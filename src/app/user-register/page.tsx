@@ -24,8 +24,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import NavigationBar from "@/components/navigationBar";
-import { useSearchParams } from 'next/navigation';
 import Footer from "@/components/footer";
+import { useSearchParams } from 'next/navigation';
 import { useToast } from "@/components/ui/use-toast";
 
 // Define types for the data
