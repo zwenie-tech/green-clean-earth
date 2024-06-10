@@ -22,8 +22,8 @@ interface TableProps {
 }
 
 const Table: React.FC<TableProps> = ({ headings, data }) => {
-    const [categories, setCategories] = useState<{ [key: number]: string }>({});
   const [currentPage, setCurrentPage] = useState(1);
+  const [categories, setCategories] = useState<{ [key: number]: string }>({});
   const nbPerPage = 5;
   const lastIndex = currentPage * nbPerPage;
   const startIndex = lastIndex - nbPerPage;
