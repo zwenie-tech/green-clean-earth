@@ -25,8 +25,8 @@ import {
 } from "@/components/ui/select";
 import NavigationBar from "@/components/navigationBar";
 import Footer from "@/components/footer";
-import { useSearchParams } from 'next/navigation';
 import { useToast } from "@/components/ui/use-toast";
+import { useSearchParams } from 'next/navigation';
 
 // Define types for the data
 interface Country {
