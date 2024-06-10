@@ -16,11 +16,16 @@ import { LinkIcon } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react";
 import { apiURL, baseURL } from "@/app/requestsapi/request";
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/components/ui/use-toast";
+import { useSearchParams } from "next/navigation";
 
 
-export function DialogAddUser({ id }:any) {
-  const { toast } = useToast()
+
+export function DialogAddUser() {
+  const { toast } = useToast();
+  const searchParams = useSearchParams();
+
+  const id:any = searchParams.get("id");
   const referral_code = "abcde";
   const message = `
 Follow the link to join GreenCleanEarth mission.

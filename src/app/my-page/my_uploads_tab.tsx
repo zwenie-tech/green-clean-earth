@@ -57,7 +57,11 @@ export default function MyUploadsTab({ token }: any) {
   useEffect(() => {
     const fetchTrees = async () => {
       const response = await fetchPlantsData(token);
-      setUpload(response.Uploads);
+      if (response && response.Uploads) {
+        setUpload(response.Uploads);
+      } else {
+        setUpload([]);
+      }
     };
     fetchTrees();
   }, [token]);
@@ -66,7 +70,7 @@ export default function MyUploadsTab({ token }: any) {
     <div>
       <DialogUploadPlant token={token} />
       <div className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {upload.length > 0 ? (
+        {Array.isArray(upload) && upload.length > 0 ? (
           upload
             .slice()
             .reverse()
