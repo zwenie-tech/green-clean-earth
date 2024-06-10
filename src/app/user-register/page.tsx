@@ -24,8 +24,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import NavigationBar from "@/components/navigationBar";
-import Footer from "@/components/footer";
 import { useSearchParams } from 'next/navigation';
+import Footer from "@/components/footer";
 import { useToast } from "@/components/ui/use-toast";
 
 // Define types for the data
@@ -212,7 +212,7 @@ function UserRegisterForm() {
                 <FormField
                   control={form.control}
                   name="email"
-                  render={({ field }) => (
+                  render={({ field }:any) => (
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
