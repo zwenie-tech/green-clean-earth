@@ -39,7 +39,6 @@ const Table: React.FC<TableProps> = ({ headings, data }) => {
           acc[category.activity_category_id] = category.activity_category;
           return acc;
         }, {});
-        console.log(categoriesMap[1]);
         setCategories(categoriesMap);
       } catch (error) {
         console.error("Error fetching categories:", error);

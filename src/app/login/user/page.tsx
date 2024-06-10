@@ -39,7 +39,6 @@ export default function UserLogin() {
       password: values.password,
     };
 
-    console.log(apidata);
     try {
       const response = await fetch(
         `${apiURL}/user/login`,
@@ -52,7 +51,6 @@ export default function UserLogin() {
         }
       );
       if (!response.ok) {
-        console.log(response);
         throw new Error("Network response was not ok");
       }
       const result = await response.json();

@@ -19,7 +19,6 @@ const Logout = () => {
         method: 'GET',
       }
     );
-    console.log(response);
     Cookies.remove('token');
     toast({
         title: "Logout",

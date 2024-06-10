@@ -61,7 +61,6 @@ export default function UploadPlant() {
   });
 
   const onSubmit = async (data: ContactFormData) => {
-    console.log(data);
     const formData = new FormData();
     formData.append("name", data.uname);
     formData.append("planterName", data.pname);
@@ -76,7 +75,6 @@ export default function UploadPlant() {
         title: "Submitted Successfully.",
         description: "Your plant has been uploaded successfully.",
       });
-      console.log("Response:", response);
     } catch (error) {
       toast({
         variant: "destructive",

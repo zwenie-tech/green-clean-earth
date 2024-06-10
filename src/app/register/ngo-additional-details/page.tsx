@@ -46,12 +46,10 @@ function NgoAdditionalDetailsForm() {
   const router = useRouter()
   const { toast } = useToast()
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
     const dataWithIds = {
       ...values,
       groupId: parseInt(group_id!),
     };
-    console.log(dataWithIds);
     try {
       const response = await fetch(
         `${apiURL}/group/ngo/register`,
@@ -75,7 +73,6 @@ function NgoAdditionalDetailsForm() {
         })
         router.push("/login/coordinator");
       }
-      console.log(result);
     } catch (error) {
       toast({
         variant: "destructive",

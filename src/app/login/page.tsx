@@ -32,9 +32,6 @@ export default function UserLogin() {
   
   Cookies.remove('token');
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
-  }
 
   return (
     <section className="bg-green-50 dark:bg-gray-900">

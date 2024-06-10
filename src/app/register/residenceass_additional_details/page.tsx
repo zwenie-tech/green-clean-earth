@@ -89,7 +89,6 @@ const group_id = searchParams.get("group_id");
 const router = useRouter()
 const { toast } = useToast()
 const onSubmit = async (values: z.infer<typeof formSchema>) => {
-  console.log(values);
   const dataWithIds = {
     // countryId : countries.find((item) => item.cntry_name === values.country)?.cntry_id,
     // stateId : states.find((item) => item.st_name === values.state)?.st_id,
@@ -100,7 +99,6 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
    
 
   };
-  console.log(dataWithIds);
 
   try {
     const response = await fetch(`${apiURL}/group/residence_association/register`, {
@@ -124,7 +122,6 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
       })
       router.push("/login/coordinator");
     }
-    console.log(result);
   } catch (error) {
     toast({
       variant: "destructive",

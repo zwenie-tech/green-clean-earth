@@ -151,7 +151,6 @@ function UserRegisterForm() {
       userPhoto: '',
       profileDescription: '',
     };
-    console.log(dataWithIds);
     try {
       const response = await fetch(`${apiURL}/user/${group_id}/register`, {
         method: "POST",
@@ -174,7 +173,6 @@ function UserRegisterForm() {
         });
         router.push("/login/user");
       }
-      console.log(result);
     } catch (error) {
       toast({
         variant: "destructive",

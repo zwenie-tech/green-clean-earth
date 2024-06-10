@@ -21,7 +21,6 @@ import { useToast } from "@/components/ui/use-toast"
 
 export function DialogAddUser({ id }:any) {
   const { toast } = useToast()
-console.log(id);
   const referral_code = "abcde";
   const message = `
 Follow the link to join GreenCleanEarth mission.

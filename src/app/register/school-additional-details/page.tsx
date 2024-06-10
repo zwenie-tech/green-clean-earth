@@ -62,10 +62,8 @@ const MultiSelectZodForm = () => {
   useEffect(() => {
     const fetchClubs = async () => {
       try {
-        console.log("call");
 
         const data = await fetchClubData();
-        console.log(data);
         setClubOptions(data.clubs);
       } catch (error) {
         console.error("Error fetching clubs:", error);

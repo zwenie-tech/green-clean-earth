@@ -35,7 +35,6 @@ export default function CoordinatorLogin() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
 
     
-    console.log(values);
     try {
       const response = await fetch(
         `${apiURL}/coordinator/login`,
@@ -54,10 +53,8 @@ export default function CoordinatorLogin() {
       if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-        console.log(response);
     
         const result = await response.json();
-        console.log(result.data.id);
         const id = result.data.id;
         const token = result.data.token;
         Cookies.set('token', token, { expires: 1 });
@@ -70,7 +67,6 @@ export default function CoordinatorLogin() {
           router.push(`/coordinator-dashboard?id=${id}`);
         }
   
-      console.log(result);
     } catch (error) {
       toast({
         variant: "destructive",

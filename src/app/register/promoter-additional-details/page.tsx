@@ -74,7 +74,6 @@ function PromoterAdditionalDetailsForm() {
   useEffect(() => {
     async function fetchLsgdData() {
       if (selectedDistrict) {
-        console.log(selectedDistrict);
         const lsgResponse = await fetch(`${apiURL}/lsg/${selectedDistrict}`);
         const lsgData = await lsgResponse.json();
         setLsgd(lsgData.district);
@@ -95,14 +94,12 @@ function PromoterAdditionalDetailsForm() {
   const { toast } = useToast();
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
     const dataWithIds = {
       cityName: values.city_name,
       totalNoOfMembers: values.total_team,
       categoryIdPromoting: category.find((item) => item.group_type === values.category)?.id,
       groupId: parseInt(group_id!)
     };
-    console.log(dataWithIds);
 
     try {
       const response = await fetch(`${apiURL}/group/promoter/register`, {
@@ -126,7 +123,6 @@ function PromoterAdditionalDetailsForm() {
         });
         router.push("/login/coordinator");
       }
-      console.log(result);
     } catch (error) {
       toast({
         variant: "destructive",

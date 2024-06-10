@@ -5,7 +5,6 @@ export const apiURL = process.env.NEXT_PUBLIC_API_URL
 
 
 export const fetchUserData = async (user_id :any, token:any) => {
-    console.log('Fetching user');
     const headersList = {
       "Authorization": `Bearer ${token}`,
     };
@@ -37,7 +36,6 @@ export const fetchUserData = async (user_id :any, token:any) => {
   };
 
   export const fetchActivityData = async (token: any) => {
-    console.log('Fetching user');
     const headersList = {
       "Authorization": `Bearer ${token}`,
     };

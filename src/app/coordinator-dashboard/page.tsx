@@ -16,7 +16,6 @@ function CoordinatorDashBoardContent() {
   const { toast } = useToast();
 
   const co_id = searchParams.get("id");
-  console.log(co_id);
   const token = Cookies.get('token');
   if (!token) {
     // Redirect to the login page
@@ -24,7 +23,6 @@ function CoordinatorDashBoardContent() {
   }
 
   async function onSubmit(values: any) {
-    console.log(values);
     try {
       const response = await fetch(
         `${apiURL}/coordinator/${co_id}`,
@@ -41,10 +39,8 @@ function CoordinatorDashBoardContent() {
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-      console.log(response);
 
       const result = await response.json();
-      console.log(result);
     } catch (error) {
       toast({
         variant: "destructive",
