@@ -27,6 +27,7 @@ import NavigationBar from "@/components/navigationBar";
 import Footer from "@/components/footer";
 import { useToast } from "@/components/ui/use-toast";
 import { useSearchParams } from 'next/navigation';
+import Cookies from "js-cookie";
 
 // Define types for the data
 interface Country {
@@ -73,6 +74,8 @@ function UserRegisterForm() {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedState, setSelectedState] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
+  Cookies.remove('token');
+
 
   const form = useForm({
     resolver: zodResolver(formSchema),
