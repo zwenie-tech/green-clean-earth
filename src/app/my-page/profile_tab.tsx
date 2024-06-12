@@ -3,6 +3,8 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { fetchUserData } from "@/app/requestsapi/request";
 import Cookies from "js-cookie";
+import Link from "next/link";
+import { Gift } from "lucide-react";
 
 interface Profile {
   name: string;
@@ -70,6 +72,18 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ profile }) => {
           max-width: 400px;
         }
       `}</style>
+      <Link 
+            className="flex m-4 justify-start items-start gap-3 text-xl border rounded-xl shadow p-6 bg-white hover:bg-green-100 hover:shadow-md hover:border-green-600"
+            href={"https://greencleanearth.org/gcem-lucky-draw-contest"}>
+            <div>
+              <Gift size={48} color="#16a34a" strokeWidth={1.75} />
+            </div>
+            <div className="flex flex-col gap-2">
+              <p className="font-semibold text-xl">Lucky Draw</p>
+              <p className="font-normal text-base">നറുക്കെടുപ്പ്</p>
+            </div>
+          </Link>
     </div>
+    
   );
 };
