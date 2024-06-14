@@ -31,6 +31,7 @@ export default function UserLogin() {
 
   
   Cookies.remove('token');
+  Cookies.remove('name');
 
 
   return (

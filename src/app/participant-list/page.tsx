@@ -5,7 +5,7 @@ import Navigationbar from "@/components/navigationBar";
 import Footer from "@/components/footer";
 import { Link } from "lucide-react";
 import { apiURL } from "@/app/requestsapi/request";
-
+import Cookies from "js-cookie";
 export default function ParticipantList() {
   const [participants, setParticipants] = useState([]);
 
@@ -17,6 +17,8 @@ export default function ParticipantList() {
     }
     fetchData();
   }, []);
+  Cookies.remove('token');
+  Cookies.remove('name');
 
   return (
     <div className="bg-green-50">

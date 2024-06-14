@@ -84,6 +84,7 @@ function UserRegisterForm() {
   const [selectedCorp, setSelectedCorp] = useState("");
 
   Cookies.remove('token');
+  Cookies.remove('name');
 
 
   const form = useForm({

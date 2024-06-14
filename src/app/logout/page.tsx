@@ -20,6 +20,7 @@ const Logout = () => {
       }
     );
     Cookies.remove('token');
+    Cookies.remove('name');
     toast({
         title: "Logout",
         description: "You have been logged out successfully!",
