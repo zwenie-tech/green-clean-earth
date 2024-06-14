@@ -13,7 +13,6 @@ type ParticipantCardProps = {
 }
 
 const ParticipantCard: React.FC<ParticipantCardProps> = ({ participant }) => {
-  console.log(participant);
   function formatDateTime(isoString: string) {
     const date = new Date(isoString);
 

@@ -35,12 +35,12 @@ export const fetchUserData = async (user_id :any, token:any) => {
     }
   };
 
-  export const fetchActivityData = async (token: any) => {
+  export const fetchActivityData = async (token: any,id:any) => {
     const headersList = {
       "Authorization": `Bearer ${token}`,
     };
     
-    const response = await fetch(`${apiURL}/activity/all`, { 
+    const response = await fetch(`${apiURL}/activity/${id}`, { 
       method: "GET",
       headers: headersList
     });

@@ -76,9 +76,9 @@ const Table: React.FC<TableProps> = ({ headings, data }) => {
               className={`${i % 2 !== 0 && "bg-gray-200"} text-center capitalize`}
             >
               <td className="">{startIndex + i + 1}</td>
-              {/* <td>
-                <img src={removejpg(d.activity_thumbnail)} alt="Thumbnail" />
-              </td> */}
+              <td>
+                <img src={`${imageURL}${d.activity_thumbnail}`} alt="Thumbnail" />
+              </td>
               <td>{d.participant_name}</td>
               <td>{d.activity_title}{d.activity_description}</td>
               <td>

@@ -55,6 +55,8 @@ const formSchema = z.object({
   country: z.string(),
   state: z.string().optional(),
   district: z.string().optional(),
+  corporation: z.string().optional(),
+  ward: z.string().optional(),
   lsg: z.string().optional(),
   city: z.string().optional(),
   username: z.string().max(255),
@@ -86,19 +88,29 @@ type Lsgd = {
   lsg_name: string;
 }
 
+type Corp = {
+  cop_id: string;
+  cop_name: string;
+}
+
 export default function Register() {
   const [countries, setCountries] = useState<Country[]>([]);
   const [states, setStates] = useState<State[]>([]);
   const [districts, setDistricts] = useState<District[]>([]);
   const [category, setCategory] = useState<Category[]>([]);
   const [lsgd, setLsgd] = useState<Lsgd[]>([]);
+  const [corporation, setCorporation] = useState<Corp[]>([]);
+  const [selectedCorp, setSelectedCorp] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [selectedState, setSelectedState] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("");
+
   const { toast } = useToast()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {},
+    defaultValues: {
+      ward: "",
+    },
   })
 
   useEffect(() => {
@@ -129,16 +141,30 @@ export default function Register() {
   }, [selectedCountry]);
 
   useEffect(() => {
-    async function fetchLsgdData() {
+    async function fetchCorpData() {
       if (selectedDistrict) {
         const dist_id = districts.find((item) => item.dis_name === selectedDistrict)?.dis_id;
-        const lsgResponse = await fetch(`${apiURL}/lsg/${dist_id}`);
+        const corpResponse = await fetch(`${apiURL}/corporation/${dist_id}`);
+        const corpData = await corpResponse.json();
+        setCorporation(corpData.corporation);
+       
+      }
+    }
+    fetchCorpData();
+  }, [selectedDistrict, districts]);
+
+  useEffect(() => {
+    async function fetchLsgdData() {
+      if (selectedCorp) {
+        
+        const corp_id = corporation.find((item) => item.cop_name === selectedCorp)?.cop_id;
+        const lsgResponse = await fetch(`${apiURL}/lsg/${corp_id}`);
         const lsgData = await lsgResponse.json();
-        setLsgd(lsgData.district);
+        setLsgd(lsgData.lsg);
       }
     }
     fetchLsgdData();
-  }, [selectedDistrict, districts]);
+  }, [selectedCorp, corporation]);
 
   const router = useRouter()
 
@@ -146,18 +172,21 @@ export default function Register() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const country_id = countries.find((item) => item.cntry_name === values.country)?.cntry_id;
     const lsgd_id = lsgd.find((item) => item.lsg_name === values.lsg)?.lsg_id;
+    const corp_id = corporation.find((item) => item.cop_name === values.corporation)?.cop_id.toString();
+
     const dataWithIds = {
       ...values,
       categoryId: category.find((item) => item.group_type === values.categoryId)?.id.toString(),
       country: country_id!.toString(),
       state: states.find((item) => item.st_name === values.state)?.st_id,
-      district: districts.find((item) => item.dis_name === values.district)?.dis_id,
-      lsg: lsgd_id,
+      district: districts.find((item) => item.dis_name === values.district)?.dis_id || '',
+      lsg: lsgd_id || '',
       whatsapp_number: values.whatsapp_number.toString(),
-      city: values.city || 'city',
-      province: values.city || 'province',
+      city: values.city || '',
+      province: values.city || '',
+      corporation: corp_id || '',
+      ward:values.ward || '',
     };
-    console.log(dataWithIds);
 
     try {
       const response = await fetch(`${apiURL}/coordinator/register`, {
@@ -239,7 +268,7 @@ export default function Register() {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Name</FormLabel>
+                      <FormLabel>Institution Name</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -402,6 +431,35 @@ export default function Register() {
                 {selectedState === 'Kerala' && (
                   <FormField
                     control={form.control}
+                    name="corporation"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Corporations</FormLabel>
+                        <Select onValueChange={(value) => {
+                          field.onChange(value);
+                          setSelectedCorp(value);
+                        }} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Choose a Corporation" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {corporation.map((corp) => (
+                              <SelectItem key={corp.cop_id} value={corp.cop_name}>
+                                {corp.cop_name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+                {selectedState === 'Kerala' && (
+                  <FormField
+                    control={form.control}
                     name="lsg"
                     render={({ field }) => (
                       <FormItem>
@@ -424,6 +482,22 @@ export default function Register() {
                       </FormItem>
                     )}
                   />
+                )}
+                {selectedState === 'Kerala' && (
+                  <FormField
+                  control={form.control}
+                  name="ward"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Ward Number</FormLabel>
+                      <FormControl>
+                        <Input type="number" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                  
                 )}
                 {selectedCountry != 'India' && (
                 <FormField

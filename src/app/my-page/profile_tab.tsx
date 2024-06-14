@@ -35,7 +35,6 @@ export default function ProfileTab({ token }: any) {
     async function fetchData() {
       if (user_id && token) {
         const data = await fetchUserData(user_id, token);
-        console.log(data);
         if (data.user) {
           const { us_name, us_address, us_mobile, us_email, us_district } = data.user[0];
           Cookies.set('name', us_name, { expires: 1 });

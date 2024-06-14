@@ -13,7 +13,6 @@ export default function ParticipantList() {
     async function fetchData() {
       const response = await fetch(`${apiURL}/uploads/all`);
       const data = await response.json();
-      console.log(data.Uploads);
       setParticipants(data.Uploads);
     }
     fetchData();

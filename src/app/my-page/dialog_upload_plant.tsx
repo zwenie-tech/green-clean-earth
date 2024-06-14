@@ -15,8 +15,13 @@ import { Upload } from "lucide-react"
 import { FormUploadActivities } from "./form_upload_activities"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { FormUploadPlant } from "./form_upload_plant"
+import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { fetchUserData } from "../requestsapi/request";
+import Cookies from "js-cookie";
 
 export function DialogUploadPlant({token}:any) {
+  
   return (
     <Dialog>
       <DialogTrigger asChild>

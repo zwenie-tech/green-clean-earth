@@ -120,13 +120,13 @@ export function FormUploadActivities({ token }: ActivitiesTabProps) {
     if (selectedImage) {
       formData.append("activityThumbnail", selectedImage);
     }
-
+    
     try {
       const response = await uploadActivityData(formData, token, id);
-      if (response!.status == 200) {
+      if (response!.status == 201) {
         toast({
           title: "Submitted Successfully.",
-          description: "Your plant has been uploaded successfully.",
+          description: "Your activity has been uploaded successfully.",
         });
         setTimeout(function () {
           window.location.reload();
@@ -150,7 +150,7 @@ export function FormUploadActivities({ token }: ActivitiesTabProps) {
           name="category"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Category</FormLabel>
+              <FormLabel>Items</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
@@ -175,7 +175,7 @@ export function FormUploadActivities({ token }: ActivitiesTabProps) {
           name="sub_category"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Sub Category</FormLabel>
+              <FormLabel>Category</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>

@@ -19,6 +19,7 @@ import { BsImages, BsPaperclip } from "react-icons/bs";
 import { useToast } from "@/components/ui/use-toast";
 import { uploadPlantData } from "@/app/requestsapi/request";
 import { useRouter, useSearchParams } from "next/navigation";
+import Cookies from "js-cookie";
 
 const MAX_FILE_SIZE = 1024 * 1024 * 5;
 const ACCEPTED_IMAGE_MIME_TYPES = [
@@ -50,11 +51,14 @@ export function FormUploadPlant({ token }:any) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
+  const us_name = Cookies.get('name');
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const form = useForm<ContactFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       image: undefined,
+      uname: us_name,
+
     },
   });
 
@@ -69,12 +73,10 @@ export function FormUploadPlant({ token }:any) {
 
     try {
       const response = await uploadPlantData(formData, token);
-      console.log("Response:", response);
       toast({
         title: "Submitted Successfully.",
         description: "Your plant has been uploaded successfully.",
       });
-      console.log("Response:", response);
       // router.push(`/my-page?id=${id}#link2`);
       // Reload the page
       setTimeout(function() {

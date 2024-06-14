@@ -46,8 +46,12 @@ interface District {
 }
 
 interface Lsgd {
-  lsgd_id: number;
+  lsg_id: number;
   lsg_name: string;
+}
+type Corp = {
+  cop_id: string;
+  cop_name: string;
 }
 
 const formSchema = z.object({
@@ -57,6 +61,8 @@ const formSchema = z.object({
   country: z.string(),
   state: z.string().optional(),
   district: z.string().optional(),
+  corporation: z.string().optional(),
+  ward: z.string().optional(),
   lsg: z.string().optional(),
   city: z.string().optional(),
   address: z.string(),
@@ -74,6 +80,9 @@ function UserRegisterForm() {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedState, setSelectedState] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [corporation, setCorporation] = useState<Corp[]>([]);
+  const [selectedCorp, setSelectedCorp] = useState("");
+
   Cookies.remove('token');
 
 
@@ -87,6 +96,8 @@ function UserRegisterForm() {
       state: "",
       district: "",
       lsg: "",
+      corporation:"",
+      ward: "",
       city: "",
       address: "",
       referralcode: "",
@@ -100,31 +111,51 @@ function UserRegisterForm() {
       const countryResponse = await fetch(`${apiURL}/country`);
       const countryData = await countryResponse.json();
       setCountries(countryData.country);
-
-      const stateResponse = await fetch(`${apiURL}/state`);
-      const stateData = await stateResponse.json();
-      setStates(stateData.state);
-
-      const districtResponse = await fetch(`${apiURL}/district`);
-      const districtData = await districtResponse.json();
-      setDistricts(districtData.district);
+    
     }
     fetchData();
   }, []);
 
   useEffect(() => {
-    async function fetchLsgdData() {
+    async function fetchData() {
+      if (selectedCountry === 'India') {
+        const stateResponse = await fetch(`${apiURL}/state`);
+        const stateData = await stateResponse.json();
+        setStates(stateData.state);
+
+        const districtResponse = await fetch(`${apiURL}/district`);
+        const districtData = await districtResponse.json();
+        setDistricts(districtData.district);
+      }
+    }
+    fetchData();
+  }, [selectedCountry]);
+
+  useEffect(() => {
+    async function fetchCorpData() {
       if (selectedDistrict) {
         const dist_id = districts.find((item) => item.dis_name === selectedDistrict)?.dis_id;
-        if (dist_id) {
-          const lsgResponse = await fetch(`${apiURL}/lsg/${dist_id}`);
-          const lsgData = await lsgResponse.json();
-          setLsgd(lsgData.district);
-        }
+        const corpResponse = await fetch(`${apiURL}/corporation/${dist_id}`);
+        const corpData = await corpResponse.json();
+        setCorporation(corpData.corporation);
+       
+      }
+    }
+    fetchCorpData();
+  }, [selectedDistrict, districts]);
+
+  useEffect(() => {
+    async function fetchLsgdData() {
+      if (selectedCorp) {
+        
+        const corp_id = corporation.find((item) => item.cop_name === selectedCorp)?.cop_id;
+        const lsgResponse = await fetch(`${apiURL}/lsg/${corp_id}`);
+        const lsgData = await lsgResponse.json();
+        setLsgd(lsgData.lsg);
       }
     }
     fetchLsgdData();
-  }, [selectedDistrict, districts]);
+  }, [selectedCorp, corporation]);
 
   const searchParams = useSearchParams();
   const group_id = searchParams.get("id");
@@ -141,19 +172,24 @@ function UserRegisterForm() {
 
   async function onSubmit(values: any) {
     const dataWithIds = {
-      name: values.name,
-      email: values.email,
-      address: values.address,
-      gender: values.gender,
-      password: values.password,
-      referalCode: values.referralcode,
-      countryId: countries.find((item) => item.cntry_name === values.country)?.cntry_id,
-      stateId: states.find((item) => item.st_name === values.state)?.st_id.toString(),
-      districtId: districts.find((item) => item.dis_name === values.district)?.dis_id,
-      mobileNumber: values.mobile.toString(),
-      userPhoto: '',
-      profileDescription: '',
+      name                 : values.name,
+      email                : values.email,
+      profileDescription   : '',
+      mobileNumber         : values.mobile.toString(),
+      countryId            : countries.find((item) => item.cntry_name === values.country)?.cntry_id,
+      stateId              : states.find((item) => item.st_name === values.state)?.st_id.toString(),
+      city                 : values.city,
+      province             : values.province || '',
+      corporation          : corporation.find((item) => item.cop_name === values.corporation)?.cop_id.toString(),
+      address              : values.address,
+      gender               : values.gender,
+      password             : values.password,
+      referalCode          : values.referralcode,
+      districtId           : districts.find((item) => item.dis_name === values.district)?.dis_id.toString(),
+      userPhoto            : '',
+      wardNo               : parseInt(values.ward),
     };
+
     try {
       const response = await fetch(`${apiURL}/user/${group_id}/register`, {
         method: "POST",
@@ -245,7 +281,7 @@ function UserRegisterForm() {
                       <Select onValueChange={(value) => {
                         field.onChange(value);
                         setSelectedCountry(value);
-                      }} value={field.value}>
+                      }} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Choose a country" />
@@ -273,7 +309,7 @@ function UserRegisterForm() {
                         <Select onValueChange={(value) => {
                           field.onChange(value);
                           setSelectedState(value);
-                        }} value={field.value}>
+                        }} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
                               <SelectValue placeholder="Choose a state" />
@@ -302,7 +338,7 @@ function UserRegisterForm() {
                         <Select onValueChange={(value) => {
                           field.onChange(value);
                           setSelectedDistrict(value);
-                        }} value={field.value}>
+                        }} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
                               <SelectValue placeholder="Choose a district" />
@@ -321,23 +357,41 @@ function UserRegisterForm() {
                     )}
                   />
                 )}
+                {selectedState !== 'Kerala' && selectedCountry === 'India' && (
+                  <FormField
+                    control={form.control}
+                    name="district"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>District</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
                 {selectedState === 'Kerala' && (
                   <FormField
                     control={form.control}
-                    name="lsg"
+                    name="corporation"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>LSGD</FormLabel>
-                        <Select onValueChange={field.onChange} value={field.value}>
+                        <FormLabel>Corporations</FormLabel>
+                        <Select onValueChange={(value) => {
+                          field.onChange(value);
+                          setSelectedCorp(value);
+                        }} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Choose an LSGD" />
+                              <SelectValue placeholder="Choose a Corporation" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {lsgd.map((item) => (
-                              <SelectItem key={item.lsgd_id} value={item.lsg_name}>
-                                {item.lsg_name}
+                            {corporation.map((corp) => (
+                              <SelectItem key={corp.cop_id} value={corp.cop_name}>
+                                {corp.cop_name}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -347,6 +401,49 @@ function UserRegisterForm() {
                     )}
                   />
                 )}
+                {selectedState === 'Kerala' && (
+                  <FormField
+                    control={form.control}
+                    name="lsg"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>LSGD / Zone</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Choose a LSG" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {lsgd.map((lsg) => (
+                              <SelectItem key={lsg.lsg_id} value={lsg.lsg_name}>
+                                {lsg.lsg_name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+                {selectedState === 'Kerala' && (
+                  <FormField
+                  control={form.control}
+                  name="ward"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Ward Number</FormLabel>
+                      <FormControl>
+                        <Input type="number" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                  
+                )}
+                {selectedCountry != 'India' && (
                 <FormField
                   control={form.control}
                   name="city"
@@ -354,12 +451,13 @@ function UserRegisterForm() {
                     <FormItem>
                       <FormLabel>City / Province</FormLabel>
                       <FormControl>
-                        <Input placeholder="City" {...field} />
+                        <Input {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+              )}
                 <FormField
                   control={form.control}
                   name="address"
@@ -413,9 +511,9 @@ function UserRegisterForm() {
                   name="referralcode"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Referral code</FormLabel>
+                      <FormLabel>Referral Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="Referral code" {...field} />
+                        <Input placeholder="Referral Name" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

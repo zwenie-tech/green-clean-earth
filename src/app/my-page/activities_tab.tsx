@@ -10,7 +10,7 @@ import { fetchActivityData } from "@/app/requestsapi/request";
 
 const headings = [
   "Sl No",
-  // "Thumbnail",
+  "Thumbnail",
   "Name",
   "Name of Art - Brief Description",
   "Category",
@@ -20,16 +20,17 @@ const headings = [
 
 export default function ActivitiesTab({token}:any) {
   const [activity, setActivity] = useState([]);
-
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
   useEffect(() => {
     async function fetchData() {
       if (token) {
-        const d = await fetchActivityData(token);
+        const d = await fetchActivityData(token,id);
         setActivity(d.activity);
       }
     }
     fetchData();
-  }, [token]);
+  }, [token,id]);
 
   return (
     <div className="">
