@@ -195,7 +195,7 @@ export function FormUploadPlant({ token }:any) {
                           htmlFor="fileInput"
                           className="text-neutral-90 flex gap-2 justify-center items-center w-full"
                         >
-                          <BsPaperclip /> Upload image
+                          <BsPaperclip /> Select Image
                         </label>
                       </Button>
                     </FormControl>

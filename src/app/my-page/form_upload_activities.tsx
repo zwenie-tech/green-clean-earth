@@ -267,7 +267,7 @@ export function FormUploadActivities({ token }: ActivitiesTabProps) {
         />
          <div className={cn("flex md:flex-row w-[100%] gap-4 flex-col")}>
               <div className="flex w-[100%] gap-2 flex-col my-4">
-              <FormLabel>Upload plant image</FormLabel>
+              <FormLabel>Upload Image</FormLabel>
               <span className="text-xs text-gray-400">Maximum file size 5MB</span>
               <div className={`flex w-[100%] gap-4 p-4 rounded border border-neutral-200 flex-col items-center md:flex-col md:justify-between md:items-center`}>
                 <div className={`flex  md:flex-[1] h-[fit-content] md:p-4 md:justify-between md:flex-row`}>
@@ -313,7 +313,7 @@ export function FormUploadActivities({ token }: ActivitiesTabProps) {
                           >
                             <BsPaperclip />
                             <span className="whitespace-nowrap">
-                              Choose your image
+                              Select Image
                             </span>
                           </label>
                         </Button>
