@@ -67,7 +67,7 @@ const formSchema = z.object({
   city: z.string().optional(),
   address: z.string(),
   gender: z.string(),
-  password: z.string().max(255),
+  password: z.string().min(6).max(255),
   referralcode: z.string().min(1).max(255),
 });
 
@@ -379,7 +379,7 @@ function UserRegisterForm() {
                     name="corporation"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Corporations</FormLabel>
+                        <FormLabel>Corporation/Municipality/Block Panchayat</FormLabel>
                         <Select onValueChange={(value) => {
                           field.onChange(value);
                           setSelectedCorp(value);

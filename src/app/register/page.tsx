@@ -60,7 +60,7 @@ const formSchema = z.object({
   lsg: z.string().optional(),
   city: z.string().optional(),
   username: z.string().max(255),
-  password: z.string().max(255),
+  password: z.string().min(8).max(255),
 })
 
 type Country = {
@@ -434,7 +434,7 @@ export default function Register() {
                     name="corporation"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Corporations</FormLabel>
+                        <FormLabel>Corporation/Municipality/Block Panchayat</FormLabel>
                         <Select onValueChange={(value) => {
                           field.onChange(value);
                           setSelectedCorp(value);

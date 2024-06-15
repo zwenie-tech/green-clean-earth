@@ -5,7 +5,7 @@ import UserRegister from "./user-register/page";
 export default function Home() {
   return (
     <main>
-      <UserRegister/>
+      <Register/>
     </main>
   );
 }
