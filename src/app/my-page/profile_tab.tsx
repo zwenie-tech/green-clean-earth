@@ -5,6 +5,7 @@ import { fetchUserData } from "@/app/requestsapi/request";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { Gift } from "lucide-react";
+import { DialogUploadPlant, DialogUploadPlantMypage } from "./dialog_upload_plant";
 
 interface Profile {
   name: string;
@@ -16,6 +17,7 @@ interface Profile {
 
 interface ProfileDetailsProps {
   profile: Profile;
+  token: string;
 }
 
 const initialProfile: Profile = {
@@ -53,14 +55,17 @@ export default function ProfileTab({ token }: any) {
 
   return (
     <div className="">
-      <ProfileDetails profile={profile} />
+      <ProfileDetails profile={profile} token={token}/>
     </div>
   );
 }
 
-const ProfileDetails: React.FC<ProfileDetailsProps> = ({ profile }) => {
+const ProfileDetails: React.FC<ProfileDetailsProps> = ({ profile},{token}) => {
   return (
     <div className="profile-details leading-normal">
+      <DialogUploadPlant token={token} />
+      <div className="">
+      </div>
       <h1 className="text-3xl font-semibold py-2">{profile.name}</h1>
       <p><strong>Location:</strong> {profile.location}</p>
       <p><strong>Address:</strong> {profile.address}</p>
