@@ -441,7 +441,7 @@ export default function Register() {
                         }} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Choose a Corporation" />
+                              <SelectValue placeholder="Choose a Option" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>

@@ -386,7 +386,7 @@ function UserRegisterForm() {
                         }} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Choose a Corporation" />
+                              <SelectValue placeholder="Choose a Option" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
@@ -507,7 +507,7 @@ function UserRegisterForm() {
                     </FormItem>
                   )}
                 />
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="referralcode"
                   render={({ field }) => (
@@ -519,7 +519,7 @@ function UserRegisterForm() {
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                /> */}
                 <Button type="submit" className="w-full">Register</Button>
               </form>
             </Form>

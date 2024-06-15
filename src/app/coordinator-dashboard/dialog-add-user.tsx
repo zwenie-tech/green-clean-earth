@@ -26,7 +26,7 @@ export function DialogAddUser() {
   const searchParams = useSearchParams();
 
   const id:any = searchParams.get("id");
-  const referral_code = "abcde";
+  const referral_code = "user"+id.toString();
   const message = `
 Follow the link to join GreenCleanEarth mission.
 ${baseURL}/user-register?id=${parseInt(id)}&ref=${referral_code}
