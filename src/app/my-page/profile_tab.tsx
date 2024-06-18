@@ -5,7 +5,7 @@ import { fetchUserData } from "@/app/requestsapi/request";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { Gift } from "lucide-react";
-import { DialogUploadPlant, DialogUploadPlantMypage } from "./dialog_upload_plant";
+import { DialogUploadPlant } from "./dialog_upload_plant";
 
 interface Profile {
   name: string;

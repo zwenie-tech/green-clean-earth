@@ -36,34 +36,7 @@ export function DialogUploadPlant({token}:any) {
         </DialogHeader>
 
         <ScrollArea className="h-full w-full p-2 rounded-md border">
-            <FormUploadPlant token={token} />
-        </ScrollArea>
-        {/* <DialogFooter>
-          <Button type="submit" className="bg-green-600 hover:bg-green-800">Save changes</Button>
-        </DialogFooter> */}
-      </DialogContent>
-    </Dialog>
-  )
-}
-
-export function DialogUploadPlantMypage({token}:any) {
-  
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <div className="flex m-4 justify-start items-start gap-3 text-xl border rounded-xl shadow p-6 bg-white hover:bg-green-100 hover:shadow-md hover:border-green-600">
-        <Upload size={48} color="#16a34a" strokeWidth={1.75} />Upload Plant</div>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] sm:h-[calc(100vh-74px)]" >
-        <DialogHeader>
-          <DialogTitle>Upload Plant</DialogTitle>
-          <DialogDescription>
-            {/* Provide details here */}
-          </DialogDescription>
-        </DialogHeader>
-
-        <ScrollArea className="h-full w-full p-2 rounded-md border">
-            <FormUploadPlant token={token} />
+            <FormUploadPlant />
         </ScrollArea>
         {/* <DialogFooter>
           <Button type="submit" className="bg-green-600 hover:bg-green-800">Save changes</Button>

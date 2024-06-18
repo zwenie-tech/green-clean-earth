@@ -46,12 +46,13 @@ const formSchema = z.object({
 
 export type ContactFormData = z.infer<typeof formSchema>;
 
-export function FormUploadPlant({ token }:any) {
+export function FormUploadPlant() {
   const { toast } = useToast();
   const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const us_name = Cookies.get('name');
+  const token = Cookies.get('token');
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const form = useForm<ContactFormData>({
     resolver: zodResolver(formSchema),
@@ -72,12 +73,11 @@ export function FormUploadPlant({ token }:any) {
     }
 
     try {
-      const response = await uploadPlantData(formData, token);
+      const response = await uploadPlantData(formData, token as string);
       toast({
         title: "Submitted Successfully.",
         description: "Your plant has been uploaded successfully.",
       });
-      // router.push(`/my-page?id=${id}#link2`);
       // Reload the page
       setTimeout(function() {
         window.location.reload();
