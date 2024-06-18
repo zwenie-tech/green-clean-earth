@@ -101,8 +101,6 @@ export default function MyUploadsTab({ token }: any) {
       <div className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {Array.isArray(upload) && upload.length > 0 ? (
           upload
-            .slice()
-            .reverse()
             .map((tree, index) => <TreeDetailsCard key={index} tree={tree} />)
         ) : (
           "No Tree Details Found"
