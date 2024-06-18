@@ -5,7 +5,7 @@ import { fetchUserData } from "@/app/requestsapi/request";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { Gift } from "lucide-react";
-import { DialogUploadPlant } from "./dialog_upload_plant";
+import { DialogUploadPlant, DialogUploadPlantMyPage } from "./dialog_upload_plant";
 
 interface Profile {
   name: string;
@@ -63,7 +63,6 @@ export default function ProfileTab({ token }: any) {
 const ProfileDetails: React.FC<ProfileDetailsProps> = ({ profile},{token}) => {
   return (
     <div className="profile-details leading-normal">
-      <DialogUploadPlant token={token} />
       <div className="">
       </div>
       <h1 className="text-3xl font-semibold py-2">{profile.name}</h1>
@@ -75,9 +74,10 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ profile},{token}) => {
         .profile-details {
           max-width: 400px;
         }
-      `}</style>
+        `}</style>
+        <DialogUploadPlantMyPage token={token} />
       <Link 
-            className="flex m-4 justify-start items-start gap-3 text-xl border rounded-xl shadow p-6 bg-white hover:bg-green-100 hover:shadow-md hover:border-green-600"
+            className="flex m-4 justify-start items-start gap-3 text-xl border rounded-xl shadow p-5 bg-white hover:bg-green-100 hover:shadow-md hover:border-green-600"
             href={"https://greencleanearth.org/gcem-lucky-draw-contest"}>
             <div>
               <Gift size={48} color="#16a34a" strokeWidth={1.75} />

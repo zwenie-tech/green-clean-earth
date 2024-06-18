@@ -33,7 +33,7 @@ import {
 } from "@/components/ui/popover"
 import { apiURL } from "@/app/requestsapi/request";
 import { useToast } from "@/components/ui/use-toast"
-
+import Cookies from "js-cookie";
 import {
   Select,
   SelectContent,
@@ -56,7 +56,7 @@ const formSchema = z.object({
   state: z.string().optional(),
   district: z.string().optional(),
   corporation: z.string().optional(),
-  ward: z.string().optional(),
+  wardNo: z.string().optional(),
   lsg: z.string().optional(),
   city: z.string().optional(),
   username: z.string().max(255),
@@ -104,12 +104,13 @@ export default function Register() {
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [selectedState, setSelectedState] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("");
-
+  Cookies.remove('token');
+  Cookies.remove('name');
   const { toast } = useToast()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      ward: "",
+      wardNo: "",
     },
   })
 
@@ -178,14 +179,14 @@ export default function Register() {
       ...values,
       categoryId: category.find((item) => item.group_type === values.categoryId)?.id.toString(),
       country: country_id!.toString(),
-      state: states.find((item) => item.st_name === values.state)?.st_id,
-      district: districts.find((item) => item.dis_name === values.district)?.dis_id || '',
-      lsg: lsgd_id || '',
+      state: states.find((item) => item.st_name === values.state)?.st_id || 0,
+      district: districts.find((item) => item.dis_name === values.district)?.dis_id || 0,
+      lsg: lsgd_id || 0,
       whatsapp_number: values.whatsapp_number.toString(),
       city: values.city || '',
       province: values.city || '',
-      corporation: corp_id || '',
-      ward:values.ward || '',
+      corporation: corp_id || '0',
+      wardNo: values.wardNo || 0,
     };
 
     try {
@@ -486,7 +487,7 @@ export default function Register() {
                 {selectedState === 'Kerala' && (
                   <FormField
                   control={form.control}
-                  name="ward"
+                  name="wardNo"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Ward Number</FormLabel>

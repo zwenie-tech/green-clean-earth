@@ -17,8 +17,6 @@ export default function ParticipantList() {
     }
     fetchData();
   }, []);
-  Cookies.remove('token');
-  Cookies.remove('name');
 
   return (
     <div className="bg-green-50">

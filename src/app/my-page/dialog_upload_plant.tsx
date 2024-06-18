@@ -25,7 +25,35 @@ export function DialogUploadPlant({token}:any) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-green-600 hover:bg-green-800 mt-4 mb-8"><Upload className="mr-2 h-4 w-4" />Upload Plants</Button>
+        <Button className="bg-green-600 hover:bg-green-800 mt-4 mb-8">
+          <Upload className="mr-2 h-4 w-4" />Upload Plants</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px] sm:h-[calc(100vh-74px)]" >
+        <DialogHeader>
+          <DialogTitle>Upload Plant</DialogTitle>
+          <DialogDescription>
+            {/* Provide details here */}
+          </DialogDescription>
+        </DialogHeader>
+
+        <ScrollArea className="h-full w-full p-2 rounded-md border">
+            <FormUploadPlant />
+        </ScrollArea>
+        {/* <DialogFooter>
+          <Button type="submit" className="bg-green-600 hover:bg-green-800">Save changes</Button>
+        </DialogFooter> */}
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+export function DialogUploadPlantMyPage({token}:any) {
+  
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <p className="flex m-4 justify-start items-start gap-4 text-xl border rounded-xl shadow p-5 bg-white hover:bg-green-100 hover:shadow-md hover:border-green-600 text-black">
+          <Upload  size={48} color="#16a34a" strokeWidth={1.75} /><span className="font-semibold text-xl">Upload Plants</span></p>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] sm:h-[calc(100vh-74px)]" >
         <DialogHeader>
