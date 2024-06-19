@@ -186,7 +186,7 @@ export default function Register() {
       city: values.city || '',
       province: values.city || '',
       corporation: corp_id || '0',
-      wardNo: values.wardNo || 0,
+      wardNo: parseInt(values.wardNo!) || 0,
     };
 
     try {
