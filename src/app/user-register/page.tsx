@@ -188,7 +188,7 @@ function UserRegisterForm() {
       referalCode          : values.referralcode,
       districtId           : districts.find((item) => item.dis_name === values.district)?.dis_id.toString(),
       userPhoto            : '',
-      wardNo               : parseInt(values.ward),
+      wardNo               : parseInt(values.ward) || 0,
     };
 
     try {
@@ -260,19 +260,7 @@ function UserRegisterForm() {
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="mobile"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Mobile number</FormLabel>
-                      <FormControl>
-                        <Input type="number" placeholder="" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                
                 <FormField
                   control={form.control}
                   name="country"
@@ -490,6 +478,19 @@ function UserRegisterForm() {
                           <SelectItem value="other">Other</SelectItem>
                         </SelectContent>
                       </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="mobile"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Mobile number</FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="" {...field} />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
