@@ -77,7 +77,7 @@ const Table: React.FC<TableProps> = ({ headings, data }) => {
             >
               <td className="">{startIndex + i + 1}</td>
               <td>
-                <img src={`${imageURL}${d.activity_thumbnail}`} alt="Thumbnail" />
+                <a href={`${d.activity_social_media_link}`}><img src={`${imageURL}${d.activity_thumbnail}`} alt="Thumbnail" /></a>
               </td>
               <td>{d.participant_name}</td>
               <td>{d.activity_title}{d.activity_description}</td>

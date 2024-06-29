@@ -136,6 +136,9 @@ export default function Register() {
         const districtResponse = await fetch(`${apiURL}/district`);
         const districtData = await districtResponse.json();
         setDistricts(districtData.district);
+        setCorporation([]);
+        setLsgd([]);
+
       }
     }
     fetchData();
@@ -148,7 +151,7 @@ export default function Register() {
         const corpResponse = await fetch(`${apiURL}/corporation/${dist_id}`);
         const corpData = await corpResponse.json();
         setCorporation(corpData.corporation);
-       
+        setLsgd([]);
       }
     }
     fetchCorpData();
@@ -157,7 +160,6 @@ export default function Register() {
   useEffect(() => {
     async function fetchLsgdData() {
       if (selectedCorp) {
-        
         const corp_id = corporation.find((item) => item.cop_name === selectedCorp)?.cop_id;
         const lsgResponse = await fetch(`${apiURL}/lsg/${corp_id}`);
         const lsgData = await lsgResponse.json();
@@ -472,11 +474,13 @@ export default function Register() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {lsgd.map((lsg) => (
+                            {lsgd ? lsgd.map((lsg) => (
                               <SelectItem key={lsg.lsg_id} value={lsg.lsg_name}>
                                 {lsg.lsg_name}
                               </SelectItem>
-                            ))}
+                            )): <SelectItem key={1} value={'lsg'}>
+                            Choose a LSG
+                          </SelectItem>}
                           </SelectContent>
                         </Select>
                         <FormMessage />

@@ -27,6 +27,7 @@ export default function ActivitiesTab({token}:any) {
       if (token) {
         const d = await fetchActivityData(token,id);
         setActivity(d.activity);
+        console.log(d.activity);
       }
     }
     fetchData();
