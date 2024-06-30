@@ -5,12 +5,11 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { LinkIcon } from "lucide-react";
+import { LinkIcon, Copy } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { baseURL } from "@/app/requestsapi/request";
@@ -52,7 +51,7 @@ Follow the link to join GreenCleanEarth mission.
 `;
 
   const [isCopied, setIsCopied] = useState(false);
-  const copyToClipboard = async (text:any) => {
+  const copyToClipboard = async (text: any) => {
     try {
       await navigator.clipboard.writeText(text);
       setIsCopied(true);
@@ -77,10 +76,12 @@ Follow the link to join GreenCleanEarth mission.
           Get referral link
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] max-h-[80vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Add members</DialogTitle>
-          <DialogDescription></DialogDescription>
+      <DialogContent className="max-w-[calc(100%-2rem)] sm:max-w-[425px] h-[calc(100vh-4rem)] mx-auto my-4 p-0 flex flex-col">
+        <div className="flex-grow overflow-y-auto p-6">
+          <DialogHeader>
+            <DialogTitle>Add members</DialogTitle>
+            <DialogDescription></DialogDescription>
+          </DialogHeader>
           <div>
             <p className="text-base">
               🥦 പ്രിയപ്പെട്ടവരേ
@@ -93,12 +94,14 @@ Follow the link to join GreenCleanEarth mission.
               വിഭാഗമായ യു.എൻ.ഇ.പി.യിലേക്ക്  സമർപ്പിക്കുവാൻ ലക്ഷ്യമിടുന്ന
               ഗ്രീൻ ക്ലീൻ കേരള വൃക്ഷത്തൈ പരിപാലന മത്സരത്തിലും  അതോടൊപ്പം ഉള്ള
               ഹരിത -കലാ- ശാസ്ത്ര മത്സരങ്ങളിലും  നമ്മുടെ സ്ഥാപനവും
-              പങ്കെടുക്കുന്നുണ്ട്. 🥦 നമ്മുടെ വിദ്യാലയവും വീടും
+              പങ്കെടുക്കുന്നുണ്ട്. 
+              🥦 നമ്മുടെ വിദ്യാലയവും വീടും
               പരിസരവും മാലിന്യമുക്തവും ഹരിതാഭവും ആക്കുവാനുള്ള
               പ്രവർത്തനങ്ങൾ നടത്തുന്ന ഈ മത്സരങ്ങളിൽ മികച്ച പ്രകടനം
               ചെയ്യുന്ന  വ്യക്തികൾക്കും സ്ഥാപനങ്ങൾക്കുമായി  പ്രൊഫസർ
               ശോഭീന്ദ്ര ന്റെ പേരിലുള്ള ഒരു ലക്ഷം രൂപയുടെ പുരസ്കാരങ്ങളും
-              സമ്മാനങ്ങളും ഉണ്ട്. 🥦 ഈ മത്സരങ്ങളിൽ
+              സമ്മാനങ്ങളും ഉണ്ട്. 
+              🥦 ഈ മത്സരങ്ങളിൽ
               പങ്കെടുക്കുവാനായി  എല്ലാ അധ്യാപകരും  ഈ ലിങ്കിൽ ക്ലിക്ക്
               ചെയ്തു  രജിസ്ട്രേഷൻ നടത്തി ഒരു യൂസർ നെയിം പാസ്സ്‌വേർഡും
               ക്രിയേറ്റ് ചെയ്തു  വിദ്യാർത്ഥികൾക്ക് അയച്ചുകൊടുക്കുകയും ,
@@ -122,18 +125,21 @@ Follow the link to join GreenCleanEarth mission.
               Whatsapp/Telegram : 9645 9645 92 Mail:
               GreenCleanKerala@gmail.Com Follow the link to join
               GreenCleanEarth mission.
-              
             </p>
           </div>
-        </DialogHeader>
-        <DialogFooter>
+        </div>
+        <div className="p-4 border-t">
           <Button
             onClick={() => copyToClipboard(message)}
-            className="bg-green-600 hover:bg-green-800"
+            className="bg-green-600 hover:bg-green-800 rounded-full w-12 h-12 flex items-center justify-center ml-auto"
           >
-            {isCopied ? "Copied!" : "Copy"}
+            {isCopied ? (
+              <span className="text-xs">Copied!</span>
+            ) : (
+              <Copy className="h-5 w-5" />
+            )}
           </Button>
-        </DialogFooter>
+        </div>
       </DialogContent>
     </Dialog>
   );
