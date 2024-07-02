@@ -45,7 +45,8 @@ export const fetchUserData = async (user_id :any, token:any) => {
       headers: headersList
     });
     
-    const data = await response.json();
+      const data = await response.json();
+   
     return data;
   };
 

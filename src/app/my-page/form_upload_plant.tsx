@@ -20,8 +20,10 @@ import { useToast } from "@/components/ui/use-toast";
 import { uploadPlantData } from "@/app/requestsapi/request";
 import { useRouter, useSearchParams } from "next/navigation";
 import Cookies from "js-cookie";
+import imageCompression from 'browser-image-compression';
 
-const MAX_FILE_SIZE = 1024 * 1024 * 100;
+const MAX_FILE_SIZE = 1024 * 1024 * 100; // 100MB
+const TARGET_FILE_SIZE = 1024 * 1024 * 4; // 4MB
 const ACCEPTED_IMAGE_MIME_TYPES = [
   "image/jpeg",
   "image/jpg",
@@ -29,15 +31,46 @@ const ACCEPTED_IMAGE_MIME_TYPES = [
   "image/webp",
 ];
 
+async function resizeImage(file:any) {
+  const options = {
+    maxSizeMB: TARGET_FILE_SIZE / (1024 * 1024),
+    maxWidthOrHeight: 1920,
+    useWebWorker: true,
+  };
+
+  try {
+    const resizedFile = await imageCompression(file, options);
+    return resizedFile;
+  } catch (error) {
+    console.error('Error resizing the image:', error);
+    throw error;
+  }
+}
+
+async function validateAndResizeImage(files:any) {
+  if (!files || files.length === 0) { 
+    return files;
+  }
+
+  const file = files[0];
+  if (file.size > TARGET_FILE_SIZE) {
+    const resizedFile = await resizeImage(file);
+    return [resizedFile];
+  }
+
+  return files;
+}
+
 const formSchema = z.object({
   uname: z.string().max(255),
   pname: z.string().max(255),
   tname: z.string().max(255),
   image: z
     .any()
-    .refine((files) => {
-      return files?.[0]?.size <= MAX_FILE_SIZE;
-    }, ``)
+    .refine(async (files) => {
+      const validFiles = await validateAndResizeImage(files);
+      return validFiles?.[0]?.size <= MAX_FILE_SIZE;
+    }, "Max image size is 100MB.")
     .refine(
       (files) => ACCEPTED_IMAGE_MIME_TYPES.includes(files?.[0]?.type),
       "Only .jpg, .jpeg, .png and .webp formats are supported."
@@ -59,7 +92,6 @@ export function FormUploadPlant() {
     defaultValues: {
       image: undefined,
       uname: us_name,
-
     },
   });
 
@@ -68,8 +100,10 @@ export function FormUploadPlant() {
     formData.append("name", data.uname);
     formData.append("planterName", data.pname);
     formData.append("treeName", data.tname);
+
     if (selectedImage) {
-      formData.append("image", selectedImage);
+      const compressedImage = await resizeImage(selectedImage);
+      formData.append("image", compressedImage);
     }
 
     try {
@@ -185,9 +219,13 @@ export function FormUploadPlant() {
                           accept="image/*"
                           onBlur={field.onBlur}
                           name={field.name}
-                          onChange={(e) => {
-                            field.onChange(e.target.files);
-                            setSelectedImage(e.target.files?.[0] || null);
+                          onChange={async (e) => {
+                            const files = e.target.files;
+                            if (files && files[0]) {
+                              const validFiles = await validateAndResizeImage(files);
+                              field.onChange(validFiles);
+                              setSelectedImage(validFiles[0] || null);
+                            }
                           }}
                           ref={field.ref}
                         />

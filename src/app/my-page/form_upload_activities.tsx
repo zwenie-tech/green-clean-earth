@@ -28,10 +28,43 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { uploadActivityData } from "@/app/requestsapi/request";
 import { useToast } from "@/components/ui/use-toast";
+import imageCompression from "browser-image-compression";
 
-const MAX_FILE_SIZE = 1024 * 1024 * 100;
+const MAX_FILE_SIZE = 1024 * 1024 * 100; // 100MB
+const TARGET_FILE_SIZE = 1024 * 1024 * 4; // 4MB
 const ACCEPTED_IMAGE_MIME_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 const ACCEPTED_IMAGE_TYPES = ["jpeg", "jpg", "png", "webp"];
+
+async function resizeImage(file:any) {
+  const options = {
+    maxSizeMB: TARGET_FILE_SIZE / (1024 * 1024),
+    maxWidthOrHeight: 1920,
+    useWebWorker: true,
+  };
+
+  try {
+    const resizedFile = await imageCompression(file, options);
+    return resizedFile;
+  } catch (error) {
+    console.error('Error resizing the image:', error);
+    throw error;
+  }
+}
+
+async function validateAndResizeImage(files:any) {
+  if (!files || files.length === 0) { 
+    return files;
+  }
+
+  const file = files[0];
+  if (file.size > TARGET_FILE_SIZE) {
+    const resizedFile = await resizeImage(file);
+    return [resizedFile];
+  }
+
+  return files;
+}
+
 
 const formSchema = z.object({
   category: z.string(),
@@ -42,9 +75,15 @@ const formSchema = z.object({
   short_desc: z.string().max(255),
   social_link: z.string().max(255),
   activityThumbnail: z
-    .any()
-    .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, "")
-    .refine((files) => ACCEPTED_IMAGE_MIME_TYPES.includes(files?.[0]?.type), "Only .jpg, .jpeg, .png and .webp formats are supported."),
+  .any()
+  .refine(async (files) => {
+    const validFiles = await validateAndResizeImage(files);
+    return validFiles?.[0]?.size <= MAX_FILE_SIZE;
+  }, "Max image size is 100MB.")
+  .refine(
+    (files) => ACCEPTED_IMAGE_MIME_TYPES.includes(files?.[0]?.type),
+    "Only .jpg, .jpeg, .png and .webp formats are supported."
+  ),
 });
 
 interface Category {
@@ -294,19 +333,23 @@ export function FormUploadActivities({ token }: ActivitiesTabProps) {
                     <FormItem>
                       <FormControl>
                         <Button size="lg" type="button" className="bg-green-100 hover:bg-green-300 border-2 border-green-600 text-green-600">
-                          <input
-                            type="file"
-                            className="hidden"
-                            id="fileInput"
-                            accept="image/*"
-                            onBlur={field.onBlur}
-                            name={field.name}
-                            onChange={(e) => {
-                              field.onChange(e.target.files);
-                              setSelectedImage(e.target.files?.[0] || null);
-                            }}
-                            ref={field.ref}
-                          />
+                        <input
+                          type="file"
+                          className="hidden"
+                          id="fileInput"
+                          accept="image/*"
+                          onBlur={field.onBlur}
+                          name={field.name}
+                          onChange={async (e) => {
+                            const files = e.target.files;
+                            if (files && files[0]) {
+                              const validFiles = await validateAndResizeImage(files);
+                              field.onChange(validFiles);
+                              setSelectedImage(validFiles[0] || null);
+                            }
+                          }}
+                          ref={field.ref}
+                        />
                           <label
                             htmlFor="fileInput"
                             className="text-neutral-90  rounded-md cursor-pointer inline-flex items-center"

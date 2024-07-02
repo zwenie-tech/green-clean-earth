@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import { fetchActivityData } from "@/app/requestsapi/request";
+import { any } from "zod";
 
 const headings = [
   "Sl No",
@@ -27,7 +28,6 @@ export default function ActivitiesTab({token}:any) {
       if (token) {
         const d = await fetchActivityData(token,id);
         setActivity(d.activity);
-        console.log(d.activity);
       }
     }
     fetchData();
