@@ -57,6 +57,10 @@ function CoordinatorDashBoardContent() {
 
       <div className="container mx-auto md:max-w-5xl min-h-screen mt-4">
         <h1 className="text-3xl my-4 font-bold mt-8 pb-4 border-b-2">Coordinator Dashboard</h1>
+        <p>താഴെക്കൊടുത്ത ലിങ്ക് കോപ്പി ചെയ്തു  എല്ലാ ക്ലാസ് ടീച്ചർമാർക്കും അയച്ചു കൊടുക്കുക.
+ അവരോട് സ്വന്തം മൊബൈൽ നമ്പറും പേരും വെച്ച്  ക്ലാസിന്റെ പേരിൽ രജിസ്റ്റർ ചെയ്യുവാൻ പറയുക.
+ യൂസർനേമും പാസ്സ്‌വേർഡും  എല്ലാ കുട്ടികൾക്കും അയച്ചു കൊടുക്കുവാനും പറയുക.
+ അതുവെച്ച് എല്ലാ കുട്ടികളോടും  തൈകൾ അപ്‌ലോഡ് ചെയ്യുവാൻ പറയുക</p><br /><br />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
           <div
             className="flex justify-start items-start gap-3 text-xl border rounded-xl shadow p-6 bg-white hover:bg-green-100 hover:shadow-md hover:border-green-600"

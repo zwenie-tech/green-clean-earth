@@ -128,15 +128,15 @@ Follow the link to join GreenCleanEarth mission.
             </p>
           </div>
         </div>
-        <div className="p-4 border-t">
+        <div className="p-2 border-t">
           <Button
             onClick={() => copyToClipboard(message)}
-            className="bg-green-600 hover:bg-green-800 rounded-full w-12 h-12 flex items-center justify-center ml-auto"
+            className="bg-green-600 hover:bg-green-800 rounded-full w-16 h-12 flex items-center justify-center ml-auto"
           >
             {isCopied ? (
               <span className="text-xs">Copied!</span>
             ) : (
-              <Copy className="h-5 w-5" />
+              <span className="text-xs"><Copy className="h-5 w-10" />Copy</span>
             )}
           </Button>
         </div>
