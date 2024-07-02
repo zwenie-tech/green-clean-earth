@@ -29,7 +29,7 @@ import { useSearchParams } from "next/navigation";
 import { uploadActivityData } from "@/app/requestsapi/request";
 import { useToast } from "@/components/ui/use-toast";
 
-const MAX_FILE_SIZE = 1024 * 1024 * 5;
+const MAX_FILE_SIZE = 1024 * 1024 * 100;
 const ACCEPTED_IMAGE_MIME_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 const ACCEPTED_IMAGE_TYPES = ["jpeg", "jpg", "png", "webp"];
 
@@ -43,7 +43,7 @@ const formSchema = z.object({
   social_link: z.string().max(255),
   activityThumbnail: z
     .any()
-    .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, "Max image size is 1MB.")
+    .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, "")
     .refine((files) => ACCEPTED_IMAGE_MIME_TYPES.includes(files?.[0]?.type), "Only .jpg, .jpeg, .png and .webp formats are supported."),
 });
 
@@ -268,7 +268,7 @@ export function FormUploadActivities({ token }: ActivitiesTabProps) {
          <div className={cn("flex md:flex-row w-[100%] gap-4 flex-col")}>
               <div className="flex w-[100%] gap-2 flex-col my-4">
               <FormLabel>Upload Image</FormLabel>
-              <span className="text-xs text-gray-400">Maximum file size 5MB</span>
+              <span className="text-xs text-gray-400"></span>
               <div className={`flex w-[100%] gap-4 p-4 rounded border border-neutral-200 flex-col items-center md:flex-col md:justify-between md:items-center`}>
                 <div className={`flex  md:flex-[1] h-[fit-content] md:p-4 md:justify-between md:flex-row`}>
                   {selectedImage ? (

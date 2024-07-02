@@ -21,7 +21,7 @@ import { uploadPlantData } from "@/app/requestsapi/request";
 import { useRouter, useSearchParams } from "next/navigation";
 import Cookies from "js-cookie";
 
-const MAX_FILE_SIZE = 1024 * 1024 * 5;
+const MAX_FILE_SIZE = 1024 * 1024 * 100;
 const ACCEPTED_IMAGE_MIME_TYPES = [
   "image/jpeg",
   "image/jpg",
@@ -37,7 +37,7 @@ const formSchema = z.object({
     .any()
     .refine((files) => {
       return files?.[0]?.size <= MAX_FILE_SIZE;
-    }, `Max image size is 5MB.`)
+    }, ``)
     .refine(
       (files) => ACCEPTED_IMAGE_MIME_TYPES.includes(files?.[0]?.type),
       "Only .jpg, .jpeg, .png and .webp formats are supported."
@@ -145,7 +145,7 @@ export function FormUploadPlant() {
         <div className={cn("flex md:flex-row w-[100%] gap-4 flex-col")}>
           <div className="flex w-[100%] gap-2 flex-col my-4">
             <FormLabel>Upload plant image</FormLabel>
-            <span className="text-xs text-gray-400">Maximum file size 1MB</span>
+            <span className="text-xs text-gray-400"></span>
             <div
               className={`flex w-[100%] gap-4 p-4 rounded border border-neutral-200 flex-col items-center md:flex-col md:justify-between md:items-center`}
             >
