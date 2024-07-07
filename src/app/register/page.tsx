@@ -44,8 +44,6 @@ import {
 import NavigationBar from "@/components/navigationBar";
 import Footer from "@/components/footer";
 import NgoAdditionalDetails from "./ngo-additional-details/page";
-import Header from "@/components/header";
-import HeaderNav from "@/components/header";
 
 const formSchema = z.object({
   categoryId: z.string(),
@@ -236,7 +234,7 @@ export default function Register() {
   return (
     <section className="bg-green-50 dark:bg-gray-900">
       {/* <NavigationBar /> */}
-      <HeaderNav />
+      <NavigationBar />
       
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0 mt-8">
       <h1 className="text-xl mb-5 font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
