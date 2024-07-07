@@ -2,15 +2,15 @@
 
 export default function Footer() {
     return (
-      <footer className="w-full py-14 bg-green-200 mt-8">
+      <footer className="w-full py-14 bg-white mt-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto">
-                <h1 className="flex justify-center text-3xl font-bold">GreenCleanEarth</h1>
-                <ul className="text-lg flex items-center justify-center flex-col gap-7 md:flex-row md:gap-12 transition-all duration-500 py-12 mb-8 border-b border-green-300">
+                {/* <h1 className="flex justify-center text-3xl font-bold">GreenCleanEarth</h1> */}
+                {/* <ul className="text-lg flex items-center justify-center flex-col gap-7 md:flex-row md:gap-12 transition-all duration-500 py-12 mb-8 border-b border-green-300">
                     <li><a href="#" className=" text-gray-800 hover:text-gray-900">About us</a></li>
                     <li><a href="#" className=" text-gray-800 hover:text-gray-900">Contact</a></li>
-                </ul>
-                <div className="flex space-x-10 justify-center items-center mb-14">
+                </ul> */}
+                {/* <div className="flex space-x-10 justify-center items-center mb-14">
                     <a href="#" className="block  text-gray-900 transition-all duration-500 hover:text-green-600 ">
                       <svg className="w-[1.688rem] h-[1.688rem]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">
                         <path d="M11.3214 8.93666L16.4919 3.05566H15.2667L10.7772 8.16205L7.1914 3.05566H3.05566L8.47803 10.7774L3.05566 16.9446H4.28097L9.022 11.552L12.8088 16.9446H16.9446L11.3211 8.93666H11.3214ZM9.64322 10.8455L9.09382 10.0765L4.72246 3.95821H6.60445L10.1322 8.8959L10.6816 9.66481L15.2672 16.083H13.3852L9.64322 10.8458V10.8455Z" fill="currentColor"/>
@@ -34,7 +34,7 @@ export default function Footer() {
                             </svg>
                             
                     </a>
-                </div>
+                </div> */}
                 <div className="text-lg text-gray-700 text-center block">
                   <p>Green Clean Earth Movement. All rights reserved</p>
                   <p>A GCEM Foundation Compaing for Save Earth</p>
