@@ -21,9 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={noto.className}>
-      <Toaster />
+        <Toaster />
         {children}
-        </body>
+      </body>
     </html>
   );
 }
