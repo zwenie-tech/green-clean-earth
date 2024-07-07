@@ -36,11 +36,11 @@ const NavigationBar = () => {
   const links = token ? userLinks : guestLinks;
 
   return (
-    <div className="flex justify-between items-center w-full h-16 px-4 text-white bg-green-600 mb-2 border-b-2">
+    <div className="flex flex-col justify-between items-center w-full px-4 py-2 mb-2 bg-white border-b-2">
       <div>
-        <h1 className="text-2xl font-bold ml-2">
+        <h1 className="text-2xl py-6 font-bold ml-2 text-primary">
           <a href="https://www.greencleanearth.org/" target="_blank" rel="noreferrer">
-            GreenCleanEarth
+            GreenCleanEarth.org
           </a>
         </h1>
       </div>
@@ -49,7 +49,7 @@ const NavigationBar = () => {
         {links.map(({ id, name, link }) => (
           <li
             key={id}
-            className="nav-links px-4 py-2 cursor-pointer capitalize font-medium text-white rounded hover:scale-105 hover:text-white hover:bg-green-700 duration-200"
+            className="px-4 py-2 cursor-pointer capitalize font-medium rounded-full text-black hover:text-white hover:bg-primary duration-200"
           >
             <Link href={link}>{name}</Link>
           </li>
@@ -58,13 +58,13 @@ const NavigationBar = () => {
 
       <div
         onClick={() => setNav(!nav)}
-        className="cursor-pointer pr-4 z-20 text-white md:hidden"
+        className="cursor-pointer pr-4 z-20 mt-2 text-primary md:hidden"
       >
         {nav ? <FaTimes size={30} /> : <FaBars size={30} />}
       </div>
 
       {nav && (
-        <ul className="z-10 flex flex-col justify-center items-center absolute top-0 left-0 w-full h-screen bg-green-600 text-white">
+        <ul className="z-10 flex flex-col justify-center items-center absolute top-0 left-0 w-full h-screen bg-white text-primary">
           {links.map(({ id, name, link }) => (
             <li
               key={id}
