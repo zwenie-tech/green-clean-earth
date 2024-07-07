@@ -16,21 +16,33 @@ const NavigationBar = () => {
   const guestLinks = [
     { id: 1, name: "Home", link: "https://www.greencleanearth.org/" },
     { id: 2, name: "Projects", link: "https://greencleanearth.org/projects" },
-    { id: 4, name: "Participant list", link: "/participant-list" },
+    { id:3, name: "Competition", link: ""},
+    { id: 4, name: "Register", link: "/register" },
     { id: 5, name: "Login", link: "/login" },
-    // { id: 6, name: "User Register", link: "/user-register" },
-    { id: 7, name: "Register", link: "/register" },
-    { id: 8, name: "About Us", link: "https://greencleanearth.org/about" },
-    { id: 9, name: "Contact Us", link: "https://greencleanearth.org/contact-us" },
+    { id: 6, name: "Events & News", link: ""},
+    { id: 7, name: "Get Plants", link: ""},
+    { id: 8, name: "Group List", link: ""},
+    { id: 9, name: "Participant list", link: "/participant-list" },
+    { id: 10, name: "Faq", link: "" },
+    { id: 11, name: "Result", link: "" },
+    { id: 12, name: "About Us", link: "https://greencleanearth.org/about" },
+    { id: 13, name: "Contact", link: "https://greencleanearth.org/contact-us" },
   ];
 
   const userLinks = [
     { id: 1, name: "Home", link: "https://www.greencleanearth.org/" },
     { id: 2, name: "Projects", link: "https://greencleanearth.org/projects" },
-    { id: 3, name: "Participant list", link: "/participant-list" },
-    { id: 4, name: "About Us", link: "https://greencleanearth.org/about" },
-    { id: 5, name: "Contact Us", link: "https://greencleanearth.org/contact-us" },
-    { id: 6, name: "Logout", link: "/logout" },
+    { id:3, name: "Competition", link: ""},
+    { id: 4, name: "Dashboard", link: "" },
+    { id: 5, name: "Logout", link: "/logout" },
+    { id: 6, name: "Events & News", link: ""},
+    { id: 7, name: "Get Plants", link: ""},
+    { id: 8, name: "Group List", link: ""},
+    { id: 9, name: "Participant list", link: "/participant-list" },
+    { id: 10, name: "Faq", link: "" },
+    { id: 11, name: "Result", link: "" },
+    { id: 12, name: "About Us", link: "https://greencleanearth.org/about" },
+    { id: 13, name: "Contact", link: "https://greencleanearth.org/contact-us" }
   ];
 
   const links = token ? userLinks : guestLinks;
