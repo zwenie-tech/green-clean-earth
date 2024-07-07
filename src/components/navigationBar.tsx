@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import Cookies from "js-cookie";
 import { usePathname } from "next/navigation";
+import { Menu, X } from "lucide-react";
 
 const NavigationBar = () => {
   const [nav, setNav] = useState(false);
@@ -60,26 +61,28 @@ const NavigationBar = () => {
 
         <div
           onClick={() => setNav(!nav)}
-          className="cursor-pointer pr-4 z-20 text-gray-800 md:hidden"
+          className="cursor-pointer pr-4 z-20 text-primary md:hidden"
         >
-          {nav ? <FaTimes size={30} /> : <FaBars size={30} />}
+          {/* {nav ? <FaTimes size={30} /> : <FaBars size={30} />} */}
+          {nav ? <X size={30}/> : <Menu size={30}/>}
+          
         </div>
       </div>
 
       {nav && (
-        <ul className="z-10 flex flex-col justify-center items-center absolute top-0 left-0 w-full h-screen bg-white text-gray-800">
+        <ul className="z-10 flex flex-col justify-center items-start absolute top-0 left-0 w-full h-screen bg-white text-gray-800">
           {links.map((link) => (
             <li
               key={link.href}
-              className="px-4 py-6 cursor-pointer capitalize text-4xl"
+              className="mx-4 my-2 cursor-pointer capitalize text-base"
             >
               <Link href={link.href} passHref>
                 <p
                   onClick={() => setNav(!nav)}
-                  className={`no-underline p-1.5 rounded-full transition-colors duration-300 ${
+                  className={`no-underline px-4 py-2 rounded-full transition-colors duration-300 ${
                     pathname === link.href
-                      ? "bg-green-600 text-white"
-                      : "hover:bg-yellow-300"
+                      ? "bg-primary text-white"
+                      : "hover:bg-primary/60"
                   }`}
                 >
                   {link.label}
