@@ -46,7 +46,6 @@ import Footer from "@/components/footer";
 import NgoAdditionalDetails from "./ngo-additional-details/page";
 import Header from "@/components/header";
 import HeaderNav from "@/components/header";
-import JoinNow from "@/components/joinNow";
 
 const formSchema = z.object({
   categoryId: z.string(),
