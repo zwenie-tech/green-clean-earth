@@ -14,7 +14,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { apiURL } from "@/app/requestsapi/request";
-import HeaderNav from "@/components/header";
 import { useRouter } from 'next/navigation'
 
 import { Input } from "@/components/ui/input";
@@ -85,7 +84,8 @@ function NgoAdditionalDetailsForm() {
 
   return (
     <section className="bg-green-50 dark:bg-gray-900">
-            <HeaderNav />
+                  <NavigationBar />
+
 
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0 mt-8">
         {/* <h1 className="flex items-center my-6 text-2xl font-bold text-green-600 dark:text-white">

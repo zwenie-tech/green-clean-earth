@@ -21,7 +21,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { apiURL } from "@/app/requestsapi/request";
-import HeaderNav from "@/components/header";
 import NavigationBar from "@/components/navigationBar";
 import Footer from "@/components/footer";
 import { useSearchParams } from "next/navigation";
@@ -135,7 +134,8 @@ function PromoterAdditionalDetailsForm() {
 
   return (
     <section className="bg-green-50 dark:bg-gray-900">
-      <HeaderNav />
+            <NavigationBar />
+
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0 mt-8">
             <h1 className="text-xl m-5 font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Promoter - Additional details
