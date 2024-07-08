@@ -26,7 +26,7 @@ import { Input } from "@/components/ui/input";
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
-
+import HeaderNav from "@/components/header";
 import { apiURL } from "@/app/requestsapi/request";
 import { fetchClubData } from "@/app/requestsapi/request";
 
@@ -122,13 +122,14 @@ const MultiSelectZodForm = () => {
 
   return (
     <section className="bg-green-50">
-      <NavigationBar />
+      <HeaderNav />
+      
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0 mt-8">
-        <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0">
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+            <h1 className="text-xl m-5 font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               School - Additional details
             </h1>
+        <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0">
+          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <Form {...multiForm}>
               <form
                 onSubmit={multiForm.handleSubmit(onSubmit)}

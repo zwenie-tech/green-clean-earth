@@ -13,7 +13,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { apiURL } from "@/app/requestsapi/request";
-
+import HeaderNav from "@/components/header";
 import { Input } from "@/components/ui/input"
 import {
   Select,
@@ -134,16 +134,16 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
 
   return (
     <section className="bg-green-50 dark:bg-gray-900">
-      <NavigationBar />
+      <HeaderNav />
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0 mt-8">
         {/* <h1 className="flex items-center my-6 text-2xl font-bold text-green-600 dark:text-white">
           GreenCleanEarth
         </h1> */}
-      <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+              <h1 className="text-xl m-5 font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Residence Association - Additional details
               </h1>
+      <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
           <Form {...form}>
             <form  noValidate onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             

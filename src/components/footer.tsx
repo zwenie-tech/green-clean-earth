@@ -5,7 +5,7 @@ export default function Footer() {
       <footer className="w-full py-14 bg-green-200 mt-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto">
-                <h1 className="flex justify-center text-3xl font-bold">GreenCleanEarth</h1>
+                {/* <h1 className="flex justify-center text-3xl font-bold">GreenCleanEarth</h1>
                 <ul className="text-lg flex items-center justify-center flex-col gap-7 md:flex-row md:gap-12 transition-all duration-500 py-12 mb-8 border-b border-green-300">
                     <li><a href="#" className=" text-gray-800 hover:text-gray-900">About us</a></li>
                     <li><a href="#" className=" text-gray-800 hover:text-gray-900">Contact</a></li>
@@ -34,7 +34,7 @@ export default function Footer() {
                             </svg>
                             
                     </a>
-                </div>
+                </div> */}
                 <div className="text-lg text-gray-700 text-center block">
                   <p>Green Clean Earth Movement. All rights reserved</p>
                   <p>A GCEM Foundation Compaing for Save Earth</p>
