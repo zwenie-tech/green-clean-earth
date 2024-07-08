@@ -305,7 +305,7 @@ export default function Register() {
                   name="coordinator_name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Coordinator name</FormLabel>
+                      <FormLabel>Coordinator Name</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -318,7 +318,7 @@ export default function Register() {
                   name="whatsapp_number"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Whatsapp number</FormLabel>
+                      <FormLabel>Whatsapp Number</FormLabel>
                       <FormControl>
                         <Input type="number" {...field} />
                       </FormControl>
@@ -553,7 +553,10 @@ export default function Register() {
                     </FormItem>
                   )}
                 />
-                <Button type="submit">Submit</Button>
+                <center>
+                <Button type="submit" className="bg-green-600">Submit</Button>
+
+                </center>
               </form>
             </Form>
           </div>
