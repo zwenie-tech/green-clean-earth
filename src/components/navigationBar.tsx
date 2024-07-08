@@ -33,9 +33,9 @@ const NavigationBar = () => {
   ];
 
   return (
-    <header className="bg-white py-5 mb-2">
-      <div className="w-full mx-auto px-5 flex flex-col justify-center items-center">
-        <h1 className="text-2xl text-primary font-medium font-sans mb-5">
+    <header className="py-5 mb-2">
+      <div className="w-full mx-auto px-5 flex flex-row md:flex-col justify-between md:justify-center items-center">
+        <h1 className="text-2xl text-primary font-medium font-sans md:mb-5">
           <a href="https://www.greencleanearth.org/" target="_blank" rel="noreferrer">
             GreenCleanEarth
           </a>
@@ -70,7 +70,7 @@ const NavigationBar = () => {
       </div>
 
       {nav && (
-        <ul className="z-10 flex flex-col justify-center items-start absolute top-0 left-0 w-full h-screen bg-white text-gray-800">
+        <ul className="z-10 flex flex-col justify-center items-center absolute top-0 left-0 w-full h-screen bg-white text-gray-800">
           {links.map((link) => (
             <li
               key={link.href}

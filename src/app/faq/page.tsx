@@ -10,6 +10,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import GceBadge from '@/components/gceBadge'
+import JoinNow from '@/components/joinNow'
 
 const Faq = () => {
   return (
@@ -17,8 +18,8 @@ const Faq = () => {
       <NavigationBar/>
       <div>
         <PageTitle title='FAQ' />
-        <div className="max-w-screen-md mx-auto p-4 mb-6">
-          <Accordion type="single" collapsible>
+        <div className="max-w-screen-xl mx-auto p-4 mb-6">
+          <Accordion type="single" collapsible className='flex flex-col gap-6'>
             <AccordionItem value="item-1" className='bg-light-gray px-4 rounded-xl'>
               <AccordionTrigger>എങ്ങിനെ അപ്ലോഡ് ചെയ്യാം?</AccordionTrigger>
               <AccordionContent>
@@ -52,6 +53,7 @@ const Faq = () => {
         </div>
       </div>
       <GceBadge />
+      <JoinNow />
       <Footer/>
     </main>
   )
