@@ -19,6 +19,9 @@ const config = {
     },
     extend: {
       colors: {
+        'light-gray': 'hsl(0, 12%, 95%)',
+        'light-green':'hsl(79, 39%, 83%)',
+        'dark-gray': 'hsl(0, 4%, 85%)',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -52,6 +55,10 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+      },
+      boxShadow: {
+        'top-bottom': '0px 12px 12px 1px rgba(0, 0, 0, 0.1), 0px -12px 12px 1px rgba(0, 0, 0, 0.1)',
+        'dashboard': '0 5px 60px -15px rgba(0, 0, 0, 0.3)',
       },
       borderRadius: {
         lg: "var(--radius)",
