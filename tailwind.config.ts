@@ -22,6 +22,7 @@ const config = {
         'light-gray': 'hsl(0, 12%, 95%)',
         'light-green':'hsl(79, 39%, 83%)',
         'dark-gray': 'hsl(0, 4%, 85%)',
+        'dark-text': 'hsla(0, 2%, 62%, 1)',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 import Link from "next/link";
 import { Gift } from "lucide-react";
 import { DialogUploadPlant, DialogUploadPlantMyPage } from "./dialog_upload_plant";
+import { DialogEditProfile } from "./dialog_edit_profile";
 
 interface Profile {
   name: string;
@@ -21,7 +22,7 @@ interface ProfileDetailsProps {
 }
 
 const initialProfile: Profile = {
-  name: "Name",
+  name: "Name Name",
   location: "Location",
   address: "Address",
   contact: "9876543210",
@@ -62,20 +63,36 @@ export default function ProfileTab({ token }: any) {
 
 const ProfileDetails: React.FC<ProfileDetailsProps> = ({ profile},{token}) => {
   return (
-    <div className="profile-details leading-normal">
-      <div className="">
+    <div className="">
+      <div className="flex flex-col items-center">
+        <div className="h-40 w-40 bg-white border rounded-full"></div>
+        <div className="relative w-full my-4">
+          <h1 className="text-3xl text-center font-semibold">{profile.name}</h1>
+          <p className="text-dark-text text-center">{profile.email}</p>  
+          <div className="my-2 md:m-0 md:absolute md:right-[25%] md:top-[50%] translate-y-[-50%]">
+            {/* <Link href={'my-profile/edit'} className="text-primary">
+              Edit Profile
+            </Link> */}
+            <DialogEditProfile />
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full p-6 bg-white">
+          <div>
+            <p className="text-dark-text">Location</p> 
+            <p>{profile.location}</p>
+          </div>
+          <div>
+            <p className="text-dark-text">Address</p>
+            <p>{profile.address}</p>
+          </div>
+          <div>
+            <p className="text-dark-text">Phone</p>
+            <p>{profile.contact}</p>
+          </div>
+        </div>
+        
       </div>
-      <h1 className="text-3xl font-semibold py-2">{profile.name}</h1>
-      <p><strong>Location:</strong> {profile.location}</p>
-      <p><strong>Address:</strong> {profile.address}</p>
-      <p><strong>Phone:</strong> {profile.contact}</p>
-      <p><strong>Email:</strong> {profile.email}</p>
-      <style jsx>{`
-        .profile-details {
-          max-width: 400px;
-        }
-        `}</style>
-        <DialogUploadPlantMyPage token={token} />
+      {/* <DialogUploadPlantMyPage token={token} />
       <Link 
             className="flex m-4 justify-start items-start gap-3 text-xl border rounded-xl shadow p-5 bg-white hover:bg-green-100 hover:shadow-md hover:border-green-600"
             href={"https://greencleanearth.org/gcem-lucky-draw-contest"}>
@@ -86,7 +103,7 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ profile},{token}) => {
               <p className="font-semibold text-xl">Lucky Draw</p>
               <p className="font-normal text-base">നറുക്കെടുപ്പ്</p>
             </div>
-          </Link>
+      </Link> */}
     </div>
     
   );
