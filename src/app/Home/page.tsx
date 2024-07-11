@@ -435,7 +435,7 @@ Supported by indian Oil Corporation and myG, VKC,tecQ, Aqua garden, Mall of gard
     </div>
     <div style={{marginLeft:"40%"}}>
               <button className="bg-light-gray font-bold py-2 px-4 rounded-full" style={{color:'#3C6E1F',paddingLeft:'20px',paddingRight:'20px'}}>
-                Read More > >
+                Read More
               </button>
             </div>
             <div>

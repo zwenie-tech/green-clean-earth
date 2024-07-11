@@ -2,7 +2,14 @@ import Footer from "@/components/footer";
 import React, { useState, useEffect } from 'react';
 import NavigationBar from '@/components/navigationBar';
 
-const NewsCard = ({ title, image, smallHeading, paragraph }) => {
+interface NewsCardProps {
+  title: string;
+  image: string;
+  smallHeading: string;
+  paragraph: string;
+}
+
+const NewsCard: React.FC<NewsCardProps> = ({ title, image, smallHeading, paragraph }) => {
   return (
     <div className="flex flex-col p-4 mb-6 shadow-md rounded-lg bg-light-gray">
       <h2 className="text-xl font-bold mb-2">{title}</h2>
@@ -15,7 +22,7 @@ const NewsCard = ({ title, image, smallHeading, paragraph }) => {
           </div>
           <div className="flex mt-10">
             <button className="bg-light-gray" style={{borderRadius:'5px'}}>
-              Read More >>
+              Read More
             </button>
           </div>
         </div>
