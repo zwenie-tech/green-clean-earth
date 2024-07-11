@@ -17,8 +17,8 @@ const NavigationBar = () => {
   }, []);
 
   const links = [
-    { href: "/", label: "Home" },
-    { href: "/projects", label: "Projects" },
+    { href: "/home", label: "Home" },
+    { href: "/project", label: "Projects" },
     { href: "/competition", label: "Competition" },
     { href: "/register", label: "Register" },
     { href: "/login", label: "Login" },
@@ -28,7 +28,7 @@ const NavigationBar = () => {
     { href: "/participant-list", label: "Participant List" },
     { href: "/faq", label: "FAQ" },
     { href: "/result", label: "Result" },
-    { href: "/about", label: "About Us" },
+    { href: "/about-us", label: "About Us" },
     { href: "/contact", label: "Contact" },
   ];
 
