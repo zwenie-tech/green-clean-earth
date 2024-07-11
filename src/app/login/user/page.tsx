@@ -61,7 +61,7 @@ export default function UserLogin() {
           description: "Successfully logged in.",
         })
         Cookies.set('token', token, { expires: 1 });
-        router.replace("/my-page?id=" + id);
+        router.replace("/user-dash-home?id=" + id);
       }
     } catch (error) {
       console.error("Error:", error);
