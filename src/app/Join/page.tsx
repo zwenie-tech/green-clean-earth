@@ -9,10 +9,10 @@ const JoinNow = () => {
         <div>
             <Navigation />
             <div className="flex justify-center items-center" style={{ marginTop: '40px', height: '60px' }}>
-                <h1 className="text-4xl font-bold" style={{ textAlign: 'center' }}>ഹരിത കേരളം വൃക്ഷത്തൈ പരിപാലന മത്സരം.</h1>
+                <h1 className="text-4xl font-bold text-center item-center" >ഹരിത കേരളം വൃക്ഷത്തൈ പരിപാലന മത്സരം.</h1>
             </div>
-            <div className="flex justify-center items-center" style={{ marginTop: '20px' }}>
-                <h3 className="text-2xl font-bold" style={{ textAlign: 'center', color: '#3C6E1F' }}>
+            <div className="mt-8 flex justify-center items-center" >
+                <h3 className="text-2xl font-bold items-center text-[#3C6E1F]">
                     വൃക്ഷങ്ങൾ നട്ട് വളർത്തൂ..ഫോട്ടോ അപ്‌ലോഡ് ചെയ്യൂ..<br />
                     സമ്മാനങ്ങൾ നേടൂ....ഭൂമിയെ രക്ഷിക്കൂ....
                 </h3>
@@ -36,7 +36,7 @@ const JoinNow = () => {
                 <button className="bg-gray-200 text-green-700 shadow-lg rounded-md px-4 py-1" style={{ marginRight: '5px' }}>
                     Login
                 </button>
-                <p style={{ color: '#3C6E1F', margin: '0 5px' }}>|</p>
+                <p  className=" text-[#3C6E1F]"style={{ margin: '0 5px' }}>|</p>
                 <button className="bg-gray-200 text-green-700 shadow-lg rounded-md px-4 py-1" style={{ marginLeft: '5px' }}>
                     Registration
                 </button>

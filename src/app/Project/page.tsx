@@ -6,8 +6,8 @@ const project=()=>{
     return(
         <>
             <NavigationBar/>
-            <div className="flex justify-center items-center" style={{ marginTop: '40px' }}>
-                <h1 className="text-4xl font-bold" style={{ textAlign: 'center' }}>Projects</h1>
+            <div className="mt-7 flex justify-center items-center">
+                <h1 className="text-4xl font-bold text-center items-center">Projects</h1>
             </div>
             {/*first div */}
             <div className="ml-9 mr-7 mt-9 shadow-lg ">
@@ -89,7 +89,7 @@ const project=()=>{
             </div>
           </div>
           <div>
-          <h2 className="mt-9 text-xl font-bold"style={{ textAlign:'center',color: '#3C6E1F'}}>Green Clean Estimate</h2>
+          <h2 className="mt-9 text-xl font-bold text-center items-center text-[#3C6E1F]">Green Clean Estimate</h2>
           </div>
            {/*table */}
            <div className="container mx-auto p-6">
@@ -129,7 +129,7 @@ const project=()=>{
                             <td className="py-3 px-6 text-left">10%-12500/w-(1.25 Lakh)</td>
                             <td className="py-3 px-6 text-left">10%-12500/w-(1.25 Lakh)</td>
                             <td className="py-3 px-6 text-left">30%-37500/w-1.25 Lakh-</td>
-                            <td className="py-3 px-6 text-left">30%-37500/w- (1.25 Lakh) .</td>
+                            <td className="py-3 px-6 text-left">30%-37500/w- (1.25 Lakh)</td>
                             <td className="py-3 px-6 text-left">10 %-12500/w- 25Cr</td>
                             <td className="py-3 px-6 text-left">10%-12500/w--25 Cr</td>
                             <td className="py-3 px-6 text-left">10 %-12500/w- 25Cr </td>
