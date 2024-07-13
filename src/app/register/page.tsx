@@ -236,7 +236,7 @@ export default function Register() {
       {/* <NavigationBar /> */}
       <NavigationBar />
       
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0 mt-8">
+      {/*<div className="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0 mt-8">
       <h1 className="text-xl mb-5 font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Create a group account
             </h1>
@@ -246,7 +246,7 @@ export default function Register() {
             {/* <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Create a group account
             </h1> */}
-            <Form {...form}>
+           {/* <Form {...form}>
               <form noValidate onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 <FormField
                   control={form.control}
@@ -555,6 +555,342 @@ export default function Register() {
               </form>
             </Form>
           </div>
+        </div>
+                  </div>*/}
+      <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white text-center">
+      Create a Group Account
+      </h1>
+      <div className="mt-7 container mx-auto p-4 flex flex-col lg:flex-row  items-stretch">
+        <div className="w-full lg:w-1/4 flex items-center justify-center">
+          <img
+            src="/images/planting_trees.jpg"
+            alt="Description of image"
+            className="w-full h-full object-cover rounded-lg opacity-50"
+          />
+        </div>
+        {/*form.......... */}
+        <div className="w-full lg:w-2/4 bg-white rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700 flex items-center justify-center border-2">
+          <div className="p-6 w-full">
+          <Form {...form}>
+              <form noValidate onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                <FormField
+                  control={form.control}
+                  name="categoryId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Category</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                          <SelectTrigger>
+                            <SelectValue placeholder="Choose a category" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {category.map((category) => (
+                            <SelectItem key={category.id} value={category.group_type}>
+                              {category.group_type}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Institution Name</FormLabel>
+                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="location"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Location</FormLabel>
+                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="coordinator_name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Coordinator name</FormLabel>
+                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="whatsapp_number"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Whatsapp number</FormLabel>
+                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                        <Input type="number" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="profession"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Profession</FormLabel>
+                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="country"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Country</FormLabel>
+                      <Select onValueChange={(value) => {
+                        field.onChange(value);
+                        setSelectedCountry(value);
+                      }} defaultValue={field.value}>
+                        <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                          <SelectTrigger>
+                            <SelectValue placeholder="Choose a country" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {countries.map((country) => (
+                            <SelectItem key={country.cntry_id} value={country.cntry_name}>
+                              {country.cntry_name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {selectedCountry === 'India' && (
+                  <FormField
+                    control={form.control}
+                    name="state"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>State</FormLabel>
+                        <Select onValueChange={(value) => {
+                          field.onChange(value);
+                          setSelectedState(value);
+                        }} defaultValue={field.value}>
+                          <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                            <SelectTrigger>
+                              <SelectValue placeholder="Choose a state" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {states.map((state) => (
+                              <SelectItem key={state.st_id} value={state.st_name}>
+                                {state.st_name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+                {selectedState === 'Kerala' && (
+                  <FormField
+                    control={form.control}
+                    name="district"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>District</FormLabel>
+                        <Select onValueChange={(value) => {
+                          field.onChange(value);
+                          setSelectedDistrict(value);
+                        }} defaultValue={field.value}>
+                          <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                            <SelectTrigger>
+                              <SelectValue placeholder="Choose a district" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {districts.map((district) => (
+                              <SelectItem key={district.dis_id} value={district.dis_name}>
+                                {district.dis_name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+                {selectedState !== 'Kerala' && selectedCountry === 'India' && (
+                  <FormField
+                    control={form.control}
+                    name="district"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>District</FormLabel>
+                        <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+                {selectedState === 'Kerala' && (
+                  <FormField
+                    control={form.control}
+                    name="corporation"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Corporation/Municipality/Block Panchayat</FormLabel>
+                        <Select onValueChange={(value) => {
+                          field.onChange(value);
+                          setSelectedCorp(value);
+                        }} defaultValue={field.value}>
+                          <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                            <SelectTrigger>
+                              <SelectValue placeholder="Choose a Option" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {corporation.map((corp) => (
+                              <SelectItem key={corp.cop_id} value={corp.cop_name}>
+                                {corp.cop_name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+                {selectedState === 'Kerala' && (
+                  <FormField
+                    control={form.control}
+                    name="lsg"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>LSGD / Zone</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Choose a LSG" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {lsgd ? lsgd.map((lsg) => (
+                              <SelectItem key={lsg.lsg_id} value={lsg.lsg_name}>
+                                {lsg.lsg_name}
+                              </SelectItem>
+                            )): <SelectItem key={1} value={'lsg'}>
+                            Choose a LSG
+                          </SelectItem>}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+                {selectedState === 'Kerala' && (
+                  <FormField
+                  control={form.control}
+                  name="wardNo"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Ward Number</FormLabel>
+                      <FormControl>
+                        <Input type="number" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                  
+                )}
+                {selectedCountry != 'India' && (
+                <FormField
+                  control={form.control}
+                  name="city"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>City / Province</FormLabel>
+                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+                <FormField
+                  control={form.control}
+                  name="username"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Username</FormLabel>
+                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                        <Input type="password" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div className="flex justify-center">
+            <Button type="submit" className="w-1/3 bg-green-600">
+              Submit
+            </Button>
+          </div>
+              </form>
+            </Form>
+          </div>
+        </div>
+        <div className="w-full lg:w-1/4 flex items-center justify-center">
+          <img
+            src="/images/planting_trees_2.jpg"
+            alt="Description of image"
+            className="w-full h-full object-cover rounded-lg opacity-50"
+          />
         </div>
       </div>
       <Footer />
