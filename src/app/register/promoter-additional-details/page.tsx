@@ -132,32 +132,39 @@ function PromoterAdditionalDetailsForm() {
       console.error("Error:", error);
     }
   };
-
   return (
     <section className="bg-green-50 dark:bg-gray-900">
       <NavigationBar />
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0 mt-8">
-        <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+      <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white text-center">
               Promoter - Additional details
-            </h1>
-            <h1 className="text-base font-normal leading-tight tracking-tight text-gray-600 dark:text-white">
-              Helping School, NGO, or Residence Association
+      </h1>
+      {/*div part */}
+      <div className="mt-7 container mx-auto p-4 flex flex-col lg:flex-row  items-stretch">
+        <div className="w-full lg:w-1/4 flex items-center justify-center">
+          <img
+            src="/images/planting_trees.jpg"
+            alt="Description of image"
+            className="w-full h-full object-cover rounded-lg opacity-50"
+          />
+        </div>
+        {/*form.......... */}
+        <div className="w-full lg:w-2/4 bg-white rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700 flex items-center justify-center border-2">
+          <div className="p-6 w-full">
+            <h1 className="text-base font-normal leading-tight tracking-tight text-black dark:text-white mt-4 mb-4 text-center">
+              Helping School, NGO or Residence Association
             </h1>
             <Form {...form}>
-              <form noValidate onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <form noValidate onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 m-14">
                 <FormField
                   control={form.control}
                   name="city_name"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>City name</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
+                      <FormControl className="shadow-lg rounded-md px-4 py-1 border-0">
+                         <Input {...field} />
                       </FormControl>
-                      <FormDescription></FormDescription>
-                      <FormMessage />
+                      <FormMessage /> 
                     </FormItem>
                   )}
                 />
@@ -169,7 +176,7 @@ function PromoterAdditionalDetailsForm() {
                     <FormItem>
                       <FormLabel>Promoting Category</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
+                        <FormControl className="shadow-lg rounded-md px-4 py-1 border-0">
                           <SelectTrigger>
                             <SelectValue placeholder="Choose a category" />
                           </SelectTrigger>
@@ -197,20 +204,28 @@ function PromoterAdditionalDetailsForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Total number of team members</FormLabel>
-                      <FormControl>
+                      <FormControl className="shadow-lg rounded-md px-4 py-1 border-0">
                         <Input type="number" {...field} />
                       </FormControl>
-                      <FormDescription></FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="bg-green-600">
+                <div className="flex justify-center">
+                <Button type="submit" className="w-1/4 bg-green-600 items-center">
                   Submit
                 </Button>
+                </div>
               </form>
             </Form>
           </div>
+        </div>
+        <div className="w-full lg:w-1/3 flex items-center justify-center">
+          <img
+            src="/images/planting_trees_2.jpg"
+            alt="Description of image"
+            className="w-full h-full object-cover rounded-lg opacity-50"
+          />
         </div>
       </div>
       <Footer />
