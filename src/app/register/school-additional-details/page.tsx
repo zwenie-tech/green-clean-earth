@@ -29,6 +29,7 @@ import { useToast } from "@/components/ui/use-toast";
 
 import { apiURL } from "@/app/requestsapi/request";
 import { fetchClubData } from "@/app/requestsapi/request";
+import Footer from "@/components/footer";
 
 const formSchema = z.object({
   value: z.array(z.string()).nonempty("Please select at least one club"),
@@ -123,13 +124,37 @@ const MultiSelectZodForm = () => {
   return (
     <section className="bg-green-50">
       <NavigationBar />
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0 mt-8">
+      {/*<div className="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0 mt-8">
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               School - Additional details
             </h1>
-            <Form {...multiForm}>
+            
+                <Button type="submit" className="bg-green-600">
+                  Submit
+                </Button>
+              </form>
+            </Form>
+          </div>
+        </div>
+                  </div>*/}
+
+<h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white text-center">
+School - Additional details   
+      </h1>
+      <div className="mt-7 container mx-auto p-4 flex flex-col lg:flex-row  items-stretch">
+        <div className="w-full lg:w-1/3 flex items-center justify-center">
+          <img
+            src="/images/planting_trees.jpg"
+            alt="Description of image"
+            className="w-full h-full object-cover rounded-lg opacity-50"
+          />
+        </div>
+        {/*form.......... */}
+        <div className="w-full lg:w-1/3 bg-white rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700 flex items-center justify-center border-2">
+          <div className="p-6 w-full">
+          <Form {...multiForm}>
               <form
                 onSubmit={multiForm.handleSubmit(onSubmit)}
                 className="space-y-3 grid gap-3 w-full"
@@ -144,7 +169,7 @@ const MultiSelectZodForm = () => {
                         onValuesChange={field.onChange}
                         values={field.value}
                       >
-                        <MultiSelectorTrigger className="border border-gray-200">
+                        <MultiSelectorTrigger className="shadow-xl rounded-md px-4 py-1 border-0">
                           <MultiSelectorInput placeholder="Select clubs" />
                         </MultiSelectorTrigger>
                         <MultiSelectorContent>
@@ -171,7 +196,7 @@ const MultiSelectZodForm = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Number of students this year</FormLabel>
-                      <FormControl>
+                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
                         <Input type="number" placeholder="" {...field} />
                       </FormControl>
                       <FormDescription> </FormDescription>
@@ -185,7 +210,7 @@ const MultiSelectZodForm = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Total number of classes</FormLabel>
-                      <FormControl>
+                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
                         <Input type="number" placeholder="" {...field} />
                       </FormControl>
                       <FormDescription> </FormDescription>
@@ -199,7 +224,7 @@ const MultiSelectZodForm = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>List of classes</FormLabel>
-                      <FormControl>
+                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
                         <Input placeholder="" {...field} />
                       </FormControl>
                       <FormDescription> </FormDescription>
@@ -207,14 +232,24 @@ const MultiSelectZodForm = () => {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="bg-green-600">
-                  Submit
-                </Button>
+                <div className="flex justify-center">
+            <Button type="submit" className="w-1/3 bg-green-600">
+              Submit
+            </Button>
+          </div>
               </form>
             </Form>
           </div>
         </div>
+        <div className="w-full lg:w-1/3 flex items-center justify-center">
+          <img
+            src="/images/planting_trees_2.jpg"
+            alt="Description of image"
+            className="w-full h-full object-cover rounded-lg opacity-50"
+          />
+        </div>
       </div>
+    <Footer/>
     </section>
   );
 };

@@ -161,7 +161,7 @@ function PromoterAdditionalDetailsForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>City name</FormLabel>
-                      <FormControl className="shadow-lg rounded-md px-4 py-1 border-0">
+                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
                          <Input {...field} />
                       </FormControl>
                       <FormMessage /> 
@@ -176,7 +176,7 @@ function PromoterAdditionalDetailsForm() {
                     <FormItem>
                       <FormLabel>Promoting Category</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl className="shadow-lg rounded-md px-4 py-1 border-0">
+                        <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
                           <SelectTrigger>
                             <SelectValue placeholder="Choose a category" />
                           </SelectTrigger>
@@ -204,7 +204,7 @@ function PromoterAdditionalDetailsForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Total number of team members</FormLabel>
-                      <FormControl className="shadow-lg rounded-md px-4 py-1 border-0">
+                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
                         <Input type="number" {...field} />
                       </FormControl>
                       <FormMessage />
@@ -212,7 +212,7 @@ function PromoterAdditionalDetailsForm() {
                   )}
                 />
                 <div className="flex justify-center">
-                <Button type="submit" className="w-1/4 bg-green-600 items-center">
+                <Button type="submit" className="w-1/3 bg-green-600 items-center">
                   Submit
                 </Button>
                 </div>
