@@ -10,7 +10,6 @@ import {
   FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -89,16 +88,19 @@ const LoginForm = () => {
 
   async function onCoordinatorSubmit(values: z.infer<typeof coordinatorSchema>) {
     try {
-      const response = await fetch(`${apiURL}/coordinator/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: values.username,
-          password: values.password,
-        }),
-      });
+      const response = await fetch(
+        `${apiURL}/coordinator/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: values.username,
+            password: values.password
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -107,7 +109,7 @@ const LoginForm = () => {
       const result = await response.json();
       const id = result.data.id;
       const token = result.data.token;
-      Cookies.set("token", token, { expires: 1 });
+      Cookies.set('token', token, { expires: 1 });
       if (id) {
         toast({
           title: "Account logged in.",
@@ -115,6 +117,7 @@ const LoginForm = () => {
         });
         router.push(`/coordinator-dashboard?id=${id}`);
       }
+
     } catch (error) {
       toast({
         variant: "destructive",
@@ -128,155 +131,135 @@ const LoginForm = () => {
   return (
     <>
       <NavigationBar />
-      <div
-        className="d-flex align-items-center justify-content-end vh-100"
+      <div className="mt-7 container mx-auto p-4 flex flex-col lg:flex-row items-stretch opacity-80"
         style={{
           backgroundImage: 'url(/images/login.jpeg)',
           backgroundSize: 'cover',
           backgroundPosition: 'right',
           borderRadius: '20px',
-        }}
-      >
-        
-        <Container>
-          <Row className="justify-content-end">
-            <Col
-              md={4}
-              className="bg-white p-4 rounded shadow opacity-80 ml-3 ml-sm-5"
-              style={{
-                height: '500px',
-                borderRadius: '20px',
-                marginLeft: '30%', // Default margin for larger screens
-              }}
-            >
-   <div className="m-9 d-flex justify-content-between align-items-center text-2xl" style={{ marginLeft: '15%', marginRight: '10%' }}>
-  <Button
-    variant={isUserLogin ? "link" : "light"}
-    className={`text-${isUserLogin ? '[#3C6E1F]' : 'black'} text-2xl`} // Increase text size
-    onClick={() => setIsUserLogin(true)}
-    style={{ marginLeft: '20%',gap:'10%' }}
-  >
-    User
-  </Button>
-  
-  <Button
-    variant={!isUserLogin ? "link" : "light"}
-    className={`text-${!isUserLogin ? '[#3C6E1F]' : 'black'} text-2xl ml-auto`} // Increase text size and add margin-left
-    onClick={() => setIsUserLogin(false)}
-    style={{ marginLeft: '20%' }}
-  >
-    Coordinator
-  </Button>
-</div>
-              {/* User Login Form */}
-              {isUserLogin ? (
-                <Form {...userForm}>
-                  <form noValidate onSubmit={userForm.handleSubmit(onUserSubmit)} className="space-y-8">
-                    <FormField
-                      control={userForm.control}
-                      name="mobile"
-                      render={({ field }) => (
-                        <FormItem>
-                         {/* <FormLabel>Mobile</FormLabel>*/}
-                         <div className="flex justify-center mx-5" style={{ marginLeft:'10%',marginRight:'10%' }}>
-                          <FormControl className="shadow-xl rounded-md border-0">
-                          <Input
-                             type="number"
-                             placeholder="Mobile"
-                             className="bg-white text-black"
-                             style={{ backgroundColor: '#FFFFFF', opacity: 1 }}
-                             {...field}
-                            />
-                          </FormControl>
-                          </div>
-                          <FormDescription />
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={userForm.control}
-                      name="password"
-                      render={({ field }) => (
-                        <FormItem>
-                          {/*<FormLabel>Password</FormLabel>*/}
-                          <div className="flex justify-center mx-5" style={{ marginLeft:'10%',marginRight:'10%' }}>
-                          <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
-                            <Input type="password" placeholder="Password" className="bg-white text-black" {...field} />
-                          </FormControl>
-                          </div>   
-                          <FormDescription />
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <div className="flex justify-center w-full">
-                      <Button type="submit" style={{ width: '50%' }} className="bg-green-600 items-center">Submit</Button>
-                    </div>
-                    <div className="flex justify-center w-full mt-4">
-                      <a href="#" className="text-green-600">Forgot your password?</a>
-                    </div>
-                    <div className="flex justify-center w-full mt-4">
-                      <Button type="button" className=" shadow-xl bg-white text-green-600">Register</Button>
-                    </div>
-
-                  </form>
-                </Form>
-              ) : (
-                // Coordinator Login Form
-                <Form {...coordinatorForm}>
-                  <form noValidate onSubmit={coordinatorForm.handleSubmit(onCoordinatorSubmit)} className="space-y-8">
-                    <FormField
-                      control={coordinatorForm.control}
-                      name="username"
-                      render={({ field }) => (
-                        <FormItem>
-                          {/*<FormLabel>Username</FormLabel>*/}
-                          <div className="flex justify-center mx-5" style={{ marginLeft:'10%',marginRight:'10%' }}>
-                          <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
-                            <Input placeholder="Username" className="bg-white text-black" {...field} />
-                          </FormControl>
-                          </div>
-                         
-                          <FormDescription />
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={coordinatorForm.control}
-                      name="password"
-                      render={({ field }) => (
-                        <FormItem>
-                          {/*<FormLabel>Password</FormLabel>*/}
-                          <div className="flex justify-center mx-5" style={{ marginLeft:'10%',marginRight:'10%' }}>
-                          <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
-                            <Input type="password" placeholder="Password" className="bg-white text-black" {...field} />
-                          </FormControl>
-                          </div>
-                          <FormDescription />
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <div className="flex justify-center w-full">
-                       <Button type="submit" style={{ width: '50%' }} className="bg-green-600 items-center">Submit</Button>
-                    </div>
-                    <div className="flex justify-center w-full mt-4">
-                      <a href="#" className="text-green-600">Forgot your password?</a>
-                    </div>
-                    <div className="flex justify-center w-full mt-4">
-                      <Button type="button" className="shadow-xl bg-white text-green-600">Register</Button>
-                    </div>
-
-                  </form>
-                </Form>
-              )}
-            </Col>
-          </Row>
-        </Container>
+        }}>
+        <div className="w-full lg:w-2/3 flex hidden lg:block">
+        </div>
+        <div className="w-full bg-[#E4EBF7] lg:w-1/3 rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700 flex items-center justify-center">
+          <Container>
+            <Row className="justify-content-end">
+              <Col md={4} className="p-4 rounded shadow opacity-80" style={{ borderRadius: '20px' }}>
+                <div className="d-flex justify-content-between mb-4">
+                  <Button
+                    variant={isUserLogin ? "link" : "light"}
+                    className={`text-${isUserLogin ? '[#3C6E1F]' : 'black'} text-2xl mt-9 ml-3`}
+                    onClick={() => setIsUserLogin(true)}
+                  >
+                    User
+                  </Button>
+                  <Button
+                    variant={!isUserLogin ? "link" : "light"}
+                    className={`text-${!isUserLogin ? '[#3C6E1F]' : 'black'} text-2xl`}
+                    onClick={() => setIsUserLogin(false)}
+                  >
+                    Coordinator
+                  </Button>
+                </div>
+                {isUserLogin ? (
+                  <Form {...userForm}>
+                    <form noValidate onSubmit={userForm.handleSubmit(onUserSubmit)} className="space-y-8">
+                      <FormField
+                        control={userForm.control}
+                        name="mobile"
+                        render={({ field }) => (
+                          <FormItem>
+                            <div className="flex justify-center mx-5" style={{ marginLeft: '10%', marginRight: '10%' }}>
+                              <FormControl className="shadow-xl rounded-md border-0">
+                                <Input
+                                  type="tel"
+                                  placeholder="Mobile"
+                                  className="bg-white text-black"
+                                  style={{ backgroundColor: '#FFFFFF', opacity: 1 }}
+                                  {...field}
+                                  pattern="[0-9]*"
+                                />
+                              </FormControl>
+                            </div>
+                            <FormDescription />
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={userForm.control}
+                        name="password"
+                        render={({ field }) => (
+                          <FormItem>
+                            <div className="flex justify-center mx-5" style={{ marginLeft: '10%', marginRight: '10%' }}>
+                              <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                                <Input type="password" placeholder="Password" className="bg-white text-black" {...field} />
+                              </FormControl>
+                            </div>
+                            <FormDescription />
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <div className="flex justify-center w-full">
+                        <Button type="submit" style={{ width: '50%' }} className="bg-green-600 items-center">Submit</Button>
+                      </div>
+                      <div className="flex justify-center w-full mt-4">
+                        <a href="#" className="text-green-600">Forgot your password?</a>
+                      </div>
+                      <div className="flex justify-center w-full mt-4">
+                        <Button type="button" className="shadow-xl bg-white text-green-600">Register</Button>
+                      </div>
+                    </form>
+                  </Form>
+                ) : (
+                  <Form {...coordinatorForm}>
+                    <form noValidate onSubmit={coordinatorForm.handleSubmit(onCoordinatorSubmit)} className="space-y-8">
+                      <FormField
+                        control={coordinatorForm.control}
+                        name="username"
+                        render={({ field }) => (
+                          <FormItem>
+                            <div className="flex justify-center mx-5" style={{ marginLeft: '10%', marginRight: '10%' }}>
+                              <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                                <Input placeholder="Username" className="bg-white text-black" {...field} />
+                              </FormControl>
+                            </div>
+                            <FormDescription />
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={coordinatorForm.control}
+                        name="password"
+                        render={({ field }) => (
+                          <FormItem>
+                            <div className="flex justify-center mx-5" style={{ marginLeft: '10%', marginRight: '10%' }}>
+                              <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                                <Input type="password" placeholder="Password" className="bg-white text-black" {...field} />
+                              </FormControl>
+                            </div>
+                            <FormDescription />
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <div className="flex justify-center w-full">
+                        <Button type="submit" style={{ width: '50%' }} className="bg-green-600 items-center">Submit</Button>
+                      </div>
+                      <div className="flex justify-center w-full mt-4">
+                        <a href="#" className="text-green-600">Forgot your password?</a>
+                      </div>
+                      <div className="flex justify-center w-full mt-4">
+                        <Button type="button" className="shadow-xl bg-white text-green-600">Register</Button>
+                      </div>
+                    </form>
+                  </Form>
+                )}
+              </Col>
+            </Row>
+          </Container>
+        </div>
       </div>
       <Footer />
     </>
