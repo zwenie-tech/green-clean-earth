@@ -18,7 +18,7 @@ const NavigationBar = () => {
 
   const links = [
     { href: "/home", label: "Home" },
-    { href: "/project", label: "Projects" },
+    { href: "/projects", label: "Projects" },
     { href: "/competition", label: "Competition" },
     { href: "/register", label: "Register" },
     { href: "/login", label: "Login" },
