@@ -147,14 +147,14 @@ const LoginForm = () => {
               <Col md={4} className="p-4 rounded shadow opacity-80" style={{ borderRadius: '20px' }}>
                 <div className="d-flex justify-content-between mb-4">
                   <Button
-                    variant={isUserLogin ? "link" : "light"}
+                    variant={isUserLogin ? "link" : "secondary"}
                     className={`text-${isUserLogin ? '[#3C6E1F]' : 'black'} text-2xl mt-9 ml-3`}
                     onClick={() => setIsUserLogin(true)}
                   >
                     User
                   </Button>
                   <Button
-                    variant={!isUserLogin ? "link" : "light"}
+                    variant={!isUserLogin ? "link" : "secondary"}
                     className={`text-${!isUserLogin ? '[#3C6E1F]' : 'black'} text-2xl`}
                     onClick={() => setIsUserLogin(false)}
                   >
