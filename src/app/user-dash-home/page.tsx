@@ -7,8 +7,9 @@ import PageTitle from "@/components/sm/pageTitle";
 import { BadgeIndianRupee, CreditCard, FileText, Gift, ImageUp, Images, LogOut, Send, SquareUserRound, Trophy, UserRoundCog } from "lucide-react";
 import Link from 'next/link'
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function UserDashHome() {
+function UserDashHomeFn() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   return (
@@ -119,4 +120,12 @@ export default function UserDashHome() {
     </main>
     </>
 )
+}
+
+export default function UserDashHome() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <UserDashHomeFn />
+    </Suspense>
+  );
 }
