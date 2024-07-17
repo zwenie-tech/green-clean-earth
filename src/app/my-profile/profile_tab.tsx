@@ -9,11 +9,15 @@ import { DialogUploadPlant, DialogUploadPlantMyPage } from "./dialog_upload_plan
 import { DialogEditProfile } from "./dialog_edit_profile";
 
 interface Profile {
-  name: string;
+  name:string
   location: string;
   address: string;
   contact: string;
   email: string;
+  institution_name: string,
+  coordinator_name: string,
+  profession: string,
+  country:string
 }
 
 interface ProfileDetailsProps {
@@ -22,11 +26,15 @@ interface ProfileDetailsProps {
 }
 
 const initialProfile: Profile = {
-  name: "Name Name",
+  name:'Name',
   location: "Location",
   address: "Address",
   contact: "9876543210",
   email: "example@email.com",
+  institution_name: 'Institution Name',
+  coordinator_name: 'Coord Name',
+  profession:'Teacher',
+  country: 'Country'
 };
 
 export default function ProfileTab({ token }: any) {
@@ -39,11 +47,44 @@ export default function ProfileTab({ token }: any) {
       if (user_id && token) {
         const data = await fetchUserData(user_id, token);
         if (data.user) {
-          const { us_name, us_address, us_mobile, us_email, us_district } = data.user[0];
+          // const { us_name, us_address, us_mobile, us_email, us_district, us_city,cntry_name  } = data.user[0];
+          const { 
+            us_name, 
+            us_address, 
+            us_mobile, 
+            us_email, 
+            us_district, 
+            us_city, 
+            cntry_name, 
+            st_name, 
+            dis_name, 
+            cop_name, 
+            lsg_name, 
+            us_ward, 
+            us_gender, 
+            us_profile_description
+           } = data.user[0];
+          
           Cookies.set('name', us_name, { expires: 1 });
+          Cookies.set('email', us_email, { expires: 1 });
+          Cookies.set('profileDescription', us_profile_description, { expires: 1 });
+          Cookies.set('mobile', us_mobile, { expires: 1 });
+          Cookies.set('country', cntry_name, { expires: 1 });
+          Cookies.set('state', st_name, { expires: 1 });
+          Cookies.set('district', dis_name, { expires: 1 });
+          Cookies.set('corporation', cop_name, { expires: 1 });
+          Cookies.set('lsg', lsg_name, { expires: 1 });
+          Cookies.set('ward', us_ward, { expires: 1 });
+          Cookies.set('city', us_city, { expires: 1 });
+          Cookies.set('address', us_address, { expires: 1 });
+          Cookies.set('gender', us_gender, { expires: 1 });
           setProfile({
-            name: us_name,
-            location: us_district || "", // Set the location with a default value
+            name : us_name,
+            institution_name: us_name,
+            coordinator_name: us_name,
+            profession: us_name,
+            country : cntry_name,
+            location: us_district ? us_district:us_city, // Set the location with a default value
             address: us_address,
             contact: us_mobile,
             email: us_email,
@@ -78,17 +119,30 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ profile},{token}) => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full p-6 bg-white">
           <div>
+            <p className="text-dark-text">Institution Name</p> 
+            <p>{profile.institution_name}</p>
+          </div>
+          <div>
+            <p className="text-dark-text">Coordinator Name</p> 
+            <p>{profile.coordinator_name}</p>
+          </div>
+          <div>
             <p className="text-dark-text">Location</p> 
             <p>{profile.location}</p>
           </div>
+          {/* <div>
+            <p className="text-dark-text">Profession</p> 
+            <p>{profile.profession}</p>
+          </div> */}
           <div>
-            <p className="text-dark-text">Address</p>
-            <p>{profile.address}</p>
-          </div>
-          <div>
-            <p className="text-dark-text">Phone</p>
+            <p className="text-dark-text">Whatsapp Number</p> 
             <p>{profile.contact}</p>
           </div>
+          <div>
+            <p className="text-dark-text">Country</p> 
+            <p>{profile.country}</p>
+          </div>
+          
         </div>
         
       </div>

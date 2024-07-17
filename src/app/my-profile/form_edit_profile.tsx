@@ -2,19 +2,19 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
-import axios from "axios";
-import { apiURL } from "@/app/requestsapi/request";
+import { apiURL, fetchUserData } from "@/app/requestsapi/request";
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import Cookies from "js-cookie";
+
 import {
   Select,
   SelectContent,
@@ -22,154 +22,223 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
-import { BsImages, BsPaperclip } from "react-icons/bs";
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
-import { uploadActivityData } from "@/app/requestsapi/request";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
-import imageCompression from "browser-image-compression";
-
-const MAX_FILE_SIZE = 1024 * 1024 * 100; // 100MB
-const TARGET_FILE_SIZE = 1024 * 1024 * 4; // 4MB
-const ACCEPTED_IMAGE_MIME_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-const ACCEPTED_IMAGE_TYPES = ["jpeg", "jpg", "png", "webp"];
-
-async function resizeImage(file:any) {
-  const options = {
-    maxSizeMB: TARGET_FILE_SIZE / (1024 * 1024),
-    maxWidthOrHeight: 1920,
-    useWebWorker: true,
-  };
-
-  try {
-    const resizedFile = await imageCompression(file, options);
-    return resizedFile;
-  } catch (error) {
-    console.error('Error resizing the image:', error);
-    throw error;
-  }
-}
-
-async function validateAndResizeImage(files:any) {
-  if (!files || files.length === 0) { 
-    return files;
-  }
-
-  const file = files[0];
-  if (file.size > TARGET_FILE_SIZE) {
-    const resizedFile = await resizeImage(file);
-    return [resizedFile];
-  }
-
-  return files;
-}
-
 
 const formSchema = z.object({
-  category: z.string(),
-  sub_category: z.string(),
-  name: z.string().max(255),
-  address: z.string().max(255),
-  activity_title: z.string().max(255),
-  short_desc: z.string().max(255),
-  social_link: z.string().max(255),
-  activityThumbnail: z
-  .any()
-  .refine(async (files) => {
-    const validFiles = await validateAndResizeImage(files);
-    return validFiles?.[0]?.size <= MAX_FILE_SIZE;
-  }, "Max image size is 100MB.")
-  .refine(
-    (files) => ACCEPTED_IMAGE_MIME_TYPES.includes(files?.[0]?.type),
-    "Only .jpg, .jpeg, .png and .webp formats are supported."
-  ),
+  name: z.string().min(1).max(255),
+  email: z.string().email().max(255),
+  mobile: z.coerce.number().gte(1).lte(9999999999),
+  country: z.string(),
+  state: z.string().optional(),
+  district: z.string().optional(),
+  corporation: z.string().optional(),
+  ward: z.string().optional(),
+  lsg: z.string().optional(),
+  city: z.string().optional(),
+  address: z.string(),
+  gender: z.string(),
+  profileDescription: z.string(),
 });
 
-interface Category {
-  activity_category: string;
-  activity_category_id: string;
+interface Country {
+  cntry_id: number;
+  cntry_name: string;
 }
 
-interface SubCategory {
-  id: string;
-  name: string;
+interface State {
+  st_id: number;
+  st_name: string;
+}
+
+interface District {
+  dis_id: number;
+  dis_name: string;
+}
+
+interface Lsgd {
+  lsg_id: number;
+  lsg_name: string;
+}
+
+type Corp = {
+  cop_id: string;
+  cop_name: string;
 }
 
 interface ActivitiesTabProps {
   token: string;
 }
 
-export function FormEditProfile({ token }: ActivitiesTabProps) {
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const searchParams = useSearchParams();
-  const id = searchParams.get("id");
+export function FormEditProfile() {
   const { toast } = useToast();
+  const [countries, setCountries] = useState<Country[]>([]);
+  const [states, setStates] = useState<State[]>([]);
+  const [districts, setDistricts] = useState<District[]>([]);
+  const [lsgd, setLsgd] = useState<Lsgd[]>([]);
+  const [corporation, setCorporation] = useState<Corp[]>([]);
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [selectedState, setSelectedState] = useState("");
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [selectedCorp, setSelectedCorp] = useState("");
+  const searchParams = useSearchParams();
+  const user_id = searchParams.get("id");
+  const router = useRouter();
+  const token = Cookies.get('token');
 
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [subCategories, setSubCategories] = useState<SubCategory[]>([]);
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const us_name = Cookies.get('name');
+  const us_email = Cookies.get('email');
+  const us_profile_description = Cookies.get('profileDescription');
+  const us_mobile = Cookies.get('mobile');
+  const cntry_name = Cookies.get('country');
+  const st_name = Cookies.get('state');
+  const dis_name = Cookies.get('district');
+  const cop_name = Cookies.get('corporation');
+  const lsg_name = Cookies.get('lsg');
+  const us_ward = Cookies.get('ward');
+  const us_city = Cookies.get('city');
+  const us_address = Cookies.get('address');
+  const us_gender = Cookies.get('gender');
+
+
+  const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      category: "",
-      sub_category: "",
-      name: "",
-      address: "",
-      activity_title: "",
-      short_desc: "",
-      social_link: "",
+      name: us_name,
+            email: us_email,
+            profileDescription: us_profile_description || "",
+            mobile: parseInt(us_mobile!) || 0,
+            country: cntry_name,
+            state: st_name || "",
+            district: dis_name || "",
+            corporation: cop_name || "",
+            lsg: lsg_name || "",
+            ward: us_ward || "",
+            city: us_city || "",
+            address: us_address,
+            gender: us_gender || "",
     },
   });
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(`${apiURL}/activity_category`);
-        setCategories(response.data.activity_category);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
+    async function fetchData() {
+      if (user_id && token) {
+        const data = await fetchUserData(user_id, token);
+        if (data.user) {
+          const { us_name, us_address, us_mobile, us_email, us_district, us_city, cntry_name, st_name, dis_name, cop_name, lsg_name, us_ward, us_gender, us_profile_description } = data.user[0];
+          form.reset({
+            name: us_name,
+            email: us_email,
+            profileDescription: us_profile_description || "",
+            mobile: parseInt(us_mobile),
+            country: cntry_name,
+            state: st_name || "",
+            district: dis_name || "",
+            corporation: cop_name || "",
+            lsg: lsg_name || "",
+            ward: us_ward || "",
+            city: us_city || "",
+            address: us_address,
+            gender: us_gender || "",
+          });
+          setSelectedCountry(cntry_name);
+          setSelectedState(st_name || "");
+          setSelectedDistrict(dis_name || "");
+          setSelectedCorp(cop_name || "");
+        }
       }
-    };
 
-    const fetchSubCategories = async () => {
-      try {
-        const response = await axios.get(`${apiURL}/activity_sub_category`);
-        setSubCategories(response.data.activity_sub_category);
-      } catch (error) {
-        console.error("Error fetching subcategories:", error);
-      }
-    };
-
-    fetchCategories();
-    fetchSubCategories();
-  }, []);
-
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    const category = categories.find((item) => item.activity_category === values.category)?.activity_category_id;
-
-    const formData = new FormData();
-    formData.append("name", values.name);
-    formData.append("category", category ? category : "");
-    formData.append("subCategory", values.sub_category);
-    formData.append("address", values.address);
-    formData.append("activityTitle", values.activity_title);
-    formData.append("shortDesc", values.short_desc);
-    formData.append("socialMediaLink", values.social_link);
-    if (selectedImage) {
-      formData.append("activityThumbnail", selectedImage);
+      const countryResponse = await fetch(`${apiURL}/country`);
+      const countryData = await countryResponse.json();
+      setCountries(countryData.country);
     }
-    
+    fetchData();
+  }, [user_id, token, form]);
+
+  useEffect(() => {
+    async function fetchData() {
+      if (selectedCountry === 'India') {
+        const stateResponse = await fetch(`${apiURL}/state`);
+        const stateData = await stateResponse.json();
+        setStates(stateData.state);
+
+        const districtResponse = await fetch(`${apiURL}/district`);
+        const districtData = await districtResponse.json();
+        setDistricts(districtData.district);
+      }
+    }
+    fetchData();
+  }, [selectedCountry]);
+
+  useEffect(() => {
+    async function fetchCorpData() {
+      if (selectedDistrict) {
+        const dist_id = districts.find((item) => item.dis_name === selectedDistrict)?.dis_id;
+        const corpResponse = await fetch(`${apiURL}/corporation/${dist_id}`);
+        const corpData = await corpResponse.json();
+        setCorporation(corpData.corporation);
+      }
+    }
+    fetchCorpData();
+  }, [selectedDistrict, districts]);
+
+  useEffect(() => {
+    async function fetchLsgdData() {
+      if (selectedCorp) {
+        const corp_id = corporation.find((item) => item.cop_name === selectedCorp)?.cop_id;
+        const lsgResponse = await fetch(`${apiURL}/lsg/${corp_id}`);
+        const lsgData = await lsgResponse.json();
+        setLsgd(lsgData.lsg);
+      }
+    }
+    fetchLsgdData();
+  }, [selectedCorp, corporation]);
+
+  async function onSubmit(values: any) {
+    const dataWithIds = {
+      name: values.name,
+      email: values.email,
+      profileDescription: values.profileDescription,
+      mobileNumber: values.mobile.toString(),
+      countryId: countries.find((item) => item.cntry_name === values.country)?.cntry_id,
+      stateId: states.find((item) => item.st_name === values.state)?.st_id?.toString(),
+      city: values.city,
+      province: values.province || '',
+      corporation: corporation.find((item) => item.cop_name === values.corporation)?.cop_id?.toString(),
+      address: values.address,
+      gender: values.gender,
+      districtId: districts.find((item) => item.dis_name === values.district)?.dis_id?.toString(),
+      wardNo: parseInt(values.ward) || 0,
+      lsgd: parseInt(values.lsg) || 0
+    };
+
     try {
-      const response = await uploadActivityData(formData, token, id);
-      if (response!.status == 201) {
+      const response = await fetch(`${apiURL}/user/updateProfile`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(dataWithIds),
+      });
+      if (!response.ok) {
+        console.log(response)
+        throw new Error("Network response was not ok");
+      }
+
+      const result = await response.json();
+
+      if (result.success) {
         toast({
-          title: "Submitted Successfully.",
-          description: "Your activity has been uploaded successfully.",
+          title: "Profile Successfully Updated.",
+          description: "",
         });
-        setTimeout(function () {
-          window.location.reload();
-        }, 1800);
+        // router.push("/my-profile?id=" + user_id);
+        location.reload();
+      } else {
+        throw new Error(result.message || "Failed to update profile");
       }
     } catch (error) {
       toast({
@@ -183,197 +252,309 @@ export function FormEditProfile({ token }: ActivitiesTabProps) {
 
   return (
     <Form {...form}>
-      <form noValidate onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 p-2 h-[calc(80vh-50px)]">
-        <FormField
-          control={form.control}
-          name="category"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Items</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {categories.map((category) => (
-                    <SelectItem key={category.activity_category_id} value={category.activity_category}>
-                      {category.activity_category}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="sub_category"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Category</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {subCategories.map((subCategory) => (
-                    <SelectItem key={subCategory.id} value={subCategory.name}>
-                      {subCategory.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormDescription></FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input placeholder="" {...field} />
-              </FormControl>
-              <FormDescription></FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="address"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Address</FormLabel>
-              <FormControl>
-                <Input placeholder="" {...field} />
-              </FormControl>
-              <FormDescription></FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="activity_title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Activity Title</FormLabel>
-              <FormControl>
-                <Input placeholder="" {...field} />
-              </FormControl>
-              <FormDescription></FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="short_desc"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Short Description</FormLabel>
-              <FormControl>
-                <Input placeholder="" {...field} />
-              </FormControl>
-              <FormDescription></FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="social_link"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Social Media Link</FormLabel>
-              <FormControl>
-                <Input placeholder="" {...field} />
-              </FormControl>
-              <FormDescription></FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-         <div className={cn("flex md:flex-row w-[100%] gap-4 flex-col")}>
-              <div className="flex w-[100%] gap-2 flex-col my-4">
-              <FormLabel>Upload Image</FormLabel>
-              <span className="text-xs text-gray-400"></span>
-              <div className={`flex w-[100%] gap-4 p-4 rounded border border-neutral-200 flex-col items-center md:flex-col md:justify-between md:items-center`}>
-                <div className={`flex  md:flex-[1] h-[fit-content] md:p-4 md:justify-between md:flex-row`}>
-                  {selectedImage ? (
-                    <div className="md:max-w-[200px]">
-                      <img
-                        src={URL.createObjectURL(selectedImage)}
-                        alt="Selected"
-                      />
-                    </div>
-                  ) : (
-                    <div className="inline-flex items-center justify-between">
-                      <div className="p-3 bg-slate-200  justify-center items-center flex">
-                        <BsImages size={56} />
-                      </div>
-                    </div>
-                  )}
-                </div> 
-                
+              <form noValidate onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 <FormField
                   control={form.control}
-                  name="activityThumbnail"
+                  name="name"
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel>Name</FormLabel>
                       <FormControl>
-                        <Button size="lg" type="button" className="bg-primary/10 hover:bg-primary/20 border-2 border-primary text-primary">
-                        <input
-                          type="file"
-                          className="hidden"
-                          id="fileInput"
-                          accept="image/*"
-                          onBlur={field.onBlur}
-                          name={field.name}
-                          onChange={async (e) => {
-                            const files = e.target.files;
-                            if (files && files[0]) {
-                              const validFiles = await validateAndResizeImage(files);
-                              field.onChange(validFiles);
-                              setSelectedImage(validFiles[0] || null);
-                            }
-                          }}
-                          ref={field.ref}
-                        />
-                          <label
-                            htmlFor="fileInput"
-                            className="text-neutral-90  rounded-md cursor-pointer inline-flex items-center"
-                          >
-                            <BsPaperclip />
-                            <span className="whitespace-nowrap">
-                              Select Image
-                            </span>
-                          </label>
-                        </Button>
+                        <Input placeholder="" {...field} />
                       </FormControl>
-                      
-
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-              </div>
-            </div>
-          </div>
-        <Button type="submit" className="bg-primary w-[100%]">
-          Submit
-        </Button>
-      </form>
-    </Form>
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }:any) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input type="email" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="profileDescription"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Profile Description</FormLabel>
+                      <FormControl>
+                        <Input placeholder="" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="country"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Country</FormLabel>
+                      <Select onValueChange={(value) => {
+                        field.onChange(value);
+                        setSelectedCountry(value);
+                      }} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Choose a country" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {countries.map((country) => (
+                            <SelectItem key={country.cntry_id} value={country.cntry_name}>
+                              {country.cntry_name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {selectedCountry === 'India' && (
+                  <FormField
+                    control={form.control}
+                    name="state"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>State</FormLabel>
+                        <Select onValueChange={(value) => {
+                          field.onChange(value);
+                          setSelectedState(value);
+                        }} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Choose a state" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {states.map((state) => (
+                              <SelectItem key={state.st_id} value={state.st_name}>
+                                {state.st_name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+                {selectedState === 'Kerala' && (
+                  <FormField
+                    control={form.control}
+                    name="district"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>District</FormLabel>
+                        <Select onValueChange={(value) => {
+                          field.onChange(value);
+                          setSelectedDistrict(value);
+                        }} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Choose a district" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {districts.map((district) => (
+                              <SelectItem key={district.dis_id} value={district.dis_name}>
+                                {district.dis_name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+                {selectedState !== 'Kerala' && selectedCountry === 'India' && (
+                  <FormField
+                    control={form.control}
+                    name="district"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>District</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+                {selectedState === 'Kerala' && (
+                  <FormField
+                    control={form.control}
+                    name="corporation"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Corporation/Municipality/Block Panchayat</FormLabel>
+                        <Select onValueChange={(value) => {
+                          field.onChange(value);
+                          setSelectedCorp(value);
+                        }} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Choose a Option" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {corporation.map((corp) => (
+                              <SelectItem key={corp.cop_id} value={corp.cop_name}>
+                                {corp.cop_name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+                {selectedState === 'Kerala' && (
+                  <FormField
+                    control={form.control}
+                    name="lsg"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>LSGD / Zone</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Choose a LSG" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {lsgd.map((lsg) => (
+                              <SelectItem key={lsg.lsg_id} value={lsg.lsg_name}>
+                                {lsg.lsg_name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+                {selectedState === 'Kerala' && (
+                  <FormField
+                  control={form.control}
+                  name="ward"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Ward Number</FormLabel>
+                      <FormControl>
+                        <Input type="number" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                  
+                )}
+                {selectedCountry != 'India' && (
+                <FormField
+                  control={form.control}
+                  name="city"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>City / Province</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+                <FormField
+                  control={form.control}
+                  name="address"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Address</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Address" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="gender"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Gender</FormLabel>
+                      <Select onValueChange={field.onChange} value={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select your gender" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="male">Male</SelectItem>
+                          <SelectItem value="female">Female</SelectItem>
+                          <SelectItem value="other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="mobile"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Mobile number</FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input type="password" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                /> */}
+                {/* <FormField
+                  control={form.control}
+                  name="referralcode"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Referral Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Referral Name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                /> */}
+                <Button type="submit" className="w-full">Update</Button>
+              </form>
+            </Form>
   )
 }
