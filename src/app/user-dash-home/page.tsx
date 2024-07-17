@@ -6,8 +6,11 @@ import NavigationBar from "@/components/navigationBar";
 import PageTitle from "@/components/sm/pageTitle";
 import { BadgeIndianRupee, CreditCard, FileText, Gift, ImageUp, Images, LogOut, Send, SquareUserRound, Trophy, UserRoundCog } from "lucide-react";
 import Link from 'next/link'
+import { useSearchParams } from "next/navigation";
 
 export default function UserDashHome() {
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
   return (
     <>
     <main className='min-h-screen flex flex-col'>
@@ -21,7 +24,7 @@ export default function UserDashHome() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
             <Link 
               className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10"
-              href={"/upload-plant"}>
+              href={`/upload-plant`}>
               <div className="flex flex-row items-center justify-between w-full px-6 py-2 bg-light-green">
                 <p className="font-semibold text-xl">My Uploads</p>
                 <ImageUp size={48} color="#6c7260" strokeWidth={1.75} />
@@ -32,7 +35,7 @@ export default function UserDashHome() {
             </Link>
             <Link 
               className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10"
-              href={"/my-profile"}>
+              href={`/my-profile?id=${id}`}>
               <div className="flex flex-row items-center justify-between w-full px-6 py-2 bg-light-green">
                 <p className="font-semibold text-xl">My Profile</p>
                 <UserRoundCog size={48} color="#6c7260" strokeWidth={1.75} />

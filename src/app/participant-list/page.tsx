@@ -57,9 +57,11 @@ const ParticipantList: React.FC = () => {
         <h1 className="text-2xl my-4 text-center font-bold">Participant List</h1>
       </div>
       <div className="m-2 flex justify-center items-center space-x-4">
+    <a href="/participants">
     <button className="text-white text-sm md:text-base py-2 px-3 bg-[#3C6E1F] rounded-2xl shadow-xl md:py-3 md:px-4">
        Sorting Page
     </button>
+    </a>
     <button className="text-white text-sm md:text-base py-2 px-3 bg-[#3C6E1F] rounded-2xl shadow-xl md:py-3 md:px-4">
          District List
     </button>
