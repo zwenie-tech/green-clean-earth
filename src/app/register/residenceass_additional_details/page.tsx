@@ -133,17 +133,21 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
 
   return (
     <section className="bg-green-50 dark:bg-gray-900">
-            <NavigationBar />
-
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0 mt-8">
-        {/* <h1 className="flex items-center my-6 text-2xl font-bold text-green-600 dark:text-white">
-          GreenCleanEarth
-        </h1> */}
-              <h1 className="text-xl m-5 font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-              Residence Association - Additional details
-              </h1>
-      <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+      <NavigationBar />
+      <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white text-center">
+      Residence Association - Additional details
+      </h1>
+      <div className="mt-7 container mx-auto p-4 flex flex-col lg:flex-row  items-stretch">
+        <div className="w-full lg:w-1/3 flex items-center justify-center">
+          <img
+            src="/images/planting_trees.jpg"
+            alt="Description of image"
+            className="w-full h-full object-cover rounded-lg opacity-50"
+          />
+        </div>
+        {/*form.......... */}
+        <div className="w-full lg:w-1/3 bg-white rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700 flex items-center justify-center border-2">
+          <div className="p-6 w-full">
           <Form {...form}>
             <form  noValidate onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             
@@ -153,7 +157,7 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Total number of team members</FormLabel>
-                        <FormControl>
+                        <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
                           <Input  type="number" {...field} />
                         </FormControl>
                         <FormDescription></FormDescription>
@@ -161,12 +165,23 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
                       </FormItem>
                     )}
                   />
-              <Button type="submit" className="bg-green-600">Submit</Button>
-            </form>
-          </Form>
-    </div>
+                <div className="flex justify-center">
+            <Button type="submit" className="w-1/3 bg-green-600">
+              Submit
+            </Button>
+          </div>
+              </form>
+            </Form>
+          </div>
+        </div>
+        <div className="w-full lg:w-1/3 flex items-center justify-center">
+          <img
+            src="/images/planting_trees_2.jpg"
+            alt="Description of image"
+            className="w-full h-full object-cover rounded-lg opacity-50"
+          />
+        </div>
       </div>
-  </div>
   <Footer/>
 </section>
   )
