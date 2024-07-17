@@ -109,12 +109,13 @@ const LoginForm = () => {
       const result = await response.json();
       const id = result.data.id;
       const token = result.data.token;
-      Cookies.set('token', token, { expires: 1 });
+      
       if (id) {
         toast({
           title: "Account logged in.",
           description: "Successfully logged in.",
         });
+        Cookies.set('token', token, { expires: 1 });
         router.push(`/coordinator-dashboard?id=${id}`);
       }
 
@@ -220,8 +221,14 @@ const LoginForm = () => {
                         render={({ field }) => (
                           <FormItem>
                             <div className="flex justify-center mx-5" style={{ marginLeft: '10%', marginRight: '10%' }}>
-                              <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
-                                <Input placeholder="Username" className="bg-white text-black" {...field} />
+                              <FormControl className="shadow-xl rounded-md border-0">
+                                <Input
+                                  type="text"
+                                  placeholder="Username"
+                                  className="bg-white text-black"
+                                  style={{ backgroundColor: '#FFFFFF', opacity: 1 }}
+                                  {...field}
+                                />
                               </FormControl>
                             </div>
                             <FormDescription />
