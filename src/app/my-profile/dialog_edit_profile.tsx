@@ -30,7 +30,7 @@ export function DialogEditProfile({token}:any) {
         </DialogHeader>
 
         <ScrollArea className="h-full w-full p-2 rounded-md border">
-            <FormEditProfile token={token}/>
+            <FormEditProfile/>
         </ScrollArea>
         {/* <DialogFooter>
           <Button type="submit" className="bg-green-600 hover:bg-green-800">Save changes</Button>
