@@ -35,20 +35,54 @@ export const fetchUserData = async (user_id :any, token:any) => {
     }
   };
 
-  export const fetchActivityData = async (token: any,id:any) => {
-    const headersList = {
-      "Authorization": `Bearer ${token}`,
-    };
+  // export const fetchActivityData = async (token: any,id:any) => {
+  //   const headersList = {
+  //     "Authorization": `Bearer ${token}`,
+  //   };
     
-    const response = await fetch(`${apiURL}/activity/${id}`, { 
-      method: "GET",
-      headers: headersList
-    });
-    
-      const data = await response.json();
+  //   const response = await fetch(`${apiURL}/activity/${id}`, { 
+  //     method: "GET",
+  //     headers: headersList
+  //   });
+  
+  //   if (await response){
+  //     var data = await response.json();
+  //   }
    
-    return data;
-  };
+  //   return data;
+  // };
+
+
+  export const fetchActivityData = async (token: any, id: any) => {
+    const headersList = {
+        "Authorization": `Bearer ${token}`,
+    };
+
+    try {
+        const response = await fetch(`${apiURL}/activity/${id}`, {
+            method: "GET",
+            headers: headersList
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        // Check if the response has content before parsing
+        const text = await response.text();
+        if (!text) {
+            // throw new Error('Response is empty');
+            return null;
+        }
+
+        // Attempt to parse the JSON content
+        const data = JSON.parse(text);
+        return data;
+    } catch (error) {
+        console.error('Error fetching activity data:', error);
+        throw error; // Rethrow the error to handle it further up the call stack if needed
+    }
+};
 
 
 export const fetchPlantsData = async (token : string) => {

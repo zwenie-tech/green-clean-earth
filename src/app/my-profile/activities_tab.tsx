@@ -4,10 +4,8 @@ import { Upload } from "lucide-react";
 import { DialogUploadActivities } from "./dialog_upload_activities";
 import Table from "@/components/table";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import { fetchActivityData } from "@/app/requestsapi/request";
-import { any } from "zod";
 
 const headings = [
   "Sl No",
@@ -19,25 +17,50 @@ const headings = [
   "Value",
 ];
 
-export default function ActivitiesTab({token}:any) {
+export default function ActivitiesTab({ token }: any) {
   const [activity, setActivity] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
+
   useEffect(() => {
     async function fetchData() {
       if (token) {
-        const d = await fetchActivityData(token,id);
-        setActivity(d.activity);
+        try {
+          const d = await fetchActivityData(token, id);
+          if (d && d.activity) {
+            setActivity(d.activity);
+          } else {
+            setActivity([]);
+          }
+        } catch (error) {
+          setError("Error fetching activity data");
+        } finally {
+          setLoading(false);
+        }
       }
     }
     fetchData();
-  }, [token,id]);
+  }, [token, id]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div className="">
-      <DialogUploadActivities token={token}/>
+      <DialogUploadActivities token={token} />
       <p>Table</p>
-      <Table data={activity} headings={headings} />
+      {activity.length === 0 ? (
+        <div>No activity data available</div>
+      ) : (
+        <Table data={activity} headings={headings} />
+      )}
     </div>
   );
 }

@@ -35,7 +35,7 @@ const Table: React.FC<TableProps> = ({ headings, data }) => {
       try {
         const response = await axios.get(`${apiURL}/activity_category`);
         const categoriesData = response.data.activity_category;
-        const categoriesMap = categoriesData.reduce((acc:any, category:any) => {
+        const categoriesMap = categoriesData.reduce((acc: any, category: any) => {
           acc[category.activity_category_id] = category.activity_category;
           return acc;
         }, {});
@@ -50,63 +50,69 @@ const Table: React.FC<TableProps> = ({ headings, data }) => {
 
   function removejpg(path: string) {
     let p = path.replace('.jpg', '');
-    let img = imageURL+p;
+    let img = imageURL + p;
     return img;
   }
 
   return (
     <div className="overflow-scroll">
-      <table className="table-auto md:w-full md:table-fixed">
-        <thead>
-          <tr className="border-b-2 border-green-300">
-            {headings.map((h, i) => (
-              <th
-                key={i}
-                className="bg-green-200 capitalize py-3 px-2 text-sm font-normal"
-              >
-                {h}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {records.map((d, i) => (
-            <tr
-              key={d.personal_activity_id}
-              className={`${i % 2 !== 0 && "bg-gray-200"} text-center capitalize`}
-            >
-              <td className="">{startIndex + i + 1}</td>
-              <td>
-                <a href={`${d.activity_social_media_link}`}><img src={`${imageURL}${d.activity_thumbnail}`} alt="Thumbnail" /></a>
-              </td>
-              <td>{d.participant_name}</td>
-              <td>{d.activity_title}{d.activity_description}</td>
-              <td>
-                {categories[d.activity_category_id]}
-                </td>
-              <td className="p-4">
-                {d.activity_views} Views, {d.activity_likes} Likes
-              </td>
-              <td>{d.activity_value}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div className="w-full flex flex-row items-center p-5">
-        <div className="flex flex-row items-center gap-4">
-          <span className="cursor-pointer font-semibold" onClick={() => prevPage()}>
-            prev
-          </span>
-          <div className="flex flex-row items-center">
-            <span>{currentPage}</span>
-            <span>/</span>
-            <span>{numberOfPages}</span>
+      {data.length === 0 ? (
+        <div className="text-center py-5">No data available</div>
+      ) : (
+        <>
+          <table className="table-auto md:w-full md:table-fixed">
+            <thead>
+              <tr className="border-b-2 border-green-300">
+                {headings.map((h, i) => (
+                  <th
+                    key={i}
+                    className="bg-green-200 capitalize py-3 px-2 text-sm font-normal"
+                  >
+                    {h}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {records.map((d, i) => (
+                <tr
+                  key={d.personal_activity_id}
+                  className={`${i % 2 !== 0 && "bg-gray-200"} text-center capitalize`}
+                >
+                  <td>{startIndex + i + 1}</td>
+                  <td>
+                    <a href={`${d.activity_social_media_link}`}>
+                      <img src={`${imageURL}${d.activity_thumbnail}`} alt="Thumbnail" />
+                    </a>
+                  </td>
+                  <td>{d.participant_name}</td>
+                  <td>{d.activity_title}{d.activity_description}</td>
+                  <td>{categories[d.activity_category_id]}</td>
+                  <td className="p-4">
+                    {d.activity_views} Views, {d.activity_likes} Likes
+                  </td>
+                  <td>{d.activity_value}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="w-full flex flex-row items-center p-5">
+            <div className="flex flex-row items-center gap-4">
+              <span className="cursor-pointer font-semibold" onClick={prevPage}>
+                prev
+              </span>
+              <div className="flex flex-row items-center">
+                <span>{currentPage}</span>
+                <span>/</span>
+                <span>{numberOfPages}</span>
+              </div>
+              <span className="cursor-pointer font-semibold" onClick={nextPage}>
+                next
+              </span>
+            </div>
           </div>
-          <span className="cursor-pointer font-semibold" onClick={() => nextPage()}>
-            next
-          </span>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 

@@ -26,7 +26,6 @@ import { Input } from "@/components/ui/input";
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
-
 import { apiURL } from "@/app/requestsapi/request";
 import { fetchClubData } from "@/app/requestsapi/request";
 import Footer from "@/components/footer";

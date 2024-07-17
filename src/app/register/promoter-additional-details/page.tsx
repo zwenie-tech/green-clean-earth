@@ -21,7 +21,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { apiURL } from "@/app/requestsapi/request";
-
 import NavigationBar from "@/components/navigationBar";
 import Footer from "@/components/footer";
 import { useSearchParams } from "next/navigation";
