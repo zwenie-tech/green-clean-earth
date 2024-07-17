@@ -67,6 +67,27 @@ const Participant = () => {
       const countryResponse = await fetch(`${apiURL}/country`);
       const countryData = await countryResponse.json();
       setCountries(countryData.country);
+      try {
+        const response = await fetch(`${apiURL}/uploads/filter?limit=1000&page=1`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          }
+        });
+  
+        if (!response.ok) {
+          console.log(response);
+          throw new Error("Network response was not ok");
+        }
+        try {
+          const result = await response.json();
+          setParticipants(result.Uploads);
+        } catch {
+          setParticipants([]);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
     }
     fetchInitialData();
   }, []);
@@ -234,7 +255,7 @@ const Participant = () => {
           <div className="w-1/2 mb-3 md:w-1/3 p-1 md:p-2 bg-white">
             <label className="block ml-5 mb-1">Country</label>
             <select
-              className="w-full p-1 md:p-2 border-0 rounded-2xl bg-white focus:border-2 focus:border-[#3C6E1F]"
+              className="w-full p-1 md:p-2 border-0 rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
               style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
               value={selectedCountry}
               onChange={handleCountryChange}
@@ -252,7 +273,7 @@ const Participant = () => {
             <div className="w-1/2 mb-3 md:w-1/3 p-1 md:p-2">
               <label className="block ml-5 mb-1">State</label>
               <select
-                className="w-full p-1 md:p-2 border rounded-2xl bg-white focus:border-2 focus:border-[#3C6E1F]"
+                className="w-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
                 style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
                 value={selectedState}
                 onChange={handleStateChange}
@@ -272,7 +293,7 @@ const Participant = () => {
               <div className="w-1/2 mb-3 md:w-1/3 p-1 md:p-2">
                 <label className="block ml-5 mb-1">District</label>
                 <select
-                  className="w-full p-1 md:p-2 border rounded-2xl bg-white focus:border-2 focus:border-[#3C6E1F]"
+                  className="w-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
                   style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
                   value={selectedDistrict}
                   onChange={handleDistrictChange}
@@ -288,7 +309,7 @@ const Participant = () => {
               <div className="w-1/2 mb-3 md:w-1/4 p-1 md:p-2">
                 <label className="block ml-5 mb-1">Corporation</label>
                 <select
-                  className="w-full p-1 md:p-2 border rounded-2xl bg-white focus:border-2 focus:border-[#3C6E1F]"
+                  className="w-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
                   style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
                   value={selectedCorp}
                   onChange={handleCorpChange}
@@ -304,7 +325,7 @@ const Participant = () => {
               <div className="w-1/2 mb-3 md:w-1/4 p-1 md:p-2 bg-white">
                 <label className="block ml-5 mb-1">LSGD</label>
                 <select
-                  className="w-full p-1 md:p-2 border rounded-2xl bg-white focus:border-2 focus:border-[#3C6E1F]"
+                  className="w-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
                   style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
                   value={selectedLsgd}
                   onChange={(e) => setSelectedLsgd(e.target.value)}
@@ -321,7 +342,7 @@ const Participant = () => {
                 <label className="block ml-3 mb-1">Ward No</label>
                 <input
                   type="text"
-                  className="w-full p-1 md:p-2 border rounded-2xl bg-white focus:border-2 focus:border-[#3C6E1F]"
+                  className="w-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
                   placeholder="Enter ward number"
                   style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
                   value={wardNo}
@@ -334,7 +355,7 @@ const Participant = () => {
           <div className="w-full md:w-1/4 p-1 md:p-2 flex justify-center md:justify-start sm:items-center md:items-start">
             <button
               type="submit"
-              className="w-1/2 md:w-full mt-7 p-1 md:p-2 bg-[#3C6E1F] text-white rounded-2xl"
+              className="w-1/2 md:w-full mt-7 p-1 md:p-2 bg-[#3C6E1F] text-white rounded-md"
               style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
             >
               Submit
