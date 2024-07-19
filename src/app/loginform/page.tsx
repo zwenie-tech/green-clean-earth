@@ -74,7 +74,7 @@ const LoginForm = () => {
           description: "Successfully logged in.",
         });
         Cookies.set("token", token, { expires: 1 });
-        router.replace("/my-page?id=" + id);
+        router.replace("/user-dash-home?id=" + id);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -161,7 +161,7 @@ const LoginForm = () => {
                     Coordinator
                   </Button>
                 </div>
-                {isUserLogin ? (
+                {isUserLogin && (
                   <Form {...userForm}>
                     <form noValidate onSubmit={userForm.handleSubmit(onUserSubmit)} className="space-y-8">
                       <FormField
@@ -212,7 +212,8 @@ const LoginForm = () => {
                       </div>
                     </form>
                   </Form>
-                ) : (
+                )}
+                {!isUserLogin && (
                   <Form {...coordinatorForm}>
                     <form noValidate onSubmit={coordinatorForm.handleSubmit(onCoordinatorSubmit)} className="space-y-8">
                       <FormField
