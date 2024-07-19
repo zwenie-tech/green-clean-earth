@@ -9,7 +9,7 @@ import Link from 'next/link'
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 
-function UserDashHomeFn() {
+  function UserDashHomeFn() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   return (

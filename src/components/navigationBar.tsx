@@ -21,7 +21,7 @@ const NavigationBar = () => {
     { href: "/projects", label: "Projects" },
     { href: "/competition", label: "Competition" },
     { href: "/register", label: "Register" },
-    { href: "/login", label: "Login" },
+    { href: "/loginform", label: "Login" },
     { href: "/events", label: "Events & News" },
     { href: "/get-plant", label: "Get Plant" },
     { href: "/group-list", label: "Group List" },
