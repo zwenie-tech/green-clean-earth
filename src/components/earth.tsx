@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 const Earth = () => {
     return (
-        <div className="container mx-auto p-6">
+        <div className="container mt-3 mx-auto shadow-xl p-6">
             <div className="grid gap-4">
                 {/* First div */}
                 <div className="flex flex-col md:flex-row">
