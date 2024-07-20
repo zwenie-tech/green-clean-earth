@@ -24,7 +24,7 @@ const plantupload=()=>{
              {/*buttons....*/}
              <div className="flex flex-wrap p-2 md:p-4">
                   <div className="w-1/2 mb-3 md:w-1/3 p-1 md:p-2 bg-white">
-                <label className="block font-bold ml-5 mb-1 text-sm md:text-lg ">Select Draw</label>
+                <label className="text-[#A09C9C] block font-bold ml-5 mb-1 text-sm md:text-lg ">Select Draw</label>
                <select className="w-full p-1 md:p-2 border-0 text-sm md:text-lg  rounded-xl bg-white focus:border-2 focus:border-[#3C6E1F]" style={{ boxShadow: "1px 4px 5px 3px #00000040" }}>
                   <option>Select Option 1</option>
                   <option>Option 1</option>
@@ -32,7 +32,7 @@ const plantupload=()=>{
                 </select>
               </div>
                   <div className="w-1/2 mb-3 md:w-1/3 p-1 md:p-2">
-                    <label className="block font-bold ml-5 text-sm md:text-lg  mb-1">Group leader list</label>
+                    <label className="text-[#A09C9C] block font-bold ml-5 text-sm md:text-lg  mb-1">Group leader list</label>
                     <select className="w-full p-1 md:p-2 text-sm md:text-lg  border rounded-xl bg-white focus:border-2 focus:border-[#3C6E1F]" style={{ boxShadow: "1px 4px 5px 3px #00000040" }}>
                       <option>Select Option 2</option>
                       <option>Option 1</option>
@@ -40,7 +40,7 @@ const plantupload=()=>{
                     </select>
                   </div>
                   <div className="w-1/2 mb-3 md:w-1/3 p-1 md:p-2">
-                    <label className="block font-bold ml-5 text-sm md:text-lg  mb-1">Select Page</label>
+                    <label className="text-[#A09C9C] block font-bold ml-5 text-sm md:text-lg  mb-1">Select Page</label>
                     <select className="w-full p-1 md:p-2 border text-sm md:text-lg  rounded-xl bg-white focus:border-2 focus:border-[#3C6E1F]" style={{ boxShadow: "1px 4px 5px 3px #00000040" }}>
                       <option>Select Option 3</option>
                       <option>Option 1</option>
@@ -48,7 +48,7 @@ const plantupload=()=>{
                     </select>
                   </div>
                   <div className="w-1/2 mb-3 md:w-1/4 p-1 md:p-2">
-                    <label className="block font-bold text-sm md:text-lg  ml-5 mb-1">District</label>
+                    <label className="text-[#A09C9C] block font-bold text-sm md:text-lg  ml-5 mb-1">District</label>
                     <select className="w-full p-1 md:p-2 border text-sm md:text-lg  rounded-xl bg-white focus:border-2 focus:border-[#3C6E1F]" style={{ boxShadow: "1px 4px 5px 3px #00000040" }}>
                       <option>Select Option 4</option>
                       <option>Option 1</option>
@@ -56,7 +56,7 @@ const plantupload=()=>{
                     </select>
                   </div>
                   <div className="w-1/2 mb-3 md:w-1/4 p-1 md:p-2 bg-white">
-                <label className="block font-bold text-sm md:text-lg ml-5 mb-1">Assembly Constituency</label>
+                <label className="text-[#A09C9C] block font-bold text-sm md:text-lg ml-5 mb-1">Assembly Constituency</label>
                 <select className="w-full p-1 md:p-2 border text-sm md:text-lg  rounded-xl bg-white focus:border-2 focus:border-[#3C6E1F]" style={{ boxShadow: "1px 4px 5px 3px #00000040" }}>
                   <option>Select Option 5</option>
                   <option>Option 1</option>
@@ -64,7 +64,7 @@ const plantupload=()=>{
                 </select>
               </div>
               <div className="w-1/2  md:mt-0 mb-3 md:w-1/4 p-1  md:p-2 bg-white">
-                <label className="block font-bold text-sm md:text-lg  ml-5 mb-1">LSGD</label>
+                <label className="text-[#A09C9C] block font-bold text-sm md:text-lg  ml-5 mb-1">LSGD</label>
                 <select className="w-full p-1 md:p-2 border text-sm md:text-lg  rounded-xl bg-white focus:border-2 focus:border-[#3C6E1F]" style={{ boxShadow: "1px 4px 5px 3px #00000040" }}>
                   <option>Select Option 5</option>
                   <option>Option 1</option>
@@ -72,7 +72,7 @@ const plantupload=()=>{
                 </select>
               </div>
               <div className="w-full md:w-1/4 p-1 md:p-2 flex flex-col items-center md:items-start">
-                 <label className=" block text-sm font-bold md:text-lg text-sm md:text-lg  mb-1">Ward No</label>
+                 <label className="text-[#A09C9C] block text-sm font-bold md:text-lg text-sm md:text-lg  mb-1">Ward No</label>
                  <input
                    type="text"
                    className="w-1/2 md:w-full p-1 md:p-2 border rounded-xl bg-white focus:border-2 focus:border-[#3C6E1F]"
@@ -80,8 +80,6 @@ const plantupload=()=>{
                    style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
                  />
                 </div>
-
-
             </div>
             <div className="w-full md:p-2 flex justify-center items-center mt-2 md:mt-0">
              <button className="w-1/2 p-1 m-7 mt-2 md:p-2 bg-[#3C6E1F] text-white rounded-xl" style={{ boxShadow: "1px 4px 5px 3px #00000040" }}>

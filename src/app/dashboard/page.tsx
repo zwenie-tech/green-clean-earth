@@ -12,7 +12,7 @@ const dashboard=()=>{
     window.location.href = '/dashboaed-PlantUploads';
   };
   const ActivitiesButton= () => {
-    window.location.href = '/dashboard';
+    window.location.href = '/dashboard-activities';
   };
   const YouTubeEarningsButton= () => {
     window.location.href = '/dashboard';
