@@ -80,7 +80,7 @@ const DashboardActivity = () => {
         <h1 className='text-xl mt-2 font-bold'>Our Activities</h1>
       </div>
       {/* Selection menu */}
-      <div className="flex flex-wrap p-2 md:p-4">
+      {/* <div className="flex flex-wrap p-2 md:p-4">
         <div className="w-1/2 mb-3 md:w-1/4 p-1 md:p-2 bg-white">
           <label className="text-[#A09C9C] block font-bold ml-5 mb-1">Category</label>
           <select className="w-full p-1 md:p-2 border text-sm md:text-lg rounded-xl bg-white focus:border-2 focus:border-[#3C6E1F]" style={{ boxShadow: "1px 4px 5px 3px #00000040" }}>
@@ -108,7 +108,7 @@ const DashboardActivity = () => {
         <div className="w-full md:w-1/4 p-1 md:p-2 flex justify-center md:justify-start sm:items-center md:items-start">
           <button className="w-1/2 md:w-full mt-7 p-1 md:p-2 bg-[#3C6E1F] text-white rounded-2xl" style={{ boxShadow: "1px 4px 5px 3px #00000040" }}>Submit</button>
         </div>
-      </div>
+      </div> */}
       {/* Table */}
       <div className="container mx-auto p-6">
         <div className="overflow-x-auto">

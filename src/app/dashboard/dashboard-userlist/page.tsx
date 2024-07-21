@@ -91,8 +91,6 @@ const DashboardUserList = () => {
                   <h4 className="text-xl font-bold">{user.us_name}</h4>
                   <p>Location: {user.us_address}</p>
                   <p>Contact No.: {user.us_mobile}</p>
-                  <p>Profession: {/* Add profession if available */}</p>
-                  <p>City: {/* Add city if available */}</p>
                 </div>
               </div>
             ))
