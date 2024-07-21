@@ -107,7 +107,11 @@ const LoginForm = () => {
       }
 
       const result = await response.json();
+      console.log(result.data); 
+
       const id = result.data.id;
+      const gid = result.data.groupId;
+
       const token = result.data.token;
       
       if (id) {
@@ -116,7 +120,7 @@ const LoginForm = () => {
           description: "Successfully logged in.",
         });
         Cookies.set('token', token, { expires: 1 });
-        router.push(`/coordinator-dashboard?id=${id}`);
+        router.push(`/dashboard?id=${id}&gid=${gid}`);
       }
 
     } catch (error) {
