@@ -23,8 +23,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from '@/components/ui/input'
 import JoinNow from '@/components/joinNow';
-import { toast } from '@/components/ui/use-toast';
-import { apiURL } from '../requestsapi/request';
 
 const formSchema = z.object({
   name: z.string(),
@@ -40,45 +38,6 @@ const Contact = () => {
     defaultValues: {},
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-
-    try {
-      const response = await fetch(`${apiURL}/common/contact`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
-
-      if (!response.ok) {
-        console.log(response);
-        throw new Error("Network response was not ok");
-      }
-
-      const result = await response.json();
-      if(result.success){
-        toast({
-          title: "Contact Request Send Successfully.",
-          description: "",
-        })
-      }else{
-        toast({
-          variant: "destructive",
-          title: "Oops, Something went wrong!",
-          description: "Please try again...",
-        })
-      }
-
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Oops, Something went wrong!",
-        description: "Please try again...",
-      })
-      console.error("Error:", error);
-    }
-  }
   return (
     <main className='min-h-screen flex flex-col'>
       <NavigationBar/>
@@ -114,7 +73,7 @@ const Contact = () => {
             <Form {...form}>
                 <form
                   noValidate
-                  onSubmit={form.handleSubmit(onSubmit)}
+                  // onSubmit={form.handleSubmit()}
                   className="flex flex-col gap-2"
                 >
                   <FormField
