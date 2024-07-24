@@ -126,9 +126,10 @@ const cards = [
   //1
   const visibleItems = getVisibleItems();
   const [isOpen1, setIsOpen1] = useState(false);
-  const toggleOpen1 = () => {
+  const toggleOpen1: () => void = () => {
     setIsOpen1(!isOpen1);
   };
+  
     //2
     const [isOpen2, setIsOpen2] = useState(false);
     const toggleOpen2 = () => {
@@ -217,7 +218,7 @@ const cards = [
             <Link href="/project" legacyBehavior>
             <a className="mt-2 self-start px-2 font-bold no-underline">
               Read more
-               <span className="text-white  text-center text-xl font-bold bg-[#3C6E1F] rounded-full ml-3 px-2  inline-block">></span>
+               <span className="text-white  text-center text-xl font-bold bg-[#3C6E1F] rounded-full ml-3 px-2  inline-block"></span>
             </a>
 
             </Link>
@@ -234,7 +235,7 @@ const cards = [
               </p>
               <Link href="/project" legacyBehavior>
                 <a className=" mt-2 self-start px-2" style={{ textDecoration: 'none',fontWeight:'bold' }}>Read more
-                <span className="text-white  text-center text-xl font-bold bg-[#3C6E1F] rounded-full ml-3 px-2  inline-block">></span>
+                <span className="text-white  text-center text-xl font-bold bg-[#3C6E1F] rounded-full ml-3 px-2  inline-block"></span>
                 </a>
               </Link>
             </div>
