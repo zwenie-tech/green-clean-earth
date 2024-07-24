@@ -25,7 +25,7 @@ import { Suspense } from "react";
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
             <Link 
               className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10"
-              href={`/upload-plant`}>
+              href={`user-dash-home/uploaded-plants`}>
               <div className="flex flex-row items-center justify-between w-full px-6 py-2 bg-light-green">
                 <p className="font-semibold text-xl">My Uploads</p>
                 <ImageUp size={48} color="#6c7260" strokeWidth={1.75} />
@@ -58,7 +58,7 @@ import { Suspense } from "react";
             </Link>
             <Link 
               className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10"
-              href={"/upload-plant"}>
+              href={"/"}>
               <div className="flex flex-row items-center justify-between w-full px-6 py-2 bg-light-green">
                 <p className="font-semibold text-xl">Invite Friends</p>
                 <Send size={48} color="#6c7260" strokeWidth={1.75} />
@@ -80,7 +80,7 @@ import { Suspense } from "react";
             </Link>
             <Link 
               className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10"
-              href={"/upload-plant"}>
+              href={"/"}>
               <div className="flex flex-row items-center justify-between w-full px-6 py-2 bg-light-green">
                 <p className="font-semibold text-xl">Green Card</p>
                 <CreditCard size={48} color="#6c7260" strokeWidth={1.75} />
@@ -91,7 +91,7 @@ import { Suspense } from "react";
             </Link>
             <Link 
               className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10"
-              href={"/upload-plant"}>
+              href={"/"}>
               <div className="flex flex-row items-center justify-between w-full px-6 py-2 bg-light-green">
                 <p className="font-semibold text-xl">Our Supporters Offer</p> 
                 <BadgeIndianRupee size={48} color="#6c7260" strokeWidth={1.75} />
@@ -102,7 +102,7 @@ import { Suspense } from "react";
             </Link>
             <Link 
               className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10"
-              href={"/upload-plant"}>
+              href={"/"}>
               <div className="flex flex-row items-center justify-between w-full px-6 py-2 bg-light-green">
                 <p className="font-semibold text-xl">GCEM Fest</p> 
                 <Trophy size={48} color="#6c7260" strokeWidth={1.75} />

@@ -37,23 +37,45 @@ const ACCEPTED_IMAGE_TYPES = ["jpeg", "jpg", "png", "webp"];
 
 
 const formSchema = z.object({
-  category: z.string(),
-  sub_category: z.string(),
-  name: z.string().max(255),
-  address: z.string().max(255),
-  activity_title: z.string().max(255),
-  short_desc: z.string().max(255),
-  social_link: z.string().max(255),
+  name: z.string().min(1).max(255),
+  email: z.string().email().max(255),
+  mobile: z.coerce.number().gte(1).lte(9999999999),
+  country: z.string(),
+  state: z.string().optional(),
+  district: z.string().optional(),
+  corporation: z.string().optional(),
+  ward: z.string().optional(),
+  lsg: z.string().optional(),
+  city: z.string().optional(),
+  address: z.string(),
+  gender: z.string(),
+  profileDescription: z.string(),
 });
 
-interface Category {
-  activity_category: string;
-  activity_category_id: string;
+
+interface Country {
+  cntry_id: number;
+  cntry_name: string;
 }
 
-interface SubCategory {
-  id: string;
-  name: string;
+interface State {
+  st_id: number;
+  st_name: string;
+}
+
+interface District {
+  dis_id: number;
+  dis_name: string;
+}
+
+interface Lsgd {
+  lsg_id: number;
+  lsg_name: string;
+}
+
+type Corp = {
+  cop_id: string;
+  cop_name: string;
 }
 
 interface ActivitiesTabProps {
@@ -62,74 +84,160 @@ interface ActivitiesTabProps {
 
 export function FormEditPlant({ token }: ActivitiesTabProps) {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const { toast } = useToast();
+  const [countries, setCountries] = useState<Country[]>([]);
+  const [states, setStates] = useState<State[]>([]);
+  const [districts, setDistricts] = useState<District[]>([]);
+  const [lsgd, setLsgd] = useState<Lsgd[]>([]);
+  const [corporation, setCorporation] = useState<Corp[]>([]);
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [selectedState, setSelectedState] = useState("");
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [selectedCorp, setSelectedCorp] = useState("");
+  const [selectedLsgd, setSelectedLsgd] = useState("");
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
-  const { toast } = useToast();
 
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [subCategories, setSubCategories] = useState<SubCategory[]>([]);
-
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      category: "",
-      sub_category: "",
-      name: "",
-      address: "",
-      activity_title: "",
-      short_desc: "",
-      social_link: "",
+      name: us_name,
+            email: us_email,
+            profileDescription: us_profile_description || "",
+            mobile: parseInt(us_mobile!) || 0,
+            country: cntry_name,
+            state: st_name || "",
+            district: dis_name || "",
+            corporation: cop_name || "",
+            lsg: lsg_name || "",
+            ward: us_ward || "",
+            city: us_city || "",
+            address: us_address,
+            gender: us_gender || "",
     },
   });
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(`${apiURL}/activity_category`);
-        setCategories(response.data.activity_category);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
+    async function fetchData() {
+      if (user_id && token) {
+        const data = await fetchUserData(user_id, token);
+        if (data.user) {
+          const { us_name, us_address, us_mobile, us_email, us_district, us_city, cntry_name, st_name, dis_name, cop_name, lsg_name, us_ward, us_gender, us_profile_description } = data.user[0];
+          form.reset({
+            name: us_name,
+            email: us_email,
+            profileDescription: us_profile_description || "",
+            mobile: parseInt(us_mobile),
+            country: cntry_name,
+            state: st_name || "",
+            district: dis_name || "",
+            corporation: cop_name || "",
+            lsg: lsg_name || "",
+            ward: us_ward.toString() || "",
+            city: us_city || "",
+            address: us_address,
+            gender: us_gender || "",
+          });
+          setSelectedCountry(cntry_name);
+          setSelectedState(st_name || "");
+          setSelectedDistrict(dis_name || "");
+          setSelectedCorp(cop_name || "");
+          console.log(data.user[0])
+          setSelectedLsgd(lsg_name || "");
+        }
       }
-    };
 
-    const fetchSubCategories = async () => {
-      try {
-        const response = await axios.get(`${apiURL}/activity_sub_category`);
-        setSubCategories(response.data.activity_sub_category);
-      } catch (error) {
-        console.error("Error fetching subcategories:", error);
-      }
-    };
-
-    fetchCategories();
-    fetchSubCategories();
-  }, []);
-
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    const category = categories.find((item) => item.activity_category === values.category)?.activity_category_id;
-
-    const formData = new FormData();
-    formData.append("name", values.name);
-    formData.append("category", category ? category : "");
-    formData.append("subCategory", values.sub_category);
-    formData.append("address", values.address);
-    formData.append("activityTitle", values.activity_title);
-    formData.append("shortDesc", values.short_desc);
-    formData.append("socialMediaLink", values.social_link);
-    if (selectedImage) {
-      formData.append("activityThumbnail", selectedImage);
+      const countryResponse = await fetch(`${apiURL}/country`);
+      const countryData = await countryResponse.json();
+      setCountries(countryData.country);
     }
+    fetchData();
+  }, [user_id, token, form]);
+
+  useEffect(() => {
+    async function fetchData() {
+      if (selectedCountry === 'India') {
+        const stateResponse = await fetch(`${apiURL}/state`);
+        const stateData = await stateResponse.json();
+        setStates(stateData.state);
+
+        const districtResponse = await fetch(`${apiURL}/district`);
+        const districtData = await districtResponse.json();
+        setDistricts(districtData.district);
+      }
+    }
+    fetchData();
+  }, [selectedCountry]);
+
+  useEffect(() => {
+    async function fetchCorpData() {
+      if (selectedDistrict) {
+        const dist_id = districts.find((item) => item.dis_name === selectedDistrict)?.dis_id;
+        const corpResponse = await fetch(`${apiURL}/corporation/${dist_id}`);
+        const corpData = await corpResponse.json();
+        setCorporation(corpData.corporation);
+      }
+    }
+    fetchCorpData();
+  }, [selectedDistrict, districts]);
+
+  useEffect(() => {
+    async function fetchLsgdData() {
+      if (selectedCorp) {
+        const corp_id = corporation.find((item) => item.cop_name === selectedCorp)?.cop_id;
+        const lsgResponse = await fetch(`${apiURL}/lsg/${corp_id}`);
+        const lsgData = await lsgResponse.json();
+        console.log(lsgData);
+        setLsgd(lsgData.lsg);
+      }
+    }
+    fetchLsgdData();
+  }, [selectedCorp, corporation]);
+
+  async function onSubmit(values: any) {
     
+    const dataWithIds = {
+      name: values.name,
+      email: values.email,
+      profileDescription: values.profileDescription,
+      mobileNumber: values.mobile.toString(),
+      countryId: countries.find((item) => item.cntry_name === values.country)?.cntry_id,
+      stateId: states.find((item) => item.st_name === values.state)?.st_id?.toString(),
+      city: values.city,
+      province: values.province || '',
+      corporation: corporation.find((item) => item.cop_name === values.corporation)?.cop_id?.toString(),
+      address: values.address,
+      gender: values.gender,
+      districtId: districts.find((item) => item.dis_name === values.district)?.dis_id?.toString(),
+      wardNo: parseInt(values.ward) || 0,
+      lsgd: lsgd.find((item) => item.lsg_name === values.lsg)?.lsg_id || 0
+    };
+    console.log(values.lsg);
     try {
-      const response = await uploadActivityData(formData, token, id);
-      if (response!.status == 201) {
+      const response = await fetch(`${apiURL}/user/updateProfile`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(dataWithIds),
+      });
+      if (!response.ok) {
+        console.log(response)
+        throw new Error("Network response was not ok");
+      }
+
+      const result = await response.json();
+
+      if (result.success) {
         toast({
-          title: "Submitted Successfully.",
-          description: "Your activity has been uploaded successfully.",
+          title: "Profile Successfully Updated.",
+          description: "",
         });
-        setTimeout(function () {
-          window.location.reload();
-        }, 1800);
+        // router.push("/my-profile?id=" + user_id);
+        location.reload();
+      } else {
+        throw new Error(result.message || "Failed to update profile");
       }
     } catch (error) {
       toast({
