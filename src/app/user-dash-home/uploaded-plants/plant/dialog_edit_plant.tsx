@@ -15,7 +15,7 @@ import { Upload } from "lucide-react"
 import { FormEditPlant } from "./form_edit_plant"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
-export function DialogEditPlant({token}:any) {
+export function DialogEditPlant() {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -30,7 +30,7 @@ export function DialogEditPlant({token}:any) {
         </DialogHeader>
 
         <ScrollArea className="h-full w-full p-2 rounded-md border">
-            <FormEditPlant token={token}/>
+            <FormEditPlant />
         </ScrollArea>
         {/* <DialogFooter>
           <Button type="submit" className="bg-green-600 hover:bg-green-800">Save changes</Button>

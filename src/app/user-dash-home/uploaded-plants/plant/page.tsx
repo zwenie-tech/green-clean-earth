@@ -36,6 +36,8 @@ type PlantData = {
   up_lsgd: string | null;
   lsg_name: string | null;
   up_ward: string | null;
+  source_name: string | null;
+  up_landmark_details: string | null;
 };
 
 type ApiResponse = {
@@ -59,20 +61,17 @@ const Plant = ({ searchParams }: any) => {
         const selectedPlant = result.Uploads.find(p => p.up_id === parseInt(searchParams.tree));
         if (selectedPlant) {
           console.log(selectedPlant);
-          const {cntry_name,st_name,city,dis_name,cop_name,lsg_name,up_ward} = selectedPlant;
-          // Cookies.set('name', us_name, { expires: 1 });
-          // Cookies.set('email', us_email, { expires: 1 });
-          // Cookies.set('profileDescription', us_profile_description, { expires: 1 });
-          // Cookies.set('mobile', us_mobile, { expires: 1 });
-          // Cookies.set('country', cntry_name, { expires: 1 });
-          // Cookies.set('state', st_name, { expires: 1 });
-          // Cookies.set('district', dis_name, { expires: 1 });
-          // Cookies.set('corporation', cop_name, { expires: 1 });
-          // Cookies.set('lsg', lsg_name, { expires: 1 });
-          // Cookies.set('ward', us_ward, { expires: 1 });
-          // Cookies.set('city', us_city, { expires: 1 });
-          // Cookies.set('address', us_address, { expires: 1 });
-          // Cookies.set('gender', us_gender, { expires: 1 });
+          const {up_id,cntry_name,st_name,city,dis_name,cop_name,lsg_name,up_ward,source_name,up_landmark_details}:any = selectedPlant;
+          Cookies.set('treeId', up_id.toString(), { expires: 1 });
+          Cookies.set('country', cntry_name, { expires: 1 });
+          Cookies.set('state', st_name, { expires: 1 });
+          Cookies.set('district', dis_name, { expires: 1 });
+          Cookies.set('corporation', cop_name, { expires: 1 });
+          Cookies.set('lsg', lsg_name, { expires: 1 });
+          Cookies.set('ward', up_ward, { expires: 1 });
+          Cookies.set('city', city, { expires: 1 });
+          Cookies.set('source', source_name, { expires: 1 });
+          Cookies.set('landmark', up_landmark_details, { expires: 1 });
           setPlant(selectedPlant);
         }
       }
@@ -122,7 +121,7 @@ const Plant = ({ searchParams }: any) => {
           </div>
           <div className="flex flex-col gap-4 bg-light-gray p-4 md:p-6 rounded-3xl">
             <div className='self-end text-primary'>
-              <DialogEditPlant />
+              <DialogEditPlant/>
             </div>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8'>
               <div className='flex flex-col gap-1'>
