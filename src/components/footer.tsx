@@ -1,6 +1,16 @@
 "use client";
-
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 export default function Footer() {
+  const [currentImage, setCurrentImage] = useState(0);
+  const images = ["/images/sponser1.jpg", "/images/sponsor2.jpg"]; 
+  const router = useRouter();
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((prevImage) => (prevImage + 1) % images.length);
+    }, 2000); // 2000 milliseconds = 2 seconds
+    return () => clearInterval(interval);
+  }, []);;
     return (
       <footer className="w-full py-14 bg-white mt-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -31,11 +41,54 @@ export default function Footer() {
                     <a href="#" className="block  text-gray-900 transition-all duration-500 hover:text-green-600 ">
                         <svg className="w-[1.875rem] h-[1.375rem]" viewBox="0 0 30 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path fillRule="evenodd" clipRule="evenodd" d="M26.3106 1.27838C27.5782 1.62071 28.5745 2.61957 28.9113 3.88573C29.524 6.18356 29.524 10.9809 29.524 10.9809C29.524 10.9809 29.524 15.7782 28.9113 18.076C28.5698 19.3469 27.5735 20.3457 26.3106 20.6834C24.0186 21.2977 14.8226 21.2977 14.8226 21.2977C14.8226 21.2977 5.63122 21.2977 3.33456 20.6834C2.06695 20.3411 1.07063 19.3422 0.73385 18.076C0.121094 15.7782 0.121094 10.9809 0.121094 10.9809C0.121094 10.9809 0.121094 6.18356 0.73385 3.88573C1.07531 2.61488 2.07162 1.61602 3.33456 1.27838C5.63122 0.664062 14.8226 0.664062 14.8226 0.664062C14.8226 0.664062 24.0186 0.664062 26.3106 1.27838ZM19.5234 10.9809L11.885 15.403V6.55872L19.5234 10.9809Z" fill="currentColor"/>
-                            </svg>
-                            
-                    </a>
-                </div> */}
-                <div className="text-lg text-gray-700 text-center block">
+                                          </svg>
+
+                                  </a>
+                              </div> */}
+            <div className="flex justify-center items-center mt-1 mb-4">
+                <h1 className="text-xl text-center font-bold">Our Supporters Sponsors & Co-Operators</h1>
+             </div>
+             <div className="w-full flex justify-center items-center mb-5 ">
+                <img 
+                  src={images[currentImage]} 
+                  alt="Sliding images" 
+                  className="shadow-xl w-full mx-6 rounded-2xl" 
+                  style={{ objectFit: 'cover' }} 
+                />
+              </div>
+             <div className="relative mt-4 flex justify-center items-center" style={{
+                  width: '100%',
+                  height: '400px'
+              }}>
+                  <div className="absolute inset-0 rounded-xl" style={{
+                      backgroundImage: 'url(/images/navigation.jpeg)',
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      backgroundRepeat: 'no-repeat',
+                      opacity: '0.50'
+                  }}></div>
+                  <div className="relative bg-light-gray p-5 rounded-lg" style={{ maxWidth: '90%', textAlign: 'center', margin: '4rem auto' }}>
+                      <h1 className="text-black font-block mb-4">
+                          വൃക്ഷത്തൈ സെൽഫി മത്സരം 2020-21
+                      </h1>
+                      <p className="mb-4">
+                          വൃക്ഷങ്ങൾ സംരക്ഷിക്കൂ... ഫോട്ടോ അപ്‌ലോഡ് ചെയ്യൂ.. സമ്മാനങ്ങൾ നേടൂ...
+                      </p>
+                      <p className="mb-4">
+                          <a href="#">www.greencleanearth.org</a>
+                      </p>
+                      <div>
+                      <button
+                          className="text-white bg-[#3C6E1F] px-4 py-2 rounded-xl"
+                           onClick={() => { router.push('/join'); }} 
+                           style={{boxShadow:'0px 4px 4px 0px #00000040' }}
+                      >
+                        Join Now
+                        </button>
+                      </div>
+                  </div>
+              </div>
+                <div className="text-lg text-[#3C6E1F] text-center block mt-8">
                   <p>Green Clean Earth Movement. All rights reserved</p>
                   <p>A GCEM Foundation Compaing for Save Earth</p>
                   <p>Supported By www.a2z4home.com. Online Green Architectural Directory</p>
