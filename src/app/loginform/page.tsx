@@ -66,14 +66,19 @@ const LoginForm = () => {
       }
 
       const result = await response.json();
+
       const id = result.data.id;
       const token = result.data.token;
+      const refcode = result.data.refferalCode;
+      
       if (id) {
         toast({
           title: "Account logged in.",
           description: "Successfully logged in.",
         });
         Cookies.set("token", token, { expires: 1 });
+        Cookies.set("user_refcode", refcode, { expires: 1 });
+
         router.replace("/user-dash-home?id=" + id);
       }
     } catch (error) {
@@ -107,7 +112,11 @@ const LoginForm = () => {
       }
 
       const result = await response.json();
+      const refcode = result.data.referral_code;
+
       const id = result.data.id;
+      const gid = result.data.groupId;
+
       const token = result.data.token;
       
       if (id) {
@@ -116,7 +125,9 @@ const LoginForm = () => {
           description: "Successfully logged in.",
         });
         Cookies.set('token', token, { expires: 1 });
-        router.push(`/coordinator-dashboard?id=${id}`);
+        Cookies.set("cord_refcode", refcode, { expires: 1 });
+
+        router.push(`/dashboard?id=${id}&gid=${gid}`);
       }
 
     } catch (error) {
@@ -207,9 +218,9 @@ const LoginForm = () => {
                       <div className="flex justify-center w-full mt-4">
                         <a href="#" className="text-green-600">Forgot your password?</a>
                       </div>
-                      <div className="flex justify-center w-full mt-4">
+                      {/* <div className="flex justify-center w-full mt-4">
                         <Button type="button" className="shadow-xl bg-white text-green-600">Register</Button>
-                      </div>
+                      </div> */}
                     </form>
                   </Form>
                 )}
@@ -259,7 +270,7 @@ const LoginForm = () => {
                         <a href="#" className="text-green-600">Forgot your password?</a>
                       </div>
                       <div className="flex justify-center w-full mt-4">
-                        <Button type="button" className="shadow-xl bg-white text-green-600">Register</Button>
+                        <a href="/register"><Button type="button" className="shadow-xl bg-white text-green-600">Register</Button></a>
                       </div>
                     </form>
                   </Form>

@@ -12,9 +12,9 @@ import Cookies from 'js-cookie';
 
 function CoordinatorDashBoardContent() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const { toast } = useToast();
-
+  
+  const searchParams = useSearchParams();
   const co_id = searchParams.get("id");
   const token = Cookies.get('token');
   if (!token) {

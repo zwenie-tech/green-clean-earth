@@ -82,6 +82,7 @@ export function FormEditProfile() {
   const [selectedState, setSelectedState] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [selectedCorp, setSelectedCorp] = useState("");
+  const [selectedLsgd, setSelectedLsgd] = useState("");
   const searchParams = useSearchParams();
   const user_id = searchParams.get("id");
   const router = useRouter();
@@ -138,7 +139,7 @@ export function FormEditProfile() {
             district: dis_name || "",
             corporation: cop_name || "",
             lsg: lsg_name || "",
-            ward: us_ward || "",
+            ward: us_ward.toString() || "",
             city: us_city || "",
             address: us_address,
             gender: us_gender || "",
@@ -147,6 +148,8 @@ export function FormEditProfile() {
           setSelectedState(st_name || "");
           setSelectedDistrict(dis_name || "");
           setSelectedCorp(cop_name || "");
+          console.log(data.user[0])
+          setSelectedLsgd(lsg_name || "");
         }
       }
 
@@ -190,6 +193,7 @@ export function FormEditProfile() {
         const corp_id = corporation.find((item) => item.cop_name === selectedCorp)?.cop_id;
         const lsgResponse = await fetch(`${apiURL}/lsg/${corp_id}`);
         const lsgData = await lsgResponse.json();
+        console.log(lsgData);
         setLsgd(lsgData.lsg);
       }
     }
@@ -197,6 +201,7 @@ export function FormEditProfile() {
   }, [selectedCorp, corporation]);
 
   async function onSubmit(values: any) {
+    
     const dataWithIds = {
       name: values.name,
       email: values.email,
@@ -211,9 +216,9 @@ export function FormEditProfile() {
       gender: values.gender,
       districtId: districts.find((item) => item.dis_name === values.district)?.dis_id?.toString(),
       wardNo: parseInt(values.ward) || 0,
-      lsgd: parseInt(values.lsg) || 0
+      lsgd: lsgd.find((item) => item.lsg_name === values.lsg)?.lsg_id || 0
     };
-
+    console.log(values.lsg);
     try {
       const response = await fetch(`${apiURL}/user/updateProfile`, {
         method: "POST",
@@ -422,21 +427,24 @@ export function FormEditProfile() {
                     )}
                   />
                 )}
-                {selectedState === 'Kerala' && (
+                {selectedState === 'Kerala' && selectedCorp!="" && (
                   <FormField
                     control={form.control}
                     name="lsg"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>LSGD / Zone</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <Select onValueChange={(value) => {
+                          field.onChange(value);
+                          setSelectedLsgd(value);
+                        }} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
                               <SelectValue placeholder="Choose a LSG" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {lsgd.map((lsg) => (
+                            {lsgd && lsgd.map((lsg) => (
                               <SelectItem key={lsg.lsg_id} value={lsg.lsg_name}>
                                 {lsg.lsg_name}
                               </SelectItem>
@@ -456,7 +464,7 @@ export function FormEditProfile() {
                     <FormItem>
                       <FormLabel>Ward Number</FormLabel>
                       <FormControl>
-                        <Input type="number" {...field} />
+                        <Input type="text" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

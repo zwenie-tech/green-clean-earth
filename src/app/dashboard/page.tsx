@@ -4,27 +4,39 @@ import NavigationBar from "@/components/navigationBar";
 import Footer from '@/components/footer';
 import { Button } from 'react-bootstrap';
 import { FaUpload } from 'react-icons/fa';
-const dashboard=()=>{
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
+
+
+const Dashboard=()=>{
+  const router = useRouter();
+  const token = Cookies.get('token');
+  if (!token) {
+    router.push("/login");
+  }
   const OurUserButton = () => {
-    window.location.href = '/dashboard-userlist';
+    router.push('/dashboard/dashboard-userlist');
   };
   const PlantUploadsButton = () => {
-    window.location.href = '/dashboaed-PlantUploads';
+    router.push('/dashboard/dashboard-PlantUploads');
   };
   const ActivitiesButton= () => {
-    window.location.href = '/dashboard-activities';
+    router.push('/dashboard/dashboard-activities');
   };
   const YouTubeEarningsButton= () => {
-    window.location.href = '/dashboard';
+    router.push('/dashboard');
   };
   const OurTeamButton = () => {
-    window.location.href = '/dashboard';
+    router.push('/dashboard');
   };
   const InviteUsersButton = () => {
-    window.location.href = '/dashboard';
+    router.push('/dashboard');
   };
   const InviteInstitutionsButton= () => {
-    window.location.href = '/dashboard';
+    router.push('/dashboard');
+  };
+  const LogoutButton= () => {
+    router.push('/logout');
   };
     return(
         <>
@@ -34,7 +46,7 @@ const dashboard=()=>{
                 <h1 className='text-4xl font-bold'>Dashboard</h1>
               </div>
               <div className='ml-auto'>
-                <button className='rounded-xl bg-gray-200 p-2 md:mr-6' style={{boxShadow:'1px 4px 5px 3px #00000040'}}>Logout</button>
+                <button className='rounded-xl bg-gray-200 p-2 md:mr-6' style={{boxShadow:'1px 4px 5px 3px #00000040'}} onClick={LogoutButton}>Logout</button>
               </div>
             </div>
             <div className='text-center'>
@@ -123,4 +135,4 @@ const dashboard=()=>{
         </>
     )
 }
-export default dashboard;
+export default Dashboard;
