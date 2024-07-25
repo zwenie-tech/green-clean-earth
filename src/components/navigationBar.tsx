@@ -32,6 +32,23 @@ const NavigationBar = () => {
     { href: "/contact", label: "Contact" },
   ];
 
+  const login_links = [
+    { href: "/home", label: "Home" },
+    { href: "/projects", label: "Projects" },
+    { href: "/competition", label: "Competition" },
+    // { href: "/register", label: "Register" },
+    // { href: "/user-dash-home", label: "Dashboard" },
+    { href: "/events", label: "Events & News" },
+    { href: "/get-plant", label: "Get Plant" },
+    { href: "/group-list", label: "Group List" },
+    { href: "/participant-list", label: "Participant List" },
+    { href: "/faq", label: "FAQ" },
+    { href: "/result", label: "Result" },
+    { href: "/about-us", label: "About Us" },
+    { href: "/contact", label: "Contact" },
+  ];
+  
+
   return (
     <header className="py-5 mb-2">
       <div className="w-full mx-auto px-5 flex flex-row md:flex-col justify-between md:justify-center items-center">
@@ -42,7 +59,7 @@ const NavigationBar = () => {
         </h1>
 
         <ul className="hidden md:flex md:justify-center md:items-center flex-wrap">
-          {links.map((link) => (
+          {token ? (login_links.map((link) => (
             <li key={link.href} className="m-0 mx-1">
               <Link href={link.href} passHref>
                 <p
@@ -56,7 +73,23 @@ const NavigationBar = () => {
                 </p>
               </Link>
             </li>
-          ))}
+          ))):
+          (links.map((link) => (
+            <li key={link.href} className="m-0 mx-1">
+              <Link href={link.href} passHref>
+                <p
+                  className={`text-black no-underline px-3 py-1 rounded-full transition-colors duration-300 ${
+                    pathname === link.href
+                      ? "bg-primary text-white"
+                      : "bg-light-gray text-black"
+                  }`}
+                >
+                  {link.label}
+                </p>
+              </Link>
+            </li>
+          )))
+          }
         </ul>
 
         <div
@@ -71,7 +104,7 @@ const NavigationBar = () => {
 
       {nav && (
         <ul className="z-10 flex flex-col justify-center items-center absolute top-0 left-0 w-full h-screen bg-white text-gray-800">
-          {links.map((link) => (
+          {token ? (login_links.map((link) => (
             <li
               key={link.href}
               className="mx-4 my-2 cursor-pointer capitalize text-base"
@@ -89,7 +122,27 @@ const NavigationBar = () => {
                 </p>
               </Link>
             </li>
-          ))}
+          ))):
+          (links.map((link) => (
+            <li
+              key={link.href}
+              className="mx-4 my-2 cursor-pointer capitalize text-base"
+            >
+              <Link href={link.href} passHref>
+                <p
+                  onClick={() => setNav(!nav)}
+                  className={`no-underline px-4 py-2 rounded-full transition-colors duration-300 ${
+                    pathname === link.href
+                      ? "bg-primary text-white"
+                      : "hover:bg-primary/60"
+                  }`}
+                >
+                  {link.label}
+                </p>
+              </Link>
+            </li>
+          )))
+          }
         </ul>
       )}
     </header>
