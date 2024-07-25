@@ -45,14 +45,14 @@ const cards = [
   {
     imageSrc: '/images/news02.jpg', 
     date: '2016-17',
-    place: 'Quilandy SIK Bazar',
+    //place: 'Quilandy SIK Bazar',
     heading: '2016-17 ഏറ്റവും കൂടുതൽ വൃക്ഷത്തൈകൾ അപ്‌ലോഡ് ചെയ്ത ഗ്രൂപ് ലീഡർ',
     paragraph: '2016-17 ൽ ഏറ്റവും കൂടുതൽ വൃക്ഷത്തൈകൾ അപ്‌ലോഡ് ചെയ്ത ഗ്രൂപ് ലീഡർ-തളിർ ജൈവഗ്രാമം മന്ദമംഗലത്തിനുള്ള ഹരിതപുരസ്കാരം ഡയറക്ടർ സതീശൻ കൊരോത്തിൽ നിന്നും തളിർ ഡയറക്ടറും കൊയിലാണ്ടി മുൻസിപ്പാലിറ്റി കൗൺസിലറുമായ ഷാജി ഏറ്റു വാങ്ങുന്നു.',
   },
   {
     imageSrc: '/images/news03.jpg', 
     date: 'DEC 31,2016',
-    place: 'Quilandy SIK Bazar',
+   // place: 'Quilandy SIK Bazar',
     heading: 'ഹരിതപുരസ്കാരം സമ്മാനപദ്ധതി രണ്ടാം നറുക്ക്ർടുപ്പ്',
     paragraph: 'ഹരിതപുരസ്കാരം സമ്മാനപദ്ധതി രണ്ടാം നറുക്ക്ർടുപ്പ് (തളിർ)വിജയി സ്മിത.CP ക്കുള്ള സ്വർണ്ണ നാണയം ബഹു കൊയിലാണ്ടി MLA K ദാസനിൽ നിന്നും പിതാവ് ഏറ്റ് വാങ്ങുന്നു.ബഹു. തൊഴിൽ, എക്സൈസ് വകുപ്പ് മന്ത്രി TP രാമകൃഷ്ണൻ, മുൻ കുടുംബശ്രീ ജില്ലാ മിഷൻ കോഡിനേറ്റർ സൈദ് അക്ബർ ബാദ്ഷഖാൻ, ജിസം ഫൗണ്ടേഷൻ ചീഫ് പേട്രൺ ശോഭീന്ദ്രൻ മാസ്റ്റർ, കുടുംബശ്രീ അസിസ്റ്റന്റ് കോർഡിനേറ്റർ നാസർ ബാബു, ജിസം ഫൗണ്ടേഷൻ എക്സിക്കുട്ടീവ് ഡയറക്ടർ മുഹമ്മദ് ഇഖ്ബാൽ.കെ എന്നിവർ സമീപം. 2016 ഡിസംബർ 31. കൊയിലാണ്ടി കൊല്ലം',
   },
@@ -424,7 +424,7 @@ Supported by indian Oil Corporation and myG, VKC,tecQ, Aqua garden, Mall of gard
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4" >
         {cards.map((card, index) => (
           <div key={index} className="bg-light-gray p-4  shadow-md" style={{borderRadius:'9px'}} >
-            <Image src={card.imageSrc} alt={`Card Image ${index + 1}`} width={500} height={300} className="rounded-t-lg" />
+            <Image src={card.imageSrc} alt={`Card Image ${index + 1}`} width={500} height={300} className="rounded-lg" />
             <div className="flex justify-between items-center mt-4" >
               <div className="flex items-center">
                 <FaCalendarAlt className="text-gray-500" />
