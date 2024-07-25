@@ -218,9 +218,9 @@ const LoginForm = () => {
                       <div className="flex justify-center w-full mt-4">
                         <a href="#" className="text-green-600">Forgot your password?</a>
                       </div>
-                      <div className="flex justify-center w-full mt-4">
+                      {/* <div className="flex justify-center w-full mt-4">
                         <Button type="button" className="shadow-xl bg-white text-green-600">Register</Button>
-                      </div>
+                      </div> */}
                     </form>
                   </Form>
                 )}
