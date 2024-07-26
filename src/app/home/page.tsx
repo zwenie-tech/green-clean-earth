@@ -163,11 +163,11 @@ const cards = [
   return (
     <div className="body">
       <NavigationBar />
-      <div className="relative w-full h-[50vh] overflow-hidden">
+      <div className="relative w-full h-full overflow-hidden">
         <img
           src={images[currentImageIndex]}
           alt="Sliding Image"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-contain md:object-cover"
         />
         <button
           onClick={handlePrev}
@@ -244,8 +244,7 @@ const cards = [
      {/* container 1 */}
        <div className={`p-4 mt-6 m-4 shadow-md rounded-lg ${isOpen1 ? 'bg-light-green' : 'bg-light-gray'}`} >
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold" style={{color:'#3C6E1F'}}>പ്രൊഫസ്സർ ശോഭീന്ദ്രൻ സ്മാരക പരിസ്ഥിതി അവാർഡ് -
-ഒരു ലക്ഷം രൂപയുടെ പുരസ്കാരങ്ങളും സമ്മാനങ്ങളും</h2>
+        <h2 className="text-2xl font-bold " style={{color:'#3C6E1F'}}>ഒരുകോടി വൃക്ഷത്തൈ സെൽഫികളുമായി കേരളം UNEP യിലേക്ക്...</h2>
         <button onClick={toggleOpen1} className="text-xl">
           {isOpen1 ? <FaChevronUp /> : <FaChevronDown />}
         </button>
@@ -253,8 +252,8 @@ const cards = [
       {isOpen1 && (
         <>
           <hr className="my-1" />
-          <p className="mt-2 ">
-            കേരളത്തിൽ നിന്നും ഒരു കോടി വൃക്ഷത്തൈകൾ സംരക്ഷിച്ച്, അതിൻറെ ഓരോ മൂന്ന് മാസത്തെയും വളർച്ച പ്രകടമാവുന്ന ഫോട്ടോയും മറ്റു വിവരങ്ങളും വെബ്സൈറ്റിൽ പ്രസിദ്ധീകരിച്ച് UNEP (United Nations Environmental Program) യിലേക്ക് സമർപ്പിക്കുവാനും , കേരളം സമ്പൂർണ്ണ മാലിന്യ മുക്തവും ഹരിതാഭവും, ഭക്ഷ്യ സുരക്ഷിതവും ജല സമൃദ്ധവും ഊർജ്ജ സ്വയം പര്യാപ്തവും ആക്കുവാനുള്ള പ്രചരണ പ്രവർത്തനങ്ങൾ നടത്തുവാനും ഈ പദ്ധതിയിലൂടെ ലക്ഷ്യമിടുന്നു..
+          <p className="mt-2 text-center">
+          കേരളത്തിൽ നിന്നും ഒരു കോടി വൃക്ഷത്തൈകൾ സംരക്ഷിച്ച്, അതിൻറെ ഓരോ മൂന്ന് മാസത്തെയും വളർച്ച പ്രകടമാവുന്ന ഫോട്ടോയും മറ്റു വിവരങ്ങളും വെബ്സൈറ്റിൽ പ്രസിദ്ധീകരിച്ച് UNEP (United Nations Environmental Program) യിലേക്ക് സമർപ്പിക്കുവാനും , കേരളം സമ്പൂർണ്ണ മാലിന്യ മുക്തവും ഹരിതാഭവും, ഭക്ഷ്യ സുരക്ഷിതവും ജല സമൃദ്ധവും ഊർജ്ജ സ്വയം പര്യാപ്തവും ആക്കുവാനുള്ള പ്രചരണ പ്രവർത്തനങ്ങൾ നടത്തുവാനും ഈ പദ്ധതിയിലൂടെ ലക്ഷ്യമിടുന്നു..
           </p>
         </>
       )}
@@ -262,8 +261,7 @@ const cards = [
     {/* container 2 */}
    <div className={`p-4  m-4 shadow-md rounded-lg ${isOpen2 ? 'bg-light-green' : 'bg-light-gray'}`} >
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold" style={{color:'#3C6E1F'}}>പ്രൊഫസ്സർ ശോഭീന്ദ്രൻ സ്മാരക പരിസ്ഥിതി അവാർഡ് -
-ഒരു ലക്ഷം രൂപയുടെ പുരസ്കാരങ്ങളും സമ്മാനങ്ങളും</h2>
+        <h2 className="text-2xl font-bold " style={{color:'#3C6E1F'}}>ആയിരം കോടി രൂപയുടെ ഗ്രീൻ ക്ലീൻ എസ്റ്റിമേറ്റ്</h2>
         <button onClick={toggleOpen2} className="text-xl">
           {isOpen2 ? <FaChevronUp /> : <FaChevronDown />}
         </button>
@@ -271,8 +269,8 @@ const cards = [
       {isOpen2 && (
         <>
           <hr className="my-1" />
-          <p className="mt-2 ">
-           ഒരു കോടി വൃക്ഷത്തൈ സെൽഫികൾ UNEP ലേക്ക് സമർപ്പിക്കുന്നതൊടൊപ്പം കേരളം സമ്പൂർണ്ണ മാലിന്യമുക്തവും ഹരിതാഭവും ആക്കുവാനുള്ള പ്രവർത്തനം നടത്താൻ ആയിരം കോടി രൂപയുടെ ഗ്രീൻ ക്ലീൻ എസ്റ്റിമേറ്റ് തയ്യാറാക്കി കേരള സർക്കാർ മുഖേന കേന്ദ്രസർക്കാർ ,UNEP, NABARD, WORLD BANK, UNESCO എന്നിവക്ക് സമർപ്പിക്കുന്നതാണ്. ഓരോ വ്യക്തികളും സ്ഥാപനങ്ങളും സ്വന്തം അധീനതയിലുള്ള സ്ഥലങ്ങളും പരിസരവും സമ്പൂർണ്ണ മാലിന്യമുക്തവും ഹരിതാഭവും ആക്കുവാനുള്ള എസ്റ്റിമേറ്റ് തയ്യാറാക്കി ഈ വെബ്സൈറ്റിൽ സമർപ്പിക്കുകയാണ് ചെയ്യുന്നത്. ഇവ ക്രോഡീകരിച്ചാണ് ആയിരം കോടി രൂപയുടെ എസ്റ്റിമേറ്റ് തയ്യാറാക്കുന്നത്. ഫണ്ട് ലഭ്യമാകുന്ന മുറക്ക് മികച്ച പ്രവർത്തനം കാഴ്ചവെക്കുന്ന വ്യക്തികൾക്കും സ്ഥാപനങ്ങൾക്കും അതാത് തദ്ദേശ സ്വയംഭരണ സ്ഥാപനങ്ങൾ മുഖേനെ പ്രായോഗികത പരിഗണിച്ച് വിതരണം ചെയ്യുന്നതാണ്.
+          <p className="mt-2 text-center">
+          ഒരു കോടി വൃക്ഷത്തൈ സെൽഫികൾ UNEP ലേക്ക് സമർപ്പിക്കുന്നതൊടൊപ്പം കേരളം സമ്പൂർണ്ണ മാലിന്യമുക്തവും ഹരിതാഭവും ആക്കുവാനുള്ള പ്രവർത്തനം നടത്താൻ ആയിരം കോടി രൂപയുടെ ഗ്രീൻ ക്ലീൻ എസ്റ്റിമേറ്റ് തയ്യാറാക്കി കേരള സർക്കാർ മുഖേന കേന്ദ്രസർക്കാർ ,UNEP, NABARD, WORLD BANK, UNESCO എന്നിവക്ക് സമർപ്പിക്കുന്നതാണ്. ഓരോ വ്യക്തികളും സ്ഥാപനങ്ങളും സ്വന്തം അധീനതയിലുള്ള സ്ഥലങ്ങളും പരിസരവും സമ്പൂർണ്ണ മാലിന്യമുക്തവും ഹരിതാഭവും ആക്കുവാനുള്ള എസ്റ്റിമേറ്റ് തയ്യാറാക്കി ഈ വെബ്സൈറ്റിൽ സമർപ്പിക്കുകയാണ് ചെയ്യുന്നത്. ഇവ ക്രോഡീകരിച്ചാണ് ആയിരം കോടി രൂപയുടെ എസ്റ്റിമേറ്റ് തയ്യാറാക്കുന്നത്. ഫണ്ട് ലഭ്യമാകുന്ന മുറക്ക് മികച്ച പ്രവർത്തനം കാഴ്ചവെക്കുന്ന വ്യക്തികൾക്കും സ്ഥാപനങ്ങൾക്കും അതാത് തദ്ദേശ സ്വയംഭരണ സ്ഥാപനങ്ങൾ മുഖേനെ പ്രായോഗികത പരിഗണിച്ച് വിതരണം ചെയ്യുന്നതാണ്.
           </p>
         </>
       )}
@@ -280,7 +278,7 @@ const cards = [
     {/* container 3 */}
     <div className={`p-4  m-4 shadow-md rounded-lg ${isOpen3 ? 'bg-light-green' : 'bg-light-gray'}`} >
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold" style={{color:'#3C6E1F'}}>പ്രൊഫസ്സർ ശോഭീന്ദ്രൻ സ്മാരക പരിസ്ഥിതി അവാർഡ് -
+        <h2 className="text-2xl font-bold " style={{color:'#3C6E1F'}}>പ്രൊഫസ്സർ ശോഭീന്ദ്രൻ സ്മാരക പരിസ്ഥിതി അവാർഡ് -
 ഒരു ലക്ഷം രൂപയുടെ പുരസ്കാരങ്ങളും സമ്മാനങ്ങളും</h2>
         <button onClick={toggleOpen3} className="text-xl">
           {isOpen3 ? <FaChevronUp /> : <FaChevronDown />}
@@ -289,7 +287,7 @@ const cards = [
       {isOpen3 && (
         <>
           <hr className="my-1" />
-          <p className="mt-2 ">
+          <p className="mt-2 text-center">
             കേരളത്തിൽ പരിസ്ഥിതി പ്രവർത്തനങ്ങളിൽ മികച്ചപ്രകടനം നടത്തുന്ന വിദ്യാലയങ്ങൾക്കും , LSGD വാർഡുകൾക്കും -ഗ്രാമങ്ങൾക്കും , സന്നദ്ധ സംഘടനകൾക്കും , റെസിഡൻസ് അസ്സോസിയേഷനുകൾക്കും വിദ്യാർത്ഥികൾക്കും , അദ്ധ്യാപകർക്കും , വ്യക്തികൾക്കു മായി പ്രൊഫസ്സർ ശോഭീന്ദ്രൻ സാറിന്റെ പേരിൽ പ്രത്യേക പുരസ്കാരങ്ങളും ക്യാഷ് പ്രൈസും നൽകുന്നതാണ് . ആയതിനായി 2023 ജൂൺ 5 മുതൽ 2024 ജൂൺ 5 വരെ പ്രത്യേക ഹരിത മത്സരങ്ങൾ സംഘടിപ്പിക്കുന്നുണ്ട് 
           </p>
         </>
@@ -298,7 +296,7 @@ const cards = [
     {/* container 4 */}
     <div className={`p-4  m-4 shadow-md rounded-lg ${isOpen4 ? 'bg-light-green' : 'bg-light-gray'}`} >
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold" style={{color:'#3C6E1F'}}>ഹരിത മത്സരങ്ങൾ - 2023-24</h2>
+        <h2 className="text-2xl font-bold " style={{color:'#3C6E1F'}}>ഹരിത മത്സരങ്ങൾ - 2023-24</h2>
         <button onClick={toggleOpen4} className="text-xl">
           {isOpen4 ? <FaChevronUp /> : <FaChevronDown />}
         </button>
@@ -306,7 +304,7 @@ const cards = [
       {isOpen4 && (
         <>
           <hr className="my-1" />
-          <p className="mt-2 ">
+          <p className="mt-2 text-center">
           വൃക്ഷത്തൈ പരിപാലന മത്സരത്തിൻറെ പ്രചരണത്തിനായി വിദ്യാർഥികൾക്കും, അദ്ധ്യാപകർക്കും , പൊതുജനങ്ങൾക്കുമായി വിവിധ ഹരിത മത്സരങ്ങൾ സംഘടിപ്പിച്ച് വിജയികൾക്ക് പുരസ്കാരങ്ങളും സമ്മാനങ്ങളും നൽകുന്നു. KG, LP, UP, HS, HSS, CLG, GENERAL എന്നീ വിഭാഗങ്ങളിൽ, വിദ്യാഭ്യാസ ഉപ ജില്ലാ തലം, വിദ്യാഭ്യാസ ജില്ലാതലം, ജില്ലാ തലം,സംസ്ഥാന തലം, എന്നിവയിൽ മികച്ച പ്രകടനം നടത്തുന്നവർക്ക് പ്രത്യേക പുരസ്കാരങ്ങളും സമ്മാനങ്ങളും ഉണ്ടായിരിക്കുന്നതാണ്. കൂടാതെ ഗ്രാമപഞ്ചായത്തുകൾ ബ്ലോക്ക് പഞ്ചായത്തുകൾ മുനിസിപ്പാലിറ്റികൾ കോർപ്പറേഷനുകൾ എന്നീ തലങ്ങളിലെ പൊതു വിഭാഗത്തിൽ പെട്ടവർക്കും, വിദ്യാഭ്യാസ ജില്ല, വിദ്യാഭ്യാസ ഉപ ജില്ല എന്നീ എന്നീ തലങ്ങളിലുള്ള വിദ്യാലയ വിഭാഗത്തിൽ പെട്ടവർക്കും, തൽപ്പരരായ അതാത് പ്രദേശത്തെ സ്ഥാപനങ്ങളുടെ സഹകരണത്തോടുകൂടി പ്രത്യേക പുരസ്കാരങ്ങളും സമ്മാനങ്ങളും ഏർപ്പെടുത്തുന്നതാണ്. പരിപാലിക്കുന്ന തൈകളുടെ ഓരോ മൂന്ന് മാസത്തെയും വളർച്ച പ്രകടമാവുന്ന ഫോട്ടൊ www.GreenCleanEarth.org എന്ന വെബ്സൈറ്റിൽ അപ്ലോഡ് ചെയ്യുന്ന ആർക്കും ഏതു മത്സരങ്ങളിലും പങ്കടുക്കാവുന്നതാണ്. കൂടുതൽ അറിയാൻ
           </p>
         </>
@@ -323,7 +321,7 @@ const cards = [
       {isOpen5 && (
         <>
           <hr className="my-1" />
-          <p className="mt-2 ">
+          <p className="mt-2 text-center">
           കോഴിക്കോട് ജില്ലയെ സമ്പൂർണ്ണ മാലിന്യ മുക്തവും ഹരിതാഭവും വേണ്ടി കോഴിക്കോട് ജില്ലാ പഞ്ചായത്ത് സോയിൽ കൺസർവേഷൻ ഡിപ്പാർട്മെൻറ് മുഖേനെ ഗ്രീൻ ക്ലീൻ കേരള മിഷൻറെ സഹകരണത്തോടെ നടപ്പാക്കുന്ന പദ്ധതിയാണ് ഗ്രീനിങ് കോഴിക്കോട് . ഹരിത കേരള മിഷൻ, ശുചിത്വ മിഷൻ , കുടുംബശ്രീ, അഗ്രിക്കൾച്ചറൽ ഡിപ്പാർമെൻറ് , സോഷ്യൽ ഫോറെസ്റ്ററി,ബയോ ഡൈവേഴ്‌സിറ്റി ബോർഡ് , വിവിധ തദ്ദേശ സ്വയം ഭരണസ്ഥാപനങ്ങൾ എന്നിവ മുഖേനെ സർക്കാർ നടപ്പാക്കുന്ന പദ്ധതികൾ കൂടുതൽ ജനകീയമാക്കാൻ ഗ്രീൻ ക്ലീൻ കേരള മിഷന്റെ സഹകരണത്തോടെ വിവിധ ഹരിത മത്സരങ്ങൾ സംഘടിപ്പിക്കുകയും , വിജയികൾക്ക് ഗ്രീൻ ക്ലീൻ കേരള മിഷൻ സമ്മാനങ്ങൾ നൽകുകയും ചെയ്യുന്നു..
           </p>
         </>
@@ -332,7 +330,7 @@ const cards = [
     {/* container 6 */}
     <div className={`p-4  m-4 shadow-md rounded-lg ${isOpen6 ? 'bg-light-green' : 'bg-light-gray'}`} >
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold" style={{color:'#3C6E1F'}}>ഗ്രീൻ ക്ലീൻ കേരള മിഷൻ</h2>
+        <h2 className="text-2xl font-bold " style={{color:'#3C6E1F'}}>ഗ്രീൻ ക്ലീൻ കേരള മിഷൻ</h2>
         <button onClick={toggleOpen6} className="text-xl">
           {isOpen6 ? <FaChevronUp /> : <FaChevronDown />}
         </button>
@@ -340,7 +338,7 @@ const cards = [
       {isOpen6 && (
         <>
           <hr className="my-1" />
-          <p className="mt-2 ">
+          <p className="mt-2 text-center">
           കോഴിക്കോട് ജില്ലയിലെ Forestry Club,ICDS, NSS, SPC, SCOUT & GUIDE, JRC, SAVE, Green Clean Earth Movement Foundation (GCEM Fondation), തുടങ്ങിയവയുടെ കൂട്ടായ്മയാണ് ഗ്രീൻ ക്ലീൻ കേരള മിഷൻ .കോഴിക്കോട് ജില്ലാ പഞ്ചായത്ത് സോയിൽ കൺസർവേഷൻ ഡിപ്പാർട്മെൻറ് , ഹരിത കേരള മിഷൻ, ശുചിത്വ മിഷൻ , കുടുംബശ്രീ, അഗ്രിക്കൾച്ചറൽ ഡിപ്പാർമെൻറ് , സോഷ്യൽ ഫോറെസ്റ്ററി,ബയോ ഡൈവേഴ്‌സിറ്റി ബോർഡ് , വിവിധ തദ്ദേശ സ്വയം ഭരണസ്ഥാപനങ്ങൾ എന്നിവയുടെ സഹകരണത്തോടെയാണ് പദ്ധതികൾ ആവിഷ്‌കരിക്കുന്നത് . വിദ്യാർഥികളിലൂടെ ഹരിത ശുചിത്വ ബോധം സമൂഹത്തിൽ വ്യാപിപ്പിക്കുവാൻ വേണ്ടി വിവിധ ഹരിത മത്സരങ്ങൾ സംഘടിപ്പിച്ച് വിജയികൾക്ക് സമ്മാനങ്ങൾ നൽകുന്നു
           </p>
         </>
@@ -350,7 +348,7 @@ const cards = [
     {/* container 7 */}
     <div className={`p-4  m-4 shadow-md rounded-lg ${isOpen7 ? 'bg-light-green' : 'bg-light-gray'}`} >
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold" style={{color:'#3C6E1F'}}>നാഴികക്കല്ലുകൾ -ഗ്രീൻ ക്ലീൻ കേരള -വൃക്ഷത്തൈ പരിപാലന മത്സരം</h2>
+        <h2 className="text-2xl font-bold " style={{color:'#3C6E1F'}}>നാഴികക്കല്ലുകൾ -ഗ്രീൻ ക്ലീൻ കേരള -വൃക്ഷത്തൈ പരിപാലന മത്സരം</h2>
         <button onClick={toggleOpen7} className="text-xl">
           {isOpen7 ? <FaChevronUp /> : <FaChevronDown />}
         </button>
@@ -358,7 +356,7 @@ const cards = [
       {isOpen7 && (
         <>
           <hr className="my-1" />
-          <p className="mt-2 ">
+          <p className="mt-2 text-center">
           Conducted by Green Clean Kerala Mission- A confederation of Green Clean Eearth Movement(GCEM) Foundation, Forestry Club, NSS, SPC, Scout & Guide, JRC & SAVE.
 In Association with Kozhikkode jilla panchayath Soil Conservation Department, Agricultural Department, Haritha Keralam Mission, Social forestry, Kudumbashree & ICDS.
 Supported by indian Oil Corporation and myG, VKC,tecQ, Aqua garden, Mall of garden, AGRI SUPER MARKET, KISAN EXCEL, a2z4home.

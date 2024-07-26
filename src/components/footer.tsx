@@ -8,7 +8,7 @@ export default function Footer() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImage((prevImage) => (prevImage + 1) % images.length);
-    }, 2000); // 2000 milliseconds = 2 seconds
+    }, 3000); // 2000 milliseconds = 2 seconds
     return () => clearInterval(interval);
   }, []);;
     return (
