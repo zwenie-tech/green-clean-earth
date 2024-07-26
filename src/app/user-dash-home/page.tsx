@@ -8,6 +8,9 @@ import { BadgeIndianRupee, CreditCard, FileText, Gift, ImageUp, Images, LogOut, 
 import Link from 'next/link'
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { DialogUploadPlant } from "@/app/user-dash-home/dialog-upload-plants";
+
+
 
   function UserDashHomeFn() {
   const searchParams = useSearchParams();
@@ -21,17 +24,28 @@ import { Suspense } from "react";
           <PageTitle title='Dashboard' />
           <Link href={'logout'} className="absolute right-[0] top-[0] px-6 py-2 rounded-full bg-light-gray hover:bg-dark-gray">Logout</Link>
         </div>
-        <div className="max-w-screen-xl mx-auto p-4 mt-4 mb-6 shadow-dashboard">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+        <div className="max-w-screen-xl mx-auto p-4 mt-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+          {/* <div 
+            className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10">
+            <div className="flex flex-row items-center justify-between w-full px-6 py-2 bg-light-green">
+              <p className="font-semibold text-xl">Upload plant</p>
+              <ImageUp size={48} color="#6c7260" strokeWidth={1.75} />
+            </div>
+            <div className="px-6">
+              
+            </div>
+          </div> */}
+            <DialogUploadPlant />
             <Link 
               className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10"
               href={`user-dash-home/uploaded-plants`}>
               <div className="flex flex-row items-center justify-between w-full px-6 py-2 bg-light-green">
                 <p className="font-semibold text-xl">My Uploads</p>
-                <ImageUp size={48} color="#6c7260" strokeWidth={1.75} />
+                <Images size={48} color="#6c7260" strokeWidth={1.75} />
               </div>
               <div>
-                <p className="px-6 py-2 font-normal text-base">വൃക്ഷത്തൈ സെൽഫി മത്സരം</p>
+                <p className="px-6 py-2 font-normal text-base">നിങ്ങൾ അപ്‌ലോഡ് ചെയ്തവ കാണാൻ</p>
               </div>
             </Link>
             <Link 
@@ -78,7 +92,7 @@ import { Suspense } from "react";
                 <p className="px-6 py-2 font-normal text-base">Lucky Draw</p>
               </div>
             </Link>
-            <Link 
+            {/* <Link 
               className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10"
               href={"/"}>
               <div className="flex flex-row items-center justify-between w-full px-6 py-2 bg-light-green">
@@ -88,8 +102,8 @@ import { Suspense } from "react";
               <div>
                 <p className="px-6 py-2 font-normal text-base"></p>
               </div>
-            </Link>
-            <Link 
+            </Link> */}
+            {/* <Link 
               className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10"
               href={"/"}>
               <div className="flex flex-row items-center justify-between w-full px-6 py-2 bg-light-green">
@@ -99,8 +113,8 @@ import { Suspense } from "react";
               <div>
                 <p className="px-6 py-2 font-normal text-base">Green Card കൈവശം ഉള്ളവർക്ക് പ്രത്യേക ഓഫറുകൾ നൽകുന്ന സ്‌ഥാപനങ്ങളുടെ ലിസ്റ്റ്</p>
               </div>
-            </Link>
-            <Link 
+            </Link> */}
+            {/* <Link 
               className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10"
               href={"/"}>
               <div className="flex flex-row items-center justify-between w-full px-6 py-2 bg-light-green">
@@ -110,7 +124,7 @@ import { Suspense } from "react";
               <div>
                 <p className="px-6 py-2 font-normal text-base">Agro Arts and Sports Competetion. കാർഷിക കലാ കായിക മത്സരങ്ങൾ</p>
               </div>
-            </Link>
+            </Link> */}
           </div>
         </div>
       </div>
