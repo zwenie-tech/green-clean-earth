@@ -21,7 +21,7 @@ export function DialogEditProfile({token}:any) {
       <DialogTrigger asChild>
         <Button className="text-primary bg-transparent hover:bg-primary/5">Edit Profile</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] sm:h-[calc(100vh-74px)]" >
+      <DialogContent className="max-w-[425px] h-[calc(100vh-74px)]" >
         <DialogHeader>
           <DialogTitle>Edit Profile</DialogTitle>
           <DialogDescription>
