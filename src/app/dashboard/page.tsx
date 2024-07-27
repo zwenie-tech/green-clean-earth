@@ -24,7 +24,7 @@ const Dashboard=()=>{
     router.push('/dashboard/dashboard-activities');
   };
   const YouTubeEarningsButton= () => {
-    router.push('/dashboard');
+    router.push('/dashboard/youtube-earnings');
   };
   const OurTeamButton = () => {
     router.push('/dashboard');
