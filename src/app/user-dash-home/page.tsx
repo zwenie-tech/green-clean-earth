@@ -72,7 +72,7 @@ import { DialogUploadPlant } from "@/app/user-dash-home/dialog-upload-plants";
             </Link>
             <Link 
               className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10"
-              href={"/"}>
+              href={"/user-dash-home/user-invite"}>
               <div className="flex flex-row items-center justify-between w-full px-6 py-2 bg-light-green">
                 <p className="font-semibold text-xl">Invite Friends</p>
                 <Send size={48} color="#6c7260" strokeWidth={1.75} />
