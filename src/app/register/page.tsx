@@ -48,6 +48,7 @@ import NgoAdditionalDetails from "./ngo-additional-details/page";
 const formSchema = z.object({
   categoryId: z.string(),
   name: z.string().max(255),
+  refferalCode: z.string().max(255),
   location: z.string().max(255),
   coordinator_name: z.string().max(255),
   whatsapp_number: z.coerce.number(),
@@ -189,6 +190,7 @@ export default function Register() {
       province: values.city || '',
       corporation: corp_id || '0',
       wardNo: parseInt(values.wardNo!) || 0,
+      refferalCode: values.refferalCode
     };
 
     try {
@@ -529,6 +531,19 @@ export default function Register() {
                   )}
                 />
               )}
+              <FormField
+                  control={form.control}
+                  name="refferalCode"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Referal Code</FormLabel>
+                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="username"
