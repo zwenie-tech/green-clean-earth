@@ -148,10 +148,11 @@ const Plant = ({ searchParams }: any) => {
                 <p className='text-sm text-dark-text'>State</p>
                 <p>{plant.st_name}</p>
               </div>
-              <div className='flex flex-col gap-1'>
+              {plant.city && (<div className='flex flex-col gap-1'>
                 <p className='text-sm text-dark-text'>City</p>
                 <p>{plant.city}</p>
-              </div>
+              </div>)}
+              
               <div className='flex flex-col gap-1'>
                 <p className='text-sm text-dark-text'>District</p>
                 <p>{plant.dis_name}</p>

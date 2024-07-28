@@ -58,6 +58,7 @@ const NavigationBar = () => {
     { href: "/result", label: "Result" },
     { href: "/about-us", label: "About Us" },
     { href: "/contact", label: "Contact" },
+    { href: "/logout", label: "Logout" },
   ];
   
 
@@ -76,7 +77,7 @@ const NavigationBar = () => {
               <Link href={link.href} passHref>
                 <p
                   className={`text-black no-underline px-3 py-1 rounded-full transition-colors duration-300 ${
-                    link.label==="Dashboard" ? "bg-primary text-white"
+                    link.label==="Dashboard" && (pathname==="/dashboard" || pathname==="/user-dash-home") ? "bg-primary text-white"
                     : (pathname === link.href
                       ? "bg-primary text-white"
                       : "bg-light-gray text-black")

@@ -121,7 +121,7 @@ const MyUploadedPlants = () => {
                     <div className='w-56 h-56  md:max-w-[200px]'>
                       {plant.up_file_2 ? (
                         // <Image src={`${imageURL}${plant.up_file}`} alt='' width={200} height={200} />
-                        <img src={`${imageURL}${plant.up_file}`} alt="Selected" width={150} height={150} />
+                        <img src={`${imageURL}${plant.up_file_2}`} alt="Selected" width={150} height={150} />
                       ) : (
                         <UploadButton imageNo={2} treeNo={plant.up_id} />
                       )}
@@ -131,7 +131,7 @@ const MyUploadedPlants = () => {
                     <div className='w-56 h-56  md:max-w-[200px]'>
                       {plant.up_file_2 ? (plant.up_file_3 ? (
                         // <Image src={`${imageURL}${plant.up_file}`} alt='' width={200} height={200} />
-                        <img src={`${imageURL}${plant.up_file}`} alt="Selected" width={150} height={150} />
+                        <img src={`${imageURL}${plant.up_file_3}`} alt="Selected" width={150} height={150} />
                       ) : (
                         <UploadButton imageNo={3} treeNo={plant.up_id} />
                       )):(<div className='bg-slate-200'></div>)}
@@ -141,7 +141,7 @@ const MyUploadedPlants = () => {
                     <div className='w-56 h-56  md:max-w-[200px]'>
                     {plant.up_file_2 && plant.up_file_3 ? (plant.up_file_4 ? (
                         // <Image src={`${imageURL}${plant.up_file}`} alt='' width={200} height={200} />
-                        <img src={`${imageURL}${plant.up_file}`} alt="Selected" width={150} height={150} />
+                        <img src={`${imageURL}${plant.up_file_4}`} alt="Selected" width={150} height={150} />
                       ) : (
                         <UploadButton imageNo={4} treeNo={plant.up_id} />
                       )):(<div className='bg-slate-200'></div>)}
