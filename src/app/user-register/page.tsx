@@ -484,6 +484,19 @@ function UserRegisterForm() {
                 />
                 <FormField
                   control={form.control}
+                  name="referralcode"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Referral Code</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Referral Code" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
                   name="mobile"
                   render={({ field }) => (
                     <FormItem>
@@ -508,19 +521,7 @@ function UserRegisterForm() {
                     </FormItem>
                   )}
                 />
-                {/* <FormField
-                  control={form.control}
-                  name="referralcode"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Referral Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Referral Name" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                /> */}
+                
                 <Button type="submit" className="w-full">Register</Button>
               </form>
             </Form>

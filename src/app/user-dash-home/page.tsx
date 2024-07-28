@@ -6,13 +6,22 @@ import NavigationBar from "@/components/navigationBar";
 import PageTitle from "@/components/sm/pageTitle";
 import { BadgeIndianRupee, CreditCard, FileText, Gift, ImageUp, Images, LogOut, Send, SquareUserRound, Trophy, UserRoundCog } from "lucide-react";
 import Link from 'next/link'
-import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect } from "react";
 import { DialogUploadPlant } from "@/app/user-dash-home/dialog-upload-plants";
+import Cookies from 'js-cookie';
 
 
 
   function UserDashHomeFn() {
+    const router = useRouter();
+  const token = Cookies.get('token');
+
+  useEffect(() => {
+    if (!token) {
+      router.push("/loginform");
+    }
+  }, [token, router]);
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   return (
@@ -22,7 +31,7 @@ import { DialogUploadPlant } from "@/app/user-dash-home/dialog-upload-plants";
       <div className="max-w-screen-md mx-auto">
         <div className="relative ">
           <PageTitle title='Dashboard' />
-          <Link href={'logout'} className="absolute right-[0] top-[0] px-6 py-2 rounded-full bg-light-gray hover:bg-dark-gray">Logout</Link>
+          {/* <Link href={'logout'} className="absolute right-[0] top-[0] px-6 py-2 rounded-full bg-light-gray hover:bg-dark-gray">Logout</Link> */}
         </div>
         <div className="max-w-screen-xl mx-auto p-4 mt-4 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">

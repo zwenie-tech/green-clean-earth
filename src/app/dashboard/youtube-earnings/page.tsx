@@ -17,6 +17,7 @@ interface Activity {
   activity_title: string;
   activity_thumbnail: string;
   gp_name: string;
+  earnings: number;
 }
 
 const DashboardActivity = () => {
@@ -29,13 +30,13 @@ const DashboardActivity = () => {
   useEffect(() => {
     if (!token) {
       // Redirect to the login page if no token is found
-      router.push("/login");
+      router.push("/loginform");
       return;
     }
 
     const fetchActivities = async () => {
       try {
-        const response = await fetch(`${apiURL}/coordinator/our-activities?page=1&limit=20`, {
+        const response = await fetch(`${apiURL}/coordinator/our-earning`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -48,7 +49,6 @@ const DashboardActivity = () => {
         }
 
         const data = await response.json();
-        console.log(data);
         setActivities(data.data); // Adjust this line based on your API response structure
         setLoading(false);
       } catch (err) {
@@ -79,36 +79,6 @@ const DashboardActivity = () => {
       <div className='text-center'>
         <h1 className='text-xl mt-2 font-bold'>Youtube earnings</h1>
       </div>
-      {/* Selection menu */}
-      {/* <div className="flex flex-wrap p-2 md:p-4">
-        <div className="w-1/2 mb-3 md:w-1/4 p-1 md:p-2 bg-white">
-          <label className="text-[#A09C9C] block font-bold ml-5 mb-1">Category</label>
-          <select className="w-full p-1 md:p-2 border text-sm md:text-lg rounded-xl bg-white focus:border-2 focus:border-[#3C6E1F]" style={{ boxShadow: "1px 4px 5px 3px #00000040" }}>
-            <option>Select Option 1</option>
-            <option>Option 1</option>
-            <option>Option 2</option>
-          </select>
-        </div>
-        <div className="w-1/2 md:mt-0 mb-3 md:w-1/4 p-1 md:p-2 bg-white">
-          <label className="text-[#A09C9C] block font-bold ml-5 mb-1">Sub Category</label>
-          <select className="w-full p-1 md:p-2 border text-sm md:text-lg rounded-xl bg-white focus:border-2 focus:border-[#3C6E1F]" style={{ boxShadow: "1px 4px 5px 3px #00000040" }}>
-            <option>Select Option 2</option>
-            <option>Option 1</option>
-            <option>Option 2</option>
-          </select>
-        </div>
-        <div className="w-full md:w-1/4 p-1 md:p-2 flex flex-col items-center md:items-start">
-          <label className="text-[#A09C9C] block font-bold md:text-lg mb-1">Club</label>
-          <select className="w-1/2 md:w-full p-1 md:p-2 border text-sm md:text-lg rounded-xl bg-white focus:border-2 focus:border-[#3C6E1F]" style={{ boxShadow: "1px 4px 5px 3px #00000040" }}>
-            <option>Select Option 2</option>
-            <option>Option 1</option>
-            <option>Option 2</option>
-          </select>
-        </div>
-        <div className="w-full md:w-1/4 p-1 md:p-2 flex justify-center md:justify-start sm:items-center md:items-start">
-          <button className="w-1/2 md:w-full mt-7 p-1 md:p-2 bg-[#3C6E1F] text-white rounded-2xl" style={{ boxShadow: "1px 4px 5px 3px #00000040" }}>Submit</button>
-        </div>
-      </div> */}
       {/* Table */}
       <div className="container mx-auto p-6">
         <div className="overflow-x-auto">
@@ -119,23 +89,23 @@ const DashboardActivity = () => {
                 <th className="py-3 px-6 text-left">View/ Like/ Comment/ Share</th>
                 <th className="py-3 px-6 text-left">Category</th>
                 <th className="py-3 px-6 text-left">Name & address of participant</th>
-                <th className="py-3 px-6 text-left">Name of art brief description</th>
                 <th className="py-3 px-6 text-left">Thumbnail</th>
-                <th className="py-3 px-6 text-left rounded-tr-lg">Value</th>
+                <th className="py-3 px-6 text-left">Value</th>
+                <th className="py-3 px-6 text-left rounded-tr-lg">Earnings</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={7} className="py-3 px-6 text-center">Loading...</td>
+                  <td colSpan={8} className="py-3 px-6 text-center">Loading...</td>
                 </tr>
               ) : error ? (
                 <tr>
-                  <td colSpan={7} className="py-3 px-6 text-center text-red-500">{error}</td>
+                  <td colSpan={8} className="py-3 px-6 text-center text-red-500">{error}</td>
                 </tr>
               ) : activities.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-3 px-6 text-center">No activities found</td>
+                  <td colSpan={8} className="py-3 px-6 text-center">No activities found</td>
                 </tr>
               ) : (
                 activities.map((activity, index) => (
@@ -144,9 +114,9 @@ const DashboardActivity = () => {
                     <td className="py-3 px-6 text-left">{activity.activity_likes} Likes & {activity.activity_views} Views</td>
                     <td className="py-3 px-6 text-left">{activity.activity_category}</td>
                     <td className="py-3 px-6 text-left">{activity.participant_name}</td>
-                    <td className="py-3 px-6 text-left">{activity.activity_title}</td>
                     <td className="py-3 px-6 text-left"><img src={`${imageURL}${activity.activity_thumbnail}`} alt="Thumbnail" style={{ height: '100px' }} /></td>
                     <td className="py-3 px-6 text-left">{activity.activity_value}</td>
+                    <td className="py-3 px-6 text-left">{activity.earnings}</td>
                   </tr>
                 ))
               )}
