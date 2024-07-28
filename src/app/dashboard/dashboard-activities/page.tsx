@@ -119,7 +119,6 @@ const DashboardActivity = () => {
                 <th className="py-3 px-6 text-left">View/ Like/ Comment/ Share</th>
                 <th className="py-3 px-6 text-left">Category</th>
                 <th className="py-3 px-6 text-left">Name & address of participant</th>
-                <th className="py-3 px-6 text-left">Name of art brief description</th>
                 <th className="py-3 px-6 text-left">Thumbnail</th>
                 <th className="py-3 px-6 text-left rounded-tr-lg">Value</th>
               </tr>
@@ -144,7 +143,6 @@ const DashboardActivity = () => {
                     <td className="py-3 px-6 text-left">{activity.activity_likes} Likes & {activity.activity_views} Views</td>
                     <td className="py-3 px-6 text-left">{activity.activity_category}</td>
                     <td className="py-3 px-6 text-left">{activity.participant_name}</td>
-                    <td className="py-3 px-6 text-left">{activity.activity_title}</td>
                     <td className="py-3 px-6 text-left"><img src={`${imageURL}${activity.activity_thumbnail}`} alt="Thumbnail" style={{ height: '100px' }} /></td>
                     <td className="py-3 px-6 text-left">{activity.activity_value}</td>
                   </tr>

@@ -9,13 +9,23 @@ import { Menu, X } from "lucide-react";
 const NavigationBar = () => {
   const [nav, setNav] = useState(false);
   const [token, setToken] = useState(null);
+  const [logintype, setLogintype] = useState(null);
   const pathname = usePathname();
 
   useEffect(() => {
     const storedToken : any = Cookies.get("token");
+    const logintype : any = Cookies.get("login_type");
+    setLogintype(logintype);
     setToken(storedToken);
   }, []);
 
+  if(logintype==="user"){
+    var userid : any = Cookies.get("userId");
+  }else{
+    var coid : any = Cookies.get("coid");
+    var cogid : any = Cookies.get("cogid");
+
+  }
   const links = [
     { href: "/home", label: "Home" },
     { href: "/projects", label: "Projects" },
@@ -32,12 +42,14 @@ const NavigationBar = () => {
     { href: "/contact", label: "Contact" },
   ];
 
+
   const login_links = [
     { href: "/home", label: "Home" },
     { href: "/projects", label: "Projects" },
     { href: "/competition", label: "Competition" },
     // { href: "/register", label: "Register" },
-    // { href: "/user-dash-home", label: "Dashboard" },
+    logintype==='user' ? { href: `/user-dash-home?id=${userid}`, label: "Dashboard" }
+    :{ href: `/dashboard?id=${coid}&gid=${cogid}`, label: "Dashboard" },
     { href: "/events", label: "Events & News" },
     { href: "/get-plant", label: "Get Plant" },
     { href: "/group-list", label: "Group List" },
@@ -64,9 +76,10 @@ const NavigationBar = () => {
               <Link href={link.href} passHref>
                 <p
                   className={`text-black no-underline px-3 py-1 rounded-full transition-colors duration-300 ${
-                    pathname === link.href
+                    link.label==="Dashboard" ? "bg-primary text-white"
+                    : (pathname === link.href
                       ? "bg-primary text-white"
-                      : "bg-light-gray text-black"
+                      : "bg-light-gray text-black")
                   }`}
                 >
                   {link.label}

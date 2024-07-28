@@ -32,7 +32,7 @@ const invite=()=>{
                          <th className="py-3 px-6 text-left rounded-tr-lg">coordinator name</th>
                        </tr>
                      </thead>
-                           <tbody>
+                     <tbody>
                              <tr className="border border-gray-200 hover:bg-gray-100">
                                <td className="py-3 px-6 text-left">1</td>
                                <td className="py-3 px-6 text-left">1234</td>

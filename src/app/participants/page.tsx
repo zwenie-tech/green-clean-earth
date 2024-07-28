@@ -6,6 +6,7 @@ import { apiURL, imageURL } from "@/app/requestsapi/request";
 
 interface Participant {
   up_id: number,
+  us_id: number,
   up_name: string,
   up_planter: string,
   up_tree_name: string,
@@ -81,6 +82,8 @@ const Participant = () => {
         }
         try {
           const result = await response.json();
+        console.log(result.Uploads);
+
           setParticipants(result.Uploads);
         } catch {
           setParticipants([]);
@@ -382,7 +385,7 @@ const Participant = () => {
             <tr key={participant.up_id} className="border border-gray-200 hover:bg-gray-100">
               <td className="py-3 px-6 text-left">{participant.up_id || 'N/A'}</td>
               <td className="py-3 px-6 text-left">{participant.up_planter || 'N/A'}</td>
-              <td className="py-3 px-6 text-left">{participant.up_name || 'N/A'}</td>
+              <td className="py-3 px-6 text-left"><a href={`/user-page?u=${participant.up_name}&id=${participant.us_id}`}>{participant.up_name || 'N/A'}</a></td>
               <td className="py-3 px-6 text-left">{participant.gp_name || 'N/A'}</td>
               <td className="py-3 px-6 text-left">{participant.up_tree_name || 'N/A'}</td>
               <td className="py-3 px-6 text-left">

@@ -6,13 +6,22 @@ import NavigationBar from "@/components/navigationBar";
 import PageTitle from "@/components/sm/pageTitle";
 import { BadgeIndianRupee, CreditCard, FileText, Gift, ImageUp, Images, LogOut, Send, SquareUserRound, Trophy, UserRoundCog } from "lucide-react";
 import Link from 'next/link'
-import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect } from "react";
 import { DialogUploadPlant } from "@/app/user-dash-home/dialog-upload-plants";
+import Cookies from 'js-cookie';
 
 
 
   function UserDashHomeFn() {
+    const router = useRouter();
+  const token = Cookies.get('token');
+
+  useEffect(() => {
+    if (!token) {
+      router.push("/loginform");
+    }
+  }, [token, router]);
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   return (

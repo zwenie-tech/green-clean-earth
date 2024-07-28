@@ -77,8 +77,10 @@ const LoginForm = () => {
           description: "Successfully logged in.",
         });
         Cookies.set("token", token, { expires: 1 });
+        Cookies.set("login_type", "user", { expires: 1 });
         Cookies.set("user_refcode", refcode, { expires: 1 });
-
+        Cookies.set("userId", id, { expires: 1 });
+        
         router.replace("/user-dash-home?id=" + id);
       }
     } catch (error) {
@@ -126,6 +128,11 @@ const LoginForm = () => {
         });
         Cookies.set('token', token, { expires: 1 });
         Cookies.set("cord_refcode", refcode, { expires: 1 });
+        Cookies.set("login_type", "coordinator", { expires: 1 });
+        Cookies.set("coid", id, { expires: 1 });
+        Cookies.set("cogid", gid, { expires: 1 });
+        
+
 
         router.push(`/dashboard?id=${id}&gid=${gid}`);
       }
