@@ -1,7 +1,7 @@
 "use client";
 import NavigationBar from '@/components/navigationBar';
 import Footer from '@/components/footer';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { apiURL, imageURL } from '../../requestsapi/request';
 import { useSearchParams } from 'next/navigation';
 
@@ -34,8 +34,14 @@ interface DistrictUploadsResponse {
   districtList: DistrictUpload[];
   success: boolean;
 }
-
-const ButtonDisplay: React.FC = () => {
+export default function ButtonDisplay() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ButtonDisplayFn />
+    </Suspense>
+  );
+}
+const ButtonDisplayFn: React.FC = () => {
   const [activeButton, setActiveButton] = useState<'upload' | 'activity'>('upload');
   const [activities, setActivities] = useState<DistrictActivity[]>([]);
   const [uploads, setUploads] = useState<DistrictUpload[]>([]);
@@ -193,5 +199,3 @@ const ButtonDisplay: React.FC = () => {
     </div>
   );
 };
-
-export default ButtonDisplay;

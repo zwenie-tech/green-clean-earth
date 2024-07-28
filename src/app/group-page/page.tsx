@@ -1,7 +1,7 @@
 "use client";
 import NavigationBar from '@/components/navigationBar';
 import Footer from '@/components/footer';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { apiURL, imageURL } from '../requestsapi/request';
 import { useRouter, useSearchParams } from 'next/navigation';
 
@@ -30,8 +30,14 @@ interface GroupUpload {
   up_reg_id: number;
   gp_id: number;
 }
-
-const ButtonDisplay: React.FC = () => {
+export default function ButtonDisplay() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ButtonDisplayFn />
+    </Suspense>
+  );
+}
+const ButtonDisplayFn: React.FC = () => {
   const [activeButton, setActiveButton] = useState<'upload' | 'activity'>('upload');
   const [groupActivities, setGroupActivities] = useState<GroupActivity[]>([]);
   const [groupUploads, setGroupUploads] = useState<GroupUpload[]>([]);
@@ -178,4 +184,3 @@ const ButtonDisplay: React.FC = () => {
   );
 };
 
-export default ButtonDisplay;

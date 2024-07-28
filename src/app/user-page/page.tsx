@@ -1,7 +1,7 @@
 "use client";
 import NavigationBar from '@/components/navigationBar';
 import Footer from '@/components/footer';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { apiURL, imageURL } from '../requestsapi/request';
 import { useSearchParams } from 'next/navigation';
 
@@ -28,8 +28,14 @@ interface Activity {
   activity_views: string;
   earnings: string | null;
 }
-
-const ButtonDisplay = () => {
+export default function ButtonDisplay() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ButtonDisplayFn />
+    </Suspense>
+  );
+}
+const ButtonDisplayFn = () => {
   const [activeButton, setActiveButton] = useState<'upload' | 'activity'>('upload');
   const [uploads, setUploads] = useState<Upload[]>([]);
   const [activities, setActivities] = useState<Activity[]>([]);
@@ -168,5 +174,3 @@ const ButtonDisplay = () => {
     </div>
   );
 };
-
-export default ButtonDisplay;
