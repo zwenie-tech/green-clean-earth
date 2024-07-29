@@ -46,7 +46,9 @@ const Dashboard=()=>{
           <h1 className='text-4xl font-bold'>Dashboard</h1>
         </div>
         <div className='ml-auto'>
-          <button className='rounded-xl bg-gray-200 p-2 md:mr-6' style={{boxShadow:'1px 4px 5px 3px #00000040'}}>Logout</button>
+          <button className='rounded-xl bg-gray-200 p-2 md:mr-6' 
+          onClick={LogoutButton}
+          style={{boxShadow:'1px 4px 5px 3px #00000040'}}>Logout</button>
         </div>
       </div>
       <div className='text-center'>
