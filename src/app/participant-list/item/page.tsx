@@ -44,26 +44,18 @@ const Item: React.FC = () => {
       <PageTitle title={`Tree number: ${treeDetails.up_id}`} />
       <div className="rounded-lg shadow-lg max-w-screen-lg mx-auto">
         <div className="rounded-lg border">
-          <div className='flex flex-col flex-wrap md:flex-row gap-3 py-2 mb-2'>
+          <div className='flex flex-col flex-wrap md:flex-row gap-3 p-4 overflow-hidden'>
             {treeDetails.up_file && (
-              <div className='w-full aspect-square md:h-40 md:w-40 rounded bg-light-gray mx-auto'>
-                <img src={`${imageURL}${treeDetails.up_file}`} alt='' width={200} height={200} />
-              </div>
+                <img src={`${imageURL}${treeDetails.up_file}`} className='mx-auto' alt='' width={200} height={200} />
             )}
             {treeDetails.up_file_2 && (
-              <div className='w-full aspect-square md:h-40 md:w-40 rounded bg-light-gray mx-auto'>
-                <img src={`${imageURL}${treeDetails.up_file_2}`} alt='' width={200} height={200} />
-              </div>
+                <img src={`${imageURL}${treeDetails.up_file_2}`} className='mx-auto' alt='' width={200} height={200} />
             )}
             {treeDetails.up_file_3 && (
-              <div className='w-full aspect-square md:h-40 md:w-40 rounded bg-light-gray mx-auto'>
-                <img src={`${imageURL}${treeDetails.up_file_3}`} alt='' width={200} height={200} />
-              </div>
+                <img src={`${imageURL}${treeDetails.up_file_3}`} className='mx-auto' alt='' width={200} height={200} />
             )}
             {treeDetails.up_file_4 && (
-              <div className='w-full aspect-square md:h-40 md:w-40 rounded bg-light-gray mx-auto'>
-                <img src={`${imageURL}${treeDetails.up_file_4}`} alt='' width={200} height={200} />
-              </div>
+                <img src={`${imageURL}${treeDetails.up_file_4}`} className='mx-auto' alt='' width={200} height={200} />
             )}
           </div>
           <hr className="my-2" />
