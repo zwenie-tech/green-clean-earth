@@ -3,7 +3,7 @@ import React from 'react'
 import NavigationBar from '@/components/navigationBar'
 import Footer from '@/components/footer'
 import { useState } from 'react'
-const detailsEdit=()=>{
+const DetailsEdit=()=>{
     const [isEditing, setIsEditing] = useState(false);
     const [isgroupEditing, setgroupIsEditing] = useState(false);
     const [iscoordinatorEditing, setcoordinatorEditing] = useState(false);
@@ -226,4 +226,4 @@ const detailsEdit=()=>{
         </>
     )
 }
-export default detailsEdit;
+export default DetailsEdit;
