@@ -8,6 +8,7 @@ import { apiURL } from '../requestsapi/request';
 interface District {
   dis_name: string;
   upload_count: number;
+  dis_id : number;
 }
 interface ApiResponse {
   districtList: District[];
@@ -62,7 +63,7 @@ const DistrictPage = () => {
               {districts.map((district, index) => (
                 <tr key={index} className="border border-gray-200 hover:bg-gray-100">
                   <td className="py-3 px-6 text-left">{index + 1}</td>
-                  <td className="py-3 px-6 text-left"><a href={`/district/district-page?i=${index+1}&n=${district.dis_name}&u=${district.upload_count}`}>{district.dis_name}</a></td>
+                  <td className="py-3 px-6 text-left"><a href={`/district/district-page?i=${district.dis_id}&n=${district.dis_name}&u=${district.upload_count}`}>{district.dis_name}</a></td>
                   <td className="py-3 px-6 text-left">{district.upload_count}</td>
                 </tr>
               ))}

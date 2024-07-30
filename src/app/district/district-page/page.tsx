@@ -70,7 +70,7 @@ const ButtonDisplayFn: React.FC = () => {
   const fetchActivities = async () => {
     try {
       const i = parseInt(ind!);
-      const response = await fetch(`${apiURL}/activity/districtActivities?limit=2`, {
+      const response = await fetch(`${apiURL}/activity/districtActivities`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ const ButtonDisplayFn: React.FC = () => {
   const fetchUploads = async () => {
     try {
       const i = parseInt(ind!);
-      const response = await fetch(`${apiURL}/common/districtUploads?districtId=${i}&page=1&limit=2`);
+      const response = await fetch(`${apiURL}/common/districtUploads?districtId=${i}`);
       const data: DistrictUploadsResponse = await response.json();
       if (data.success) {
         setUploads(data.districtList);
