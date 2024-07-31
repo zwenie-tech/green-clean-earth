@@ -84,9 +84,9 @@ const DashboardUserList = () => {
           ) : (
             users.map((user) => (
               <div key={user.us_id} className="flex flex-col md:flex-row items-center p-4 border border-gray-200 rounded-lg" style={{ boxShadow: '0px 4px 10px 3px #00000040' }}>
-                <div className="w-full md:w-1/4">
+{/*                 <div className="w-full md:w-1/4">
                   <img src='/images/participants_list.jpeg' alt={`User ${user.us_id}`} className="w-full h-auto object-cover rounded-lg" />
-                </div>
+                </div> */}
                 <div className="w-full md:w-3/4 md:pl-4">
                   <h4 className="text-xl font-bold">{user.us_name}</h4>
                   <p>Location: {user.us_address}</p>

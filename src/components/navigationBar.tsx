@@ -28,7 +28,7 @@ const NavigationBar = () => {
   }
   const links = [
     { href: "/home", label: "Home" },
-    { href: "/projects", label: "Projects" },
+    { href: "/project", label: "Projects" },
     { href: "/competition", label: "Competition" },
     { href: "/register", label: "Register" },
     { href: "/loginform", label: "Login" },
@@ -45,7 +45,7 @@ const NavigationBar = () => {
 
   const login_links = [
     { href: "/home", label: "Home" },
-    { href: "/projects", label: "Projects" },
+    { href: "/project", label: "Projects" },
     { href: "/competition", label: "Competition" },
     // { href: "/register", label: "Register" },
     logintype==='user' ? { href: `/user-dash-home?id=${userid}`, label: "Dashboard" }
