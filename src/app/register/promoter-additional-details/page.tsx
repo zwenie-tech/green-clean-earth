@@ -120,7 +120,7 @@ function PromoterAdditionalDetailsForm() {
           title: "Account created.",
           description: "We've created your account for you.",
         });
-        router.push("/login/coordinator");
+        router.push("/loginform");
       }
     } catch (error) {
       toast({

@@ -35,7 +35,6 @@ const formSchema = z.object({
   no_of_students: z.coerce.number(),
   total_classes: z.coerce.number().gte(1).lte(999),
   list_of_classes: z.string().min(3).max(255),
-  // referral_name: z.string().min(3),
 });
 
 type FormSchema = z.infer<typeof formSchema>;
@@ -108,7 +107,7 @@ const MultiSelectZodForm = () => {
           title: "Account created.",
           description: "We've created your account for you.",
         });
-        router.push("/login/coordinator");
+        router.push("/loginform");
       }
     } catch (error) {
       toast({
