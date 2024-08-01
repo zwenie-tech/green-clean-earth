@@ -24,7 +24,6 @@ const DistrictPage = () => {
         const response = await fetch(`${apiURL}/common/districtList`);
         const data: ApiResponse = await response.json();
         if (data.success) {
-          console.log(data.districtList);
           setDistricts(data.districtList);
         } else {
           console.error('Failed to fetch district data');

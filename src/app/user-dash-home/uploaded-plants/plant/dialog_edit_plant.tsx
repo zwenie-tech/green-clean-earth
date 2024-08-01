@@ -29,7 +29,7 @@ export function DialogEditPlant() {
           </DialogDescription>
         </DialogHeader>
 
-        <ScrollArea className="h-full w-full p-2 rounded-md border">
+        <ScrollArea className="h-[calc(100vh-150px)] sm:h-full w-full p-2 rounded-md border">
             <FormEditPlant />
         </ScrollArea>
         {/* <DialogFooter>

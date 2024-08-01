@@ -209,12 +209,6 @@ const DetailsEdit: React.FC = () => {
   })
 
 
-  useEffect(() => {
-    // Verify default values are set correctly after form initialization
-    console.log('Form default values:', residenceform.getValues());
-    console.log('Form values:', residenceDetails.no_of_members);
-  }, [residenceform,residenceDetails.no_of_members]);
-
   const promoterform = useForm<FormPromoterSchema>({
     resolver: zodResolver(formPromoterSchema),
     defaultValues: {
@@ -314,7 +308,6 @@ const DetailsEdit: React.FC = () => {
               }
             );
             if(schoolResponse.status == 200){
-              console.log(schoolResponse.status);
               const schoolData = await schoolResponse.json();
             
             if (schoolData.schoolDetails.length > 0) {
@@ -366,10 +359,9 @@ const DetailsEdit: React.FC = () => {
             );
             if(residenceResponse.status == 200){
               const residenceData = await residenceResponse.json();
-            console.log(typeof(residenceData.residenceDetails))
               // Check if ResidenceDetails is defined and is an array
               if (residenceData.residenceDetails && Array.isArray(residenceData.residenceDetails) && residenceData.residenceDetails.length > 0) {
-                console.log('residence data:', residenceData.residenceDetails[0]);
+                
                 setResidenceDetails(residenceData.residenceDetails[0]);
             
                 residenceform.reset({
@@ -396,8 +388,6 @@ const DetailsEdit: React.FC = () => {
               const promoterData = await promoterResponse.json();
 
               
-              console.log('prodata',promoterData);
-              
               if (promoterData.promoterDetails.length) {
                 setPromoterDetails(promoterData.promoterDetails[0]);
                 
@@ -406,7 +396,6 @@ const DetailsEdit: React.FC = () => {
                 category: promoterData.promoterDetails[0].group_type,
                 total_team: promoterData.promoterDetails[0].total_members,
               };
-              console.log('proset',proset);
 
               promoterform.reset(proset);
             }}
@@ -627,7 +616,6 @@ const DetailsEdit: React.FC = () => {
         
         members: values.members,
       };
-      console.log(values);
   
       try {
         const response = await fetch(`${apiURL}/coordinator/updateNgo`, {
@@ -670,7 +658,6 @@ const DetailsEdit: React.FC = () => {
         
         members: values.no_of_members,
       };
-      console.log(apiresdata);
   
       try {
         const response = await fetch(`${apiURL}/coordinator/updateResidence`, {
@@ -714,7 +701,6 @@ const DetailsEdit: React.FC = () => {
         categoryId:category.find((item) => item.group_type === values.category)?.id,
         totalMembers:values.total_team,
       };
-      console.log('apidata',apipromoterdata);
   
       try {
         const response = await fetch(`${apiURL}/coordinator/updatePromoter`, {

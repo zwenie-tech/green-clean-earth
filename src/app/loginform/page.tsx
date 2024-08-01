@@ -66,10 +66,13 @@ const LoginForm = () => {
       }
 
       const result = await response.json();
+      console.log(result.data);
 
       const id = result.data.id;
       const token = result.data.token;
       const refcode = result.data.refferalCode;
+      const uname = result.data.userName;
+
       
       if (id) {
         toast({
@@ -79,6 +82,8 @@ const LoginForm = () => {
         Cookies.set("token", token, { expires: 1 });
         Cookies.set("login_type", "user", { expires: 1 });
         Cookies.set("user_refcode", refcode, { expires: 1 });
+        Cookies.set("name", uname, { expires: 1 });
+
         Cookies.set("userId", id, { expires: 1 });
         
         router.replace("/user-dash-home?id=" + id);
@@ -114,7 +119,8 @@ const LoginForm = () => {
       }
 
       const result = await response.json();
-      console.log(result.data)
+      console.log(result.data);
+
       const refcode = result.data.referral_code;
 
       const id = result.data.id;

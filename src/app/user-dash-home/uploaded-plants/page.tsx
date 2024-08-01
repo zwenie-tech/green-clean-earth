@@ -65,7 +65,6 @@ const MyUploadedPlants = () => {
       });
       const result: ApiResponse = await response.json();
       if (result.success) {
-        console.log(result.Uploads);
         setData(result.Uploads);
       }
     };
@@ -246,7 +245,6 @@ const UploadButton = ({imageNo,treeNo}:any) => {
         body: formData,
       });
       if (!response.ok) {
-        console.log(response);
         throw new Error("Network response was not ok");
       }
 
