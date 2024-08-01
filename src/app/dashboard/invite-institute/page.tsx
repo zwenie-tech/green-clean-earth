@@ -5,6 +5,7 @@ import Footer from '@/components/footer';
 import { apiURL, baseURL } from '@/app/requestsapi/request';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
+import { Button } from '@/components/ui/button';
 
 interface Institution {
   gp_id: number;
@@ -14,6 +15,7 @@ interface Institution {
 const Invite: React.FC = () => {
   const [institutions, setInstitutions] = useState<Institution[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [copy, setCopy] = useState<boolean>(false);
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const router = useRouter();
   const token = Cookies.get('token');
@@ -23,6 +25,7 @@ const Invite: React.FC = () => {
     // Redirect to the login page if no token is found
     router.push("/loginform");
   }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -50,16 +53,15 @@ const Invite: React.FC = () => {
   return (
     <>
       <NavigationBar />
-      <div className='relative flex p-4'>
-        <div className='absolute left-1/2 transform -translate-x-1/2 w-full md:w-auto'>
+      <div className='relative flex flex-col md:flex-row md:justify-between p-4'>
+        <div className='md:absolute md:left-1/2 md:transform md:-translate-x-1/2 w-full md:w-auto'>
           <h1 className='text-2xl m-3 text-left md:text-center md:text-4xl font-bold'>Dashboard</h1>
         </div>
-        <div className='ml-auto'>
+        <div className='ml-auto md:mr-0 md:mt-0 mt-4'>
           <button
             className='rounded-xl md:mr-5 text-[#FFFFFF] bg-[#3C6E1F] p-2 mr-4'
             style={{ boxShadow: '1px 4px 5px 3px #00000040' }}
             onClick={() => setShowDialog(true)}
-
           >
             Invite
           </button>
@@ -83,14 +85,14 @@ const Invite: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {institutions ? institutions.map((institution, index) => (
+                {institutions.length > 0 ? institutions.map((institution, index) => (
                   <tr key={institution.gp_id} className="border border-gray-200 hover:bg-gray-100">
                     <td className="py-3 px-6 text-left">{index + 1}</td>
                     <td className="py-3 px-6 text-left">{institution.gp_id}</td>
                     <td className="py-3 px-6 text-left">{institution.gp_name}</td>
                     {/* <td className="py-3 px-6 text-left">Bathhon Pannur</td> */}
                   </tr>
-                )): <div>No data found</div>}
+                )) : <tr><td colSpan={3} className="text-center py-3">No data found</td></tr>}
               </tbody>
             </table>
           )}
@@ -99,29 +101,29 @@ const Invite: React.FC = () => {
       <Footer />
 
       {showDialog && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
           <div className="fixed inset-0 bg-black opacity-50"></div>
           <div className="bg-white rounded-lg shadow-lg p-6 z-10 w-full max-w-md mx-auto">
             <h2 className="text-xl font-bold mb-4">Invite Coordinator</h2>
-            <p >Follow this link <strong><a className='text-green-600' href={`${baseURL}/register`}>{`${baseURL}/register`}</a></strong> to be the part of Green Clean Earth movement.  Use refferel code <strong>{user_ref}</strong> while registration.</p>
+            <p>Follow this link <strong><a className='text-green-600' href={`${baseURL}/register`}>{`${baseURL}/register`}</a></strong> to be the part of Green Clean Earth movement. Use referral code <strong>{user_ref}</strong> while registration.</p>
             <div className="flex justify-end mt-4">
-  <button
-    className="bg-gray-600 text-white py-2 px-4 rounded mr-2"
-    onClick={() => {
-      navigator.clipboard.writeText(`Follow this link ${baseURL}/register to be the part of Green Clean Earth movement.  Use refferel code ${user_ref} while registration.`);
-      alert("Text copied to clipboard!");
-    }}
-  >
-    Copy
-  </button>
-  <button
-    className="bg-green-600 text-white py-2 px-4 rounded"
-    onClick={() => setShowDialog(false)}
-  >
-    OK
-  </button>
-</div>
-
+          
+              <button
+                className="bg-gray-600 text-white py-2 px-4 rounded mr-2"
+                onClick={() => {
+                  navigator.clipboard.writeText(`Follow this link ${baseURL}/register to be the part of Green Clean Earth movement. Use referral code ${user_ref} while registration.`);
+                  setCopy(true);
+                }}
+              >
+               {copy ? "Copied!" : "Copy"} 
+              </button>
+              <button
+                className="bg-green-600 text-white py-2 px-4 rounded"
+                onClick={() => setShowDialog(false)}
+              >
+                OK
+              </button>
+            </div>
           </div>
         </div>
       )}

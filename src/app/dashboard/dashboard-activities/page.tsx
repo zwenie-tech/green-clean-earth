@@ -69,10 +69,8 @@ const DashboardActivity = () => {
         </div>
         <div className='ml-auto'>
           <button 
-            className='rounded-xl md:mr-5 text-[#FFFFFF] bg-[#3C6E1F] p-2 mr-4' 
-            style={{ boxShadow: '1px 4px 5px 3px #00000040' }}
+            className='rounded-xl md:mr-5 text-[#FFFFFF]  p-2 mr-4' 
           >
-            Invite New User
           </button>
         </div>
       </div>
