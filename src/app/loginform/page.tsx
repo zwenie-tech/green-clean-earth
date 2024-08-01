@@ -118,6 +118,7 @@ const LoginForm = () => {
       const refcode = result.data.referral_code;
 
       const id = result.data.id;
+      const gname = result.data.gp_name;
       const gid = result.data.groupId;
 
       const token = result.data.token;
@@ -131,6 +132,7 @@ const LoginForm = () => {
         Cookies.set("cord_refcode", refcode, { expires: 1 });
         Cookies.set("login_type", "coordinator", { expires: 1 });
         Cookies.set("coid", id, { expires: 1 });
+        Cookies.set("gname", gname, { expires: 1 });
         Cookies.set("cogid", gid, { expires: 1 });
         
 

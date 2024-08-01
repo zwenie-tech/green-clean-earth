@@ -1,16 +1,18 @@
 "use client";
-import React from 'react'
+import React, { Suspense } from 'react'
 import NavigationBar from "@/components/navigationBar";
 import Footer from '@/components/footer';
 import { Button } from 'react-bootstrap';
 import { FaUpload } from 'react-icons/fa';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
+import { DialogAddUser } from './dialog-add-user';
 
 
 const Dashboard=()=>{
   const router = useRouter();
   const token = Cookies.get('token');
+  const gname = Cookies.get('gname');
   if (!token) {
     router.push("/loginform");
   }
@@ -29,9 +31,7 @@ const Dashboard=()=>{
   const OurTeamButton = () => {
     router.push('/dashboard/details-edit');
   };
-  const InviteUsersButton = () => {
-    router.push('/dashboard');
-  };
+  
   const InviteInstitutionsButton= () => {
     router.push('/dashboard/invite-institute');
   };
@@ -50,7 +50,7 @@ const Dashboard=()=>{
         </div>
       </div>
       <div className='text-center'>
-           <h1 className='text-xl mt-2 font-bold text-[#3C6E1F]'>Green clean institution Name</h1>
+           <h1 className='text-xl mt-2 font-bold text-[#3C6E1F]'>Green clean {gname}</h1>
       </div>
       <div className='text-center'>
            <h1 className='text-xl mb-6 mt-2 font-bold '>in Association with Green Clean Kerala Mission</h1>
@@ -101,15 +101,8 @@ const Dashboard=()=>{
   {/**3..... */}
   <div className="flex justify-center items-center p-2 gap-2 md:gap-6 
   mb-3">
-  <label className="btn btn-primary flex align-items-center  bg-light-green rounded-lg"style={{width:'300px',height: '70px',boxShadow:'1px 4px 5px 3px #00000040'}} onClick={InviteUsersButton}>
-    <div
-     style={{ width: '60px',height: '70px',backgroundColor: 'white',borderRadius: '20px',borderWidth: '1px',borderColor: '#3C6E1F',display:'flex',justifyContent: 'center',alignItems: 'center',}}
-    >
-    <FaUpload />
-   </div>
-    <div className="pt-5 p-1 text-lg md:text-2xl md:pt-5 md:pr-3">Invite Users</div>
-    <input type="submit" style={{ display: 'none' }} />
-  </label>
+    <DialogAddUser />
+
   <label className="btn btn-primary flex align-items-center  bg-light-green rounded-lg"style={{width:'300px',height: '70px',boxShadow:'1px 4px 5px 3px #00000040'}} onClick={InviteInstitutionsButton} >
     <div
      style={{ width: '60px',height: '70px',backgroundColor: 'white',borderRadius: '20px',borderWidth: '1px',borderColor: '#3C6E1F',display:'flex',justifyContent: 'center',alignItems: 'center',}}
@@ -137,4 +130,11 @@ const Dashboard=()=>{
   </>
     )
 }
-export default Dashboard;
+
+export default function Dashboardfn() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Dashboard />
+    </Suspense>
+  );
+}
