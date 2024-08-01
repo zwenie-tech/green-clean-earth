@@ -60,7 +60,6 @@ const Estimate = () => {
       q15        : parseInt(formData.Q15),
 
     }
-    console.log(data);
 
     try {
       const response = await fetch(`${apiURL}/user/saveEstimate`, {
@@ -74,12 +73,11 @@ const Estimate = () => {
       });
 
       if (!response.ok) {
-        console.log(response);
         throw new Error("Network response was not ok");
       }
 
       const result = await response.json();
-      console.log(result);
+      
 
       if (result.success) {
         toast({

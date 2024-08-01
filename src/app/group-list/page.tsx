@@ -35,7 +35,6 @@ const GroupList = () => {
 
       const data: ApiResponse = await response.json();
       if (data.success) {
-        console.log(data.groupList);
         setGroups(data.groupList);
       }
     };

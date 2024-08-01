@@ -48,7 +48,7 @@ const DashboardActivity = () => {
         }
 
         const data = await response.json();
-        console.log(data);
+       
         setActivities(data.data); // Adjust this line based on your API response structure
         setLoading(false);
       } catch (err) {

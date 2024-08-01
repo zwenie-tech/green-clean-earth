@@ -106,7 +106,7 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ profile},{token}) => {
   return (
     <div className="">
       <div className="flex flex-col items-center">
-        <div className="h-40 w-40 bg-white border rounded-full"></div>
+        {/* <div className="h-40 w-40 bg-white border rounded-full"></div> */}
         <div className="relative w-full my-4">
           <h1 className="text-3xl text-center font-semibold">{profile.name}</h1>
           <p className="text-dark-text text-center">{profile.email}</p>  

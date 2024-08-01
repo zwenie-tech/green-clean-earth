@@ -233,7 +233,7 @@ export function FormEditPlant() {
   }, []);
 
   async function onSubmit(values: any) {
-    console.log(values);
+  
 
     const dataWithIds = {
       treeNumber: parseInt(tree_id!),
@@ -247,7 +247,6 @@ export function FormEditPlant() {
       sourceId: clubOptions.find((item) => item.name === values.clubs)?.id,
       landmark: values.landmark
     };
-    console.log(dataWithIds);
     try {
       const response = await fetch(`${apiURL}/uploads/updateDetails`, {
         method: "POST",
@@ -258,7 +257,6 @@ export function FormEditPlant() {
         body: JSON.stringify(dataWithIds),
       });
       if (!response.ok) {
-        console.log(response)
         throw new Error("Network response was not ok");
       }
 

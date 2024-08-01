@@ -148,7 +148,6 @@ export function FormEditProfile() {
           setSelectedState(st_name || "");
           setSelectedDistrict(dis_name || "");
           setSelectedCorp(cop_name || "");
-          console.log(data.user[0])
           setSelectedLsgd(lsg_name || "");
         }
       }
@@ -193,7 +192,7 @@ export function FormEditProfile() {
         const corp_id = corporation.find((item) => item.cop_name === selectedCorp)?.cop_id;
         const lsgResponse = await fetch(`${apiURL}/lsg/${corp_id}`);
         const lsgData = await lsgResponse.json();
-        console.log(lsgData);
+        
         setLsgd(lsgData.lsg);
       }
     }
@@ -218,7 +217,7 @@ export function FormEditProfile() {
       wardNo: parseInt(values.ward) || 0,
       lsgd: lsgd.find((item) => item.lsg_name === values.lsg)?.lsg_id || 0
     };
-    console.log(values.lsg);
+   
     try {
       const response = await fetch(`${apiURL}/user/updateProfile`, {
         method: "POST",
@@ -229,7 +228,7 @@ export function FormEditProfile() {
         body: JSON.stringify(dataWithIds),
       });
       if (!response.ok) {
-        console.log(response)
+       
         throw new Error("Network response was not ok");
       }
 

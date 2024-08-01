@@ -60,7 +60,6 @@ const Plant = ({ searchParams }: any) => {
       if (result.success) {
         const selectedPlant = result.Uploads.find(p => p.up_id === parseInt(searchParams.tree));
         if (selectedPlant) {
-          console.log(selectedPlant);
           const {up_id,cntry_name,st_name,city,dis_name,cop_name,lsg_name,up_ward,source_name,up_landmark_details}:any = selectedPlant;
           Cookies.set('treeId', up_id.toString(), { expires: 1 });
           Cookies.set('country', cntry_name, { expires: 1 });

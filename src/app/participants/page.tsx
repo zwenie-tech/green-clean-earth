@@ -77,12 +77,12 @@ const Participant = () => {
         });
   
         if (!response.ok) {
-          console.log(response);
+        
           throw new Error("Network response was not ok");
         }
         try {
           const result = await response.json();
-        console.log(result.Uploads);
+        
 
           setParticipants(result.Uploads);
         } catch {
@@ -221,7 +221,6 @@ const Participant = () => {
       }
     }
 
-    console.log('Form Data:', dataWithIds);
 
     try {
       const response = await fetch(`${apiURL}/uploads/filter`, {
@@ -233,7 +232,6 @@ const Participant = () => {
       });
 
       if (!response.ok) {
-        console.log(response);
         throw new Error("Network response was not ok");
       }
       try {

@@ -26,7 +26,7 @@ interface ApiResponse {
 const Events = () => {
   const searchParams = useSearchParams();
   const id = searchParams.get("slug");
-  console.log(`id====${id}`)
+  
   const [event, setEvent] = useState<Event | null>(null);
 
   useEffect(() => {
