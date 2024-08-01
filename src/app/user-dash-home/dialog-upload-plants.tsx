@@ -29,7 +29,7 @@ export function DialogUploadPlant({token}:any) {
         </div>
       </div>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] sm:h-[calc(100vh-74px)]" >
+      <DialogContent className="max-w-[425px] h-[calc(100vh-74px)]" >
         <DialogHeader>
           <DialogTitle>Upload Plant</DialogTitle>
           <DialogDescription>

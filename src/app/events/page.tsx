@@ -64,10 +64,10 @@ const Events = () => {
               ) : (
                 events.slice().reverse().map((event) => {
                   return (
-                    <div key={event.id} className='flex flex-col gap-2 mx-4 my-4 md:mx-16 p-4 bg-light-gray'>
+                    <div key={event.id} className='flex flex-col gap-2 my-2 md:my-4 mx-auto p-4 max-w-screen-xl bg-light-gray rounded-lg'>
                       <h2 className='text-xl font-bold'>{event.event_heading}</h2>
                       <div className="flex flex-col md:flex-row gap-4"> 
-                        <div className="flex flex-col gap-4">
+                        <div className="min-w-fit flex flex-col gap-4 ">
                           {event.image_link ? (
                             <a href={`/events/${event.id}?slug=${event.id}`}>
                             <img src={event.image_link} alt="Event Image" className="h-52 w-52 object-cover bg-primary" />
@@ -78,7 +78,7 @@ const Events = () => {
                           <p className='text-left md:text-center'>{new Date(event.created_time).toLocaleDateString()}</p>
                         </div>
                         <div className="flex flex-col">
-                          <p className=' text-justify p-5'>{event.event_body}</p>
+                          <p className=' text-justify p-2 md:p-5'>{event.event_body}</p>
                           {event.event_body.length > 100 && (
                       <a href={`/events/${event.id}?slug=${event.id}`} className='self-start bg-white px-5 py-2 rounded-2xl'>Read more</a>
                     )}
