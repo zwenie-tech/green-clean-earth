@@ -1,5 +1,5 @@
 "use client";
-import React from 'react'
+import React, { Suspense } from 'react'
 import NavigationBar from "@/components/navigationBar";
 import Footer from '@/components/footer';
 import { Button } from 'react-bootstrap';
@@ -31,9 +31,7 @@ const Dashboard=()=>{
   const OurTeamButton = () => {
     router.push('/dashboard/details-edit');
   };
-  const InviteUsersButton = () => {
-    <DialogAddUser />
-  };
+  
   const InviteInstitutionsButton= () => {
     router.push('/dashboard/invite-institute');
   };
@@ -132,4 +130,11 @@ const Dashboard=()=>{
   </>
     )
 }
-export default Dashboard;
+
+export default function Dashboardfn() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Dashboard />
+    </Suspense>
+  );
+}

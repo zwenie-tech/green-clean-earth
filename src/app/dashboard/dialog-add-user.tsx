@@ -11,20 +11,24 @@ import {
 } from "@/components/ui/dialog";
 import { LinkIcon, Copy } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { baseURL } from "@/app/requestsapi/request";
 import { useToast } from "@/components/ui/use-toast";
 import { useSearchParams } from "next/navigation";
 import { FaUpload } from "react-icons/fa";
 import Cookies from 'js-cookie';
 
-
 export function DialogAddUser() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <DialogAddUserfn />
+    </Suspense>
+  );
+}
+function DialogAddUserfn() {
   const { toast } = useToast();
   const searchParams = useSearchParams();
   const referral_code = Cookies.get('cord_refcode');
-
-
   const id = searchParams.get("id");
   const message = `
  
