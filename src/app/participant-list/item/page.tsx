@@ -1,7 +1,8 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import PageTitle from '@/components/sm/pageTitle';
 import { apiURL, imageURL } from '@/app/requestsapi/request';
+import { useSearchParams } from 'next/navigation';
 
 interface TreeDetails {
   up_id: number;
@@ -19,13 +20,19 @@ interface TreeDetails {
   source_name: string | null;
   gp_name: string | null;
 }
+interface Participant {
+  id : number;
+}
+
+
 
 const Item: React.FC = () => {
   const [treeDetails, setTreeDetails] = useState<TreeDetails | null>(null);
-
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
   useEffect(() => {
     const fetchTreeDetails = async () => {
-      const response = await fetch(`${apiURL}/uploads/treeDetails/113693`);
+      const response = await fetch(`${apiURL}/uploads/treeDetails/${id}`);
       const data = await response.json();
       if (data.success) {
         setTreeDetails(data.treeDetails[0]);
@@ -33,7 +40,7 @@ const Item: React.FC = () => {
     };
 
     fetchTreeDetails();
-  }, []);
+  }, [id]);
 
   if (!treeDetails) {
     return <div>Loading...</div>;
@@ -111,4 +118,12 @@ const Item: React.FC = () => {
   );
 }
 
-export default Item;
+
+
+export default function Itemfn() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Item />
+    </Suspense>
+  );
+}

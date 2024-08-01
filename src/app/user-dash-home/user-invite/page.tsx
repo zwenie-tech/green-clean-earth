@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import NavigationBar from '@/components/navigationBar';
 import Footer from '@/components/footer';
 import Cookies from "js-cookie";
-import { apiURL } from '@/app/requestsapi/request';
+import { apiURL, baseURL } from '@/app/requestsapi/request';
 
 interface Invite {
   gp_id: number;
@@ -13,8 +13,9 @@ interface Invite {
 const UserInvite: React.FC = () => {
   const [invites, setInvites] = useState<Invite[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [showDialog, setShowDialog] = useState<boolean>(false);
   const token = Cookies.get('token');
-
+  const user_ref = Cookies.get('user_refcode');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,10 +49,10 @@ const UserInvite: React.FC = () => {
           <h1 className='text-2xl m-3 text-left md:text-center md:text-4xl font-bold'>Dashboard</h1>
         </div>
         <div className='ml-auto'>
-          
           <button
             className='rounded-xl md:mr-5 text-[#FFFFFF] bg-[#3C6E1F] p-2 mr-4'
             style={{ boxShadow: '1px 4px 5px 3px #00000040' }}
+            onClick={() => setShowDialog(true)}
           >
             Invite
           </button>
@@ -71,7 +72,6 @@ const UserInvite: React.FC = () => {
                   <th className="py-3 px-6 text-left w-16 bd-2 rounded-tl-lg">Sl. No</th>
                   <th className="py-3 px-6 text-left">Group code</th>
                   <th className="py-3 px-6 text-left">Institution name</th>
-                  {/* <th className="py-3 px-6 text-left rounded-tr-lg">Coordinator name</th> */}
                 </tr>
               </thead>
               <tbody>
@@ -80,15 +80,42 @@ const UserInvite: React.FC = () => {
                     <td className="py-3 px-6 text-left">{index + 1}</td>
                     <td className="py-3 px-6 text-left">{invite.gp_id}</td>
                     <td className="py-3 px-6 text-left">{invite.gp_name}</td>
-                    {/* <td className="py-3 px-6 text-left">Bathhon Pannur</td> Replace with actual data if available */}
                   </tr>
-                )): <div>No data found</div>}
+                )) : <div>No data found</div>}
               </tbody>
             </table>
           )}
         </div>
       </div>
       <Footer />
+
+      {showDialog && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="fixed inset-0 bg-black opacity-50"></div>
+          <div className="bg-white rounded-lg shadow-lg p-6 z-10 w-full max-w-md mx-auto">
+            <h2 className="text-xl font-bold mb-4">Invite Coordinator</h2>
+            <p >Follow this link <strong><a className='text-green-600' href={`${baseURL}/register`}>{`${baseURL}/register`}</a></strong> to be the part of Green Clean Earth movement.  Use refferel code <strong>{user_ref}</strong> while registration.</p>
+            <div className="flex justify-end mt-4">
+  <button
+    className="bg-gray-600 text-white py-2 px-4 rounded mr-2"
+    onClick={() => {
+      navigator.clipboard.writeText(`Follow this link ${baseURL}/register to be the part of Green Clean Earth movement.  Use refferel code ${user_ref} while registration.`);
+      alert("Text copied to clipboard!");
+    }}
+  >
+    Copy
+  </button>
+  <button
+    className="bg-green-600 text-white py-2 px-4 rounded"
+    onClick={() => setShowDialog(false)}
+  >
+    OK
+  </button>
+</div>
+
+          </div>
+        </div>
+      )}
     </>
   );
 };

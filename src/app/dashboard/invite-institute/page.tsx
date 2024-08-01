@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import NavigationBar from '@/components/navigationBar';
 import Footer from '@/components/footer';
-import { apiURL } from '@/app/requestsapi/request';
+import { apiURL, baseURL } from '@/app/requestsapi/request';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 
@@ -14,8 +14,11 @@ interface Institution {
 const Invite: React.FC = () => {
   const [institutions, setInstitutions] = useState<Institution[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [showDialog, setShowDialog] = useState<boolean>(false);
   const router = useRouter();
   const token = Cookies.get('token');
+  const user_ref = Cookies.get('cord_refcode');
+
   if (!token) {
     // Redirect to the login page if no token is found
     router.push("/loginform");
@@ -55,6 +58,8 @@ const Invite: React.FC = () => {
           <button
             className='rounded-xl md:mr-5 text-[#FFFFFF] bg-[#3C6E1F] p-2 mr-4'
             style={{ boxShadow: '1px 4px 5px 3px #00000040' }}
+            onClick={() => setShowDialog(true)}
+
           >
             Invite
           </button>
@@ -92,6 +97,34 @@ const Invite: React.FC = () => {
         </div>
       </div>
       <Footer />
+
+      {showDialog && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="fixed inset-0 bg-black opacity-50"></div>
+          <div className="bg-white rounded-lg shadow-lg p-6 z-10 w-full max-w-md mx-auto">
+            <h2 className="text-xl font-bold mb-4">Invite Coordinator</h2>
+            <p >Follow this link <strong><a className='text-green-600' href={`${baseURL}/register`}>{`${baseURL}/register`}</a></strong> to be the part of Green Clean Earth movement.  Use refferel code <strong>{user_ref}</strong> while registration.</p>
+            <div className="flex justify-end mt-4">
+  <button
+    className="bg-gray-600 text-white py-2 px-4 rounded mr-2"
+    onClick={() => {
+      navigator.clipboard.writeText(`Follow this link ${baseURL}/register to be the part of Green Clean Earth movement.  Use refferel code ${user_ref} while registration.`);
+      alert("Text copied to clipboard!");
+    }}
+  >
+    Copy
+  </button>
+  <button
+    className="bg-green-600 text-white py-2 px-4 rounded"
+    onClick={() => setShowDialog(false)}
+  >
+    OK
+  </button>
+</div>
+
+          </div>
+        </div>
+      )}
     </>
   );
 };

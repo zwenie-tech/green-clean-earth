@@ -27,7 +27,7 @@ const Dashboard=()=>{
     router.push('/dashboard/youtube-earnings');
   };
   const OurTeamButton = () => {
-    router.push('/dashboard');
+    router.push('/dashboard/details-edit');
   };
   const InviteUsersButton = () => {
     router.push('/dashboard');

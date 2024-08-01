@@ -211,7 +211,7 @@ function UserRegisterForm() {
           title: "Account created.",
           description: "We've created your account for you.",
         });
-        router.push("/login/user");
+        router.push("/loginform");
       }
     } catch (error) {
       toast({

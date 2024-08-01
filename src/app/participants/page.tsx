@@ -69,7 +69,7 @@ const Participant = () => {
       const countryData = await countryResponse.json();
       setCountries(countryData.country);
       try {
-        const response = await fetch(`${apiURL}/uploads/filter?limit=1000&page=1`, {
+        const response = await fetch(`${apiURL}/uploads/filter`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -224,7 +224,7 @@ const Participant = () => {
     console.log('Form Data:', dataWithIds);
 
     try {
-      const response = await fetch(`${apiURL}/uploads/filter?limit=1000&page=1`, {
+      const response = await fetch(`${apiURL}/uploads/filter`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

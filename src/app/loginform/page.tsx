@@ -114,6 +114,7 @@ const LoginForm = () => {
       }
 
       const result = await response.json();
+      console.log(result.data)
       const refcode = result.data.referral_code;
 
       const id = result.data.id;
