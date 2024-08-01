@@ -44,11 +44,11 @@ const UserInvite: React.FC = () => {
   return (
     <>
       <NavigationBar />
-      <div className='relative flex p-4'>
-        <div className='absolute left-1/2 transform -translate-x-1/2 w-full md:w-auto'>
+      <div className='relative flex flex-col md:flex-row md:justify-between p-4'>
+        <div className='md:absolute md:left-1/2 md:transform md:-translate-x-1/2 w-full md:w-auto'>
           <h1 className='text-2xl m-3 text-left md:text-center md:text-4xl font-bold'>Dashboard</h1>
         </div>
-        <div className='ml-auto'>
+        <div className='ml-auto md:mr-0 md:mt-0 mt-4'>
           <button
             className='rounded-xl md:mr-5 text-[#FFFFFF] bg-[#3C6E1F] p-2 mr-4'
             style={{ boxShadow: '1px 4px 5px 3px #00000040' }}
@@ -90,7 +90,7 @@ const UserInvite: React.FC = () => {
       <Footer />
 
       {showDialog && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
           <div className="fixed inset-0 bg-black opacity-50"></div>
           <div className="bg-white rounded-lg shadow-lg p-6 z-10 w-full max-w-md mx-auto">
             <h2 className="text-xl font-bold mb-4">Invite Coordinator</h2>
