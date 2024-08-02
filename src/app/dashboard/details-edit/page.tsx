@@ -33,6 +33,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
+import axios from "axios";
 
 const groupDetailsSchema = z.object({
   gp_name: z.string().optional(),
@@ -164,9 +165,20 @@ const DetailsEdit: React.FC = () => {
   const [clubOptions, setClubOptions] = useState<Club[]>([]);
 
   const [isEditing, setIsEditing] = useState(false);
-  const [isgroupEditing, setgroupIsEditing] = useState(false);
+  const [isGroupEditing, setgroupIsEditing] = useState(false);
   const [iscoordinatorEditing, setcoordinatorIsEditing] = useState(false);
-  const [groupDetails, setGroupDetails] = useState<GroupDetails>({});
+  const [groupDetails, setGroupDetails] = useState({
+    gp_name: '',
+    group_type: '',
+    cntry_name: '',
+    st_name: '',
+    dis_name: '',
+    cop_name: '',
+    lsg_name: '',
+    gp_ward_no: '',
+    gp_city: '',
+    gp_location: ''
+  });
   const [schoolDetails, setSchoolDetails] = useState<SchoolDetails>({});
   const [ngoDetails, setNgoDetails] = useState<SchoolDetails>({});
   const [residenceDetails, setResidenceDetails] = useState<ResidenceDetails>({});
@@ -188,6 +200,25 @@ const DetailsEdit: React.FC = () => {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [additionalmode, setadditionalmode] = useState(0);
 
+  const handleInputChange = (e: { target: { name: any; value: any; }; }) => {
+    const { name, value } = e.target;
+    setGroupDetails({ ...groupDetails, [name]: value });
+  };
+
+  const handleSelectChange = (name: string, value: React.SetStateAction<string>) => {
+    setGroupDetails({ ...groupDetails, [name]: value });
+    if (name === 'cntry_name') {
+      setSelectedCountry(value);
+    } else if (name === 'st_name') {
+      setSelectedState(value);
+    } else if (name === 'dis_name') {
+      setSelectedDistrict(value);
+    } else if (name === 'cop_name') {
+      setSelectedCorp(value);
+    } else if (name === 'lsg_name') {
+      setSelectedLsgd(value);
+    }
+  };
   const multiForm = useForm<FormSchema>({
     resolver: zodResolver(formSchoolSchema),
     defaultValues: {
@@ -259,7 +290,20 @@ const DetailsEdit: React.FC = () => {
     }
     fetchData();
   }, []);
-
+  useEffect(() => {
+    async function fetchData() {
+      if(selectedState != 'Kerala'){
+        const formset = {
+          lsg_name: '',
+          dis_name: '',
+          cop_name: '',
+          gp_ward_no: '',
+        };
+        form.reset(formset,{ keepDefaultValues: true });
+      }
+    }
+    fetchData();
+  }, [form, selectedState]);
  
   useEffect(() => {
     async function fetchData() {
@@ -461,59 +505,93 @@ const DetailsEdit: React.FC = () => {
     fetchLsgdData();
   }, [selectedCorp, corporation]);
 
-  async function handleSubmitGroup(values: any) {
-    const apidata = {
-      name: values.gp_name,
-      categoryId: category
-        .find((item) => item.group_type === values.group_type)
-        ?.id.toString(),
-      countryId: countries.find((item) => item.cntry_name === values.cntry_name)
-        ?.cntry_id,
-      stateId: states.find((item) => item.st_name === values.st_name)?.st_id,
-      districtId: districts.find((item) => item.dis_name === values.dis_name)
-        ?.dis_id,
-      corporationId: corporation
-        .find((item) => item.cop_name === values.cop_name)
-        ?.cop_id.toString(),
-      lsgdId: lsgd.find((item) => item.lsg_name === values.lsg_name)?.lsg_id,
-      wardNo: values.gp_ward_no,
-      location: values.gp_location,
-      city: values.gp_city,
-      province: values.gp_city,
-    };
-    try {
-      const response = await fetch(`${apiURL}/coordinator/updateGroup`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(apidata),
-      });
+  const handleSubmitGroup = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
 
-      if (response.ok) {
-        const data = await response.json();
-        toast({
-          title: "Group details updated successfully.",
+
+    const apidata_base = {
+      name: groupDetails.gp_name,
+      categoryId: category
+        .find((item) => item.group_type === groupDetails.group_type)
+        ?.id.toString(),
+      countryId: countries.find((item) => item.cntry_name === groupDetails.cntry_name)
+        ?.cntry_id,
+      stateId: states.find((item) => item.st_name === groupDetails.st_name)?.st_id || '',
+      districtId: districts.find((item) => item.dis_name === groupDetails.dis_name)
+        ?.dis_id || '',
+      corporationId: corporation
+        .find((item) => item.cop_name === groupDetails.cop_name)
+        ?.cop_id.toString() || '',
+        lsgdId: groupDetails.lsg_name != '' ?  (lsgd.find((item) => item.lsg_name === groupDetails.lsg_name)?.lsg_id) : '',
+      wardNo: groupDetails.gp_ward_no || '',
+      location: groupDetails.gp_location || '',
+      city: groupDetails.gp_city || '',
+      province: groupDetails.gp_city || '',
+    };
+
+
+    const apidata_not_kerala = {
+      name: groupDetails.gp_name,
+      categoryId: category
+        .find((item) => item.group_type === groupDetails.group_type)
+        ?.id.toString(),
+      countryId: countries.find((item) => item.cntry_name === groupDetails.cntry_name)
+        ?.cntry_id,
+      stateId: states.find((item) => item.st_name === groupDetails.st_name)?.st_id || '',
+      
+      location: groupDetails.gp_location || '',
+    };
+
+    const apidata_not_india = {
+      name: groupDetails.gp_name,
+      categoryId: category
+        .find((item) => item.group_type === groupDetails.group_type)
+        ?.id.toString(),
+      countryId: countries.find((item) => item.cntry_name === groupDetails.cntry_name)
+        ?.cntry_id,
+      
+        city: groupDetails.gp_city || '',
+        province: groupDetails.gp_city || '',
+      location: groupDetails.gp_location || '',
+    };
+    
+    const apidata = groupDetails.cntry_name==='India' && groupDetails.st_name === 'Kerala' 
+                    ? apidata_base : groupDetails.cntry_name==='India'? apidata_not_kerala : apidata_not_india
+    
+    
+        try {
+        const response = await fetch(`${apiURL}/coordinator/updateGroup`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(apidata),
         });
-        setgroupIsEditing(false); // Exit edit mode after successful update
-      } else {
+  
+        if (response.ok) {
+          const data = await response.json();
+          toast({
+            title: "Group details updated successfully.",
+          });
+          setgroupIsEditing(false); // Exit edit mode after successful update
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Oops, Something went wrong!",
+            description: "Please try again...",
+          });
+          console.error("Error updating group details:", response.statusText);
+        }
+      } catch (error) {
         toast({
           variant: "destructive",
           title: "Oops, Something went wrong!",
           description: "Please try again...",
         });
-        console.error("Error updating group details:", response.statusText);
+        console.error("Error updating group details:", error);
       }
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Oops, Something went wrong!",
-        description: "Please try again...",
-      });
-      console.error("Error updating group details:", error);
-    }
-  }
+  };
 
   const handleSubmitCoordinator = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -743,337 +821,297 @@ const DetailsEdit: React.FC = () => {
         <div className="md:flex gap-6">
           {/* Form 1 */}
           <Form {...form}>
-            <div className="w-full md:w-1/2 mb-4 md:mb-0 rounded-lg border-1 border-black shadow-xl bg-light-gray">
-              <div className="card p-3">
-                <form
-                  noValidate
-                  onSubmit={form.handleSubmit(handleSubmitGroup)}
-                >
-                  <div className="flex items-center mb-3 gap-5">
-                    <h2 className="mb-0 text-left text-xl font-bold">
-                      Group details
-                    </h2>
-                    <button
-                      type="button"
-                      className="btn text-primary bg-light-gray py-3 px-4 rounded-lg btn-lg shadow-lg ml-auto"
-                      onClick={handleGroupEditClick}
+      <div className="w-full md:w-1/2 mb-4 md:mb-0 rounded-lg border-1 border-black shadow-xl bg-light-gray">
+        <div className="card p-3">
+          <form noValidate onSubmit={handleSubmitGroup}>
+            <div className="flex items-center mb-3 gap-5">
+              <h2 className="mb-0 text-left text-xl font-bold">
+                Group details
+              </h2>
+              <button
+                type="button"
+                className="btn text-primary bg-light-gray py-3 px-4 rounded-lg btn-lg shadow-lg ml-auto"
+                onClick={handleGroupEditClick}
+              >
+                Edit
+              </button>
+            </div>
+
+            {selectedCountry && (
+              <FormField
+                name="gp_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        value={groupDetails.gp_name}
+                        onChange={handleInputChange}
+                        disabled={!isGroupEditing}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
+            {selectedCountry && (
+              <FormField
+                name="group_type"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Category</FormLabel>
+                    <Select
+                      onValueChange={(value) => handleSelectChange('group_type', value)}
+                      defaultValue={field.value}
+                      disabled={!isGroupEditing}
                     >
-                      Edit
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Choose a Category" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {category.map((cat) => (
+                          <SelectItem key={cat.id} value={cat.group_type}>
+                            {cat.group_type}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
+            {selectedCountry && (
+              <FormField
+                name="cntry_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Country</FormLabel>
+                    <Select
+                      onValueChange={(value) => handleSelectChange('cntry_name', value)}
+                      defaultValue={field.value}
+                      disabled={!isGroupEditing}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Choose a country" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {countries.map((country) => (
+                          <SelectItem key={country.cntry_id} value={country.cntry_name}>
+                            {country.cntry_name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
+            {selectedCountry === 'India' && (
+              <FormField
+                name="st_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>State</FormLabel>
+                    <Select
+                      onValueChange={(value) => handleSelectChange('st_name', value)}
+                      defaultValue={field.value}
+                      disabled={!isGroupEditing}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Choose a state" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {states.map((state) => (
+                          <SelectItem key={state.st_id} value={state.st_name}>
+                            {state.st_name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
+            {selectedState === 'Kerala' && (
+              <FormField
+                name="dis_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>District</FormLabel>
+                    <Select
+                      onValueChange={(value) => handleSelectChange('dis_name', value)}
+                      defaultValue={field.value}
+                      disabled={!isGroupEditing}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Choose a district" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {districts.map((district) => (
+                          <SelectItem key={district.dis_id} value={district.dis_name}>
+                            {district.dis_name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
+            {selectedState === 'Kerala' && (
+              <FormField
+                name="cop_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Corporation/Municipality/Block Panchayat</FormLabel>
+                    <Select
+                      onValueChange={(value) => handleSelectChange('cop_name', value)}
+                      defaultValue={field.value}
+                      disabled={!isGroupEditing}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Choose an Option" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {corporation.map((corp) => (
+                          <SelectItem key={corp.cop_id} value={corp.cop_name}>
+                            {corp.cop_name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
+            {selectedState === 'Kerala' && selectedCorp !== '' && (
+              <FormField
+                name="lsg_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>LSGD / Zone</FormLabel>
+                    <Select
+                      onValueChange={(value) => handleSelectChange('lsg_name', value)}
+                      defaultValue={field.value}
+                      disabled={!isGroupEditing}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Choose an LSG" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {lsgd && lsgd.map((lsg) => (
+                          <SelectItem key={lsg.lsg_id} value={lsg.lsg_name}>
+                            {lsg.lsg_name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
+            {selectedState === 'Kerala' && (
+              <FormField
+                name="gp_ward_no"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Ward Number</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        {...field}
+                        value={groupDetails.gp_ward_no}
+                        onChange={handleInputChange}
+                        disabled={!isGroupEditing}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+          {selectedCountry !== 'India' && (
+            <FormField
+              name="gp_city"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>City / Province</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      {...field}
+                      value={groupDetails.gp_city}
+                      onChange={handleInputChange}
+                      disabled={!isGroupEditing}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />)}
+
+            <FormField
+            
+              name="gp_location"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Location</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      {...field}
+                      
+                      value={groupDetails.gp_location}
+                      onChange={handleInputChange}
+                      disabled={!isGroupEditing}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+                  {isGroupEditing && (
+                  <div className="flex justify-center">
+                    <button
+                      type="submit"
+                      className="btn m-3 text-white bg-primary py-2 px-5 rounded-sm shadow-lg"
+                    >
+                      Submit
                     </button>
                   </div>
-
-                  {selectedCountry && (
-                    <FormField
-                      control={form.control}
-                      name="gp_name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Name</FormLabel>
-                          <FormControl>
-                            <Input {...field} disabled={!isgroupEditing} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  )}
-
-                  {selectedCountry && (
-                    <FormField
-                      control={form.control}
-                      name="group_type"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Category</FormLabel>
-                          <Select
-                            onValueChange={(value) => {
-                              field.onChange(value);
-                              setSelectedCategory(value);
-                            }}
-                            defaultValue={field.value}
-                            disabled={!isgroupEditing}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Choose a Category" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {category.map((cat) => (
-                                <SelectItem key={cat.id} value={cat.group_type}>
-                                  {cat.group_type}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  )}
-
-                  {selectedCountry && (
-                    <FormField
-                      control={form.control}
-                      name="cntry_name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Country</FormLabel>
-                          <Select
-                            onValueChange={(value) => {
-                              field.onChange(value);
-                              setSelectedCountry(value);
-                            }}
-                            defaultValue={field.value}
-                            disabled={!isgroupEditing}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Choose a country" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {countries.map((country) => (
-                                <SelectItem
-                                  key={country.cntry_id}
-                                  value={country.cntry_name}
-                                >
-                                  {country.cntry_name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  )}
-                  {selectedCountry === "India" && (
-                    <FormField
-                      control={form.control}
-                      name="st_name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>State</FormLabel>
-                          <Select
-                            onValueChange={(value) => {
-                              field.onChange(value);
-                              setSelectedState(value);
-                            }}
-                            defaultValue={field.value}
-                            disabled={!isgroupEditing}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Choose a state" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {states.map((state) => (
-                                <SelectItem
-                                  key={state.st_id}
-                                  value={state.st_name}
-                                >
-                                  {state.st_name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  )}
-                  {selectedState === "Kerala" && (
-                    <FormField
-                      control={form.control}
-                      name="dis_name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>District</FormLabel>
-                          <Select
-                            onValueChange={(value) => {
-                              field.onChange(value);
-                              setSelectedDistrict(value);
-                            }}
-                            defaultValue={field.value}
-                            disabled={!isgroupEditing}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Choose a district" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {districts.map((district) => (
-                                <SelectItem
-                                  key={district.dis_id}
-                                  value={district.dis_name}
-                                >
-                                  {district.dis_name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  )}
-                  {selectedState !== "Kerala" &&
-                    selectedCountry === "India" && (
-                      <FormField
-                        control={form.control}
-                        name="dis_name"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>District</FormLabel>
-                            <FormControl>
-                              <Input {...field} disabled={!isgroupEditing} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    )}
-                  {selectedState === "Kerala" && (
-                    <FormField
-                      control={form.control}
-                      name="cop_name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>
-                            Corporation/Municipality/Block Panchayat
-                          </FormLabel>
-                          <Select
-                            onValueChange={(value) => {
-                              field.onChange(value);
-                              setSelectedCorp(value);
-                            }}
-                            defaultValue={field.value}
-                            disabled={!isgroupEditing}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Choose a Option" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {corporation.map((corp) => (
-                                <SelectItem
-                                  key={corp.cop_id}
-                                  value={corp.cop_name}
-                                >
-                                  {corp.cop_name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  )}
-                  {selectedState === "Kerala" && selectedCorp != "" && (
-                    <FormField
-                      control={form.control}
-                      name="lsg_name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>LSGD / Zone</FormLabel>
-                          <Select
-                            onValueChange={(value) => {
-                              field.onChange(value);
-                              setSelectedLsgd(value);
-                            }}
-                            defaultValue={field.value}
-                            disabled={!isgroupEditing}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Choose a LSG" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {lsgd &&
-                                lsgd.map((lsg) => (
-                                  <SelectItem
-                                    key={lsg.lsg_id}
-                                    value={lsg.lsg_name}
-                                  >
-                                    {lsg.lsg_name}
-                                  </SelectItem>
-                                ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  )}
-                  {selectedState === "Kerala" && (
-                    <FormField
-                      control={form.control}
-                      name="gp_ward_no"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Ward Number</FormLabel>
-                          <FormControl>
-                            <Input
-                              type="text"
-                              {...field}
-                              disabled={!isgroupEditing}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  )}
-                  {selectedCountry && selectedCountry != "India" && (
-                    <FormField
-                      control={form.control}
-                      name="gp_city"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>City / Province</FormLabel>
-                          <FormControl>
-                            <Input {...field} disabled={!isgroupEditing} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  )}
-                  {selectedCountry && (
-                    <FormField
-                      control={form.control}
-                      name="gp_location"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Location</FormLabel>
-                          <FormControl>
-                            <Input {...field} disabled={!isgroupEditing} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  )}
-                  {isgroupEditing && (
-                    <div className="flex justify-center">
-                      <button
-                        type="submit"
-                        className="btn text-white bg-primary py-2 px-5 rounded-sm shadow-lg"
-                      >
-                        Submit
-                      </button>
-                    </div>
-                  )}
-                </form>
-              </div>
-            </div>
-          </Form>
+                )}
+          </form>
+        </div>
+      </div>
+    </Form>
           {/* Form 2 */}
           <div className="w-full md:w-1/2 mb-4 md:mb-0 rounded-lg border-1 border-black bg-light-gray shadow-xl">
             <div className="card p-3">
