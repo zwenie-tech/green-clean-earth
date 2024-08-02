@@ -26,7 +26,7 @@ const ParticipantList: React.FC = () => {
  
     useEffect(() => {
       async function fetchfirstData(){
-        const responseall = await fetch(`${apiURL}/uploads/all`);
+        const responseall = await fetch(`${apiURL}/uploads/all?limit=100000000000`);
         const dataall = await responseall.json();
         console.log('length', dataall.Uploads.length);
         setTotalItem(dataall.Uploads.length);
