@@ -86,7 +86,7 @@ interface SchoolDetails {
 
 interface PromoterDetails {
   city_name?: string,
-  add_group_type?: string,
+  group_type?: string,
   total_members?: number,
 }
 
@@ -212,9 +212,9 @@ const DetailsEdit: React.FC = () => {
   const promoterform = useForm<FormPromoterSchema>({
     resolver: zodResolver(formPromoterSchema),
     defaultValues: {
+      category: promoterDetail.group_type,
       city_name: promoterDetail.city_name,
       total_team: promoterDetail.total_members,
-      category: promoterDetail.add_group_type
     },
   });
 
@@ -698,10 +698,9 @@ const DetailsEdit: React.FC = () => {
     if(additionalmode===4){
       const apipromoterdata = {
         cityName:values.city_name,
-        categoryId:category.find((item) => item.group_type === values.category)?.id,
+        categoryId:category.find((item) => item.group_type === promoterDetail.group_type)?.id,
         totalMembers:values.total_team,
       };
-  
       try {
         const response = await fetch(`${apiURL}/coordinator/updatePromoter`, {
           method: "POST",
@@ -1416,21 +1415,21 @@ const DetailsEdit: React.FC = () => {
                       />
                 </div>)}
                 
-                {promoterDetail.add_group_type && (
-                <div className="mb-3 flex justify-between gap-3">
+                {promoterDetail && (
+                <div className="">
                 <FormField
                   control={promoterform.control}
                   name="category"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Promoting Category</FormLabel>
+                      {/* <FormLabel>Promoting Category {promoterDetail.group_type}</FormLabel> */}
                       <Select onValueChange={field.onChange} defaultValue={field.value} disabled={!isEditing}>
-                        <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
-                          <SelectTrigger>
+                        {/* <FormControl className=" rounded-md px-4  border-0"> */}
+                          {/* <SelectTrigger>
                             <SelectValue placeholder="Choose a category" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
+                          </SelectTrigger> */}
+                        {/* </FormControl> */}
+                        {/* <SelectContent>
                           {category.map((category) =>
                             category.group_type !== "Promoter" ? (
                               <SelectItem key={category.id} value={category.group_type}>
@@ -1440,7 +1439,7 @@ const DetailsEdit: React.FC = () => {
                               ""
                             )
                           )}
-                        </SelectContent>
+                        </SelectContent> */}
                       </Select>
                       <FormMessage />
                     </FormItem>
