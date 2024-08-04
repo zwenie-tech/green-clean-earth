@@ -73,7 +73,7 @@ const NavigationBar = () => {
 
         <ul className="hidden md:flex md:justify-center md:items-center flex-wrap">
           {token ? (login_links.map((link) => (
-            <li key={link.href} className="m-0 mx-1">
+            <li key={link.href} className="m-1">
               <Link href={link.href} passHref>
                 <p
                   className={`text-black no-underline px-3 py-1 rounded-full transition-colors duration-300 ${
@@ -89,7 +89,7 @@ const NavigationBar = () => {
             </li>
           ))):
           (links.map((link) => (
-            <li key={link.href} className="m-0 mx-1">
+            <li key={link.href} className="m-1">
               <Link href={link.href} passHref>
                 <p
                   className={`text-black no-underline px-3 py-1 rounded-full transition-colors duration-300 ${

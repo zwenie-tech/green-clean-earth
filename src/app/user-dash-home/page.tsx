@@ -138,7 +138,6 @@ import Cookies from 'js-cookie';
         </div>
       </div>
       <GceBadge />
-      <JoinNow />
       <Footer/>
     </main>
     </>

@@ -110,7 +110,15 @@ const MyUploadedPlants = () => {
                     <div className='overflow-hidden'>
                       {plant.up_file ? (
                         // <Image src={`${imageURL}${plant.up_file}`} alt='' width={200} height={200} />
-                        <img src={`${imageURL}${plant.up_file}`} alt="Selected" width={150} height={150} />
+                        <div className="aspect-square h-40 w-40">
+                          <img 
+                            src={`${imageURL}${plant.up_file}`} 
+                            alt="Selected" 
+                            width={150} 
+                            height={150}
+                            className='h-full w-full object-cover'
+                          />
+                        </div>
                       ) : (
                         <UploadButton imageNo={1} treeNo={plant.up_id}/>
                       )}
@@ -120,7 +128,15 @@ const MyUploadedPlants = () => {
                     <div className='w-56 h-56  md:max-w-[200px]'>
                       {plant.up_file_2 ? (
                         // <Image src={`${imageURL}${plant.up_file}`} alt='' width={200} height={200} />
-                        <img src={`${imageURL}${plant.up_file_2}`} alt="Selected" width={150} height={150} />
+                        <div className="aspect-square h-40 w-40">
+                          <img 
+                            src={`${imageURL}${plant.up_file_2}`} 
+                            alt="Selected" 
+                            width={150} 
+                            height={150}
+                            className='h-full w-full object-cover'
+                          />
+                        </div>
                       ) : (
                         <UploadButton imageNo={2} treeNo={plant.up_id} />
                       )}
@@ -130,7 +146,15 @@ const MyUploadedPlants = () => {
                     <div className='w-56 h-56  md:max-w-[200px]'>
                       {plant.up_file_2 ? (plant.up_file_3 ? (
                         // <Image src={`${imageURL}${plant.up_file}`} alt='' width={200} height={200} />
-                        <img src={`${imageURL}${plant.up_file_3}`} alt="Selected" width={150} height={150} />
+                        <div className="aspect-square h-40 w-40">
+                          <img 
+                            src={`${imageURL}${plant.up_file_3}`} 
+                            alt="Selected" 
+                            width={150} 
+                            height={150}
+                            className='h-full w-full object-cover'
+                          />
+                        </div>
                       ) : (
                         <UploadButton imageNo={3} treeNo={plant.up_id} />
                       )):(<div className='bg-slate-200'></div>)}
@@ -140,7 +164,15 @@ const MyUploadedPlants = () => {
                     <div className='w-56 h-56  md:max-w-[200px]'>
                     {plant.up_file_2 && plant.up_file_3 ? (plant.up_file_4 ? (
                         // <Image src={`${imageURL}${plant.up_file}`} alt='' width={200} height={200} />
-                        <img src={`${imageURL}${plant.up_file_4}`} alt="Selected" width={150} height={150} />
+                        <div className="aspect-square h-40 w-40">
+                          <img 
+                            src={`${imageURL}${plant.up_file_4}`} 
+                            alt="Selected" 
+                            width={150} 
+                            height={150}
+                            className='h-full w-full object-cover'
+                          />
+                        </div>
                       ) : (
                         <UploadButton imageNo={4} treeNo={plant.up_id} />
                       )):(<div className='bg-slate-200'></div>)}
@@ -275,8 +307,11 @@ const UploadButton = ({imageNo,treeNo}:any) => {
       <div className={cn("flex md:flex-row w-[100%] flex-col")}>
           <div className="flex w-[100%] gap-2 flex-col">
             <Form {...form}>
-              <form  noValidate
-        onSubmit={form.handleSubmit(onSubmit)}>
+              <form
+                noValidate
+                onSubmit={form.handleSubmit(onSubmit)}
+                className='flex flex-col gap-4 place-items-center'  
+              >
               <div
                 className={`flex w-[100%] gap-4  flex-col items-center md:flex-col md:justify-between md:items-center`}
               >
@@ -284,10 +319,11 @@ const UploadButton = ({imageNo,treeNo}:any) => {
                   className={`flex md:flex-[1] h-[fit-content] md:justify-between md:flex-row`}
                 >
                   {selectedImage ? (
-                    <div className="md:max-w-[200px]">
+                    <div className=" max-w-[200px]">
                       <img
                         src={URL.createObjectURL(selectedImage)}
                         alt="Selected"
+                        className='max-h-32'
                       />
                     </div>
                   ) : (
@@ -339,7 +375,7 @@ const UploadButton = ({imageNo,treeNo}:any) => {
                   )}
                 />
               </div>
-              <Button size="sm" variant={'link'} type="submit">
+              <Button size="sm" variant={'default'} type="submit">
                 Upload
               </Button>
               </form>

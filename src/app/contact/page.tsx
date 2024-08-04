@@ -141,7 +141,6 @@ const Contact = () => {
         </div>
       </div>
       <GceBadge />
-      <JoinNow />
       <Footer/>
     </main>
   )
