@@ -133,6 +133,7 @@ const formSchoolSchema = z.object({
   value: z.array(z.string()).nonempty("Please select at least one club"),
   no_of_students: z.coerce.number(),
   list_of_classes: z.string().min(3).max(255),
+  sub_category: z.string().min(3).max(255)
 });
 
 type FormSchema = z.infer<typeof formSchoolSchema>;
@@ -152,6 +153,11 @@ const formPromoterSchema = z.object({
   total_team: z.coerce.number(),
 });
 
+interface subCategory {
+  gp_cat_id: string;
+  gp_cat_name: string;
+}
+
 type FormPromoterSchema = z.infer<typeof formPromoterSchema>;
 
 const DetailsEdit: React.FC = () => {
@@ -163,6 +169,7 @@ const DetailsEdit: React.FC = () => {
   const { toast } = useToast();
 
   const [clubOptions, setClubOptions] = useState<Club[]>([]);
+  const [subcategoryOptions, setsubCategoryOptions] = useState<subCategory[]>([]);
 
   const [isEditing, setIsEditing] = useState(false);
   const [isGroupEditing, setgroupIsEditing] = useState(false);
@@ -225,6 +232,7 @@ const DetailsEdit: React.FC = () => {
       value: [schoolDetails.club_names],
       no_of_students: schoolDetails.no_of_students,
       list_of_classes: schoolDetails.list_of_classes,
+      sub_category: 'try'
     },
   });
 
@@ -273,6 +281,13 @@ const DetailsEdit: React.FC = () => {
         setClubOptions(data.clubs);
       } catch (error) {
         console.error("Error fetching clubs:", error);
+      }
+      try {
+        const response = await axios.get(`${apiURL}/schoolCategory`);
+        console.log(response.data);
+        setsubCategoryOptions(response.data.subCategory);
+      } catch (error) {
+        console.error("Error fetching category:", error);
       }
     };
     fetchClubs();
@@ -355,16 +370,15 @@ const DetailsEdit: React.FC = () => {
               const schoolData = await schoolResponse.json();
             
             if (schoolData.schoolDetails.length > 0) {
-              setSchoolDetails(schoolData.schoolDetails[0]);
-              const formattedClubname =
-                schoolData.schoolDetails[0].club_names.split(", ");
-              const clubset = {
-                value: formattedClubname,
-                list_of_classes: schoolData.schoolDetails[0].list_of_classes,
-                no_of_students: schoolData.schoolDetails[0].no_of_students,
-              };
-
-              multiForm.reset(clubset);
+              const schooldetails = schoolData.schoolDetails[0]
+              setSchoolDetails(schooldetails);
+              multiForm.reset({
+                value: schooldetails.club_names.split(", "),
+                list_of_classes: schooldetails.list_of_classes,
+                no_of_students: schooldetails.no_of_students,
+                sub_category: schooldetails.gp_cat_name
+                
+              });
             }}
           }
 
@@ -650,8 +664,9 @@ const DetailsEdit: React.FC = () => {
         clubs: selectedClubIds.toString(),
         list_of_classes: values.list_of_classes,
         no_of_students: values.no_of_students,
+        subCategoryId: subcategoryOptions.find((item) => item.gp_cat_name === values.sub_category)?.gp_cat_id
       };
-  
+
       try {
         const response = await fetch(`${apiURL}/coordinator/updateSchool`, {
           method: "POST",
@@ -776,9 +791,10 @@ const DetailsEdit: React.FC = () => {
     if(additionalmode===4){
       const apipromoterdata = {
         cityName:values.city_name,
-        categoryId:category.find((item) => item.group_type === promoterDetail.group_type)?.id,
+        categoryId:category.find((item) => item.group_type === values.category)?.id,
         totalMembers:values.total_team,
       };
+
       try {
         const response = await fetch(`${apiURL}/coordinator/updatePromoter`, {
           method: "POST",
@@ -1251,7 +1267,7 @@ const DetailsEdit: React.FC = () => {
                       />
                     </div>
                   )}
-                  {selectedCountry && (
+                  {schoolDetails && (
                     <div className="mb-3 flex justify-between gap-3">
                       <FormField
                         control={multiForm.control}
@@ -1273,7 +1289,7 @@ const DetailsEdit: React.FC = () => {
                       />
                     </div>
                   )}
-                  {selectedCountry && (
+                  {schoolDetails && (
                     <div className="mb-3 flex justify-between gap-3">
                       <FormField
                         control={multiForm.control}
@@ -1294,6 +1310,34 @@ const DetailsEdit: React.FC = () => {
                       />
                     </div>
                   )}
+                  
+            <FormField
+            
+                 control={multiForm.control}
+                 
+
+                  name="sub_category"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel> Category</FormLabel>
+                      <Select  {...field} onValueChange={(value) =>field.onChange(value)} defaultValue={field.value} disabled={!isEditing}>
+                        <FormControl className=" rounded-md px-4  border-0">
+                          <SelectTrigger>
+                            <SelectValue placeholder="Choose a category" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                        {subcategoryOptions.map((cat) => (
+                          <SelectItem key={cat.gp_cat_id} value={cat.gp_cat_name}>
+                            {cat.gp_cat_name}
+                          </SelectItem>
+                        ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
                   {isEditing && (
                     <div className="flex justify-center">
@@ -1460,14 +1504,14 @@ const DetailsEdit: React.FC = () => {
                   name="category"
                   render={({ field }) => (
                     <FormItem>
-                      {/* <FormLabel>Promoting Category {promoterDetail.group_type}</FormLabel> */}
-                      <Select onValueChange={field.onChange} defaultValue={field.value} disabled={!isEditing}>
-                        {/* <FormControl className=" rounded-md px-4  border-0"> */}
-                          {/* <SelectTrigger>
+                      <FormLabel>Promoting Category {promoterDetail.group_type}</FormLabel>
+                      <Select {...field} onValueChange={field.onChange} defaultValue={field.value} disabled={!isEditing}>
+                        <FormControl className=" rounded-md px-4  border-0">
+                          <SelectTrigger>
                             <SelectValue placeholder="Choose a category" />
-                          </SelectTrigger> */}
-                        {/* </FormControl> */}
-                        {/* <SelectContent>
+                          </SelectTrigger>
+                        </FormControl>
+                         <SelectContent> 
                           {category.map((category) =>
                             category.group_type !== "Promoter" ? (
                               <SelectItem key={category.id} value={category.group_type}>
@@ -1477,7 +1521,7 @@ const DetailsEdit: React.FC = () => {
                               ""
                             )
                           )}
-                        </SelectContent> */}
+                        </SelectContent>
                       </Select>
                       <FormMessage />
                     </FormItem>
