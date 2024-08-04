@@ -882,7 +882,7 @@ const DetailsEdit: React.FC = () => {
                     <Select
                       onValueChange={(value) => handleSelectChange('group_type', value)}
                       defaultValue={field.value}
-                      disabled={!isGroupEditing}
+                      disabled={true}
                     >
                       <FormControl>
                         <SelectTrigger>
