@@ -77,14 +77,14 @@ const ParticipantList: React.FC = () => {
       </div>
       <div className="m-2 flex justify-center items-center space-x-4">
         <a href="/participants">
-          <button className="text-white text-sm md:text-base py-2 px-3 bg-[#3C6E1F] rounded-2xl shadow-xl md:py-3 md:px-4">
+          <button className="text-black text-sm md:text-base py-2 px-3 bg-[#FFF6E4] rounded-2xl shadow-xl md:py-3 md:px-4">
             Sorting Page
           </button>
         </a>
-        <a href="/district"><button className="text-white text-sm md:text-base py-2 px-3 bg-[#3C6E1F] rounded-2xl shadow-xl md:py-3 md:px-4">
+        <a href="/district"><button className="text-black text-sm md:text-base py-2 px-3 bg-[#FFF6E4] rounded-2xl shadow-xl md:py-3 md:px-4">
           District List
         </button></a>
-        <button className="text-white text-sm md:text-base py-2 px-3 bg-[#3C6E1F] rounded-2xl shadow-xl md:py-3 md:px-4">
+        <button className="text-black text-sm md:text-base py-2 px-3 bg-[#FFF6E4] rounded-2xl shadow-xl md:py-3 md:px-4">
           Old participants
         </button>
       </div>
@@ -98,30 +98,28 @@ const ParticipantList: React.FC = () => {
                 query: { id: participant.up_id }
               }}
             >
-              <div className="rounded-lg shadow-lg">
-                <div className="rounded-lg border">
-                  <img className="w-full h-48 object-cover" src={`${imageURL}${participant.up_file}`} alt={"Image"} height={150} width={200} />
-                  <div className="flex justify-center mt-2 gap-2">
-                    <div className="text-md text-center font-bold">Tree number: </div>
-                    <div className="text-md">{participant.up_id}</div>
-                  </div>
-                  <div className="flex justify-center mt-2 text-gray-600 gap-2">
-                    <div className="text-md">{formatDate(participant.up_date)}</div>
-                    <div className="text-md">{formatTime(participant.up_date)}</div>
-                  </div>
-                  <hr className="my-2" />
-                  <div className="flex ml-2 mt-2 gap-2">
-                    <div className="text-sm pl-5 mb-2">Tree name: </div>
-                    <div className="text-sm">{participant.up_tree_name}</div>
-                  </div>
-                  <div className="flex ml-2 mt-2 gap-2">
-                    <div className="text-sm pl-5 mb-2">Planter name: </div>
-                    <div className="text-sm">{participant.up_planter}</div>
-                  </div>
-                  <div className="flex ml-2 mt-2 gap-2">
-                    <div className="text-sm pl-5 mb-2">Uploader name: </div>
-                    <div className="text-sm">{participant.up_name}</div>
-                  </div>
+              <div className="rounded-lg shadow-lg border p-4 hover:shadow-2xl hover:border-gray-400">
+                <img className="w-full h-48 object-cover" src={`${imageURL}${participant.up_file}`} alt={"Image"} height={150} width={200} />
+                <div className="flex justify-center mt-2 gap-2">
+                  <div className="text-md text-center font-bold">Tree number: </div>
+                  <div className="text-md">{participant.up_id}</div>
+                </div>
+                <div className="flex justify-center mt-2 text-gray-600 gap-2">
+                  <div className="text-md">{formatDate(participant.up_date)}</div>
+                  <div className="text-md">{formatTime(participant.up_date)}</div>
+                </div>
+                <hr className="my-2" />
+                <div className="flex ml-2 mt-2 gap-2">
+                  <div className="text-sm pl-5 mb-2">Tree name: </div>
+                  <div className="text-sm">{participant.up_tree_name}</div>
+                </div>
+                <div className="flex ml-2 mt-2 gap-2">
+                  <div className="text-sm pl-5 mb-2">Planter name: </div>
+                  <div className="text-sm">{participant.up_planter}</div>
+                </div>
+                <div className="flex ml-2 mt-2 gap-2">
+                  <div className="text-sm pl-5 mb-2">Uploader name: </div>
+                  <div className="text-sm">{participant.up_name}</div>
                 </div>
               </div>
             </Link>

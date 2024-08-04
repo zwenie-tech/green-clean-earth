@@ -9,6 +9,15 @@ import { useEffect, useState } from 'react';
 import Cookies from "js-cookie";
 import { apiURL, imageURL } from '@/app/requestsapi/request';
 import Image from 'next/image';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+
 
 type PlantData = {
   up_id: number;
@@ -105,18 +114,62 @@ const Plant = ({ searchParams }: any) => {
       <div className='p-4 md:p-8 max-w-6xl mx-auto'>
         <div>
           <div className='flex flex-col flex-wrap md:flex-row gap-3 py-2 mb-2'>
-            <div className='w-full aspect-square md:h-40 md:w-40 rounded bg-light-gray mx-auto'>
-              {plant.up_file && <img src={`${imageURL}${plant.up_file}`} alt='' width={200} height={200} />}
-            </div>
-            <div className='w-full aspect-square md:h-40 md:w-40 rounded bg-light-gray mx-auto'>
-              {plant.up_file_2 && <img src={`${imageURL}${plant.up_file_2}`} alt='' width={200} height={200} />}
-            </div>
-            <div className='w-full aspect-square md:h-40 md:w-40 rounded bg-light-gray mx-auto'>
-              {plant.up_file_3 && <img src={`${imageURL}${plant.up_file_3}`} alt='' width={200} height={200} />}
-            </div>
-            <div className='w-full aspect-square md:h-40 md:w-40 rounded bg-light-gray mx-auto'>
-              {plant.up_file_4 && <img src={`${imageURL}${plant.up_file_4}`} alt='' width={200} height={200} />}
-            </div>
+            { plant.up_file
+              && 
+              
+                <Dialog>
+                  <DialogTrigger>
+                  <div className='aspect-square md:h-40 md:w-40 rounded mx-auto'>
+                    <img 
+                      src={`${imageURL}${plant.up_file}`} 
+                      alt='' 
+                      className='w-full h-full object-cover'
+                    />
+                  </div>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Tree</DialogTitle>
+                      {/* <DialogDescription></DialogDescription> */}
+                    </DialogHeader>
+                    <img 
+                      src={`${imageURL}${plant.up_file}`} 
+                      alt='' 
+                      className='w-full h-full object-cover'
+                    />
+                  </DialogContent>
+                </Dialog>
+            }
+            { plant.up_file_2
+              && 
+              <div className='aspect-square md:h-40 md:w-40 rounded mx-auto'>
+                <img 
+                  src={`${imageURL}${plant.up_file_2}`} 
+                  alt='' 
+                  className='w-full h-full object-cover'
+                />
+              </div>
+            }
+            { plant.up_file_3
+              && 
+              <div className='aspect-square md:h-40 md:w-40 rounded mx-auto'>
+                <img 
+                  src={`${imageURL}${plant.up_file_3}`} 
+                  alt='' 
+                  className='w-full h-full object-cover'
+                />
+              </div>
+            }
+            { plant.up_file_4
+              && 
+              <div className='aspect-square md:h-40 md:w-40 rounded mx-auto'>
+                <img 
+                  src={`${imageURL}${plant.up_file_4}`} 
+                  alt='' 
+                  className='w-full h-full object-cover'
+                />
+              </div>
+            }
           </div>
           <div className="flex flex-col gap-4 bg-light-gray p-4 md:p-6 rounded-3xl">
             <div className='self-end text-primary'>

@@ -53,7 +53,6 @@ const Faq = () => {
         </div>
       </div>
       <GceBadge />
-      <JoinNow />
       <Footer/>
     </main>
   )
