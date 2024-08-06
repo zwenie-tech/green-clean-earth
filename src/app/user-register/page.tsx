@@ -68,7 +68,7 @@ const formSchema = z.object({
   address: z.string(),
   gender: z.string(),
   password: z.string().min(6).max(255),
-  referralcode: z.string().min(1).max(255),
+  referralcode: z.string().min(1).max(255).optional(),
 });
 
 function UserRegisterForm() {

@@ -20,7 +20,35 @@ const DashboardUserList = () => {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const token = Cookies.get('token');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 10;
 
+ 
+    useEffect(() => {
+      async function fetchfirstData(){
+        const responseall = await fetch(`${apiURL}/coordinator/members?limit=100000000000`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        }); 
+        if(responseall.status===200){
+          const dataall = await responseall.json();
+          console.log('length', dataall.Users.length);
+          setTotalPages(Math.ceil(dataall.Users.length / itemsPerPage));
+        }
+      }
+      fetchfirstData();
+    }, [token]);
+
+    const handlePageChange = (newPage: number) => {
+      if (newPage > 0 && newPage <= totalPages) {
+        console.log('working')
+        setCurrentPage(newPage);
+      }
+    }
   useEffect(() => {
     if (!token) {
       // Redirect to the login page if no token is found
@@ -30,7 +58,7 @@ const DashboardUserList = () => {
 
     const fetchUsers = async () => {
       try {
-        const response = await fetch(`${apiURL}/coordinator/members?page=1&limit=20`, {
+        const response = await fetch(`${apiURL}/coordinator/members?page=${currentPage}&limit=${itemsPerPage}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -51,7 +79,7 @@ const DashboardUserList = () => {
     };
 
     fetchUsers();
-  }, [token, router]);
+  }, [token, router,currentPage]);
 
   return (
     <>
@@ -95,6 +123,31 @@ const DashboardUserList = () => {
             ))
           )}
         </div>
+      </div>
+      <div className="flex justify-center items-center space-x-2 my-4">
+        <button
+        className={currentPage === 1 ? 
+          "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
+        : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+        }
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        <span className="text-xl">{currentPage}</span>
+        <button
+          className={currentPage === totalPages ? 
+            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
+          : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+          }
+          onClick={() => {
+            handlePageChange(currentPage + 1) 
+          }}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
       </div>
       <Footer />
     </>

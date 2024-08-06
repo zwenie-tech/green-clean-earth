@@ -27,11 +27,31 @@ interface EventsApiResponse {
 
 const Events = () => {
   const [events, setEvents] = useState<Event[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 10;
 
+ 
+    useEffect(() => {
+      async function fetchfirstData(){
+        const responseall = await fetch(`${apiURL}/common/events?limit=100000000000`); 
+        const dataall = await responseall.json();
+        console.log('length', dataall.events.length);
+        setTotalPages(Math.ceil(dataall.events.length / itemsPerPage));
+      }
+      fetchfirstData();
+    }, []);
+
+    const handlePageChange = (newPage: number) => {
+      if (newPage > 0 && newPage <= totalPages) {
+        console.log('working')
+        setCurrentPage(newPage);
+      }
+    }
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch(`${apiURL}/common/events`);
+        const response = await fetch(`${apiURL}/common/events?page=${currentPage}&limit=${itemsPerPage}`);
         const data: EventsApiResponse = await response.json();
         
         if (data && data.success) {
@@ -45,7 +65,7 @@ const Events = () => {
     };
 
     fetchEvents();
-  }, []);
+  }, [currentPage]);
 
 
   return (
@@ -91,6 +111,31 @@ const Events = () => {
             }
           </div>
         </div>
+      </div>
+      <div className="flex justify-center items-center space-x-2 my-4">
+        <button
+        className={currentPage === 1 ? 
+          "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
+        : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+        }
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        <span className="text-xl">{currentPage}</span>
+        <button
+          className={currentPage === totalPages ? 
+            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
+          : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+          }
+          onClick={() => {
+            handlePageChange(currentPage + 1) 
+          }}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
       </div>
       <GceBadge />
       <Footer />

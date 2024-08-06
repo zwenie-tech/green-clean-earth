@@ -16,7 +16,35 @@ const UserInvite: React.FC = () => {
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const token = Cookies.get('token');
   const user_ref = Cookies.get('user_refcode');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 10;
 
+ 
+    useEffect(() => {
+      async function fetchfirstData(){
+        const responseall = await fetch(`${apiURL}/user/my-invites?limit=100000000000`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }); 
+        if (responseall.status===200) {
+          const dataall = await responseall.json();
+          console.log('length', dataall.data);
+          setTotalPages(Math.ceil(dataall.data.length / itemsPerPage));
+        }
+      }
+      fetchfirstData();
+    }, [token]);
+
+    const handlePageChange = (newPage: number) => {
+      if (newPage > 0 && newPage <= totalPages) {
+        console.log('working')
+        setCurrentPage(newPage);
+      }
+    }
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -27,9 +55,12 @@ const UserInvite: React.FC = () => {
             'Content-Type': 'application/json'
           }
         });
-        const result = await response.json();
-        if (result.success) {
+        if (response.status===200) {
+          const result = await response.json();
           setInvites(result.data);
+        }
+        else{
+          setInvites([]);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -65,7 +96,7 @@ const UserInvite: React.FC = () => {
         <div className="overflow-x-auto">
           {loading ? (
             <p>Loading...</p>
-          ) : (
+          ) :  (
             <table className="min-w-full bg-white border-gray-200 rounded-t-lg">
               <thead>
                 <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
@@ -75,17 +106,42 @@ const UserInvite: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {invites ? invites.map((invite, index) => (
+                {invites.length>0 ? invites.map((invite, index) => (
                   <tr key={invite.gp_id} className="border border-gray-200 hover:bg-gray-100">
                     <td className="py-3 px-6 text-left">{index + 1}</td>
                     <td className="py-3 px-6 text-left">{invite.gp_id}</td>
                     <td className="py-3 px-6 text-left">{invite.gp_name}</td>
                   </tr>
-                )) : <div>No data found</div>}
+                )) : <div className="flex justify-center items-center space-x-2 my-4">No data found</div>}
               </tbody>
             </table>
           )}
         </div>
+      </div>
+      <div className="flex justify-center items-center space-x-2 my-4">
+        <button
+        className={currentPage === 1 ? 
+          "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
+        : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+        }
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        <span className="text-xl">{currentPage}</span>
+        <button
+          className={currentPage === totalPages ? 
+            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
+          : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+          }
+          onClick={() => {
+            handlePageChange(currentPage + 1) 
+          }}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
       </div>
       <Footer />
 
