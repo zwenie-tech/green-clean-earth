@@ -48,7 +48,7 @@ import NgoAdditionalDetails from "./ngo-additional-details/page";
 const formSchema = z.object({
   categoryId: z.string(),
   name: z.string().max(255),
-  refferalCode: z.string().max(255),
+  refferalCode: z.string().max(255).optional(),
   location: z.string().max(255),
   coordinator_name: z.string().max(255),
   whatsapp_number: z.coerce.number(),

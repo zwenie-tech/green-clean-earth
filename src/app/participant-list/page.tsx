@@ -20,16 +20,14 @@ const ParticipantList: React.FC = () => {
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalItem, setTotalItem] = useState(0);
   const itemsPerPage = 10;
 
  
     useEffect(() => {
       async function fetchfirstData(){
-        const responseall = await fetch(`${apiURL}/uploads/all?limit=100000000000`);
+        const responseall = await fetch(`${apiURL}/uploads/all?limit=100000000000`); 
         const dataall = await responseall.json();
         console.log('length', dataall.Uploads.length);
-        setTotalItem(dataall.Uploads.length);
         setTotalPages(Math.ceil(dataall.Uploads.length / itemsPerPage));
       }
       fetchfirstData();

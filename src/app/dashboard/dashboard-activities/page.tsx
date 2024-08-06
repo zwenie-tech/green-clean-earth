@@ -25,17 +25,46 @@ const DashboardActivity = () => {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const token = Cookies.get('token');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 10;
 
+ 
+    useEffect(() => {
+      async function fetchfirstData(){
+        const responseall = await fetch(`${apiURL}/coordinator/our-activities?limit=100000000000`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        }); 
+        if(responseall.status===200){
+          const dataall = await responseall.json();
+          console.log('length', dataall.data.length);
+          setTotalPages(Math.ceil(dataall.data.length / itemsPerPage));
+
+        }
+      }
+      fetchfirstData();
+    }, [token]);
+
+    const handlePageChange = (newPage: number) => {
+      if (newPage > 0 && newPage <= totalPages) {
+        console.log('working')
+        setCurrentPage(newPage);
+      }
+    }
   useEffect(() => {
     if (!token) {
       // Redirect to the login page if no token is found
-      router.push("/login");
+      router.push("/loginform");
       return;
     }
 
     const fetchActivities = async () => {
       try {
-        const response = await fetch(`${apiURL}/coordinator/our-activities?page=1&limit=20`, {
+        const response = await fetch(`${apiURL}/coordinator/our-activities?page=${currentPage}&limit=${itemsPerPage}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -58,7 +87,7 @@ const DashboardActivity = () => {
     };
 
     fetchActivities();
-  }, [token, router]);
+  }, [token, router,currentPage]);
 
   return (
     <>
@@ -77,36 +106,7 @@ const DashboardActivity = () => {
       <div className='text-center'>
         <h1 className='text-xl mt-2 font-bold'>Our Activities</h1>
       </div>
-      {/* Selection menu */}
-      {/* <div className="flex flex-wrap p-2 md:p-4">
-        <div className="w-1/2 mb-3 md:w-1/4 p-1 md:p-2 bg-white">
-          <label className="text-[#A09C9C] block font-bold ml-5 mb-1">Category</label>
-          <select className="w-full p-1 md:p-2 border text-sm md:text-lg rounded-xl bg-white focus:border-2 focus:border-[#3C6E1F]" style={{ boxShadow: "1px 4px 5px 3px #00000040" }}>
-            <option>Select Option 1</option>
-            <option>Option 1</option>
-            <option>Option 2</option>
-          </select>
-        </div>
-        <div className="w-1/2 md:mt-0 mb-3 md:w-1/4 p-1 md:p-2 bg-white">
-          <label className="text-[#A09C9C] block font-bold ml-5 mb-1">Sub Category</label>
-          <select className="w-full p-1 md:p-2 border text-sm md:text-lg rounded-xl bg-white focus:border-2 focus:border-[#3C6E1F]" style={{ boxShadow: "1px 4px 5px 3px #00000040" }}>
-            <option>Select Option 2</option>
-            <option>Option 1</option>
-            <option>Option 2</option>
-          </select>
-        </div>
-        <div className="w-full md:w-1/4 p-1 md:p-2 flex flex-col items-center md:items-start">
-          <label className="text-[#A09C9C] block font-bold md:text-lg mb-1">Club</label>
-          <select className="w-1/2 md:w-full p-1 md:p-2 border text-sm md:text-lg rounded-xl bg-white focus:border-2 focus:border-[#3C6E1F]" style={{ boxShadow: "1px 4px 5px 3px #00000040" }}>
-            <option>Select Option 2</option>
-            <option>Option 1</option>
-            <option>Option 2</option>
-          </select>
-        </div>
-        <div className="w-full md:w-1/4 p-1 md:p-2 flex justify-center md:justify-start sm:items-center md:items-start">
-          <button className="w-1/2 md:w-full mt-7 p-1 md:p-2 bg-[#3C6E1F] text-white rounded-2xl" style={{ boxShadow: "1px 4px 5px 3px #00000040" }}>Submit</button>
-        </div>
-      </div> */}
+      
       {/* Table */}
       <div className="container mx-auto p-6">
         <div className="overflow-x-auto">
@@ -149,6 +149,31 @@ const DashboardActivity = () => {
             </tbody>
           </table>
         </div>
+      </div>
+      <div className="flex justify-center items-center space-x-2 my-4">
+        <button
+        className={currentPage === 1 ? 
+          "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
+        : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+        }
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        <span className="text-xl">{currentPage}</span>
+        <button
+          className={currentPage === totalPages ? 
+            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
+          : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+          }
+          onClick={() => {
+            handlePageChange(currentPage + 1) 
+          }}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
       </div>
       <Footer />
     </>

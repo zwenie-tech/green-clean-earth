@@ -17,11 +17,31 @@ interface ApiResponse {
 
 const DistrictPage = () => {
   const [districts, setDistricts] = useState<District[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 10;
 
+ 
+    useEffect(() => {
+      async function fetchfirstData(){
+        const responseall = await fetch(`${apiURL}/common/districtList`); 
+        const dataall = await responseall.json();
+        console.log('length', dataall.districtList.length);
+        setTotalPages(Math.ceil(dataall.districtList.length / itemsPerPage));
+      }
+      fetchfirstData();
+    }, []);
+
+    const handlePageChange = (newPage: number) => {
+      if (newPage > 0 && newPage <= totalPages) {
+        console.log('working')
+        setCurrentPage(newPage);
+      }
+    }
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${apiURL}/common/districtList`);
+        const response = await fetch(`${apiURL}/common/districtList?page=${currentPage}&limit=${itemsPerPage}`);
         const data: ApiResponse = await response.json();
         if (data.success) {
           setDistricts(data.districtList);
@@ -34,7 +54,7 @@ const DistrictPage = () => {
     };
 
     fetchData();
-  }, []);
+  }, [currentPage]);
 
   return (
     <>
@@ -70,6 +90,34 @@ const DistrictPage = () => {
           </table>
         </div>
       </div>
+
+      <div className="flex justify-center items-center space-x-2 my-4">
+        <button
+        className={currentPage === 1 ? 
+          "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
+        : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+        }
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        <span className="text-xl">{currentPage}</span>
+        <button
+          className={currentPage === totalPages ? 
+            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
+          : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+          }
+          onClick={() => {
+            handlePageChange(currentPage + 1) 
+          }}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
+      </div>
+
+      
       <div className="grid grid-cols-1 md:grid-cols-2 mx-2 gap-2">
         <div className="items-center rounded-xl md:h-64">
           <img
@@ -85,6 +133,9 @@ const DistrictPage = () => {
           </p>
         </div>
       </div>
+
+      
+
       <Footer />
     </>
   );

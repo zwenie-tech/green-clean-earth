@@ -42,10 +42,72 @@ const ButtonDisplayFn = () => {
   const searchParams = useSearchParams();
   const username = searchParams.get("u");
   const userid = searchParams.get("id");
+  const [currentPageAct, setCurrentPageAct] = useState(1);
+  const [currentPageUp, setCurrentPageUp] = useState(1);
+  const [totalPagesAct, setTotalPagesAct] = useState(1);
+  const [totalPagesUp, setTotalPagesUp] = useState(1);
+  const itemsPerPage = 10;
+
+ 
+    useEffect(() => {
+      async function fetchfirstData(){
+        const uid = parseInt(userid!);
+
+        const responseACTall = await fetch(`${apiURL}/activity/userActivities?limit=100000000000`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ userId: uid }),
+        }); 
+        if(responseACTall.status === 200)
+        {
+
+          const dataall = await responseACTall.json();
+          console.log('length', dataall.userActivities.length);
+          setTotalPagesAct(Math.ceil(dataall.userActivities.length / itemsPerPage));
+        }
+      }
+      fetchfirstData();
+    }, [userid]);
+
+    useEffect(() => {
+      async function fetchfirstData(){
+        const uid = parseInt(userid!);
+        const responseUpall = await fetch(`${apiURL}/uploads/userUploads?limit=100000000000`,{
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ userId: uid }),
+        }); 
+        if(responseUpall.status === 200)
+        {
+
+          const dataall = await responseUpall.json();
+          console.log('lengthupload', dataall.userUploads.length);
+          setTotalPagesUp(Math.ceil(dataall.userUploads.length / itemsPerPage));
+        }
+      }
+      fetchfirstData();
+    }, [userid]);
+
+    const handlePageChangeAct = (newPage: number) => {
+      if (newPage > 0 && newPage <= totalPagesAct) {
+        console.log('working')
+        setCurrentPageAct(newPage);
+      }
+    }
+    const handlePageChangeUp = (newPage: number) => {
+      if (newPage > 0 && newPage <= totalPagesAct) {
+        console.log('working')
+        setCurrentPageUp(newPage);
+      }
+    }
 
   useEffect(() => {
     const uid = parseInt(userid!);
-    fetch(`${apiURL}/uploads/userUploads`, {
+    fetch(`${apiURL}/uploads/userUploads?page=${currentPageUp}&limit=${itemsPerPage}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -60,7 +122,7 @@ const ButtonDisplayFn = () => {
       })
       .catch(error => console.error('Error fetching uploads:', error));
 
-    fetch(`${apiURL}/activity/userActivities`, {
+    fetch(`${apiURL}/activity/userActivities?page=${currentPageAct}&limit=${itemsPerPage}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -74,7 +136,7 @@ const ButtonDisplayFn = () => {
         }
       })
       .catch(error => console.error('Error fetching activities:', error));
-  }, [userid]);
+  }, [userid,currentPageAct,currentPageUp]);
 
   const showFirstMessage = () => {
     setActiveButton('upload');
@@ -134,6 +196,31 @@ const ButtonDisplayFn = () => {
                 </div>
               ))}
             </div>
+            <div className="flex justify-center items-center space-x-2 my-4">
+                  <button
+                  className={currentPageUp === 1 ? 
+                    "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
+                  : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+                  }
+                    onClick={() => handlePageChangeUp(currentPageUp - 1)}
+                    disabled={currentPageUp === 1}
+                  >
+                    Previous
+                  </button>
+                  <span className="text-xl">{currentPageUp}</span>
+                  <button
+                    className={currentPageUp === totalPagesUp ? 
+                      "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
+                    : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+                    }
+                    onClick={() => {
+                      handlePageChangeUp(currentPageUp + 1) 
+                    }}
+                    disabled={currentPageUp === totalPagesUp}
+                  >
+                    Next
+                  </button>
+              </div>
           </div>
         )}
 
@@ -166,6 +253,31 @@ const ButtonDisplayFn = () => {
                 </tbody>
               </table>
             </div>
+            <div className="flex justify-center items-center space-x-2 my-4">
+                  <button
+                  className={currentPageAct === 1 ? 
+                    "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
+                  : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+                  }
+                    onClick={() => handlePageChangeAct(currentPageAct - 1)}
+                    disabled={currentPageAct === 1}
+                  >
+                    Previous
+                  </button>
+                  <span className="text-xl">{currentPageAct}</span>
+                  <button
+                    className={currentPageAct === totalPagesAct ? 
+                      "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
+                    : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+                    }
+                    onClick={() => {
+                      handlePageChangeAct(currentPageAct + 1) 
+                    }}
+                    disabled={currentPageAct === totalPagesAct}
+                  >
+                    Next
+                  </button>
+              </div>
           </div>
         )}
       </div>

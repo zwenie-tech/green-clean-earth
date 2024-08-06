@@ -45,11 +45,71 @@ const ButtonDisplayFn: React.FC = () => {
   const grpname = searchParams.get("gname");
   const grpid = searchParams.get("gid");
   const grpuc = searchParams.get("uc");
+  const [currentPageAct, setCurrentPageAct] = useState(1);
+  const [currentPageUp, setCurrentPageUp] = useState(1);
+  const [totalPagesAct, setTotalPagesAct] = useState(1);
+  const [totalPagesUp, setTotalPagesUp] = useState(1);
+  const itemsPerPage = 10;
 
-  const fetchGroupActivities = async () => {
+ 
+    useEffect(() => {
+      async function fetchfirstData(){
+        const grpId = parseInt(grpid!);
+        const responseACTall = await fetch(`${apiURL}/activity/groupActivities?limit=100000000000`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },body: JSON.stringify({ groupId: grpId }),
+        }); 
+        if(responseACTall.status === 200)
+        {
+
+          const dataall = await responseACTall.json();
+          console.log('length', dataall.groupActivities.length);
+          setTotalPagesAct(Math.ceil(dataall.groupActivities.length / itemsPerPage));
+        }
+      }
+      fetchfirstData();
+    }, [grpid]);
+
+    useEffect(() => {
+      async function fetchfirstData(){
+        const grpId = parseInt(grpid!);
+        const responseUpall = await fetch(`${apiURL}/uploads/groupUploads?limit=100000000000`,{
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },body: JSON.stringify({ groupId: grpId }),
+        }); 
+        if(responseUpall.status === 200)
+        {
+
+          const dataall = await responseUpall.json();
+          console.log('lengthupload', dataall.groupUploads.length);
+          setTotalPagesUp(Math.ceil(dataall.groupUploads.length / itemsPerPage));
+        }
+      }
+      fetchfirstData();
+    }, [grpid]);
+
+    const handlePageChangeAct = (newPage: number) => {
+      if (newPage > 0 && newPage <= totalPagesAct) {
+        console.log('working')
+        setCurrentPageAct(newPage);
+      }
+    }
+    const handlePageChangeUp = (newPage: number) => {
+      if (newPage > 0 && newPage <= totalPagesAct) {
+        console.log('working')
+        setCurrentPageUp(newPage);
+      }
+    }
+  
+
+  const fetchGroupActivities = async (page:any) => {
     try {
       const grpId = parseInt(grpid!);
-      const response = await fetch(`${apiURL}/activity/groupActivities`, {
+      const response = await fetch(`${apiURL}/activity/groupActivities?page=${page}&limit=${itemsPerPage}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -65,11 +125,11 @@ const ButtonDisplayFn: React.FC = () => {
     }
   };
 
-  const fetchGroupUploads = async () => {
+  const fetchGroupUploads = async (page:any) => {
     try {
       const grpId = parseInt(grpid!);
 
-      const response = await fetch(`${apiURL}/uploads/groupUploads`, {
+      const response = await fetch(`${apiURL}/uploads/groupUploads?page=${page}&limit=${itemsPerPage}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -86,9 +146,9 @@ const ButtonDisplayFn: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchGroupActivities();
-    fetchGroupUploads();
-  }, []);
+    fetchGroupActivities(currentPageAct);
+    fetchGroupUploads(currentPageUp);
+  }, [currentPageAct, currentPageUp]);
 
   return (
     <div>
@@ -144,6 +204,31 @@ const ButtonDisplayFn: React.FC = () => {
                 </div>
               ))): (<div>No data found</div>)}
             </div>
+            <div className="flex justify-center items-center space-x-2 my-4">
+                  <button
+                  className={currentPageUp === 1 ? 
+                    "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
+                  : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+                  }
+                    onClick={() => handlePageChangeUp(currentPageUp - 1)}
+                    disabled={currentPageUp === 1}
+                  >
+                    Previous
+                  </button>
+                  <span className="text-xl">{currentPageUp}</span>
+                  <button
+                    className={currentPageUp === totalPagesUp ? 
+                      "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
+                    : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+                    }
+                    onClick={() => {
+                      handlePageChangeUp(currentPageUp + 1) 
+                    }}
+                    disabled={currentPageUp === totalPagesUp}
+                  >
+                    Next
+                  </button>
+              </div>
           </div>
         )}
 
@@ -175,6 +260,31 @@ const ButtonDisplayFn: React.FC = () => {
                 </tbody>
               </table>
             </div>
+            <div className="flex justify-center items-center space-x-2 my-4">
+                  <button
+                  className={currentPageAct === 1 ? 
+                    "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
+                  : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+                  }
+                    onClick={() => handlePageChangeAct(currentPageAct - 1)}
+                    disabled={currentPageAct === 1}
+                  >
+                    Previous
+                  </button>
+                  <span className="text-xl">{currentPageAct}</span>
+                  <button
+                    className={currentPageAct === totalPagesAct ? 
+                      "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
+                    : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+                    }
+                    onClick={() => {
+                      handlePageChangeAct(currentPageAct + 1) 
+                    }}
+                    disabled={currentPageAct === totalPagesAct}
+                  >
+                    Next
+                  </button>
+              </div>
           </div>
         )}
       </div>
