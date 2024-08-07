@@ -81,7 +81,9 @@ const NavigationBar = () => {
                     : (pathname === link.href
                       ? "bg-primary text-white"
                       : "bg-light-gray text-black")
-                  }`}
+                  }
+                  
+                  hover:bg-light-green`}
                 >
                   {link.label}
                 </p>
@@ -96,7 +98,8 @@ const NavigationBar = () => {
                     pathname === link.href
                       ? "bg-primary text-white"
                       : "bg-light-gray text-black"
-                  }`}
+                  }
+                  hover:bg-light-green`}
                 >
                   {link.label}
                 </p>
