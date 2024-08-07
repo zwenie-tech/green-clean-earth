@@ -6,7 +6,6 @@ import { apiURL } from "@/app/requestsapi/request";
 import Earth from "@/components/earth";
 import { imageURL } from "../requestsapi/request";
 import Link from "next/link";
-import Loading from "@/components/loading";
 
 type Participant = {
   up_file: string;
@@ -18,7 +17,7 @@ type Participant = {
 }
 
 const ParticipantList: React.FC = () => {
-  const [participants, setParticipants] = useState<Participant[]>();
+  const [participants, setParticipants] = useState<Participant[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 10;
@@ -87,10 +86,8 @@ const ParticipantList: React.FC = () => {
           Old participants
         </button>
       </div>
-      {
-        participants ?
-        (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4">
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4">
         {participants.map((participant) => (
           <div key={participant.up_id} className="p-2">
             <Link
@@ -127,10 +124,6 @@ const ParticipantList: React.FC = () => {
           </div>
         ))}
       </div>
-        ):
-        <Loading />
-      }
-      
 
       <div className="flex justify-center items-center space-x-2 my-4">
         <button

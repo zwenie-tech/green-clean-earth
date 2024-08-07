@@ -173,7 +173,7 @@ const MultiSelectZodForm = () => {
                         onValuesChange={field.onChange}
                         values={field.value}
                       >
-                        <MultiSelectorTrigger className="shadow-xl rounded-md px-4 py-1 border-0">
+                        <MultiSelectorTrigger className="border border-primary">
                           <MultiSelectorInput placeholder="Select clubs" />
                         </MultiSelectorTrigger>
                         <MultiSelectorContent>
@@ -200,7 +200,7 @@ const MultiSelectZodForm = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Number of students this year</FormLabel>
-                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                      <FormControl>
                         <Input type="number" placeholder="" {...field} />
                       </FormControl>
                       <FormDescription> </FormDescription>
@@ -214,7 +214,7 @@ const MultiSelectZodForm = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Total number of classes</FormLabel>
-                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                      <FormControl>
                         <Input type="number" placeholder="" {...field} />
                       </FormControl>
                       <FormDescription> </FormDescription>
@@ -228,7 +228,7 @@ const MultiSelectZodForm = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>List of classes</FormLabel>
-                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                      <FormControl>
                         <Input placeholder="" {...field} />
                       </FormControl>
                       <FormDescription> </FormDescription>
@@ -242,7 +242,7 @@ const MultiSelectZodForm = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Select Category</FormLabel>
-                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                      <FormControl>
                         <select {...field} className="w-full px-4 py-2 border rounded-md" required>
                           <option value="">Select a category</option>
                           {categoryOptions.map((category) => (
@@ -258,7 +258,7 @@ const MultiSelectZodForm = () => {
                   )}
                 />
                 <div className="flex justify-center">
-                  <Button type="submit" className="w-1/3 bg-green-600">
+                  <Button type="submit" className="w-1/3 bg-primary">
                     Submit
                   </Button>
                 </div>

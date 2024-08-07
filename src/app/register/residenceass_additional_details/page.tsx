@@ -114,7 +114,7 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Total number of team members</FormLabel>
-                        <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                        <FormControl>
                           <Input  type="number" {...field} />
                         </FormControl>
                         <FormDescription></FormDescription>
@@ -123,7 +123,7 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
                     )}
                   />
                 <div className="flex justify-center">
-            <Button type="submit" className="w-1/3 bg-green-600">
+            <Button type="submit" className="w-1/3 bg-primary">
               Submit
             </Button>
           </div>

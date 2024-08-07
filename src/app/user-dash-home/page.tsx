@@ -36,7 +36,7 @@ import Cookies from 'js-cookie';
         <div className="max-w-screen-xl mx-auto p-4 mt-4 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
           {/* <div 
-            className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10">
+            className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10" transition-all hover:scale-105>
             <div className="flex flex-row items-center justify-between w-full px-6 py-2 bg-light-green">
               <p className="font-semibold text-xl">Upload plant</p>
               <ImageUp size={48} color="#6c7260" strokeWidth={1.75} />
@@ -47,7 +47,7 @@ import Cookies from 'js-cookie';
           </div> */}
             <DialogUploadPlant />
             <Link 
-              className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10"
+              className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10 transition-all hover:scale-105"
               href={`user-dash-home/uploaded-plants`}>
               <div className="flex flex-row items-center justify-between w-full px-6 py-2 bg-light-green">
                 <p className="font-semibold text-xl">My Uploads</p>
@@ -58,7 +58,7 @@ import Cookies from 'js-cookie';
               </div>
             </Link>
             <Link 
-              className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10"
+              className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10 transition-all hover:scale-105"
               href={`/my-profile?id=${id}`}>
               <div className="flex flex-row items-center justify-between w-full px-6 py-2 bg-light-green">
                 <p className="font-semibold text-xl">My Profile</p>
@@ -69,7 +69,7 @@ import Cookies from 'js-cookie';
               </div>
             </Link>
             <Link 
-              className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10"
+              className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10 transition-all hover:scale-105"
               href={"/user-dash-home/estimate"}>
               <div className="flex flex-row items-center justify-between w-full px-6 py-2 bg-light-green">
                 <p className="font-semibold text-xl">Green Clean Estimate</p>
@@ -80,7 +80,7 @@ import Cookies from 'js-cookie';
               </div>
             </Link>
             <Link 
-              className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10"
+              className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10 transition-all hover:scale-105"
               href={"/user-dash-home/user-invite"}>
               <div className="flex flex-row items-center justify-between w-full px-6 py-2 bg-light-green">
                 <p className="font-semibold text-xl">Invite Friends</p>
@@ -91,7 +91,7 @@ import Cookies from 'js-cookie';
               </div>
             </Link>
             <Link 
-              className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10"
+              className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10 transition-all hover:scale-105"
               href={"/user-dash-home/narukkeduppu"}>
               <div className="flex flex-row items-center justify-between w-full px-6 py-2 bg-light-green">
                 <p className="font-semibold text-xl">നറുക്കെടുപ്പ്</p>
@@ -102,7 +102,7 @@ import Cookies from 'js-cookie';
               </div>
             </Link>
             {/* <Link 
-              className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10"
+              className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10 transition-all hover:scale-105"
               href={"/"}>
               <div className="flex flex-row items-center justify-between w-full px-6 py-2 bg-light-green">
                 <p className="font-semibold text-xl">Green Card</p>
@@ -113,7 +113,7 @@ import Cookies from 'js-cookie';
               </div>
             </Link> */}
             {/* <Link 
-              className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10"
+              className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10 transition-all hover:scale-105"
               href={"/"}>
               <div className="flex flex-row items-center justify-between w-full px-6 py-2 bg-light-green">
                 <p className="font-semibold text-xl">Our Supporters Offer</p> 
@@ -124,7 +124,7 @@ import Cookies from 'js-cookie';
               </div>
             </Link> */}
             {/* <Link 
-              className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10"
+              className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10 transition-all hover:scale-105"
               href={"/"}>
               <div className="flex flex-row items-center justify-between w-full px-6 py-2 bg-light-green">
                 <p className="font-semibold text-xl">GCEM Fest</p> 
