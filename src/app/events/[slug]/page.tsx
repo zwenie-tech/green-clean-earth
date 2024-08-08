@@ -26,7 +26,7 @@ interface ApiResponse {
 const Events = () => {
   const searchParams = useSearchParams();
   const id = searchParams.get("slug");
-  console.log(`id====${id}`)
+  
   const [event, setEvent] = useState<Event | null>(null);
 
   useEffect(() => {
@@ -62,7 +62,7 @@ const Events = () => {
       <NavigationBar />
       <div className='mx-2'>
         <PageTitle title='Events and News' />
-        <div className='flex flex-col items-center gap-2 mx-4 my-4 md:mx-24 px-4 py-6 bg-light-gray'>
+        <div className='flex flex-col items-center gap-2 mx-4 my-4 md:mx-24 px-4 py-6 rounded-md bg-light-gray'>
           <h2 className='text-2xl font-semibold'>{event.event_heading}</h2>
           <img src={event.image_link} alt={event.event_heading} className="h-52 w-80 bg-primary" />
           <p className='text-left md:text-left'>{new Date(event.created_time).toLocaleDateString()}</p>

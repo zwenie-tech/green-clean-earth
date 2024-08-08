@@ -38,48 +38,6 @@ function ResidenceAssAdditionalDetailsForm() {
     defaultValues: {},
   })
 
-  // const [countries, setCountries] = useState([]);
-  // const [states, setStates] = useState([]);
-  // const [districts, setDistricts] = useState([]);
-  // const [category, setCategory] = useState([]);
-  // const [lsgd, setLsgd] = useState([]);
-  // const [selectedDistrict, setSelectedDistrict] = useState("");
-
-  
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     const countryResponse = await fetch(`${apiURL}/country`);
-  //     const countryData = await countryResponse.json();
-  //     setCountries(countryData.country);
-
-  //     const stateResponse = await fetch(`${apiURL}/state`);
-  //     const stateData = await stateResponse.json();
-  //     setStates(stateData.state);
-
-  //     const districtResponse = await fetch(`${apiURL}/district`);
-  //     const districtData = await districtResponse.json();
-  //     setDistricts(districtData.district);
-
-  //     const categoryResponse = await fetch(`${apiURL}/category`);
-  //     const categoryData = await categoryResponse.json();
-  //     setCategory(categoryData.category);
-  //   }
-  //   fetchData();
-  // }, []);
-
-  
-  // useEffect(() => {
-  //   async function fetchLsgdData() {
-  //     if (selectedDistrict) {
-  //       console.log(selectedDistrict);
-  //       const lsgResponse = await fetch(`${apiURL}/lsg/${selectedDistrict}`);
-  //       const lsgData = await lsgResponse.json();
-  //       setLsgd(lsgData.district);
-  //     }
-  //   }
-  //   fetchLsgdData();
-  // }, [selectedDistrict]);
-
   
 // get group id from the url parameter
 const searchParams = useSearchParams();
@@ -109,7 +67,6 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
     });
 
     if (!response.ok) {
-      console.log(response);
       throw new Error("Network response was not ok");
     }
 
@@ -119,7 +76,7 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
         title: "Account created.",
         description: "We've created your account for you.",
       })
-      router.push("/login/coordinator");
+      router.push("/loginform");
     }
   } catch (error) {
     toast({
@@ -157,7 +114,7 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Total number of team members</FormLabel>
-                        <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                        <FormControl>
                           <Input  type="number" {...field} />
                         </FormControl>
                         <FormDescription></FormDescription>
@@ -166,7 +123,7 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
                     )}
                   />
                 <div className="flex justify-center">
-            <Button type="submit" className="w-1/3 bg-green-600">
+            <Button type="submit" className="w-1/3 bg-primary">
               Submit
             </Button>
           </div>

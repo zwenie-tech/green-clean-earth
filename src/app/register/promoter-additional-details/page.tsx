@@ -110,7 +110,6 @@ function PromoterAdditionalDetailsForm() {
       });
 
       if (!response.ok) {
-        console.log(response);
         throw new Error("Network response was not ok");
       }
 
@@ -120,7 +119,7 @@ function PromoterAdditionalDetailsForm() {
           title: "Account created.",
           description: "We've created your account for you.",
         });
-        router.push("/login/coordinator");
+        router.push("/loginform");
       }
     } catch (error) {
       toast({
@@ -160,7 +159,7 @@ function PromoterAdditionalDetailsForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>City name</FormLabel>
-                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                      <FormControl>
                          <Input {...field} />
                       </FormControl>
                       <FormMessage /> 
@@ -175,7 +174,7 @@ function PromoterAdditionalDetailsForm() {
                     <FormItem>
                       <FormLabel>Promoting Category</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                        <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Choose a category" />
                           </SelectTrigger>
@@ -203,7 +202,7 @@ function PromoterAdditionalDetailsForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Total number of team members</FormLabel>
-                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                      <FormControl>
                         <Input type="number" {...field} />
                       </FormControl>
                       <FormMessage />
@@ -211,7 +210,7 @@ function PromoterAdditionalDetailsForm() {
                   )}
                 />
                 <div className="flex justify-center">
-                <Button type="submit" className="w-1/3 bg-green-600 items-center">
+                <Button type="submit" className="w-1/3 bg-primary items-center">
                   Submit
                 </Button>
                 </div>

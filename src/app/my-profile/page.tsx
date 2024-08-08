@@ -13,15 +13,15 @@ import GceBadge from "@/components/gceBadge";
 import JoinNow from "@/components/joinNow";
 
 function MyProfile() {
-  const router = useRouter();
   const token = Cookies.get('token');
   const [openTab, setOpenTab] = useState(1);
   const searchParams = useSearchParams();
   
+  const router = useRouter();
   useEffect(() => {
-    // if (!token) {
-    //   router.push("/login");
-    // }
+    if (!token) {
+      router.push("/loginform");
+    }
   }, [token, router]);
 
   return (

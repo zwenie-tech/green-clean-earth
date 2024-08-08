@@ -3,7 +3,7 @@ import Footer from "@/components/footer";
 import NavigationBar from "@/components/navigationBar";
 import { UserPlus } from "lucide-react";
 import Link from 'next/link'
-import { DialogAddUser } from "./dialog-add-user";
+import { DialogAddUser } from "../dashboard/dialog-add-user";
 import { useSearchParams, useRouter } from "next/navigation";
 import { apiURL } from "@/app/requestsapi/request";
 import { useToast } from "@/components/ui/use-toast"
@@ -12,9 +12,9 @@ import Cookies from 'js-cookie';
 
 function CoordinatorDashBoardContent() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const { toast } = useToast();
-
+  
+  const searchParams = useSearchParams();
   const co_id = searchParams.get("id");
   const token = Cookies.get('token');
   if (!token) {

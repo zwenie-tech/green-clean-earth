@@ -6,6 +6,7 @@ import { apiURL, imageURL } from "@/app/requestsapi/request";
 
 interface Participant {
   up_id: number,
+  up_reg_id: number,
   up_name: string,
   up_planter: string,
   up_tree_name: string,
@@ -61,6 +62,32 @@ const Participant = () => {
   const [selectedCorp, setSelectedCorp] = useState("");
   const [selectedLsgd, setSelectedLsgd] = useState("");
   const [wardNo, setWardNo] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 10;
+
+ 
+    useEffect(() => {
+      async function fetchfirstData(){
+        const responseall = await fetch(`${apiURL}/uploads/filter?limit=100000000000`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        }); 
+        const dataall = await responseall.json();
+        console.log('length', dataall.Uploads);
+        setTotalPages(Math.ceil(dataall.Uploads.length / itemsPerPage));
+      }
+      fetchfirstData();
+    }, []);
+
+    const handlePageChange = (newPage: number) => {
+      if (newPage > 0 && newPage <= totalPages) {
+        console.log('working')
+        setCurrentPage(newPage);
+      }
+    }
 
   useEffect(() => {
     async function fetchInitialData() {
@@ -68,7 +95,7 @@ const Participant = () => {
       const countryData = await countryResponse.json();
       setCountries(countryData.country);
       try {
-        const response = await fetch(`${apiURL}/uploads/filter?limit=1000&page=1`, {
+        const response = await fetch(`${apiURL}/uploads/filter?page=${currentPage}&limit=${itemsPerPage}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -76,11 +103,13 @@ const Participant = () => {
         });
   
         if (!response.ok) {
-          console.log(response);
+        
           throw new Error("Network response was not ok");
         }
         try {
           const result = await response.json();
+        
+
           setParticipants(result.Uploads);
         } catch {
           setParticipants([]);
@@ -90,7 +119,7 @@ const Participant = () => {
       }
     }
     fetchInitialData();
-  }, []);
+  }, [currentPage]);
 
   useEffect(() => {
     async function fetchStates() {
@@ -218,10 +247,9 @@ const Participant = () => {
       }
     }
 
-    console.log('Form Data:', dataWithIds);
 
     try {
-      const response = await fetch(`${apiURL}/uploads/filter?limit=1000&page=1`, {
+      const response = await fetch(`${apiURL}/uploads/filter`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -230,7 +258,6 @@ const Participant = () => {
       });
 
       if (!response.ok) {
-        console.log(response);
         throw new Error("Network response was not ok");
       }
       try {
@@ -382,7 +409,7 @@ const Participant = () => {
             <tr key={participant.up_id} className="border border-gray-200 hover:bg-gray-100">
               <td className="py-3 px-6 text-left">{participant.up_id || 'N/A'}</td>
               <td className="py-3 px-6 text-left">{participant.up_planter || 'N/A'}</td>
-              <td className="py-3 px-6 text-left">{participant.up_name || 'N/A'}</td>
+              <td className="py-3 px-6 text-left"><a href={`/user-page?u=${participant.up_name}&id=${participant.up_reg_id}`}>{participant.up_name || 'N/A'}</a></td>
               <td className="py-3 px-6 text-left">{participant.gp_name || 'N/A'}</td>
               <td className="py-3 px-6 text-left">{participant.up_tree_name || 'N/A'}</td>
               <td className="py-3 px-6 text-left">
@@ -411,6 +438,31 @@ const Participant = () => {
     </table>
   </div>
 </div>
+<div className="flex justify-center items-center space-x-2 my-4">
+        <button
+        className={currentPage === 1 ? 
+          "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
+        : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+        }
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        <span className="text-xl">{currentPage}</span>
+        <button
+          className={currentPage === totalPages ? 
+            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
+          : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+          }
+          onClick={() => {
+            handlePageChange(currentPage + 1) 
+          }}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
+      </div>
       <Footer />
     </>
   );

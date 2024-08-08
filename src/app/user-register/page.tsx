@@ -68,7 +68,7 @@ const formSchema = z.object({
   address: z.string(),
   gender: z.string(),
   password: z.string().min(6).max(255),
-  referralcode: z.string().min(1).max(255),
+  referralcode: z.string().min(1).max(255).optional(),
 });
 
 function UserRegisterForm() {
@@ -200,7 +200,6 @@ function UserRegisterForm() {
         body: JSON.stringify(dataWithIds),
       });
       if (!response.ok) {
-        console.log(response);
         throw new Error("Network response was not ok");
       }
 
@@ -211,7 +210,7 @@ function UserRegisterForm() {
           title: "Account created.",
           description: "We've created your account for you.",
         });
-        router.push("/login/user");
+        router.push("/loginform");
       }
     } catch (error) {
       toast({
@@ -484,6 +483,19 @@ function UserRegisterForm() {
                 />
                 <FormField
                   control={form.control}
+                  name="referralcode"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Referral Code</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Referral Code" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
                   name="mobile"
                   render={({ field }) => (
                     <FormItem>
@@ -508,19 +520,7 @@ function UserRegisterForm() {
                     </FormItem>
                   )}
                 />
-                {/* <FormField
-                  control={form.control}
-                  name="referralcode"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Referral Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Referral Name" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                /> */}
+                
                 <Button type="submit" className="w-full">Register</Button>
               </form>
             </Form>

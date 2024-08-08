@@ -48,6 +48,7 @@ import NgoAdditionalDetails from "./ngo-additional-details/page";
 const formSchema = z.object({
   categoryId: z.string(),
   name: z.string().max(255),
+  refferalCode: z.string().max(255).optional(),
   location: z.string().max(255),
   coordinator_name: z.string().max(255),
   whatsapp_number: z.coerce.number(),
@@ -189,6 +190,7 @@ export default function Register() {
       province: values.city || '',
       corporation: corp_id || '0',
       wardNo: parseInt(values.wardNo!) || 0,
+      refferalCode: values.refferalCode
     };
 
     try {
@@ -201,7 +203,6 @@ export default function Register() {
       });
 
       if (!response.ok) {
-        console.log(response);
         throw new Error("Network response was not ok");
       }
 
@@ -259,7 +260,7 @@ export default function Register() {
                     <FormItem>
                       <FormLabel>Category</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                      <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Choose a category" />
                           </SelectTrigger>
@@ -282,7 +283,7 @@ export default function Register() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Institution Name</FormLabel>
-                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                      <FormControl>
                         <Input {...field} />
                       </FormControl>
                       <FormMessage />
@@ -295,7 +296,7 @@ export default function Register() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Location</FormLabel>
-                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                      <FormControl>
                         <Input {...field} />
                       </FormControl>
                       <FormMessage />
@@ -308,7 +309,7 @@ export default function Register() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Coordinator name</FormLabel>
-                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                      <FormControl>
                         <Input {...field} />
                       </FormControl>
                       <FormMessage />
@@ -321,7 +322,7 @@ export default function Register() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Whatsapp number</FormLabel>
-                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                      <FormControl>
                         <Input type="number" {...field} />
                       </FormControl>
                       <FormMessage />
@@ -334,7 +335,7 @@ export default function Register() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Profession</FormLabel>
-                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                      <FormControl>
                         <Input {...field} />
                       </FormControl>
                       <FormMessage />
@@ -351,7 +352,7 @@ export default function Register() {
                         field.onChange(value);
                         setSelectedCountry(value);
                       }} defaultValue={field.value}>
-                        <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                        <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Choose a country" />
                           </SelectTrigger>
@@ -379,7 +380,7 @@ export default function Register() {
                           field.onChange(value);
                           setSelectedState(value);
                         }} defaultValue={field.value}>
-                          <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                          <FormControl>
                             <SelectTrigger>
                               <SelectValue placeholder="Choose a state" />
                             </SelectTrigger>
@@ -408,7 +409,7 @@ export default function Register() {
                           field.onChange(value);
                           setSelectedDistrict(value);
                         }} defaultValue={field.value}>
-                          <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                          <FormControl>
                             <SelectTrigger>
                               <SelectValue placeholder="Choose a district" />
                             </SelectTrigger>
@@ -433,7 +434,7 @@ export default function Register() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>District</FormLabel>
-                        <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                        <FormControl>
                           <Input {...field} />
                         </FormControl>
                         <FormMessage />
@@ -452,7 +453,7 @@ export default function Register() {
                           field.onChange(value);
                           setSelectedCorp(value);
                         }} defaultValue={field.value}>
-                          <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                          <FormControl>
                             <SelectTrigger>
                               <SelectValue placeholder="Choose a Option" />
                             </SelectTrigger>
@@ -521,7 +522,7 @@ export default function Register() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>City / Province</FormLabel>
-                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                      <FormControl>
                         <Input {...field} />
                       </FormControl>
                       <FormMessage />
@@ -529,13 +530,26 @@ export default function Register() {
                   )}
                 />
               )}
+              <FormField
+                  control={form.control}
+                  name="refferalCode"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Referal Code</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="username"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Username</FormLabel>
-                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                      <FormControl>
                         <Input {...field} />
                       </FormControl>
                       <FormMessage />
@@ -548,7 +562,7 @@ export default function Register() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Password</FormLabel>
-                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                      <FormControl>
                         <Input type="password" {...field} />
                       </FormControl>
                       <FormMessage />
@@ -556,7 +570,7 @@ export default function Register() {
                   )}
                 />
                 <div className="flex justify-center">
-            <Button type="submit" className="w-1/3 bg-green-600">
+            <Button type="submit" className="w-1/3 bg-primary">
               Submit
             </Button>
           </div>

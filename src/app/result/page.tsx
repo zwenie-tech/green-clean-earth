@@ -28,7 +28,11 @@ const Results = () => {
         <div className='w-full md:w-1/2 border-2 border-black rounded-lg flex flex-col justify-center items-center gap-4 mt-5 p-4'>
           <p className='text-center'>ഇത് വരെ UPLOAD ചെയ്യപ്പെട്ട വൃക്ഷത്തൈ സെൽഫികളുടെ ലിസ്റ്റ് ലഭിക്കാൻ ഇവിടെ ക്ലിക് ചെയ്യുക</p>
           <button className='text-sm md:text-md w-1/2 md:w-1/4 bg-[#FFF6E4] pt-3 pb-3 rounded-lg justify-center items-center' style={{boxShadow:'0px 4px 10px 3px #00000040'}}>
+<<<<<<< HEAD
             Click here &gt;
+=======
+            Click here &gt
+>>>>>>> 56da16e5e4b88d51497ae2725b42d94260b10a2f
           </button>
         </div>
         <ResultImages/>

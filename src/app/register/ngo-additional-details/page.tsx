@@ -61,7 +61,6 @@ function NgoAdditionalDetailsForm() {
         }
       );
       if (!response.ok) {
-        console.log(response);
         throw new Error("Network response was not ok");
       }
       const result = await response.json();
@@ -70,7 +69,7 @@ function NgoAdditionalDetailsForm() {
           title: "Account created.",
           description: "We've created your account for you.",
         })
-        router.push("/login/coordinator");
+        router.push("/loginform");
       }
     } catch (error) {
       toast({
@@ -115,7 +114,7 @@ function NgoAdditionalDetailsForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Team members</FormLabel>
-                      <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
+                      <FormControl>
                         <Input type="number" {...field} />
                       </FormControl>
                       <FormDescription></FormDescription>
@@ -124,7 +123,7 @@ function NgoAdditionalDetailsForm() {
                   )}
                 />
                 <div className="flex justify-center">
-            <Button type="submit" className="w-1/3 bg-green-600">
+            <Button type="submit" className="w-1/3 bg-primary">
               Submit
             </Button>
           </div>

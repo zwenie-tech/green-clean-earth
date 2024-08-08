@@ -47,12 +47,12 @@ const ParticipantCard: React.FC<ParticipantCardProps> = ({ participant }) => {
   const formattedTime = formatTime(participant.up_date);
 
   return (
-    <div className="bg-white flex flex-col items-start border shadow gap-3 p-4 m-1 text-sm">
-      <div>
+    <div className="bg-red-300 flex flex-col items-start border shadow gap-3 p-4 m-1 text-sm">
+      <div className="bg-red-600">
         <img className="w-full h-48 object-cover" src={`${imageURL}${participant.up_file}`} alt={"Image"} height={150} width={200}/>
         {/* <img src={participant.up_file'} alt={"Image"} height={150}/> */}
       </div>
-      <div>
+      <div className="bg-red-900">
         <div className="text-sm text-gray-500">Tree number: </div>
         <div className="text-xl">{ participant.up_id }</div>
       </div>
