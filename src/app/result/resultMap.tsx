@@ -7,7 +7,7 @@ import WorldMap from "./world";
 const ResultImages = () => {
   const [selectedMap, setSelectedMap] = useState("world");
 
-  const handleMapChange = (event) => {
+  const handleMapChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedMap(event.target.value);
   };
 

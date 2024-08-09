@@ -1,19 +1,40 @@
-"use client"; // Indicate this is a Client Component
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 
 const worldMapUrl = '/worldmads.json'; // Ensure this path is correct and accessible
 
-const WorldMap = () => {
-  const [selectedCountry, setSelectedCountry] = useState('');
+interface CountryData {
+  cntry_id: number;
+  cntry_name: string;
+  iso_a3: string;
+  upload_count: number;
+}
 
-  const handleClick = (name) => {
-    setSelectedCountry(name);
+const WorldMap = () => {
+  const [selectedCountry, setSelectedCountry] = useState<CountryData | null>(null);
+  const [countryData, setCountryData] = useState<CountryData[]>([]);
+
+  useEffect(() => {
+    // Fetch country data from the API
+    fetch('https://api-staging.greencleanearth.org/api/v1/common/countryMapData')
+      .then(response => response.json())
+      .then(data => setCountryData(data.countryData))
+      .catch(error => console.error('Error fetching country data:', error));
+  }, []);
+
+  const handleClick = (iso_a3: string) => {
+    const country = countryData.find(country =>
+      country.iso_a3 === iso_a3
+    );
+    if (country) {
+      setSelectedCountry(country);
+    } else {
+      console.log("Country not found");
+    }
   };
 
   const handleOverlayClose = () => {
-    setSelectedCountry(''); // Clear the selected country
+    setSelectedCountry(null); // Clear the selected country
   };
 
   return (
@@ -39,7 +60,10 @@ const WorldMap = () => {
                   fill="#D0E0F0"
                   stroke="#000"
                   strokeWidth={0.5}
-                  onClick={() => handleClick(geo.properties.name)}
+                  onClick={() => {
+                    console.log('Geo Properties:', geo.properties);  // Inspect the properties
+                    handleClick(geo.properties.iso_a3 || geo.properties.adm0_a3 || geo.properties.su_a3 || geo.properties.brk_a3);
+                  }}
                   style={{
                     default: {
                       outline: 'none',
@@ -62,8 +86,8 @@ const WorldMap = () => {
       
       {selectedCountry && (
         <div className="overlay">
-          <h3>{selectedCountry}</h3>
-          <p>Here is some information about {selectedCountry}.</p>
+          <h3>{selectedCountry.cntry_name}</h3>
+          <p>Upload Count: {selectedCountry.upload_count}</p> {/* Display upload count */}
           <button className="btn btn-secondary" onClick={handleOverlayClose}>
             Close
           </button>
@@ -92,7 +116,7 @@ const WorldMap = () => {
             margin-top: 20px;
             transform: none;
             margin-left:0;
-            margin-right:0
+            margin-right:0;
             width: 100% !important;
           }
         }

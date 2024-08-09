@@ -4,22 +4,47 @@ import React, { useState, useEffect } from "react";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import { Container, Button } from "react-bootstrap";
 
+interface StateData {
+  st_id: number;
+  st_name: string;
+  hc_a2_code: string;
+  upload_count: number;
+}
+
 function IndiaMap() {
-  const [stateName, setStateName] = useState("");
-  const [showInfo, setShowInfo] = useState(false);
-  const [indiaTopoJson, setIndiaTopoJson] = useState(null);
+  const [stateName, setStateName] = useState<string>(""); // Explicitly typing stateName as a string
+  const [showInfo, setShowInfo] = useState<boolean>(false); // Explicitly typing showInfo as a boolean
+  const [indiaTopoJson, setIndiaTopoJson] = useState<any>(null); // Typing indiaTopoJson as any for simplicity
+  const [stateData, setStateData] = useState<StateData[]>([]); // Store state data from API
+  const [uploadCount, setUploadCount] = useState<number | null>(null); // Store the upload count
 
   useEffect(() => {
+    // Fetch India topo JSON
     fetch('/india.json') // Ensure the JSON file is in the public directory
       .then(response => response.json())
       .then(data => setIndiaTopoJson(data))
       .catch(error => console.error("Error loading map data:", error));
+
+    // Fetch state data from API
+    fetch('https://api-staging.greencleanearth.org/api/v1/common/stateMapData')
+      .then(response => response.json())
+      .then(data => setStateData(data.stateMapData))
+      .catch(error => console.error("Error loading state data:", error));
   }, []);
 
-  const handleStateClick = (name) => {
-    setStateName(name);
-    setShowInfo(true);
-  };
+  const handleStateClick = (geo: any) => { 
+    const clickedStateCode = geo.properties['hc-a2']; // Use the hc-a2 property
+    console.log("Geo Properties:", geo.properties); // Log the properties of the clicked geography
+
+    // Find the clicked state's data using the hc-a2 code
+    const clickedState = stateData.find(state => state.hc_a2_code === clickedStateCode);
+
+    if (clickedState) {
+      setStateName(clickedState.st_name); // Set the state name
+      setUploadCount(clickedState.upload_count); // Set the upload count
+      setShowInfo(true);
+    }
+};
 
   const handleOverlayClose = () => {
     setShowInfo(false);
@@ -45,7 +70,7 @@ function IndiaMap() {
                 <Geography
                   key={geo.rsmKey}
                   geography={geo}
-                  onClick={() => handleStateClick(geo.properties.name)}
+                  onClick={() => handleStateClick(geo)} // Pass the entire geo object to the click handler
                   style={{
                     default: {
                       fill: "#D6D6DA",
@@ -75,7 +100,7 @@ function IndiaMap() {
         {showInfo && (
           <div className="overlay">
             <h3>{stateName}</h3>
-            <p>Here is some information about {stateName}. Detailed description and additional information can be provided here.</p>
+            <p>Upload Count: {uploadCount}</p> {/* Display the upload count */}
             <Button onClick={handleOverlayClose} variant="secondary">
               Close
             </Button>
@@ -110,8 +135,8 @@ function IndiaMap() {
             position: static;
             transform: none;
             margin-top: 20px;
-            margin:auto;
-            width:100%;
+            margin: auto;
+            width: 100%;
           }
         }
 

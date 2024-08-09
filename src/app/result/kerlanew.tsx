@@ -1,15 +1,30 @@
 "use client"; // Indicate this is a Client Component
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 
 const keralaMapUrl = '/kerala.json'; // Ensure this path is correct and accessible
 
 const KeralanewMap = () => {
-  const [selectedDistrict, setSelectedDistrict] = useState('');
+  const [selectedDistrict, setSelectedDistrict] = useState<string>('');
+  const [districtData, setDistrictData] = useState<any[]>([]);
 
-  const handleClick = (name) => {
-    setSelectedDistrict(name);
+  useEffect(() => {
+    // Fetch the district data from the API
+    fetch('https://api-staging.greencleanearth.org/api/v1/common/districtList')
+      .then(response => response.json())
+      .then(data => setDistrictData(data.districtList))
+      .catch(error => console.error("Error fetching district data:", error));
+  }, []);
+
+  const handleClick = (geo: any) => {
+    const districtName = geo.properties.DISTRICT;
+    const districtInfo = districtData.find(d => d.dis_name === districtName);
+    
+    if (districtInfo) {
+      console.log("Geo Properties:", geo.properties); // Log the properties of the clicked geography
+      setSelectedDistrict(`${districtName} - Upload Count: ${districtInfo.upload_count}`);
+    }
   };
 
   const handleOverlayClose = () => {
@@ -40,7 +55,7 @@ const KeralanewMap = () => {
                   fill="#D0E0F0"
                   stroke="#000"
                   strokeWidth={0.5}
-                  onClick={() => handleClick(geo.properties.DISTRICT)}
+                  onClick={() => handleClick(geo)}
                   style={{
                     default: {
                       outline: 'none',
@@ -64,7 +79,6 @@ const KeralanewMap = () => {
       {selectedDistrict && (
         <div className="overlay">
           <h3>{selectedDistrict}</h3>
-          <p>Here is some information about {selectedDistrict}.</p>
           <button className="btn btn-secondary" onClick={handleOverlayClose}>
             Close
           </button>
