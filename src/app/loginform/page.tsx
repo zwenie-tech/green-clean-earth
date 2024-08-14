@@ -172,22 +172,30 @@ const LoginForm = () => {
           <Container>
             <Row className="justify-content-end">
               <Col md={4} className="p-4 rounded shadow opacity-80" style={{ borderRadius: '20px' }}>
-                <div className="d-flex justify-content-between mb-4">
-                  <Button
-                    variant={isUserLogin ? "link" : "secondary"}
-                    className={`text-${isUserLogin ? '[#3C6E1F]' : 'black'} text-2xl mt-9 ml-3`}
-                    onClick={() => setIsUserLogin(true)}
-                  >
-                    User
-                  </Button>
-                  <Button
-                    variant={!isUserLogin ? "link" : "secondary"}
-                    className={`text-${!isUserLogin ? '[#3C6E1F]' : 'black'} text-2xl`}
-                    onClick={() => setIsUserLogin(false)}
-                  >
-                    Coordinator
-                  </Button>
-                </div>
+              <div className="flex flex-row bg-[#E4EBF7] gap-2 rounded mb-5 justify-center items-center w-3/4 mx-auto">
+          <button
+            onClick={() => setIsUserLogin(true)}
+            className={`w-1/2 text-center rounded-xl font-bold bg-[#E4EBF7] py-3 text-[#3C6E1F] hover:bg-primary/15 border-b-2 ${
+              isUserLogin
+                ? 'shadow-lg border-[#3C6E1F]' // Apply shadow and border color when active
+                : 'border-transparent' // No shadow and border when inactive
+            }`}
+          >
+            User
+          </button>
+          <button
+            onClick={() => setIsUserLogin(false)}
+            className={`w-1/2 text-center rounded-xl px-2 font-bold bg-[#E4EBF7] py-3 text-[#3C6E1F] hover:bg-primary/15 border-b-2 ${
+              !isUserLogin
+                ? 'shadow-lg border-[#3C6E1F]' // Apply shadow and border color when active
+                : 'border-transparent' // No shadow and border when inactive
+            }`}
+          >
+            Coordinator
+          </button>
+        </div>
+
+          
                 {isUserLogin && (
                   <Form {...userForm}>
                     <form noValidate onSubmit={userForm.handleSubmit(onUserSubmit)} className="space-y-8">
