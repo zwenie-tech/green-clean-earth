@@ -48,7 +48,7 @@ import NgoAdditionalDetails from "./ngo-additional-details/page";
 const formSchema = z.object({
   categoryId: z.string(),
   name: z.string().max(255),
-  refferalCode: z.string().max(255).optional(),
+  refferalCode: z.string().max(255),
   location: z.string().max(255),
   coordinator_name: z.string().max(255),
   whatsapp_number: z.coerce.number(),
@@ -258,11 +258,11 @@ export default function Register() {
                   name="categoryId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Category</FormLabel>
+                      <FormLabel>Group</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Choose a category" />
+                            <SelectValue placeholder="Choose a group" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -536,8 +536,9 @@ export default function Register() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Referal Code</FormLabel>
+                      <p className="text-xs">(Enter the Referal Code received from your Promoter. If not received contact +919645964592)</p>
                       <FormControl>
-                        <Input {...field} />
+                        <Input {...field} required />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
