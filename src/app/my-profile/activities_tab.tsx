@@ -65,7 +65,7 @@ export default function ActivitiesTab({ token }: any) {
             setActivity([]);
           }
         } catch (error) {
-          setError("Error fetching activity data");
+          setError("No activities");
         } finally {
           setLoading(false);
         }
@@ -79,7 +79,14 @@ export default function ActivitiesTab({ token }: any) {
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return (
+    <div>
+      <DialogUploadActivities token={token} />
+      <div className="p-4">
+        {error}
+      </div>
+    </div>
+  );
   }
 
   return (
