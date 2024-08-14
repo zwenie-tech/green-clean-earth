@@ -60,6 +60,7 @@ const formSchema = z.object({
   wardNo: z.string().optional(),
   lsg: z.string().optional(),
   city: z.string().optional(),
+  email: z.string().max(255),
   username: z.string().max(255),
   password: z.string().min(8).max(255),
 })
@@ -190,7 +191,8 @@ export default function Register() {
       province: values.city || '',
       corporation: corp_id || '0',
       wardNo: parseInt(values.wardNo!) || 0,
-      refferalCode: values.refferalCode
+      refferalCode: values.refferalCode,
+      emailId:values.email
     };
 
     try {
@@ -539,6 +541,19 @@ export default function Register() {
                       <p className="text-xs">(Enter the Referal Code received from your Promoter. If not received contact +919645964592)</p>
                       <FormControl>
                         <Input {...field} required />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input {...field} required/>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
