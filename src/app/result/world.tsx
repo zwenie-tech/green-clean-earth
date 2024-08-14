@@ -13,41 +13,65 @@ interface CountryData {
 const WorldMap = () => {
   const [selectedCountry, setSelectedCountry] = useState<CountryData | null>(null);
   const [countryData, setCountryData] = useState<CountryData[]>([]);
+  const [mousePosition, setMousePosition] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
+  const [countryColors, setCountryColors] = useState<{ [key: string]: string }>({});
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   useEffect(() => {
     // Fetch country data from the API
     fetch('https://api-staging.greencleanearth.org/api/v1/common/countryMapData')
       .then(response => response.json())
-      .then(data => setCountryData(data.countryData))
+      .then(data => {
+        setCountryData(data.countryData);
+
+        // Generate colors based on upload_count
+        const colors = data.countryData.reduce((acc: { [key: string]: string }, country: CountryData) => {
+          acc[country.iso_a3] = country.upload_count > 0 ? '#3C6E1F' : '#D0E0F0'; // Green if upload_count > 0, else default color
+          return acc;
+        }, {});
+
+        setCountryColors(colors);
+      })
       .catch(error => console.error('Error fetching country data:', error));
+
+    // Set isMobile based on screen size
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    handleResize(); // Set initial state
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const handleClick = (iso_a3: string) => {
-    const country = countryData.find(country =>
-      country.iso_a3 === iso_a3
-    );
+  const handleMouseEnter = (iso_a3: string, event: React.MouseEvent | React.TouchEvent) => {
+    const country = countryData.find(country => country.iso_a3 === iso_a3);
     if (country) {
       setSelectedCountry(country);
-    } else {
-      console.log("Country not found");
+
+      if (!isMobile) {
+        // Capture mouse coordinates only for non-mobile
+        const isTouch = 'touches' in event;
+        const x = isTouch ? event.touches[0].clientX : event.clientX;
+        const y = isTouch ? event.touches[0].clientY : event.clientY;
+        setMousePosition({ x, y });
+      }
     }
   };
 
-  const handleOverlayClose = () => {
-    setSelectedCountry(null); // Clear the selected country
+  const handleMouseLeave = () => {
+    setSelectedCountry(null); // Clear the selected country when the mouse leaves
   };
 
   return (
-    <div style={{ textAlign: 'center', padding: '10px' }}>
-      <h1 className='mb-1 text-primary text-2xl font-bold'>World Details</h1> {/* Reduced bottom margin */}
-      <div className='mt-0'> {/* Removed top margin */}
+    <div style={{ textAlign: 'center', padding: '10px', position: 'relative' }}>
+      <h1 className='mb-1 text-primary text-2xl font-bold'>World Details</h1>
+      <div className='mt-0'>
         <ComposableMap
           projectionConfig={{
-            scale: 120,  // Adjust scale to zoom in/out
-            center: [0, 20], // Approximate center of the world, adjust as needed
+            scale: 125,
+            center: [0, 30],
           }}
           width={800}
-          height={260}  // Adjust height to fit the whole map
+          height={360}
           style={{ maxWidth: '100%', height: 'auto' }}
           className="map"
         >
@@ -57,13 +81,13 @@ const WorldMap = () => {
                 <Geography
                   key={i}
                   geography={geo}
-                  fill="#D0E0F0"
+                  fill={countryColors[geo.properties.iso_a3] || "#D0E0F0"} // Use color from state
                   stroke="#000"
                   strokeWidth={0.5}
-                  onClick={() => {
-                    console.log('Geo Properties:', geo.properties);  // Inspect the properties
-                    handleClick(geo.properties.iso_a3 || geo.properties.adm0_a3 || geo.properties.su_a3 || geo.properties.brk_a3);
+                  onMouseEnter={(event) => {
+                    handleMouseEnter(geo.properties.iso_a3 || geo.properties.adm0_a3 || geo.properties.su_a3 || geo.properties.brk_a3, event);
                   }}
+                  onMouseLeave={handleMouseLeave}
                   style={{
                     default: {
                       outline: 'none',
@@ -85,52 +109,57 @@ const WorldMap = () => {
       </div>
       
       {selectedCountry && (
-        <div className="overlay">
+        <div
+          className={`overlay ${isMobile ? 'mobile-overlay' : ''}`}
+          style={{
+            left: isMobile ? '50%' : mousePosition.x + 10,
+            top: isMobile ? '50%' : mousePosition.y + 10,
+            transform: isMobile ? 'translate(-50%, -50%)' : 'none',
+            position: isMobile ? 'fixed' : 'absolute'
+          }}
+        >
           <h3>{selectedCountry.cntry_name}</h3>
-          <p>Upload Count: {selectedCountry.upload_count}</p> {/* Display upload count */}
-          <button className="btn btn-secondary" onClick={handleOverlayClose}>
-            Close
-          </button>
+          <p>Upload Count: {selectedCountry.upload_count}</p>
         </div>
       )}
 
       <style jsx>{`
         .overlay {
           z-index: 10;
-          max-width: 400px;
-          width: 80%;
+          max-width: 200px;
           text-align: center;
           background-color: #f8f9fa;
           border-radius: 8px;
           box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-          padding: 20px;
+          padding: 10px;
+          pointer-events: none; /* Prevent the overlay from blocking mouse interactions */
+        }
+
+        .mobile-overlay {
+          width: 90%; /* Take up 90% of the screen width on mobile */
+          max-width: 300px;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
         }
 
         @media (max-width: 768px) {
           .map {
-            width: 100% !important;
-            height: 200px !important;
+            width:100% !important;
+            height: 500px !important; /* Increased height for mobile view */
           }
-          .overlay {
-            position: static;
-            margin-top: 20px;
-            transform: none;
-            margin-left:0;
-            margin-right:0;
-            width: 100% !important;
+
+          .mobile-overlay {
+            position: fixed;
+            max-width: 300px;
+            background-color: #f8f9fa;
           }
         }
 
         @media (min-width: 769px) {
           .map {
             width: 800px !important;
-            height: 260px !important;
-          }
-          .overlay {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            height: 360px !important;
           }
         }
       `}</style>
