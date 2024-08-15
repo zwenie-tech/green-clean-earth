@@ -171,11 +171,11 @@ const LoginForm = () => {
         <div className="w-full bg-[#E4EBF7] lg:w-1/3 rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700 flex items-center justify-center">
           <Container>
             <Row className="justify-content-end">
-              <Col md={4} className="p-4 rounded shadow opacity-80" style={{ borderRadius: '20px' }}>
-              <div className="flex flex-row bg-[#E4EBF7] gap-2 rounded mb-5 justify-center items-center w-3/4 mx-auto">
+              <Col md={4} className="p-2 rounded shadow opacity-80" style={{ borderRadius: '20px' }}>
+              <div className="flex flex-row bg-[#E4EBF7] rounded mb-5 justify-center items-center w-3/4 mx-auto">
           <button
             onClick={() => setIsUserLogin(true)}
-            className={`w-1/2 text-center rounded-xl font-bold bg-[#E4EBF7] py-3 text-[#3C6E1F] hover:bg-primary/15 border-b-2 ${
+            className={`w-2/5 text-center rounded-xl font-bold bg-[#E4EBF7] py-3 text-http://localhost:3000[#3C6E1F] hover:bg-primary/15 border-b-2 ${
               isUserLogin
                 ? 'shadow-lg border-[#3C6E1F]' // Apply shadow and border color when active
                 : 'border-transparent' // No shadow and border when inactive
@@ -185,7 +185,7 @@ const LoginForm = () => {
           </button>
           <button
             onClick={() => setIsUserLogin(false)}
-            className={`w-1/2 text-center rounded-xl px-2 font-bold bg-[#E4EBF7] py-3 text-[#3C6E1F] hover:bg-primary/15 border-b-2 ${
+            className={`w-3/5 text-center rounded-xl font-bold bg-[#E4EBF7] py-3 text-[#3C6E1F] hover:bg-primary/15 border-b-2 ${
               !isUserLogin
                 ? 'shadow-lg border-[#3C6E1F]' // Apply shadow and border color when active
                 : 'border-transparent' // No shadow and border when inactive

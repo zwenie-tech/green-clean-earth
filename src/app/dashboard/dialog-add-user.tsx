@@ -80,7 +80,7 @@ Follow the link to join GreenCleanEarth mission.
     <Dialog>
       <DialogTrigger asChild>
         
-      <label className="btn btn-primary flex align-items-center  bg-light-green rounded-lg"style={{width:'300px',height: '70px',boxShadow:'1px 4px 5px 3px #00000040'}} >
+      <label className="btn btn-primary flex align-items-center bg-light-green rounded-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10"style={{width:'300px',height: '70px',boxShadow:'1px 4px 5px 3px #00000040'}} >
     <div
      style={{ width: '60px',height: '70px',backgroundColor: 'white',borderRadius: '20px',borderWidth: '1px',borderColor: '#3C6E1F',display:'flex',justifyContent: 'center',alignItems: 'center',}}
     >
