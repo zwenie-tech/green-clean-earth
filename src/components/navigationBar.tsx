@@ -63,43 +63,45 @@ const NavigationBar = () => {
   
 
   return (
-    <header className="py-5 mb-2">
+    <header className="bg-primary py-5">
       <div className="w-full mx-auto px-5 flex flex-row md:flex-col justify-between md:justify-center items-center">
-        <h1 className="text-2xl text-primary font-medium font-sans md:mb-5">
+        <h1 className="text-2xl text-primary text-white font-medium font-sans md:mb-5">
           <a href="https://www.greencleanearth.org/" target="_blank" rel="noreferrer">
             GreenCleanEarth
           </a>
         </h1>
 
         <ul className="hidden md:flex md:justify-center md:items-center flex-wrap">
+          {/* when logged in */}
           {token ? (login_links.map((link) => (
             <li key={link.href} className="m-1">
               <Link href={link.href} passHref>
                 <p
-                  className={`text-black no-underline px-3 py-1 rounded-full transition-colors duration-300 ${
+                  className={`text-white border-2 border-transparent no-underline px-3 py-1 rounded-full transition-colors duration-300 ${
                     link.label==="Dashboard" && (pathname==="/dashboard" || pathname==="/user-dash-home") ? "bg-primary text-white"
                     : (pathname === link.href
-                      ? "bg-primary text-white"
-                      : "bg-light-gray text-black")
+                      ? " border-white"
+                      : "")
                   }
                   
-                  hover:bg-light-green`}
+                  hover:border-light-green/40`}
                 >
                   {link.label}
                 </p>
               </Link>
             </li>
           ))):
+          // when logged out
           (links.map((link) => (
             <li key={link.href} className="m-1">
               <Link href={link.href} passHref>
                 <p
-                  className={`text-black no-underline px-3 py-1 rounded-full transition-colors duration-300 ${
+                  className={`text-white border-2 border-transparent no-underline px-3 py-1 rounded-full transition-colors duration-300 ${
                     pathname === link.href
-                      ? "bg-primary text-white"
-                      : "bg-light-gray text-black"
+                      ? " border-white"
+                      : ""
                   }
-                  hover:bg-light-green`}
+                  hover:border-light-green/40`}
                 >
                   {link.label}
                 </p>
@@ -111,10 +113,10 @@ const NavigationBar = () => {
 
         <div
           onClick={() => setNav(!nav)}
-          className="cursor-pointer pr-4 z-20 text-primary md:hidden"
+          className="cursor-pointer pr-4 z-20 text-white md:hidden"
         >
           {/* {nav ? <FaTimes size={30} /> : <FaBars size={30} />} */}
-          {nav ? <X size={30}/> : <Menu size={30}/>}
+          {nav ? <X size={30} className="text-primary"/> : <Menu size={30}/>}
           
         </div>
       </div>
