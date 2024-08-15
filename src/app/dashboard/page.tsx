@@ -56,76 +56,90 @@ const Dashboard=()=>{
            <h1 className='text-xl mb-6 mt-2 font-bold '>in Association with Green Clean Kerala Mission</h1>
       </div>
       {/*uploading button .......... */}
-  <div className="flex justify-center items-center p-2 gap-2 md:gap-6 mb-3">
-  <label className="btn btn-primary flex align-items-center bg-light-green rounded-lg"style={{width: '300px',height: '70px',boxShadow:'1px 4px 5px 3px #00000040'}} 
-  onClick={PlantUploadsButton}>
+      <div className="flex justify-center items-center p-2 gap-2 md:gap-6 mb-3">
+  <label className="btn btn-primary flex align-items-center bg-light-green rounded-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10" 
+    style={{ width: '300px', height: '70px', boxShadow: '1px 4px 5px 3px #00000040' }} 
+    onClick={PlantUploadsButton}>
     <div
-     style={{ width: '60px',height: '70px',backgroundColor: 'white',borderRadius: '20px',borderWidth: '1px',borderColor: '#3C6E1F',display:'flex',justifyContent: 'center',alignItems: 'center',}}
+      style={{ width: '60px', height: '70px', backgroundColor: 'white', borderRadius: '20px', borderWidth: '1px', borderColor: '#3C6E1F', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
     >
-    <FaUpload />
-   </div>
+      <FaUpload />
+    </div>
     <div className="pt-2 p-1 text-lg md:text-2xl md:py-5 md:pr-3">Plant Uploads</div>
     <input type="submit" style={{ display: 'none' }} />
   </label>
-  <label className="btn btn-primary flex align-items-center bg-light-green rounded-lg"style={{width:'300px',height: '70px',boxShadow:'1px 4px 5px 3px #00000040'}} onClick={ActivitiesButton}>
+
+  <label className="btn btn-primary flex align-items-center bg-light-green rounded-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10" 
+    style={{ width: '300px', height: '70px', boxShadow: '1px 4px 5px 3px #00000040' }} 
+    onClick={ActivitiesButton}>
     <div
-     style={{ width: '60px',height: '70px',backgroundColor: 'white',borderRadius: '20px',borderWidth: '1px',borderColor: '#3C6E1F',display:'flex',justifyContent: 'center',alignItems: 'center',}}
+      style={{ width: '60px', height: '70px', backgroundColor: 'white', borderRadius: '20px', borderWidth: '1px', borderColor: '#3C6E1F', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
     >
-    <FaUpload />
-   </div>
+      <FaUpload />
+    </div>
     <div className="pt-5 p-1 text-lg md:text-2xl md:py-5 md:pr-3">Activities</div>
     <input type="submit" style={{ display: 'none' }} />
   </label>
-  </div>
-  {/**2..... */}
-  <div className="flex justify-center items-center p-2 gap-2 md:gap-6 mb-3">
-  <label className="btn btn-primary flex align-items-center bg-light-green rounded-lg"style={{width:'300px',height: '70px',boxShadow:'1px 4px 5px 3px #00000040'}} onClick={YouTubeEarningsButton}>
+</div>
+
+{/** 2nd Row */}
+<div className="flex justify-center items-center p-2 gap-2 md:gap-6 mb-3">
+  <label className="btn btn-primary flex align-items-center bg-light-green rounded-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10" 
+    style={{ width: '300px', height: '70px', boxShadow: '1px 4px 5px 3px #00000040' }} 
+    onClick={YouTubeEarningsButton}>
     <div
-     style={{ width: '60px',height: '70px',backgroundColor: 'white',borderRadius: '20px',borderWidth: '1px',borderColor: '#3C6E1F',display:'flex',justifyContent: 'center',alignItems: 'center',}}
+      style={{ width: '60px', height: '70px', backgroundColor: 'white', borderRadius: '20px', borderWidth: '1px', borderColor: '#3C6E1F', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
     >
-    <FaUpload />
-   </div>
+      <FaUpload />
+    </div>
     <div className="pt-2 p-1 text-lg md:text-2xl md:pt-5 md:pr-3">YouTube Earnings</div>
     <input type="submit" style={{ display: 'none' }} />
   </label>
-  <label className="btn btn-primary flex align-items-center bg-light-green rounded-lg"style={{width:'300px',height: '70px',boxShadow:'1px 4px 5px 3px #00000040'}} onClick={OurTeamButton}>
+
+  <label className="btn btn-primary flex align-items-center bg-light-green rounded-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10" 
+    style={{ width: '300px', height: '70px', boxShadow: '1px 4px 5px 3px #00000040' }} 
+    onClick={OurTeamButton}>
     <div
-     style={{ width: '60px',height: '70px',backgroundColor: 'white',borderRadius: '20px',borderWidth: '1px',borderColor: '#3C6E1F',display:'flex',justifyContent: 'center',alignItems: 'center',}}
+      style={{ width: '60px', height: '70px', backgroundColor: 'white', borderRadius: '20px', borderWidth: '1px', borderColor: '#3C6E1F', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
     >
-    <FaUpload />
-   </div>
+      <FaUpload />
+    </div>
     <div className="pt-5 p-1 text-lg md:text-2xl md:pt-5 md:pr-3">Our Team</div>
     <input type="submit" style={{ display: 'none' }} />
   </label>
-  </div>
-  {/**3..... */}
-  <div className="flex justify-center items-center p-2 gap-2 md:gap-6 
-  mb-3">
-    <DialogAddUser />
+</div>
 
-  <label className="btn btn-primary flex align-items-center  bg-light-green rounded-lg"style={{width:'300px',height: '70px',boxShadow:'1px 4px 5px 3px #00000040'}} onClick={InviteInstitutionsButton} >
+{/** 3rd Row */}
+<div className="flex justify-center items-center p-2 gap-2 md:gap-6 mb-3">
+  <DialogAddUser />
+  <label className="btn btn-primary flex align-items-center bg-light-green rounded-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10" 
+    style={{ width: '300px', height: '70px', boxShadow: '1px 4px 5px 3px #00000040' }} 
+    onClick={InviteInstitutionsButton}>
     <div
-     style={{ width: '60px',height: '70px',backgroundColor: 'white',borderRadius: '20px',borderWidth: '1px',borderColor: '#3C6E1F',display:'flex',justifyContent: 'center',alignItems: 'center',}}
+      style={{ width: '60px', height: '70px', backgroundColor: 'white', borderRadius: '20px', borderWidth: '1px', borderColor: '#3C6E1F', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
     >
-    <FaUpload />
-   </div>
+      <FaUpload />
+    </div>
     <div className="pt-2 p-1 text-lg md:text-2xl md:pt-5 md:pr-3">Invite Institutions</div>
     <input type="submit" style={{ display: 'none' }} />
   </label>
-  </div>
-  {/*4th */}
-  <div className="flex justify-center items-center gap-5 ">
-  <label className="btn btn-primary flex align-items-center bg-light-green rounded-lg"style={{width:'300px',height: '70px',boxShadow:'1px 4px 5px 3px #00000040'}}
-   onClick={OurUserButton}>
+</div>
+
+{/** 4th Row */}
+<div className="flex justify-center items-center gap-5">
+  <label className="btn btn-primary flex align-items-center bg-light-green rounded-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10" 
+    style={{ width: '300px', height: '70px', boxShadow: '1px 4px 5px 3px #00000040' }} 
+    onClick={OurUserButton}>
     <div
-     style={{ width: '60px',height: '70px',backgroundColor: 'white',borderRadius: '20px',borderWidth: '1px',borderColor: '#3C6E1F',display:'flex',justifyContent: 'center',alignItems: 'center'}}
+      style={{ width: '60px', height: '70px', backgroundColor: 'white', borderRadius: '20px', borderWidth: '1px', borderColor: '#3C6E1F', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
     >
-    <FaUpload />
-   </div>
+      <FaUpload />
+    </div>
     <div className="pt-5 p-1 text-lg md:text-2xl md:pt-5 md:pr-3">Our Users</div>
     <input type="submit" style={{ display: 'none' }} />
   </label>
-  </div>
+</div>
+
   <Footer/>
   </>
     )
