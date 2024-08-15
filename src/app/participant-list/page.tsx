@@ -88,48 +88,61 @@ const ParticipantList: React.FC = () => {
         </button>
       </div>
       {
-        participants ?
-        (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4">
-        {participants.map((participant) => (
-          <div key={participant.up_id} className="p-2">
-            <Link
-              href={{
-                pathname: 'participant-list/item',
-                query: { id: participant.up_id }
-              }}
-            >
-              <div className="rounded-lg shadow-lg border p-4 hover:shadow-2xl hover:border-gray-400">
-                <img className="w-full h-48 object-cover" src={`${imageURL}${participant.up_file}`} alt={"Image"} height={150} width={200} />
-                <div className="flex justify-center mt-2 gap-2">
-                  <div className="text-md text-center font-bold">Tree number: </div>
-                  <div className="text-md">{participant.up_id}</div>
+  participants ? (
+    <div className="participant-container">
+      {participants.map((participant) => (
+        <div key={participant.up_id} className="participant-item">
+          <Link
+            href={{
+              pathname: 'participant-list/item',
+              query: { id: participant.up_id },
+            }}
+          >
+            <div className="rounded-lg shadow-lg border p-4 hover:shadow-2xl hover:border-gray-400">
+              <img
+                className="w-full h-48 object-cover"
+                src={`${imageURL}${participant.up_file}`}
+                alt="Image"
+                height={150}
+                width={200}
+              />
+              <div className="flex justify-center mt-2 gap-2">
+                <div className="text-md text-center font-bold">
+                  Tree number:
                 </div>
-                <div className="flex justify-center mt-2 text-gray-600 gap-2">
-                  <div className="text-md">{formatDate(participant.up_date)}</div>
-                  <div className="text-md">{formatTime(participant.up_date)}</div>
+                <div className="text-md">{participant.up_id}</div>
+              </div>
+              <div className="flex justify-center mt-2 text-gray-600 gap-2">
+                <div className="text-md">
+                  {formatDate(participant.up_date)}
                 </div>
-                <hr className="my-2" />
-                <div className="flex ml-2 mt-2 gap-2">
-                  <div className="text-sm pl-5 mb-2">Tree name: </div>
-                  <div className="text-sm">{participant.up_tree_name}</div>
-                </div>
-                <div className="flex ml-2 mt-2 gap-2">
-                  <div className="text-sm pl-5 mb-2">Planter name: </div>
-                  <div className="text-sm">{participant.up_planter}</div>
-                </div>
-                <div className="flex ml-2 mt-2 gap-2">
-                  <div className="text-sm pl-5 mb-2">Uploader name: </div>
-                  <div className="text-sm">{participant.up_name}</div>
+                <div className="text-md">
+                  {formatTime(participant.up_date)}
                 </div>
               </div>
-            </Link>
-          </div>
-        ))}
-      </div>
-        ):
-        <Loading />
-      }
+              <hr className="my-2" />
+              <div className="flex ml-2 mt-2 gap-2">
+                <div className="text-sm pl-5 mb-2">Tree name: </div>
+                <div className="text-sm">{participant.up_tree_name}</div>
+              </div>
+              <div className="flex ml-2 mt-2 gap-2">
+                <div className="text-sm pl-5 mb-2">Planter name: </div>
+                <div className="text-sm">{participant.up_planter}</div>
+              </div>
+              <div className="flex ml-2 mt-2 gap-2">
+                <div className="text-sm pl-5 mb-2">Uploader name: </div>
+                <div className="text-sm">{participant.up_name}</div>
+              </div>
+            </div>
+          </Link>
+        </div>
+      ))}
+    </div>
+  ) : (
+    <Loading />
+  )
+}
+
       
 
       <div className="flex justify-center items-center space-x-2 my-4">
@@ -160,6 +173,32 @@ const ParticipantList: React.FC = () => {
 
       <Earth />
       <Footer />
+      <style jsx>{`
+  .participant-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .participant-item {
+    flex: 1 1 calc(50% - 32px); /* 2 items on mobile screens */
+    padding: 8px;
+  }
+
+  @media (min-width: 640px) {
+    .participant-item {
+      flex: 1 1 calc(33.33% - 32px); /* 3 items on small-screen laptops */
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .participant-item {
+      flex: 1 1 calc(25% - 32px); /* 4 items on normal laptops */
+    }
+  }
+`}</style>
+
     </div>
   );
 }
