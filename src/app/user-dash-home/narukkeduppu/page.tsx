@@ -23,7 +23,7 @@ const Narukkeduppu = () => {
         alert('Please enter valid numbers with "Tree Number From" less than or equal to "Tree Number To".');
       }
       setIsLuckyDrawAnimating(false);
-    },2000);
+    },7000);
   };
 
   return (
