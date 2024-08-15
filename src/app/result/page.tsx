@@ -69,6 +69,6 @@ const Results = () => {
       <Footer />
     </>
   );
-}
+};
 
 export default Results;
