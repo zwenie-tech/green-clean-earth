@@ -39,18 +39,18 @@ const Dashboard=()=>{
     router.push('/logout');
   };
     return(
-      <>
+      <div style={{background: 'rgba(3, 18, 20, 0.1)'}}>
       <NavigationBar/>
       <div className='relative flex items-center p-4'>
         <div className='absolute left-1/2 transform -translate-x-1/2'>
-          <h1 className='text-4xl font-bold'>Dashboard</h1>
+          <h1 className='text-xl font-bold'>Dashboard</h1>
         </div>
         <div className='ml-auto'>
           {/* <button className='rounded-xl bg-gray-200 p-2 md:mr-6' style={{boxShadow:'1px 4px 5px 3px #00000040'}} onClick={LogoutButton}>Logout</button> */}
         </div>
       </div>
       <div className='text-center'>
-           <h1 className='text-xl mt-2 font-bold text-[#3C6E1F]'>Green clean {gname}</h1>
+           <h1 className='text-3xl mt-2 font-bold text-[#3C6E1F]'>{gname}</h1>
       </div>
       <div className='text-center'>
            <h1 className='text-xl mb-6 mt-2 font-bold '>in Association with Green Clean Kerala Mission</h1>
@@ -141,7 +141,7 @@ const Dashboard=()=>{
 </div>
 
   <Footer/>
-  </>
+  </div>
     )
 }
 

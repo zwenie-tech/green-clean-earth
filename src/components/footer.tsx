@@ -12,7 +12,7 @@ export default function Footer() {
     return () => clearInterval(interval);
   }, []);;
     return (
-      <footer className="w-full py-14 bg-white mt-8">
+      <footer className="w-full py-14 bg-transparent mt-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto">
                 {/* <h1 className="flex justify-center text-3xl font-bold">GreenCleanEarth</h1> */}
