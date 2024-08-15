@@ -416,7 +416,7 @@ const Participant = () => {
                 {participant.up_file ? (
                   <img 
                     src={`${imageURL}${participant.up_file}`} 
-                    style={{ height: '100px' }} 
+                    style={{ height: '100px' , width:'110px'}} 
                     alt="Tree" 
                     // onError={(e) => {
                     //   e.currentTarget.src = '/path/to/fallback/image.jpg';
