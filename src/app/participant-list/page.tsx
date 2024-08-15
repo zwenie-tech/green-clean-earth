@@ -83,9 +83,9 @@ const ParticipantList: React.FC = () => {
         <a href="/district"><button className="text-black text-sm md:text-base py-2 px-3 bg-[#FFF6E4] rounded-2xl shadow-xl md:py-3 md:px-4">
           District List
         </button></a>
-        <button className="text-black text-sm md:text-base py-2 px-3 bg-[#FFF6E4] rounded-2xl shadow-xl md:py-3 md:px-4">
+        <a href="https://greencleanearth.org/participants/1" className="text-black text-sm md:text-base py-2 px-3 bg-[#FFF6E4] rounded-2xl shadow-xl md:py-3 md:px-4">
           Old participants
-        </button>
+        </a>
       </div>
       {
         participants ?
