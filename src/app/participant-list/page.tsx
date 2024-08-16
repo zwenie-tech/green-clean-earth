@@ -87,117 +87,129 @@ const ParticipantList: React.FC = () => {
           Old participants
         </button>
       </div>
-      {
-  participants ? (
-    <div className="participant-container">
-      {participants.map((participant) => (
-        <div key={participant.up_id} className="participant-item">
-          <Link
-            href={{
-              pathname: 'participant-list/item',
-              query: { id: participant.up_id },
-            }}
-          >
-            <div className="rounded-lg shadow-lg border p-4 hover:shadow-2xl hover:border-gray-400">
-              <img
-                className="w-full h-48 object-cover"
-                src={`${imageURL}${participant.up_file}`}
-                alt="Image"
-                height={150}
-                width={200}
-              />
-              <div className="flex justify-center mt-2 gap-2">
-                <div className="text-md text-center font-bold">
-                  Tree number:
+  {
+    participants ? (
+      <div className="participant-container">
+        {participants.map((participant) => (
+          <div key={participant.up_id} className="participant-item" style={{ maxHeight: '400px', boxSizing: 'border-box' }}>
+            <Link
+              href={{
+                pathname: 'participant-list/item',
+                query: { id: participant.up_id },
+              }}
+            >
+              <div className="rounded-lg shadow-lg border p-1 hover:shadow-2xl hover:border-gray-400 h-full flex flex-col">
+                <img
+                  className="w-full h-48 object-cover"
+                  src={`${imageURL}${participant.up_file}`}
+                  alt="Image"
+                />
+                <div className="flex justify-center mt-2 gap-1">
+                  <div className="text-md text-center font-bold">Tree number:</div>
+                  <div className="text-md">{participant.up_id}</div>
                 </div>
-                <div className="text-md">{participant.up_id}</div>
-              </div>
-              <div className="flex justify-center mt-2 text-gray-600 gap-2">
-                <div className="text-md">
-                  {formatDate(participant.up_date)}
+                <div className="flex justify-center mt-2 text-gray-600 gap-2">
+                  <div className="text-md">{formatDate(participant.up_date)}</div>
+                  <div className="text-md">{formatTime(participant.up_date)}</div>
                 </div>
-                <div className="text-md">
-                  {formatTime(participant.up_date)}
+                <hr className="my-2" />
+                <div className="flex-grow flex flex-col justify-between">
+                  <div className="flex ml-2 gap-1">
+                    <div className="text-sm pl-1">Tree name:</div>
+                    <div className="text-sm">{participant.up_tree_name}</div>
+                  </div>
+                  <div className="flex ml-2 gap-1">
+                    <div className="text-sm pl-1">Planter name:</div>
+                    <div className="text-sm">{participant.up_planter}</div>
+                  </div>
+                  <div className="flex ml-2 gap-1">
+                    <div className="text-sm pl-1">Uploader name:</div>
+                    <div className="text-sm">{participant.up_name}</div>
+                  </div>
                 </div>
               </div>
-              <hr className="my-2" />
-              <div className="flex ml-2 mt-2 gap-2">
-                <div className="text-sm pl-5 mb-2">Tree name: </div>
-                <div className="text-sm">{participant.up_tree_name}</div>
-              </div>
-              <div className="flex ml-2 mt-2 gap-2">
-                <div className="text-sm pl-5 mb-2">Planter name: </div>
-                <div className="text-sm">{participant.up_planter}</div>
-              </div>
-              <div className="flex ml-2 mt-2 gap-2">
-                <div className="text-sm pl-5 mb-2">Uploader name: </div>
-                <div className="text-sm">{participant.up_name}</div>
-              </div>
-            </div>
-          </Link>
-        </div>
-      ))}
-    </div>
-  ) : (
-    <Loading />
-  )
-}
-
-      
-
-      <div className="flex justify-center items-center space-x-2 my-4">
-        <button
-        className={currentPage === 1 ? 
-          "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
-        : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-        }
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-        <span className="text-xl">{currentPage}</span>
-        <button
-          className={currentPage === totalPages ? 
-            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
-          : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-          }
-          onClick={() => {
-            handlePageChange(currentPage + 1) 
-          }}
-          disabled={currentPage === totalPages}
-        >
-          Next
-        </button>
+            </Link>
+          </div>
+        ))}
       </div>
-
-      <Earth />
-      <Footer />
-      <style jsx>{`
-  .participant-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    padding: 16px;
+    ) : (
+      <Loading />
+    )
   }
-
-  .participant-item {
-    flex: 1 1 calc(50% - 32px); /* 2 items on mobile screens */
-    padding: 8px;
-  }
-
-  @media (min-width: 640px) {
-    .participant-item {
-      flex: 1 1 calc(33.33% - 32px); /* 3 items on small-screen laptops */
+  
+  <div className="flex justify-center items-center space-x-2 my-4">
+    <button
+      className={
+        currentPage === 1
+          ? "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
+          : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+      }
+      onClick={() => handlePageChange(currentPage - 1)}
+      disabled={currentPage === 1}
+    >
+      Previous
+    </button>
+    <span className="text-xl">{currentPage}</span>
+    <button
+      className={
+        currentPage === totalPages
+          ? "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
+          : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+      }
+      onClick={() => handlePageChange(currentPage + 1)}
+      disabled={currentPage === totalPages}
+    >
+      Next
+    </button>
+  </div>
+  
+  <Earth />
+  <Footer />
+  
+  <style jsx>{`
+    .participant-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 16px;
     }
-  }
-
-  @media (min-width: 1024px) {
+  
     .participant-item {
-      flex: 1 1 calc(25% - 32px); /* 4 items on normal laptops */
+      flex: 1 1 calc(100%);
+      max-width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
     }
-  }
-`}</style>
+  
+    @media (min-width: 640px) {
+      .participant-item {
+        flex: 1 1 calc(33.33% - 32px);
+        max-width: 400px !important;
+      }
+    }
+  
+    @media (min-width: 1024px) {
+      .participant-item {
+        flex: 1 1 calc(25% - 32px);
+        max-width: 300px !important;
+      }
+    }
+  
+    .participant-item > div {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+  
+    img {
+      flex-shrink: 0;
+    }
+  
+    .flex-grow {
+      flex-grow: 1;
+    }
+  `}</style>
+  
 
     </div>
   );
