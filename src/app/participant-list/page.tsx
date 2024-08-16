@@ -83,26 +83,29 @@ const ParticipantList: React.FC = () => {
         <a href="/district"><button className="text-black text-sm md:text-base py-2 px-3 bg-[#FFF6E4] rounded-2xl shadow-xl md:py-3 md:px-4">
           District List
         </button></a>
-        <button className="text-black text-sm md:text-base py-2 px-3 bg-[#FFF6E4] rounded-2xl shadow-xl md:py-3 md:px-4">
+        <a href="https://greencleanearth.org/participants/1" className="text-black text-sm md:text-base py-2 px-3 bg-[#FFF6E4] rounded-2xl shadow-xl md:py-3 md:px-4">
           Old participants
-        </button>
+        </a>
       </div>
-      {
-        participants ?
-        (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4">
+  {
+    participants ? (
+      <div className="participant-container">
         {participants.map((participant) => (
-          <div key={participant.up_id} className="p-2">
+          <div key={participant.up_id} className="participant-item" style={{ maxHeight: '400px', boxSizing: 'border-box' }}>
             <Link
               href={{
                 pathname: 'participant-list/item',
-                query: { id: participant.up_id }
+                query: { id: participant.up_id },
               }}
             >
-              <div className="rounded-lg shadow-lg border p-4 hover:shadow-2xl hover:border-gray-400">
-                <img className="w-full h-48 object-cover" src={`${imageURL}${participant.up_file}`} alt={"Image"} height={150} width={200} />
-                <div className="flex justify-center mt-2 gap-2">
-                  <div className="text-md text-center font-bold">Tree number: </div>
+              <div className="rounded-lg shadow-lg border p-1 hover:shadow-2xl hover:border-gray-400 h-full flex flex-col">
+                <img
+                  className="w-full h-48 object-cover"
+                  src={`${imageURL}${participant.up_file}`}
+                  alt="Image"
+                />
+                <div className="flex justify-center mt-2 gap-1">
+                  <div className="text-md text-center font-bold">Tree number:</div>
                   <div className="text-md">{participant.up_id}</div>
                 </div>
                 <div className="flex justify-center mt-2 text-gray-600 gap-2">
@@ -110,56 +113,104 @@ const ParticipantList: React.FC = () => {
                   <div className="text-md">{formatTime(participant.up_date)}</div>
                 </div>
                 <hr className="my-2" />
-                <div className="flex ml-2 mt-2 gap-2">
-                  <div className="text-sm pl-5 mb-2">Tree name: </div>
-                  <div className="text-sm">{participant.up_tree_name}</div>
-                </div>
-                <div className="flex ml-2 mt-2 gap-2">
-                  <div className="text-sm pl-5 mb-2">Planter name: </div>
-                  <div className="text-sm">{participant.up_planter}</div>
-                </div>
-                <div className="flex ml-2 mt-2 gap-2">
-                  <div className="text-sm pl-5 mb-2">Uploader name: </div>
-                  <div className="text-sm">{participant.up_name}</div>
+                <div className="flex-grow flex flex-col justify-between">
+                  <div className="flex ml-2 gap-1">
+                    <div className="text-sm pl-1">Tree name:</div>
+                    <div className="text-sm">{participant.up_tree_name}</div>
+                  </div>
+                  <div className="flex ml-2 gap-1">
+                    <div className="text-sm pl-1">Planter name:</div>
+                    <div className="text-sm">{participant.up_planter}</div>
+                  </div>
+                  <div className="flex ml-2 gap-1">
+                    <div className="text-sm pl-1">Uploader name:</div>
+                    <div className="text-sm">{participant.up_name}</div>
+                  </div>
                 </div>
               </div>
             </Link>
           </div>
         ))}
       </div>
-        ):
-        <Loading />
-      }
-      
-
-      <div className="flex justify-center items-center space-x-2 my-4">
-        <button
-        className={currentPage === 1 ? 
-          "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
-        : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-        }
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-        <span className="text-xl">{currentPage}</span>
-        <button
-          className={currentPage === totalPages ? 
-            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
+    ) : (
+      <Loading />
+    )
+  }
+  
+  <div className="flex justify-center items-center space-x-2 my-4">
+    <button
+      className={
+        currentPage === 1
+          ? "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
           : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-          }
-          onClick={() => {
-            handlePageChange(currentPage + 1) 
-          }}
-          disabled={currentPage === totalPages}
-        >
-          Next
-        </button>
-      </div>
+      }
+      onClick={() => handlePageChange(currentPage - 1)}
+      disabled={currentPage === 1}
+    >
+      Previous
+    </button>
+    <span className="text-xl">{currentPage}</span>
+    <button
+      className={
+        currentPage === totalPages
+          ? "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
+          : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+      }
+      onClick={() => handlePageChange(currentPage + 1)}
+      disabled={currentPage === totalPages}
+    >
+      Next
+    </button>
+  </div>
+  
+  <Earth />
+  <Footer />
+  
+  <style jsx>{`
+    .participant-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 16px;
+    }
+  
+    .participant-item {
+      flex: 1 1 calc(100%);
+      max-width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+  
+    @media (min-width: 640px) {
+      .participant-item {
+        flex: 1 1 calc(33.33% - 32px);
+        max-width: 400px !important;
+      }
+    }
+  
+    @media (min-width: 1024px) {
+      .participant-item {
+        flex: 1 1 calc(25% - 32px);
+        max-width: 300px !important;
+      }
+    }
+  
+    .participant-item > div {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+  
+    img {
+      flex-shrink: 0;
+    }
+  
+    .flex-grow {
+      flex-grow: 1;
+    }
+  `}</style>
+  
 
-      <Earth />
-      <Footer />
     </div>
   );
 }
