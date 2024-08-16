@@ -36,7 +36,7 @@ export default function ActivitiesTab({ token }: any) {
           },
         }); 
         const dataall = await responseall.json();
-        console.log('length', dataall.activity.length);
+      
         setTotalPages(Math.ceil(dataall.activity.length / itemsPerPage));
       }
       fetchfirstData();
@@ -44,7 +44,7 @@ export default function ActivitiesTab({ token }: any) {
 
     const handlePageChange = (newPage: number) => {
       if (newPage > 0 && newPage <= totalPages) {
-        console.log('working')
+    
         setCurrentPage(newPage);
       }
     }

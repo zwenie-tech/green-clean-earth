@@ -51,7 +51,6 @@ function Page() {
     try{
       const response = await axios.post(`${apiURL}/coordinator/resetPassword`,apidata);
       if (response.status === 200) {
-        console.log('Form submitted successfully');
         toast({
           title: "Password reset successful",
           description: "Your password has been reset successfully.",

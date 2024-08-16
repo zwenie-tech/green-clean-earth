@@ -66,7 +66,7 @@ const LoginForm = () => {
       }
 
       const result = await response.json();
-      console.log(result.data);
+      
 
       const id = result.data.id;
       const token = result.data.token;
@@ -119,7 +119,7 @@ const LoginForm = () => {
       }
 
       const result = await response.json();
-      console.log(result.data);
+    
 
       const refcode = result.data.referral_code;
 

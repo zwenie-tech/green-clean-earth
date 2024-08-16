@@ -26,7 +26,7 @@ const DistrictPage = () => {
       async function fetchfirstData(){
         const responseall = await fetch(`${apiURL}/common/districtList`); 
         const dataall = await responseall.json();
-        console.log('length', dataall.districtList.length);
+
         setTotalPages(Math.ceil(dataall.districtList.length / itemsPerPage));
       }
       fetchfirstData();
@@ -34,7 +34,7 @@ const DistrictPage = () => {
 
     const handlePageChange = (newPage: number) => {
       if (newPage > 0 && newPage <= totalPages) {
-        console.log('working')
+   
         setCurrentPage(newPage);
       }
     }

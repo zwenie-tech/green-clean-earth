@@ -36,14 +36,13 @@ function Page() {
   const { toast } = useToast()
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+
     const apidata = {
       phoneNumber:values.phone.toString()
     }
     try{
       const response = await axios.post(`${apiURL}/user/forgotPassword`,apidata);
       if (response.status === 200) {
-        console.log('Form submitted successfully');
         Cookies.set("ph", values.phone.toString(), { expires: 1 });
         toast({
           title: "Success",

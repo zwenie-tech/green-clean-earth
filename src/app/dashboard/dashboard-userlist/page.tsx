@@ -36,7 +36,6 @@ const DashboardUserList = () => {
         }); 
         if(responseall.status===200){
           const dataall = await responseall.json();
-          console.log('length', dataall.Users.length);
           setTotalPages(Math.ceil(dataall.Users.length / itemsPerPage));
         }
       }
@@ -45,7 +44,6 @@ const DashboardUserList = () => {
 
     const handlePageChange = (newPage: number) => {
       if (newPage > 0 && newPage <= totalPages) {
-        console.log('working')
         setCurrentPage(newPage);
       }
     }
