@@ -42,7 +42,6 @@ const DashboardActivity = () => {
         }); 
         if(responseall.status===200){
           const dataall = await responseall.json();
-          console.log('length', dataall.data.length);
           setTotalPages(Math.ceil(dataall.data.length / itemsPerPage));
 
         }
@@ -52,7 +51,7 @@ const DashboardActivity = () => {
 
     const handlePageChange = (newPage: number) => {
       if (newPage > 0 && newPage <= totalPages) {
-        console.log('working')
+  
         setCurrentPage(newPage);
       }
     }

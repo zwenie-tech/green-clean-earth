@@ -36,7 +36,6 @@ const Invite: React.FC = () => {
         }); 
         if(responseall.status===200){
           const dataall = await responseall.json();
-          console.log('length', dataall.data.length);
           setTotalPages(Math.ceil(dataall.data.length / itemsPerPage));
 
         }
@@ -46,7 +45,6 @@ const Invite: React.FC = () => {
 
     const handlePageChange = (newPage: number) => {
       if (newPage > 0 && newPage <= totalPages) {
-        console.log('working')
         setCurrentPage(newPage);
       }
     }

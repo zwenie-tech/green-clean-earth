@@ -48,7 +48,7 @@ import NgoAdditionalDetails from "./ngo-additional-details/page";
 const formSchema = z.object({
   categoryId: z.string(),
   name: z.string().max(255),
-  refferalCode: z.string().max(255).optional(),
+  refferalCode: z.string().max(255),
   location: z.string().max(255),
   coordinator_name: z.string().max(255),
   whatsapp_number: z.coerce.number(),
@@ -60,6 +60,7 @@ const formSchema = z.object({
   wardNo: z.string().optional(),
   lsg: z.string().optional(),
   city: z.string().optional(),
+  email: z.string().max(255),
   username: z.string().max(255),
   password: z.string().min(8).max(255),
 })
@@ -177,6 +178,10 @@ export default function Register() {
     const country_id = countries.find((item) => item.cntry_name === values.country)?.cntry_id;
     const lsgd_id = lsgd.find((item) => item.lsg_name === values.lsg)?.lsg_id;
     const corp_id = corporation.find((item) => item.cop_name === values.corporation)?.cop_id.toString();
+    const dis_id = districts.find((item) => item.dis_name === values.district)?.dis_id
+    const st_id = states.find((item) => item.st_name === values.state)?.st_id
+    dis_id ? Cookies.set("dis_id", dis_id, { expires: 1 }): '';
+    st_id ? Cookies.set("st_id", st_id, { expires: 1 }): '';
 
     const dataWithIds = {
       ...values,
@@ -190,7 +195,8 @@ export default function Register() {
       province: values.city || '',
       corporation: corp_id || '0',
       wardNo: parseInt(values.wardNo!) || 0,
-      refferalCode: values.refferalCode
+      refferalCode: values.refferalCode,
+      emailId:values.email
     };
 
     try {
@@ -258,11 +264,11 @@ export default function Register() {
                   name="categoryId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Category</FormLabel>
+                      <FormLabel>Group</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Choose a category" />
+                            <SelectValue placeholder="Choose a group" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -536,8 +542,22 @@ export default function Register() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Referal Code</FormLabel>
+                      <p className="text-xs">(Enter the Referal Code received from your Promoter. If not received contact +919645964592)</p>
                       <FormControl>
-                        <Input {...field} />
+                        <Input {...field} required />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input {...field} required/>
                       </FormControl>
                       <FormMessage />
                     </FormItem>

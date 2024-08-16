@@ -28,7 +28,7 @@ const ParticipantList: React.FC = () => {
       async function fetchfirstData(){
         const responseall = await fetch(`${apiURL}/uploads/all?limit=100000000000`); 
         const dataall = await responseall.json();
-        console.log('length', dataall.Uploads.length);
+      
         setTotalPages(Math.ceil(dataall.Uploads.length / itemsPerPage));
       }
       fetchfirstData();
@@ -63,7 +63,7 @@ const ParticipantList: React.FC = () => {
 
   const handlePageChange = (newPage: number) => {
     if (newPage > 0 && newPage <= totalPages) {
-      console.log('working')
+      
       setCurrentPage(newPage);
     }
   }
