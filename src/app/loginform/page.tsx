@@ -240,7 +240,7 @@ const LoginForm = () => {
                         <Button type="submit" style={{ width: '50%' }} className="bg-green-600 items-center">Submit</Button>
                       </div>
                       <div className="flex justify-center w-full mt-4">
-                        <a href="#" className="text-green-600">Forgot your password?</a>
+                        <a href="/forgot-password-user" className="text-green-600">Forgot your password?</a>
                       </div>
                       {/* <div className="flex justify-center w-full mt-4">
                         <Button type="button" className="shadow-xl bg-white text-green-600">Register</Button>
@@ -291,7 +291,7 @@ const LoginForm = () => {
                         <Button type="submit" style={{ width: '50%' }} className="bg-green-600 items-center">Submit</Button>
                       </div>
                       <div className="flex justify-center w-full mt-4">
-                        <a href="#" className="text-green-600">Forgot your password?</a>
+                        <a href="/forgot-password-coordinator" className="text-green-600">Forgot your password?</a>
                       </div>
                       <div className="flex justify-center w-full mt-4">
                         <a href="/register"><Button type="button" className="shadow-xl bg-white text-green-600">Register</Button></a>

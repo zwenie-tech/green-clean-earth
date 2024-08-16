@@ -3,6 +3,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import Cookies from 'js-cookie';
+
 import {
   Form,
   FormControl,
@@ -18,12 +20,12 @@ import { Input } from "@/components/ui/input";
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
+import axios from "axios";
 
 const formSchema = z.object({
-  otp: z.coerce.number(),
-  password: z.string(),
-  confirmPassword: z.string(),
+  email: z.string().email("Invalid email address"),
 });
+
 function Page() {
 
 
@@ -33,7 +35,38 @@ function Page() {
   });
   const router = useRouter()
   const { toast } = useToast()
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values);
+    const apidata = {
+      emailId: values.email
+    }
+    try {
+      const response = await axios.post(`${apiURL}/coordinator/forgotPassword`, apidata);
+      if (response.status === 200) {
+        console.log('Form submitted successfully');
+        Cookies.set("email", values.email, { expires: 1 });
+        toast({
+          title: "Success",
+          description: "Password reset link sent to your email.",
+        });
+        router.push(`/forgot-password-coordinator/change-password`);
+      } else {
+        console.error('Form submission failed');
+        toast({
+          title: "Error",
+          description: "Failed to send password reset link. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('An error occurred while submitting the form:', error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred. Please try again later.",
+        variant: "destructive",
+      });
+    }
   }
 
   return (
@@ -52,49 +85,22 @@ function Page() {
                 className="space-y-8"
               >
                 <FormField
-                  control={form.control}
-                  name="otp"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>OTP</FormLabel>
-                      <FormControl>
-                        <Input type="number" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        We have sent OTP in your registered mail address
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Password</FormLabel>
-                      <FormControl>
-                        <Input type="password" {...field} />
-                      </FormControl>
-                      <FormDescription></FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="confirmPassword"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Confirm password</FormLabel>
-                      <FormControl>
-                        <Input type="password" {...field} />
-                      </FormControl>
-                      <FormDescription></FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email Address</FormLabel>
+                    <FormControl>
+                      <Input type="email" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      Please enter your registered email address
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+                
                 <div className="flex justify-center">
                   <Button type="submit" className="w-1/3 bg-primary">
                     Submit

@@ -178,6 +178,10 @@ export default function Register() {
     const country_id = countries.find((item) => item.cntry_name === values.country)?.cntry_id;
     const lsgd_id = lsgd.find((item) => item.lsg_name === values.lsg)?.lsg_id;
     const corp_id = corporation.find((item) => item.cop_name === values.corporation)?.cop_id.toString();
+    const dis_id = districts.find((item) => item.dis_name === values.district)?.dis_id
+    const st_id = states.find((item) => item.st_name === values.state)?.st_id
+    dis_id ? Cookies.set("dis_id", dis_id, { expires: 1 }): '';
+    st_id ? Cookies.set("st_id", st_id, { expires: 1 }): '';
 
     const dataWithIds = {
       ...values,
