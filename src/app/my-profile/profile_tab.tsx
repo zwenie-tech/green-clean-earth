@@ -62,7 +62,8 @@ export default function ProfileTab({ token }: any) {
             lsg_name, 
             us_ward, 
             us_gender, 
-            us_profile_description
+            us_profile_description,
+            co_ord_name
            } = data.user[0];
           
           Cookies.set('name', us_name, { expires: 1 });
@@ -78,10 +79,11 @@ export default function ProfileTab({ token }: any) {
           Cookies.set('city', us_city, { expires: 1 });
           Cookies.set('address', us_address, { expires: 1 });
           Cookies.set('gender', us_gender, { expires: 1 });
+
           setProfile({
             name : us_name,
             institution_name: us_name,
-            coordinator_name: us_name,
+            coordinator_name: co_ord_name,
             profession: us_name,
             country : cntry_name,
             location: us_district ? us_district:us_city, // Set the location with a default value
@@ -118,10 +120,10 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ profile},{token}) => {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full p-6 bg-white">
-          <div>
+          {/* <div>
             <p className="text-dark-text">Institution Name</p> 
             <p>{profile.institution_name}</p>
-          </div>
+          </div> */}
           <div>
             <p className="text-dark-text">Coordinator Name</p> 
             <p>{profile.coordinator_name}</p>

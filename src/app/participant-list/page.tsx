@@ -7,6 +7,7 @@ import Earth from "@/components/earth";
 import { imageURL } from "../requestsapi/request";
 import Link from "next/link";
 import Loading from "@/components/loading";
+import axios from "axios";
 
 type Participant = {
   up_file: string;
@@ -15,6 +16,7 @@ type Participant = {
   up_date: string;
   up_planter: string;
   up_name: string;
+  is_challenged:number;
 }
 
 const ParticipantList: React.FC = () => {
@@ -69,6 +71,15 @@ const ParticipantList: React.FC = () => {
     }
   }
 
+  async function handleChallenge(treeno: number) {
+    try {
+      const response = await axios.post(`${apiURL}/uploads/markChallenged`, { treeNumber:treeno });
+      fetchData(currentPage);
+    } catch (error) {
+      console.error("Error challenging tree:", error);
+    }
+  }
+
   return (
     <div className="">
       <Navigationbar />
@@ -95,15 +106,15 @@ const ParticipantList: React.FC = () => {
         <div 
           key={participant.up_id} 
           className="participant-item relative group" // Add `group` here
-          style={{ maxHeight: '400px', boxSizing: 'border-box' }}
+          style={{ maxHeight: '450px', boxSizing: 'border-box' }}
         >
+            <div className="rounded-lg shadow-lg border  hover:shadow-2xl hover:border-gray-400 h-full flex flex-col">
           <Link
             href={{
               pathname: 'participant-list/item',
               query: { id: participant.up_id },
             }}
           >
-            <div className="rounded-lg shadow-lg border  hover:shadow-2xl hover:border-gray-400 h-full flex flex-col">
               <img
                 className="w-full h-48 object-cover rounded-tl-lg rounded-tr-lg"
                 src={`${imageURL}${participant.up_file}`}
@@ -117,6 +128,7 @@ const ParticipantList: React.FC = () => {
                 <div className="text-md">{formatDate(participant.up_date)}</div>
                 <div className="text-md">{formatTime(participant.up_date)}</div>
               </div>
+              </Link>
               <hr className="my-2" />
               <div className="flex-grow flex flex-col justify-between">
                 <div className="flex ml-2 gap-1">
@@ -131,22 +143,26 @@ const ParticipantList: React.FC = () => {
                   <div className="text-sm pl-1">Uploader name:</div>
                   <div className="text-sm">{participant.up_name}</div>
                 </div>
-                {challenge ? (
+                {participant.is_challenged==1 ? (
                   <div className="flex ml-2">
                     <div className="text-sm pl-1 text-primary">This image has been challenged</div>
                   </div>
                 ) : (
                   <div className="flex justify-center">
                     <button
-                      className="bg-primary m-1 text-white text-sm py-1 px-2 rounded hidden group-hover:block mx-auto" // Updated to `hidden` by default and `group-hover:block`
-                    >
-                      Challenge
-                    </button>
+                    onClick={(e) => {
+                      e.preventDefault(); // Prevent the default link behavior
+                      handleChallenge(participant.up_id);
+                    }}
+                    className="bg-primary m-1 text-white text-sm py-1 px-2 rounded hidden group-hover:block mx-auto"
+                  >
+                    Challenge
+                  </button>
                   </div>
                 )}
               </div>
             </div>
-          </Link>
+         
         </div>
       ))}
     </div>
