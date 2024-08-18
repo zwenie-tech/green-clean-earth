@@ -46,7 +46,7 @@ const Contact = () => {
         <div className="mx-4 mb-10 flex flex-col gap-4 md:flex md:flex-row-reverse">
           <div className='mx-8'>
             <div className='my-4'>
-              <h3 className='text-primary text-2xl'>About us</h3>
+              <h3 className='text-primary text-2xl text-center'>About us</h3>
               <p className='border-l p-2 border-black'>ഭൂമിയെ ഹരിതാഭമാക്കാനും, മാലിന്യ മുക്തമാക്കാനും ജനങ്ങളെ പ്രേരിപ്പിക്കാൻവിവിധ സ്ഥാപങ്ങളുടെയും,സംഘടനകളുടെയും , സഹകരണത്തോടെ GCEM Foundation ആവിഷ്‌കരിച്ച് നടപ്പിൽ വരുത്തുന്ന ഒരു ബഹുജനമുന്നേറ്റമാണ് Green Clean Earth Movement(GCEM).</p>
             </div>
             <div>

@@ -12,16 +12,20 @@ interface NewsCardProps {
 const NewsCard: React.FC<NewsCardProps> = ({ title, image, smallHeading, paragraph }) => {
   return (
     <div className="flex flex-col p-4 mb-6 shadow-md rounded-lg bg-light-gray mt-6">
-      <h2 className="text-xl font-bold mb-2">{title}</h2>
-      <div className="flex">
-        <img src={image} alt="news" className="w-1/3  object-cover mr-4 rounded-lg" />
-        <div className="flex flex-col justify-between w-2/3">
+      <h2 className="text-xl font-bold mb-4">{title}</h2>
+      <div className="flex flex-col md:flex-row">
+        <img
+          src={image}
+          alt="news"
+          className="w-full md:w-1/3 object-cover mb-4 md:mb-0 mr-0 md:mr-4 rounded-lg"
+        />
+        <div className="flex flex-col justify-between w-full md:w-2/3">
           <div>
             <h3 className="text-lg font-semibold mb-1">{smallHeading}</h3>
             <p className="mb-2">{paragraph}</p>
           </div>
-          <div className="flex mt-10">
-            <button className="bg-light-gray" style={{borderRadius:'5px'}}>
+          <div className="flex mt-4 md:mt-10">
+            <button className="bg-light-gray px-4 py-2 rounded-md">
               Read More
             </button>
           </div>
@@ -29,11 +33,9 @@ const NewsCard: React.FC<NewsCardProps> = ({ title, image, smallHeading, paragra
       </div>
     </div>
   );
-};
+};;
 
 const Latest = () => {
-
- 
   const newsData = [
     {
       title: "സുരഭി ലക്ഷ്മി ഗ്രീൻ ക്‌ളീൻ എർത്ത് മൂവേമെന്റ്- ബ്രാൻഡ് അംബാസഡർ ആയി ചുമതലയേറ്റു.",

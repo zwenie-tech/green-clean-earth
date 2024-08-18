@@ -56,7 +56,7 @@ function CoordinatorDashBoardContent() {
       <NavigationBar />
 
       <div className="container mx-auto md:max-w-5xl min-h-screen mt-6">
-        <h1 className="text-3xl my-4 font-bold pb-4 border-b-2 mb-3">Coordinator Dashboard</h1>
+        <h1 className="text-3xl my-4 font-bold pb-4 border-b-2 mb-3 text-center">Coordinator Dashboard</h1>
         <p>താഴെക്കൊടുത്ത ലിങ്ക് കോപ്പി ചെയ്തു  എല്ലാ ക്ലാസ് ടീച്ചർമാർക്കും അയച്ചു കൊടുക്കുക.
  അവരോട് സ്വന്തം മൊബൈൽ നമ്പറും പേരും വെച്ച്  ക്ലാസിന്റെ പേരിൽ രജിസ്റ്റർ ചെയ്യുവാൻ പറയുക.
  യൂസർനേമും പാസ്സ്‌വേർഡും  എല്ലാ കുട്ടികൾക്കും അയച്ചു കൊടുക്കുവാനും പറയുക.
