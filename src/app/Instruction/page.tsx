@@ -4,21 +4,26 @@ import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 
 const Instruction = () => {
+  const mobileStyles = {
+    paddingLeft: '20px',
+    paddingTop: '40px',
+    paddingRight: '25px',
+    overflowY: 'scroll', // This will be applied on mobile screens
+  };
   return (
     <>
-    <NavigationBar/>
+     <NavigationBar />
       <div className="flex justify-center items-center mt-6 mb-3">
-        <h1 className="text-3xl font-bold">വിത്തുകള് നടുന്ന വിധം</h1>
+        <h1 className="text-3xl text-center font-bold">വിത്തുകള് നടുന്ന വിധം</h1>
       </div>
-
-      <Container>
-        <Row style={{display: 'flex',marginTop:'20px',height:'510px'}}>
-          <Col  className='bg-light-green'xs={3} style={{ padding: '10px',marginLeft:'45px'}}>
-            <div style={{ height: '100%', alignItems: 'center' }}>
-            </div>
-          </Col>
-          <Col style={{paddingLeft:'20px',paddingTop:'40px',paddingRight:'25px'}}>
-            {/* Example content */}
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <Container fluid style={{ flex: 1, overflowY: 'auto' }}>
+          <Row style={{ display: 'flex', marginTop: '20px', height: 'auto' }}>
+            <Col className='bg-light-green' xs={3} style={{ padding: '10px', marginLeft: '45px' }}>
+              <div style={{ height: 'auto', alignItems: 'center' }}>
+              </div>
+            </Col>
+            <Col style={{ paddingLeft: '20px', paddingTop: '40px', paddingRight: '25px' }}>
             <p>1.ബദാം, പേര, നീർമരുത്, വേങ്ങ, താന്നി, കുമിഴ് : ഇവ ചാക്കോടെ രണ്ട് ദിവസം പച്ചവെള്ളത്തിലിടുക, പിന്നെ ബെഡിലിടുക.</p>
             <p>2.നെല്ലി, ഉങ്ങ്,കരിങ്ങാര്, സീതാപ്പഴം, കൂവളം, മാദളം, ചമത, മന്താരം, പൂവരശ്, സുബാബൂല്‍: ഇവ രണ്ട് മണിക്കൂര്‍ പച്ചവെള്ളത്തിലിടുക അതിന് ശേഷം ബെഡിലിടുക. മുകളില്‍ പൊടിമണ്ണിടുക താഴ്ത്തി നനയ്ക്കുക.</p>
             <p>3.മഹാഗണി, വീട്ടി, ലക്ഷ്മി തരു : മൂന്ന് മണിക്കൂര്‍ പച്ചവെള്ളത്തിലിടുക. പിന്നെ ബെഡിലിടുക. വിത്ത് മറയുന്ന രീതിയില്‍ മണ്ണിടുക.</p>
@@ -36,6 +41,7 @@ const Instruction = () => {
           </Col>
         </Row>
       </Container>
+      </div>
       <Footer/>
     </>
   );
