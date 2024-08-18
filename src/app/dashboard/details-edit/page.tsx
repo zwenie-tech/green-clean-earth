@@ -284,7 +284,6 @@ const DetailsEdit: React.FC = () => {
       }
       try {
         const response = await axios.get(`${apiURL}/schoolCategory`);
-        console.log(response.data);
         setsubCategoryOptions(response.data.subCategory);
       } catch (error) {
         console.error("Error fetching category:", error);

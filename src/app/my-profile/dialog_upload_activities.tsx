@@ -19,7 +19,7 @@ export function DialogUploadActivities({token}:any) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-green-600 hover:bg-green-800 mt-4 mb-8"><Upload className="mr-2 h-4 w-4" />Upload Activities</Button>
+        <Button className="bg-primary hover:bg-primary/85 mt-4 mb-8"><Upload className="mr-2 h-4 w-4" />Upload Activities</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] sm:h-[calc(100vh-74px)]" >
         <DialogHeader>

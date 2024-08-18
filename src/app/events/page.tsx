@@ -36,7 +36,7 @@ const Events = () => {
       async function fetchfirstData(){
         const responseall = await fetch(`${apiURL}/common/events?limit=100000000000`); 
         const dataall = await responseall.json();
-        console.log('length', dataall.events.length);
+   
         setTotalPages(Math.ceil(dataall.events.length / itemsPerPage));
       }
       fetchfirstData();
@@ -44,7 +44,7 @@ const Events = () => {
 
     const handlePageChange = (newPage: number) => {
       if (newPage > 0 && newPage <= totalPages) {
-        console.log('working')
+  
         setCurrentPage(newPage);
       }
     }

@@ -76,7 +76,7 @@ const Participant = () => {
           },
         }); 
         const dataall = await responseall.json();
-        console.log('length', dataall.Uploads);
+      
         setTotalPages(Math.ceil(dataall.Uploads.length / itemsPerPage));
       }
       fetchfirstData();
@@ -84,7 +84,7 @@ const Participant = () => {
 
     const handlePageChange = (newPage: number) => {
       if (newPage > 0 && newPage <= totalPages) {
-        console.log('working')
+        
         setCurrentPage(newPage);
       }
     }

@@ -10,24 +10,24 @@ const Results = () => {
       <div className='flex flex-col items-center m-5'>
         <h1 className='text-2xl font-bold mb-5'>Result</h1>
         <div className='w-full flex justify-center items-center gap-4 m-5'>
-          <button className='text-sm md:text-md w-1/2 md:w-1/4 bg-[#FFF6E4] pt-6 pb-5 sm:pt-3 sm:pb-3 rounded-lg' style={{boxShadow:'0px 4px 10px 3px #00000040'}}>
+          <button className='text-sm md:text-md w-1/2 md:w-1/4 bg-[#FFF6E4] pt-6 pb-5 sm:pt-3 sm:pb-3 rounded-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10' style={{boxShadow:'0px 4px 10px 3px #00000040'}}>
             Winners List
           </button>
-          <button className='text-sm md:text-md w-1/2 md:w-1/4 bg-[#FFF6E4] pt-3 pb-3 rounded-lg' style={{boxShadow:'0px 4px 10px 3px #00000040'}}>
+          <button className='text-sm md:text-md w-1/2 md:w-1/4 bg-[#FFF6E4] pt-3 pb-3 rounded-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10' style={{boxShadow:'0px 4px 10px 3px #00000040'}}>
             Participant List After 01/11/2017
           </button>
         </div>
         <div className='w-full flex justify-center items-center gap-4'>
-          <button className='text-sm md:text-md w-1/2 md:w-1/4 bg-[#FFF6E4] pt-3 pb-3 rounded-lg' style={{boxShadow:'0px 4px 10px 3px #00000040'}}>
+          <button className='text-sm md:text-md w-1/2 md:w-1/4 bg-[#FFF6E4] pt-3 pb-3 rounded-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10' style={{boxShadow:'0px 4px 10px 3px #00000040'}}>
           Participant List Before 31/10/2017
           </button>
-          <button className='text-sm md:text-md w-1/2 md:w-1/4 bg-[#FFF6E4] pt-3 pb-3 rounded-lg' style={{boxShadow:'0px 4px 10px 3px #00000040'}}>
+          <button className='text-sm md:text-md w-1/2 md:w-1/4 bg-[#FFF6E4] pt-3 pb-3 rounded-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10' style={{boxShadow:'0px 4px 10px 3px #00000040'}}>
           Agro Art Competition - Participant List
           </button>
         </div>
         <div className='w-full md:w-1/2 border-2 border-black rounded-lg flex flex-col justify-center items-center gap-4 mt-5 p-4'>
           <p className='text-center'>ഇത് വരെ UPLOAD ചെയ്യപ്പെട്ട വൃക്ഷത്തൈ സെൽഫികളുടെ ലിസ്റ്റ് ലഭിക്കാൻ ഇവിടെ ക്ലിക് ചെയ്യുക</p>
-          <button className='text-sm md:text-md w-1/2 md:w-1/4 bg-[#FFF6E4] pt-3 pb-3 rounded-lg justify-center items-center' style={{boxShadow:'0px 4px 10px 3px #00000040'}}>
+          <button className='text-sm md:text-md w-1/2 md:w-1/4 bg-[#FFF6E4] pt-3 pb-3 rounded-lg justify-center items-center cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10' style={{boxShadow:'0px 4px 10px 3px #00000040'}}>
             Click here &gt;
           </button>
         </div>

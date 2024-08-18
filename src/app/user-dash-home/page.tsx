@@ -28,7 +28,11 @@ import Cookies from 'js-cookie';
     <>
     <main className='min-h-screen flex flex-col'>
       <NavigationBar/>
+<<<<<<< HEAD
       <div className="max-w-screen-md mx-auto mt-6 mb-3">
+=======
+      <div className="max-w-screen-md mx-auto pt-6">
+>>>>>>> b72d530a1868075db9d4f4b6730aafaeb0ece49a
         <div className="relative ">
           <PageTitle title='Dashboard' />
           {/* <Link href={'logout'} className="absolute right-[0] top-[0] px-6 py-2 rounded-full bg-light-gray hover:bg-dark-gray">Logout</Link> */}
@@ -68,7 +72,7 @@ import Cookies from 'js-cookie';
                 <p className="px-6 py-2 font-normal text-base">All your activities, Update your info.</p>
               </div>
             </Link>
-            <Link 
+            {/* <Link 
               className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10 transition-all hover:scale-105"
               href={"/user-dash-home/estimate"}>
               <div className="flex flex-row items-center justify-between w-full px-6 py-2 bg-light-green">
@@ -78,8 +82,8 @@ import Cookies from 'js-cookie';
               <div>
                 <p className="px-6 py-2 font-normal text-base"></p>
               </div>
-            </Link>
-            <Link 
+            </Link> */}
+            {/* <Link 
               className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10 transition-all hover:scale-105"
               href={"/user-dash-home/user-invite"}>
               <div className="flex flex-row items-center justify-between w-full px-6 py-2 bg-light-green">
@@ -89,7 +93,7 @@ import Cookies from 'js-cookie';
               <div>
                 <p className="px-6 py-2 font-normal text-base">സന്ദേശം പ്രചരിപ്പിച്ചാൽ സമ്മാനം</p>
               </div>
-            </Link>
+            </Link> */}
             <Link 
               className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10 transition-all hover:scale-105"
               href={"/user-dash-home/narukkeduppu"}>

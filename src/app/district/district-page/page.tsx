@@ -69,7 +69,6 @@ const ButtonDisplayFn: React.FC = () => {
         {
 
           const dataall = await responseACTall.json();
-          console.log('length', dataall.districtActivities.length);
           setTotalPagesAct(Math.ceil(dataall.districtActivities.length / itemsPerPage));
         }
       }
@@ -84,7 +83,6 @@ const ButtonDisplayFn: React.FC = () => {
         {
 
           const dataall = await responseUpall.json();
-          console.log('lengthupload', dataall.districtList.length);
           setTotalPagesUp(Math.ceil(dataall.districtList.length / itemsPerPage));
         }
       }
@@ -93,13 +91,13 @@ const ButtonDisplayFn: React.FC = () => {
 
     const handlePageChangeAct = (newPage: number) => {
       if (newPage > 0 && newPage <= totalPagesAct) {
-        console.log('working')
+ 
         setCurrentPageAct(newPage);
       }
     }
     const handlePageChangeUp = (newPage: number) => {
       if (newPage > 0 && newPage <= totalPagesAct) {
-        console.log('working')
+   
         setCurrentPageUp(newPage);
       }
     }

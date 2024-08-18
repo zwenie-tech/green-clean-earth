@@ -68,7 +68,6 @@ const MyUploadedPlants = () => {
           },
         }); 
         const dataall = await responseall.json();
-        console.log('length', dataall.Uploads.length);
         setTotalPages(Math.ceil(dataall.Uploads.length / itemsPerPage));
       }
       fetchfirstData();
@@ -76,7 +75,7 @@ const MyUploadedPlants = () => {
 
     const handlePageChange = (newPage: number) => {
       if (newPage > 0 && newPage <= totalPages) {
-        console.log('working')
+        
         setCurrentPage(newPage);
       }
     }

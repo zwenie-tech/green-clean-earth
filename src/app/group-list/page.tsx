@@ -36,7 +36,6 @@ const GroupList = () => {
           },
         }); 
         const dataall = await responseall.json();
-        console.log('length', dataall.groupList.length);
         setTotalPages(Math.ceil(dataall.groupList.length / itemsPerPage));
       }
       fetchfirstData();
@@ -44,7 +43,7 @@ const GroupList = () => {
 
     const handlePageChange = (newPage: number) => {
       if (newPage > 0 && newPage <= totalPages) {
-        console.log('working')
+      
         setCurrentPage(newPage);
       }
     }

@@ -36,7 +36,7 @@ export default function ActivitiesTab({ token }: any) {
           },
         }); 
         const dataall = await responseall.json();
-        console.log('length', dataall.activity.length);
+      
         setTotalPages(Math.ceil(dataall.activity.length / itemsPerPage));
       }
       fetchfirstData();
@@ -44,7 +44,7 @@ export default function ActivitiesTab({ token }: any) {
 
     const handlePageChange = (newPage: number) => {
       if (newPage > 0 && newPage <= totalPages) {
-        console.log('working')
+    
         setCurrentPage(newPage);
       }
     }
@@ -65,7 +65,7 @@ export default function ActivitiesTab({ token }: any) {
             setActivity([]);
           }
         } catch (error) {
-          setError("Error fetching activity data");
+          setError("No activities");
         } finally {
           setLoading(false);
         }
@@ -79,7 +79,14 @@ export default function ActivitiesTab({ token }: any) {
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return (
+    <div>
+      <DialogUploadActivities token={token} />
+      <div className="p-4">
+        {error}
+      </div>
+    </div>
+  );
   }
 
   return (

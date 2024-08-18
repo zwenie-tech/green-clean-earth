@@ -29,7 +29,7 @@ const ParticipantList: React.FC = () => {
       async function fetchfirstData(){
         const responseall = await fetch(`${apiURL}/uploads/all?limit=100000000000`); 
         const dataall = await responseall.json();
-        console.log('length', dataall.Uploads.length);
+      
         setTotalPages(Math.ceil(dataall.Uploads.length / itemsPerPage));
       }
       fetchfirstData();
@@ -64,7 +64,7 @@ const ParticipantList: React.FC = () => {
 
   const handlePageChange = (newPage: number) => {
     if (newPage > 0 && newPage <= totalPages) {
-      console.log('working')
+      
       setCurrentPage(newPage);
     }
   }
@@ -84,9 +84,9 @@ const ParticipantList: React.FC = () => {
         <a href="/district"><button className="text-black text-sm md:text-base py-2 px-3 bg-[#FFF6E4] rounded-2xl shadow-xl md:py-3 md:px-4">
           District List
         </button></a>
-        <button className="text-black text-sm md:text-base py-2 px-3 bg-[#FFF6E4] rounded-2xl shadow-xl md:py-3 md:px-4">
+        <a href="https://greencleanearth.org/participants/1" className="text-black text-sm md:text-base py-2 px-3 bg-[#FFF6E4] rounded-2xl shadow-xl md:py-3 md:px-4">
           Old participants
-        </button>
+        </a>
       </div>
       {
   participants ? (

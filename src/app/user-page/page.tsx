@@ -64,7 +64,6 @@ const ButtonDisplayFn = () => {
         {
 
           const dataall = await responseACTall.json();
-          console.log('length', dataall.userActivities.length);
           setTotalPagesAct(Math.ceil(dataall.userActivities.length / itemsPerPage));
         }
       }
@@ -85,7 +84,6 @@ const ButtonDisplayFn = () => {
         {
 
           const dataall = await responseUpall.json();
-          console.log('lengthupload', dataall.userUploads.length);
           setTotalPagesUp(Math.ceil(dataall.userUploads.length / itemsPerPage));
         }
       }
@@ -94,13 +92,13 @@ const ButtonDisplayFn = () => {
 
     const handlePageChangeAct = (newPage: number) => {
       if (newPage > 0 && newPage <= totalPagesAct) {
-        console.log('working')
+        
         setCurrentPageAct(newPage);
       }
     }
     const handlePageChangeUp = (newPage: number) => {
       if (newPage > 0 && newPage <= totalPagesAct) {
-        console.log('working')
+        
         setCurrentPageUp(newPage);
       }
     }
