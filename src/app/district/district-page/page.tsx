@@ -159,7 +159,7 @@ const ButtonDisplayFn: React.FC = () => {
   return (
     <div>
       <NavigationBar />
-      <div className='w-full flex flex-col items-center gap-4'>
+      <div className='w-full flex flex-col items-center gap-4 mt-6'>
         <div className='w-full flex justify-between items-center gap-3 '>
           <p className='text-right font-bold w-1/2'>District Name:</p>
           <p className='w-1/2 font-bold'>{dname}</p>

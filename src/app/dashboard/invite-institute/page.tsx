@@ -83,8 +83,8 @@ const Invite: React.FC = () => {
     <>
       <NavigationBar />
       <div className='relative flex flex-col md:flex-row md:justify-between p-4'>
-        <div className='md:absolute md:left-1/2 md:transform md:-translate-x-1/2 w-full md:w-auto'>
-          <h1 className='text-2xl m-3 text-left md:text-center md:text-4xl font-bold'>Dashboard</h1>
+        <div className='md:absolute md:left-1/2 md:transform md:-translate-x-1/2 w-full md:w-auto mt-6 mb-3'>
+          <h1 className='text-xl m-2 text-left md:text-center md:text-xl font-bold'>Dashboard</h1>
         </div>
         <div className='ml-auto md:mr-0 md:mt-0 mt-4'>
           <button
@@ -97,7 +97,7 @@ const Invite: React.FC = () => {
         </div>
       </div>
       <div className='text-center'>
-        <h1 className='text-xl mt-2 font-bold'>Invite Institution</h1>
+        <h1 className='text-3xl mt-2 font-bold'>Invite Institution</h1>
       </div>
       <div className="container mx-auto p-6">
         <div className="overflow-x-auto">

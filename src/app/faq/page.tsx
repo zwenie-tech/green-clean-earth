@@ -16,7 +16,7 @@ const Faq = () => {
   return (
     <main className='min-h-screen flex flex-col'>
       <NavigationBar/>
-      <div>
+      <div className='mt-6'>
         <PageTitle title='FAQ' />
         <div className="max-w-screen-xl mx-auto p-4 mb-6">
           <Accordion type="single" collapsible className='flex flex-col gap-6'>

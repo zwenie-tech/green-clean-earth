@@ -11,7 +11,7 @@ interface NewsCardProps {
 
 const NewsCard: React.FC<NewsCardProps> = ({ title, image, smallHeading, paragraph }) => {
   return (
-    <div className="flex flex-col p-4 mb-6 shadow-md rounded-lg bg-light-gray">
+    <div className="flex flex-col p-4 mb-6 shadow-md rounded-lg bg-light-gray mt-6">
       <h2 className="text-xl font-bold mb-2">{title}</h2>
       <div className="flex">
         <img src={image} alt="news" className="w-1/3  object-cover mr-4 rounded-lg" />

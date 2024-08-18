@@ -274,8 +274,8 @@ const Participant = () => {
   return (
     <>
       <NavigationBar />
-      <div>
-        <h2 className="m-5 text-2xl font-bold text-center items-center text-[#3C6E1F]">Participants list</h2>
+      <div className="mt-6 mb-3">
+        <h2 className="text-2xl font-bold text-center items-center text-[#3C6E1F]">Participants list</h2>
       </div>
       <form onSubmit={onSubmit}>
         <div className="flex flex-wrap p-2 md:p-4">

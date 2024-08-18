@@ -28,7 +28,7 @@ const AboutUs = () => {
     return (
         <>
             <NavigationBar />
-            <div className="flex justify-center items-center mt-10">
+            <div className="flex justify-center items-center mt-6 m-3">
                 <h1 className="text-3xl font-bold text-center">About Us</h1>
             </div>
             <div className="bg-[#D9E4C1] p-10 text-center">

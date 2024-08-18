@@ -72,7 +72,7 @@ const GroupList = () => {
   return (
     <>
       <NavigationBar />
-      <div className='justify-center sw-full md:w-auto'>
+      <div className='justify-center sw-full md:w-auto mt-6'>
         <h1 className='m-3 text-center text-2xl font-bold'>Group List</h1>
       </div>
       <div className='border border-black m-5 p-7 rounded-lg'>

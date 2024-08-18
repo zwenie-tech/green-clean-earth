@@ -149,7 +149,7 @@ const ButtonDisplayFn = () => {
   return (
     <div>
       <NavigationBar />
-      <div className='w-full flex flex-col items-center gap-4'>
+      <div className='w-full flex flex-col items-center gap-4 mt-6'>
         <div className='w-full flex justify-between items-center gap-3 '>
           <p className='text-right font-bold w-1/2'>User Name:</p>
           <p className='w-1/2 font-bold'>{username}</p>

@@ -99,7 +99,7 @@ const MyUploadedPlants = () => {
   return (
     <main className='min-h-screen flex flex-col'>
       <NavigationBar />
-      <div className='mx-2'>
+      <div className='mx-2 mt-6'>
         <PageTitle title='My Uploaded Plants' />
         <div className="overflow-x-scroll">
           <table className='mx-auto table-fixed border-collapse border border-black'>

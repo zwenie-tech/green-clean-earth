@@ -93,8 +93,8 @@ const PlantuploadContent = () => {
     <>
       <NavigationBar />
       <div className='relative flex p-4'>
-        <div className='absolute left-1/2 transform -translate-x-1/2 w-full md:w-auto'>
-          <h1 className='text-2xl m-3 text-left md:text-center md:text-4xl font-bold'>Dashboard</h1>
+        <div className='absolute left-1/2 transform -translate-x-1/2 w-full md:w-auto mt-3'>
+          <h1 className='text-xl mb-3 text-left md:text-center md:text-xl font-bold'>Dashboard</h1>
         </div>
         <div className='ml-auto'>
           <button
@@ -106,7 +106,7 @@ const PlantuploadContent = () => {
         </div>
       </div>
       <div className='text-center'>
-        <h1 className='text-xl mt-2 font-bold'>Our Plant Uploads</h1>
+        <h1 className='text-3xl mt-2 font-bold'>Our Plant Uploads</h1>
       </div>
       <div className="container mx-auto p-6">
         <div className="overflow-x-auto">

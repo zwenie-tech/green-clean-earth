@@ -8,7 +8,7 @@ const JoinNow = () => {
     return (
         <div>
             <Navigation />
-            <div className="flex justify-center items-center" style={{ marginTop: '40px', height: '60px' }}>
+            <div className="flex justify-center items-center mt-6" style={{ height: '60px' }}>
                 <h1 className="text-4xl font-bold text-center item-center" >ഹരിത കേരളം വൃക്ഷത്തൈ പരിപാലന മത്സരം.</h1>
             </div>
             <div className="mt-8 flex justify-center items-center" >

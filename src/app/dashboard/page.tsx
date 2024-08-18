@@ -42,7 +42,7 @@ const Dashboard=()=>{
       <div style={{background: 'rgba(3, 18, 20, 0.1)'}}>
       <NavigationBar/>
       <div className='relative flex items-center p-4'>
-        <div className='absolute left-1/2 transform -translate-x-1/2'>
+        <div className='absolute left-1/2 mt-6 mb-3 transform -translate-x-1/2'>
           <h1 className='text-xl font-bold'>Dashboard</h1>
         </div>
         <div className='ml-auto'>

@@ -144,7 +144,7 @@ const MultiSelectZodForm = () => {
   return (
     <section className="bg-green-50">
       <NavigationBar />
-      <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white text-center">
+      <h1 className="mt-6 mb-3 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white text-center">
         School - Additional details   
       </h1>
       <div className="mt-7 container mx-auto p-4 flex flex-col lg:flex-row  items-stretch">
