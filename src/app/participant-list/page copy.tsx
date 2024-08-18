@@ -70,7 +70,7 @@ const ParticipantList: React.FC = () => {
   return (
     <div className="">
       <Navigationbar />
-      <div>
+      <div className="mt-6 mb-3">
         <h1 className="text-2xl my-4 text-center font-bold">Participant List</h1>
       </div>
       <div className="m-2 flex justify-center items-center space-x-4">

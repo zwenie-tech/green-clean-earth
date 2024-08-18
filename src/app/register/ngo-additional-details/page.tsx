@@ -84,7 +84,7 @@ function NgoAdditionalDetailsForm() {
   return (
     <section className="bg-green-50 dark:bg-gray-900">
       <NavigationBar />
-      <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white text-center">
+      <h1 className="text-xl mt-6 mb-3 font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white text-center">
               NGO - Additional Details
       </h1>
      {/* <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0 mt-8">

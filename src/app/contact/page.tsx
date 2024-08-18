@@ -41,7 +41,7 @@ const Contact = () => {
   return (
     <main className='min-h-screen flex flex-col'>
       <NavigationBar/>
-      <div className='mx-2'>
+      <div className='mx-2 mt-2'>
         <PageTitle title='Get in touch with us' />
         <div className="mx-4 mb-10 flex flex-col gap-4 md:flex md:flex-row-reverse">
           <div className='mx-8'>

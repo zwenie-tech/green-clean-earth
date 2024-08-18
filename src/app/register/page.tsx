@@ -243,10 +243,10 @@ export default function Register() {
       {/* <NavigationBar /> */}
       <NavigationBar />
       
-      <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white text-center">
+      <h1 className="text-xl mt-6 mb-3 font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white text-center">
       Create a Group Account
       </h1>
-      <div className="mt-7 container mx-auto p-4 flex flex-col lg:flex-row  items-stretch">
+      <div className="mt-3 container mx-auto p-4 flex flex-col lg:flex-row  items-stretch">
         <div className="w-full lg:w-1/4 flex items-center justify-center">
           <img
             src="/images/planting_trees.jpg"

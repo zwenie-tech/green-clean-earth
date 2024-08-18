@@ -29,7 +29,7 @@ const Narukkeduppu = () => {
   return (
     <>
       <NavigationBar />
-      <div className='justify-center text-center m-5'>
+      <div className='justify-center text-center mt-5 mb-3'>
         <h1 className='text-2xl font-bold'>നറുക്കെടുപ്പ്</h1>
       </div>
       <div className='p-4 flex flex-col items-center w-2/3 md:w-1/3 border-2 mx-auto rounded-2xl border-black transition-all'>

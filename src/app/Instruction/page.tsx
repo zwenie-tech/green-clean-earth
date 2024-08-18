@@ -7,7 +7,7 @@ const Instruction = () => {
   return (
     <>
     <NavigationBar/>
-      <div className="flex justify-center items-center" style={{ marginTop: '50px' }}>
+      <div className="flex justify-center items-center mt-6 mb-3">
         <h1 className="text-3xl font-bold">വിത്തുകള് നടുന്ന വിധം</h1>
       </div>
 

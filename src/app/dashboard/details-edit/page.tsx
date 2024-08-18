@@ -832,7 +832,7 @@ const DetailsEdit: React.FC = () => {
   return (
     <>
       <NavigationBar />
-      <div className="container w-full justify-center">
+      <div className="container w-full justify-center mt-6">
         <div className="md:flex gap-6">
           {/* Form 1 */}
           <Form {...form}>

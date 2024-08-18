@@ -71,7 +71,7 @@ const Events = () => {
   return (
     <main className='min-h-screen flex flex-col'>
       <NavigationBar />
-      <div className='mx-2'>
+      <div className='mx-2 mt-6'>
         <PageTitle title='Events and News' />
         <div className="flex flex-col gap-4">
           <div className="">

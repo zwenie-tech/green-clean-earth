@@ -98,7 +98,7 @@ const Estimate = () => {
   return (
     <>
       <NavigationBar />
-      <div className='justify-center text-center m-5'>
+      <div className='justify-center text-center mt-5 mb-3'>
         <h1 className='text-2xl font-bold'>Green Clean Estimate</h1>
       </div>
       <div className='flex justify-center items-center m-4 my-7'>

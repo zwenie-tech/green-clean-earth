@@ -133,7 +133,7 @@ function PromoterAdditionalDetailsForm() {
   return (
     <section className="bg-green-50 dark:bg-gray-900">
       <NavigationBar />
-      <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white text-center">
+      <h1 className="text-xl mt-6 mb-3 font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white text-center">
               Promoter - Additional details
       </h1>
       {/*div part */}

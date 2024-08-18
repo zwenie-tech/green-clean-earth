@@ -108,7 +108,7 @@ const Plant = ({ searchParams }: any) => {
   return (
     <main className='min-h-screen flex flex-col'>
       <NavigationBar />
-      <div className='mx-2'>
+      <div className='mx-2 mt-6'>
         <PageTitle title={`Tree Id: ${plant.up_id}`} />
       </div>
       <div className='p-4 md:p-8 max-w-6xl mx-auto'>

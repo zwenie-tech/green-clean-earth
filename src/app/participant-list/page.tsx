@@ -22,6 +22,7 @@ const ParticipantList: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 10;
+  const [challenge,setchallenge]=useState(false)
 
  
     useEffect(() => {
@@ -71,7 +72,7 @@ const ParticipantList: React.FC = () => {
   return (
     <div className="">
       <Navigationbar />
-      <div>
+      <div className="mt-6 mb-3">
         <h1 className="text-2xl my-4 text-center font-bold">Participant List</h1>
       </div>
       <div className="m-2 flex justify-center items-center space-x-4">
@@ -87,55 +88,74 @@ const ParticipantList: React.FC = () => {
           Old participants
         </a>
       </div>
-  {
-    participants ? (
-      <div className="participant-container">
-        {participants.map((participant) => (
-          <div key={participant.up_id} className="participant-item" style={{ maxHeight: '400px', boxSizing: 'border-box' }}>
-            <Link
-              href={{
-                pathname: 'participant-list/item',
-                query: { id: participant.up_id },
-              }}
-            >
-              <div className="rounded-lg shadow-lg border p-1 hover:shadow-2xl hover:border-gray-400 h-full flex flex-col">
-                <img
-                  className="w-full h-48 object-cover"
-                  src={`${imageURL}${participant.up_file}`}
-                  alt="Image"
-                />
-                <div className="flex justify-center mt-2 gap-1">
-                  <div className="text-md text-center font-bold">Tree number:</div>
-                  <div className="text-md">{participant.up_id}</div>
-                </div>
-                <div className="flex justify-center mt-2 text-gray-600 gap-2">
-                  <div className="text-md">{formatDate(participant.up_date)}</div>
-                  <div className="text-md">{formatTime(participant.up_date)}</div>
-                </div>
-                <hr className="my-2" />
-                <div className="flex-grow flex flex-col justify-between">
-                  <div className="flex ml-2 gap-1">
-                    <div className="text-sm pl-1">Tree name:</div>
-                    <div className="text-sm">{participant.up_tree_name}</div>
-                  </div>
-                  <div className="flex ml-2 gap-1">
-                    <div className="text-sm pl-1">Planter name:</div>
-                    <div className="text-sm">{participant.up_planter}</div>
-                  </div>
-                  <div className="flex ml-2 gap-1">
-                    <div className="text-sm pl-1">Uploader name:</div>
-                    <div className="text-sm">{participant.up_name}</div>
-                  </div>
-                </div>
+      {
+  participants ? (
+    <div className="participant-container flex justify-center">
+      {participants.map((participant) => (
+        <div 
+          key={participant.up_id} 
+          className="participant-item relative group" // Add `group` here
+          style={{ maxHeight: '400px', boxSizing: 'border-box' }}
+        >
+          <Link
+            href={{
+              pathname: 'participant-list/item',
+              query: { id: participant.up_id },
+            }}
+          >
+            <div className="rounded-lg shadow-lg border  hover:shadow-2xl hover:border-gray-400 h-full flex flex-col">
+              <img
+                className="w-full h-48 object-cover rounded-tl-lg rounded-tr-lg"
+                src={`${imageURL}${participant.up_file}`}
+                alt="Image"
+              />
+              <div className="flex justify-center mt-2 gap-1">
+                <div className="text-md text-center font-bold">Tree number:</div>
+                <div className="text-md">{participant.up_id}</div>
               </div>
-            </Link>
-          </div>
-        ))}
-      </div>
-    ) : (
-      <Loading />
-    )
-  }
+              <div className="flex justify-center mt-2 text-gray-600 gap-2">
+                <div className="text-md">{formatDate(participant.up_date)}</div>
+                <div className="text-md">{formatTime(participant.up_date)}</div>
+              </div>
+              <hr className="my-2" />
+              <div className="flex-grow flex flex-col justify-between">
+                <div className="flex ml-2 gap-1">
+                  <div className="text-sm pl-1">Tree name:</div>
+                  <div className="text-sm">{participant.up_tree_name}</div>
+                </div>
+                <div className="flex ml-2 gap-1">
+                  <div className="text-sm pl-1">Planter name:</div>
+                  <div className="text-sm">{participant.up_planter}</div>
+                </div>
+                <div className="flex ml-2 gap-1">
+                  <div className="text-sm pl-1">Uploader name:</div>
+                  <div className="text-sm">{participant.up_name}</div>
+                </div>
+                {challenge ? (
+                  <div className="flex ml-2">
+                    <div className="text-sm pl-1 text-primary">This image has been challenged</div>
+                  </div>
+                ) : (
+                  <div className="flex justify-center">
+                    <button
+                      className="bg-primary m-1 text-white text-sm py-1 px-2 rounded hidden group-hover:block mx-auto" // Updated to `hidden` by default and `group-hover:block`
+                    >
+                      Challenge
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </Link>
+        </div>
+      ))}
+    </div>
+  ) : (
+    <Loading />
+  )
+}
+
+
   
   <div className="flex justify-center items-center space-x-2 my-4">
     <button

@@ -7,7 +7,7 @@ const Competition = () => {
     return (
         <div>
             <NavigationBar />
-            <div className="mt-7 flex justify-center items-center">
+            <div className="mt-6 mb-3 flex justify-center items-center">
                 <h1 className="text-4xl font-bold text-center items-center">Competition</h1>
             </div>
 

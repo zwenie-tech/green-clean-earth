@@ -60,7 +60,7 @@ const DistrictPage = () => {
     <>
       <NavigationBar />
       <div className='justify-center sw-full md:w-auto'>
-        <h1 className='m-3 text-center text-2xl font-bold'>District List</h1>
+        <h1 className='mt-6 mb-3 text-center text-2xl font-bold'>District List</h1>
       </div>
       <div className="w-3/4 mx-auto flex justify-center items-center p-7">
         <p className="text-center">

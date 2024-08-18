@@ -28,7 +28,11 @@ import Cookies from 'js-cookie';
     <>
     <main className='min-h-screen flex flex-col'>
       <NavigationBar/>
+<<<<<<< HEAD
+      <div className="max-w-screen-md mx-auto mt-6 mb-3">
+=======
       <div className="max-w-screen-md mx-auto pt-6">
+>>>>>>> b72d530a1868075db9d4f4b6730aafaeb0ece49a
         <div className="relative ">
           <PageTitle title='Dashboard' />
           {/* <Link href={'logout'} className="absolute right-[0] top-[0] px-6 py-2 rounded-full bg-light-gray hover:bg-dark-gray">Logout</Link> */}
