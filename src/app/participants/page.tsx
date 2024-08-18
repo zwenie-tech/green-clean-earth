@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import NavigationBar from "@/components/navigationBar";
 import Footer from "@/components/footer";
 import { apiURL, imageURL } from "@/app/requestsapi/request";
+import { setgid } from "process";
 
 interface Participant {
   up_id: number,
@@ -47,6 +48,11 @@ type Corp = {
   cop_name: string;
 }
 
+type GrpName = {
+  gp_id: string;
+  gp_name: string;
+}
+
 const Participant = () => {
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [countries, setCountries] = useState<Country[]>([]);
@@ -55,13 +61,19 @@ const Participant = () => {
   const [category, setCategory] = useState<Category[]>([]);
   const [lsgd, setLsgd] = useState<Lsgd[]>([]);
   const [corporation, setCorporation] = useState<Corp[]>([]);
+  const [grpName, setGrpName] = useState<GrpName[]>([]);
+
 
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedState, setSelectedState] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [selectedCorp, setSelectedCorp] = useState("");
   const [selectedLsgd, setSelectedLsgd] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [wardNo, setWardNo] = useState("");
+  const [treeNo, setTreeNo] = useState("");
+  const [grpId, setGrpId] = useState("");
+  const [selectedgrpName, setSelectedGrpName] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 10;
@@ -120,6 +132,28 @@ const Participant = () => {
     }
     fetchInitialData();
   }, [currentPage]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const categoryResponse = await fetch(`${apiURL}/category`);
+      const categoryData = await categoryResponse.json();
+      setCategory(categoryData.category);
+    }
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    async function fetchData() {
+      if(selectedCategory){
+        const groupId=category.find((item) => item.group_type === selectedCategory)?.id;
+        const Response = await fetch(`${apiURL}/common/groupName/${groupId}`);
+        const Data = await Response.json();
+        setGrpName(Data.stateMapData);
+
+      }
+    }
+    fetchData();
+  }, [category, grpName, selectedCategory]);
 
   useEffect(() => {
     async function fetchStates() {
@@ -228,14 +262,23 @@ const Participant = () => {
     setSelectedLsgd("");
     setWardNo("");
   };
-
+  
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     
-    const dataWithIds: any = {
-      countryId: countries.find((item) => item.cntry_name === selectedCountry)?.cntry_id
-    };
+    const dataWithIds: any = {};
+    treeNo!==""? dataWithIds.treeNumber=parseInt(treeNo):'';
 
+    if(selectedCategory!==""){
+      dataWithIds.groupTypeId= parseInt(category.find((item) => item.group_type === selectedCategory)?.id!);
+      selectedgrpName!==""? dataWithIds.groupId=parseInt(grpName.find((item) => item.gp_name === selectedgrpName)?.gp_id!) :'';
+
+    }
+
+    if(selectedCountry!==""){
+      dataWithIds.countryId = countries.find((item) => item.cntry_name === selectedCountry)?.cntry_id
+    }
+    
     if (selectedCountry === "India") {
       dataWithIds.stateId = states.find((item) => item.st_name === selectedState)?.st_id || null;
       
@@ -246,7 +289,6 @@ const Participant = () => {
         dataWithIds.wardNo = parseInt(wardNo) || null;
       }
     }
-
 
     try {
       const response = await fetch(`${apiURL}/uploads/filter`, {
@@ -279,6 +321,56 @@ const Participant = () => {
       </div>
       <form onSubmit={onSubmit}>
         <div className="flex flex-wrap p-2 md:p-4">
+          <div className="w-1/2 mb-3 md:w-1/4 p-1 md:p-2">
+            <label className="block ml-3 mb-1">Tree Number</label>
+            <input
+                    type="text"
+                    className="w-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
+                    placeholder="Enter Tree Number"
+                    style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
+                    value={treeNo}
+                    onChange={(e) => setTreeNo(e.target.value)}
+               />
+          </div>
+
+          <div className="w-1/2 mb-3 md:w-1/3 p-1 md:p-2 bg-white">
+            <label className="block ml-5 mb-1">Group Type</label>
+            <select
+              className="w-full p-1 md:p-2 border-0 rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
+              style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
+              value={selectedCategory}
+              onChange={(e)=> setSelectedCategory(e.target.value)}
+            >
+              <option value="">Select Group Type</option>
+              {category.map((c) => (
+                <option key={c.id} value={c.group_type}>
+                  {c.group_type}
+                </option>
+              ))}
+            </select>
+          </div>
+          {selectedCategory !=="" && (
+            <div className="w-1/2 mb-3 md:w-1/3 p-1 md:p-2 bg-white">
+            <label className="block ml-5 mb-1">Group Id</label>
+            <select
+              className="w-full p-1 md:p-2 border-0 rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
+              style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
+              value={selectedgrpName}
+              onChange={(e)=> setSelectedGrpName(e.target.value)}
+            >
+              <option value="">Select Group Type</option>
+              {grpName.map((c) => (
+                <option key={c.gp_id} value={c.gp_name}>
+                  {c.gp_name}
+                </option>
+              ))}
+            </select>
+          </div>
+            
+          )}
+          
+
+
           <div className="w-1/2 mb-3 md:w-1/3 p-1 md:p-2 bg-white">
             <label className="block ml-5 mb-1">Country</label>
             <select
