@@ -12,7 +12,7 @@ const JoinNow = () => {
                 <h1 className="text-4xl font-bold text-center item-center" >ഹരിത കേരളം വൃക്ഷത്തൈ പരിപാലന മത്സരം.</h1>
             </div>
             <div className="mt-8 flex justify-center items-center" >
-                <h3 className="text-2xl font-bold items-center text-[#3C6E1F]">
+                <h3 className="text-2xl font-bold items-center text-[#3C6E1F] text-center">
                     വൃക്ഷങ്ങൾ നട്ട് വളർത്തൂ..ഫോട്ടോ അപ്‌ലോഡ് ചെയ്യൂ..<br />
                     സമ്മാനങ്ങൾ നേടൂ....ഭൂമിയെ രക്ഷിക്കൂ....
                 </h3>
