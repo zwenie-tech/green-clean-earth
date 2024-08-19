@@ -43,6 +43,9 @@ const LoginForm = () => {
     resolver: zodResolver(coordinatorSchema),
   });
 
+  // Determine the background color based on the state
+  const parentBgColor = isUserLogin ? '#E4EBF7' : '#FEFAEC'; 
+
   const { toast } = useToast();
   const router = useRouter();
 
@@ -159,7 +162,7 @@ const LoginForm = () => {
   return (
     <>
       <NavigationBar />
-      <div className="mt-7 container mx-auto p-4 flex flex-col lg:flex-row items-stretch opacity-80"
+      <div className="mt-3 container mx-auto p-4 flex flex-col lg:flex-row items-stretch opacity-80"
         style={{
           backgroundImage: 'url(/images/login.jpeg)',
           backgroundSize: 'cover',
@@ -168,34 +171,32 @@ const LoginForm = () => {
         }}>
         <div className="w-full lg:w-2/3 flex hidden lg:block">
         </div>
-        <div className="w-full bg-[#E4EBF7] lg:w-1/3 rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700 flex items-center justify-center">
+  <div className="w-full lg:w-1/3 rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700 flex items-center justify-center" style={{ backgroundColor: parentBgColor }} >
           <Container>
             <Row className="justify-content-end">
               <Col md={4} className="p-2 rounded shadow opacity-80" style={{ borderRadius: '20px' }}>
-              <div className="flex flex-row bg-[#E4EBF7] rounded mb-5 justify-center items-center w-3/4 mx-auto">
+              <div className="flex flex-row bg-transparent rounded mb-5 justify-center items-center w-3/4 mx-auto gap-2">
           <button
             onClick={() => setIsUserLogin(true)}
-            className={`w-2/5 text-center rounded-xl font-bold bg-[#E4EBF7] py-3 text-http://localhost:3000[#3C6E1F] hover:bg-primary/15 border-b-2 ${
+            className={`w-2/5 text-center rounded-2xl font-bold bg-[#E4EBF7] py-3 text-http://localhost:3000[#3C6E1F] hover:bg-primary/15 border-2 ${
               isUserLogin
                 ? 'shadow-lg border-[#3C6E1F]' // Apply shadow and border color when active
-                : 'border-transparent' // No shadow and border when inactive
+                : 'border-transparent bg-transparent' // No shadow and border when inactive
             }`}
           >
             User
           </button>
           <button
             onClick={() => setIsUserLogin(false)}
-            className={`w-3/5 text-center rounded-xl font-bold bg-[#E4EBF7] py-3 text-[#3C6E1F] hover:bg-primary/15 border-b-2 ${
+            className={`w-3/5 text-center rounded-2xl font-bold bg-transparent py-3 text-[#3C6E1F] hover:bg-primary/15 border-2 ${
               !isUserLogin
                 ? 'shadow-lg border-[#3C6E1F]' // Apply shadow and border color when active
-                : 'border-transparent' // No shadow and border when inactive
+                : 'border-transparent bg-transparent' // No shadow and border when inactive
             }`}
           >
             Coordinator
           </button>
         </div>
-
-          
                 {isUserLogin && (
                   <Form {...userForm}>
                     <form noValidate onSubmit={userForm.handleSubmit(onUserSubmit)} className="space-y-8">
@@ -237,10 +238,10 @@ const LoginForm = () => {
                         )}
                       />
                       <div className="flex justify-center w-full">
-                        <Button type="submit" style={{ width: '50%' }} className="bg-green-600 items-center">Submit</Button>
+                        <Button type="submit" style={{ width: '50%' }} className="bg-primary items-center">Submit</Button>
                       </div>
                       <div className="flex justify-center w-full mt-4">
-                        <a href="/forgot-password-user" className="text-green-600">Forgot your password?</a>
+                        <a href="/forgot-password-user" className="text-primary">Forgot your password?</a>
                       </div>
                       {/* <div className="flex justify-center w-full mt-4">
                         <Button type="button" className="shadow-xl bg-white text-green-600">Register</Button>
@@ -250,7 +251,7 @@ const LoginForm = () => {
                 )}
                 {!isUserLogin && (
                   <Form {...coordinatorForm}>
-                    <form noValidate onSubmit={coordinatorForm.handleSubmit(onCoordinatorSubmit)} className="space-y-8">
+                    <form noValidate onSubmit={coordinatorForm.handleSubmit(onCoordinatorSubmit)} className="space-y-8" >
                       <FormField
                         control={coordinatorForm.control}
                         name="username"
@@ -288,13 +289,13 @@ const LoginForm = () => {
                         )}
                       />
                       <div className="flex justify-center w-full">
-                        <Button type="submit" style={{ width: '50%' }} className="bg-green-600 items-center">Submit</Button>
+                        <Button type="submit" style={{ width: '50%' }} className="bg-primary items-center">Submit</Button>
                       </div>
                       <div className="flex justify-center w-full mt-4">
-                        <a href="/forgot-password-coordinator" className="text-green-600">Forgot your password?</a>
+                        <a href="/forgot-password-coordinator" className="text-primary">Forgot your password?</a>
                       </div>
                       <div className="flex justify-center w-full mt-4">
-                        <a href="/register"><Button type="button" className="shadow-xl bg-white text-green-600">Register</Button></a>
+                        <a href="/register"><Button type="button" className="shadow-xl bg-white text-primary">Register</Button></a>
                       </div>
                     </form>
                   </Form>
