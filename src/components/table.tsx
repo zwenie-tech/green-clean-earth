@@ -60,13 +60,13 @@ const Table: React.FC<TableProps> = ({ headings, data }) => {
         <div className="text-center py-5">No data available</div>
       ) : (
         <>
-          <table className="table-auto md:w-full md:table-fixed">
+          <table className="table-auto md:w-full md:table-fixed border border-black border-collapse">
             <thead>
-              <tr className="border-b-2 border-green-300">
+              <tr className="">
                 {headings.map((h, i) => (
                   <th
                     key={i}
-                    className="bg-green-200 capitalize py-3 px-2 text-sm font-normal"
+                    className="border border-black capitalize py-3 px-2 text-sm font-normal"
                   >
                     {h}
                   </th>
@@ -77,21 +77,21 @@ const Table: React.FC<TableProps> = ({ headings, data }) => {
               {records.map((d, i) => (
                 <tr
                   key={d.personal_activity_id}
-                  className={`${i % 2 !== 0 && "bg-gray-200"} text-center capitalize`}
+                  className={`text-center capitalize`}
                 >
-                  <td>{startIndex + i + 1}</td>
-                  <td>
+                  <td className="border border-black">{startIndex + i + 1}</td>
+                  <td className="border border-black">
                     <a href={`${d.activity_social_media_link}`}>
                       <img src={`${imageURL}${d.activity_thumbnail}`} alt="Thumbnail" />
                     </a>
                   </td>
-                  <td>{d.participant_name}</td>
-                  <td>{d.activity_title}{d.activity_description}</td>
-                  <td>{categories[d.activity_category_id]}</td>
-                  <td className="p-4">
+                  <td className="border border-black">{d.participant_name}</td>
+                  <td className="border border-black">{d.activity_title}{d.activity_description}</td>
+                  <td className="border border-black">{categories[d.activity_category_id]}</td>
+                  <td className="border border-black p-4">
                     {d.activity_views} Views, {d.activity_likes} Likes
                   </td>
-                  <td>{d.activity_value}</td>
+                  <td className="border border-black">{d.activity_value}</td>
                 </tr>
               ))}
             </tbody>

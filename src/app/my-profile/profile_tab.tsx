@@ -119,7 +119,7 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({ profile},{token}) => {
             <DialogEditProfile />
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full p-6 bg-white">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full p-6 bg-white rounded-md">
           {/* <div>
             <p className="text-dark-text">Institution Name</p> 
             <p>{profile.institution_name}</p>

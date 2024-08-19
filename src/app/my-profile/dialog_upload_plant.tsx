@@ -12,7 +12,6 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Upload } from "lucide-react"
-import { FormUploadActivities } from "./form_upload_activities"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { FormUploadPlant } from "./form_upload_plant"
 import { useEffect } from "react";
