@@ -131,21 +131,23 @@ const ParticipantList: React.FC = () => {
               </Link>
               <hr className="my-2" />
               <div className="flex-grow flex flex-col justify-between">
-                <div className="flex ml-2 gap-1">
-                  <div className="text-sm pl-1">Tree name:</div>
+                <div className="flex gap-3">
+                  <div className="text-sm text-left pl-8" style={{width:'45%'}}>Tree name:</div>
                   <div className="text-sm">{participant.up_tree_name}</div>
                 </div>
-                <div className="flex ml-2 gap-1">
-                  <div className="text-sm pl-1">Planter name:</div>
+                <div className="flex gap-3">
+                  <div className="text-sm text-left pl-8" style={{width:'45%'}}>Planter name:</div>
+                 
                   <div className="text-sm">{participant.up_planter}</div>
                 </div>
-                <div className="flex ml-2 gap-1">
-                  <div className="text-sm pl-1">Uploader name:</div>
+                <div className="flex gap-3">
+                  <div className="text-sm text-left pl-8" style={{width:'45%'}}>Uploader name:</div>
+                 
                   <div className="text-sm">{participant.up_name}</div>
                 </div>
                 {participant.is_challenged==1 ? (
-                  <div className="flex ml-2">
-                    <div className="text-sm pl-1 text-primary">This image has been challenged</div>
+                  <div className="flex m-auto">
+                    <div className="text-sm text-center text-primary">This image has been challenged</div>
                   </div>
                 ) : (
                   <div className="flex justify-center">
@@ -216,11 +218,18 @@ const ParticipantList: React.FC = () => {
       padding: 8px;
       box-sizing: border-box;
     }
+
+    @media (min-width: 440px) {
+      .participant-item {
+        flex: 1 1 calc(50% - 32px);
+        max-width: 400px !important;
+      }
+    }
   
-    @media (min-width: 640px) {
+    @media (min-width: 740px) {
       .participant-item {
         flex: 1 1 calc(33.33% - 32px);
-        max-width: 400px !important;
+        max-width: 350px !important;
       }
     }
   
