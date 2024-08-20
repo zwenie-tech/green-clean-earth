@@ -59,8 +59,8 @@ const Table: React.FC<TableProps> = ({ headings, data }) => {
       {data.length === 0 ? (
         <div className="text-center py-5">No data available</div>
       ) : (
-        <>
-          <table className="table-auto md:w-full md:table-fixed border border-black border-collapse">
+        <div className="w-full overflow-x-scroll">
+          <table className="mx-auto table-fixed border border-black border-collapse">
             <thead>
               <tr className="">
                 {headings.map((h, i) => (
@@ -81,8 +81,8 @@ const Table: React.FC<TableProps> = ({ headings, data }) => {
                 >
                   <td className="border border-black">{startIndex + i + 1}</td>
                   <td className="border border-black">
-                    <a href={`${d.activity_social_media_link}`}>
-                      <img src={`${imageURL}${d.activity_thumbnail}`} alt="Thumbnail" />
+                    <a href={`${d.activity_social_media_link}`} className="flex place-content-center">
+                      <img className="max-h-56" src={`${imageURL}${d.activity_thumbnail}`} alt="Thumbnail" />
                     </a>
                   </td>
                   <td className="border border-black">{d.participant_name}</td>
@@ -111,7 +111,7 @@ const Table: React.FC<TableProps> = ({ headings, data }) => {
               </span>
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

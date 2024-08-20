@@ -24,9 +24,7 @@ function MyActivities() {
       <Navigationbar />
       <div className="container mx-auto md:max-w-5xl mt-4 min-h-screen">
         <PageTitle title="My Activities" />
-        <div className="flex flex-wrap">
-          <ActivitiesTab token={token} />
-        </div>
+        <ActivitiesTab token={token} />
       </div>
       <GceBadge />
       <JoinNow />
