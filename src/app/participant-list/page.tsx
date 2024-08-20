@@ -108,16 +108,25 @@ const ParticipantList: React.FC = () => {
           className="participant-item relative group" // Add `group` here
           style={{ maxHeight: '450px', boxSizing: 'border-box' }}
         >
-            <div className="rounded-lg shadow-lg border  hover:shadow-2xl hover:border-gray-400 h-full flex flex-col">
-          <Link
-            href={{
-              pathname: 'participant-list/item',
-              query: { id: participant.up_id },
-            }}
-          >
+          {/* Conditional image for challenged status */}
+          {participant.is_challenged == 1 && (
+            <img
+              className="absolute top-1/3 left-1/2  transform -translate-x-1/2  w-28 h-18 object-cover z-10"
+              src="/images/chellenge.png"
+              alt="Challenged"
+            />
+          )}
+          <div className="rounded-lg shadow-lg border  hover:shadow-2xl hover:border-gray-400 h-full flex flex-col">
+            <Link
+              href={{
+                pathname: 'participant-list/item',
+                query: { id: participant.up_id },
+              }}
+            >
               <img
                 className="w-full h-48 object-cover rounded-tl-lg rounded-tr-lg"
-                src={`${imageURL}${participant.up_file}`}
+                //src={`${imageURL}${participant.up_file}`}
+                src="/images/image1.jpeg"
                 alt="Image"
               />
               <div className="flex justify-center mt-2 gap-1">
@@ -128,30 +137,28 @@ const ParticipantList: React.FC = () => {
                 <div className="text-md">{formatDate(participant.up_date)}</div>
                 <div className="text-md">{formatTime(participant.up_date)}</div>
               </div>
-              </Link>
-              <hr className="my-2" />
-              <div className="flex-grow flex flex-col justify-between">
-                <div className="flex gap-3">
-                  <div className="text-sm text-left pl-8" style={{width:'45%'}}>Tree name:</div>
-                  <div className="text-sm">{participant.up_tree_name}</div>
+            </Link>
+            <hr className="my-2" />
+            <div className="flex-grow flex flex-col justify-between">
+              <div className="flex gap-3">
+                <div className="text-sm text-left pl-8" style={{width:'45%'}}>Tree name:</div>
+                <div className="text-sm">{participant.up_tree_name}</div>
+              </div>
+              <div className="flex gap-3">
+                <div className="text-sm text-left pl-8" style={{width:'45%'}}>Planter name:</div>                 
+                <div className="text-sm">{participant.up_planter}</div>
+              </div>
+              <div className="flex gap-3">
+                <div className="text-sm text-left pl-8" style={{width:'45%'}}>Uploader name:</div>                 
+                <div className="text-sm">{participant.up_name}</div>
+              </div>
+              {participant.is_challenged == 1 ? (
+                <div className="flex m-auto">
+                  <div className="text-sm text-center text-primary">This image has been challenged</div>
                 </div>
-                <div className="flex gap-3">
-                  <div className="text-sm text-left pl-8" style={{width:'45%'}}>Planter name:</div>
-                 
-                  <div className="text-sm">{participant.up_planter}</div>
-                </div>
-                <div className="flex gap-3">
-                  <div className="text-sm text-left pl-8" style={{width:'45%'}}>Uploader name:</div>
-                 
-                  <div className="text-sm">{participant.up_name}</div>
-                </div>
-                {participant.is_challenged==1 ? (
-                  <div className="flex m-auto">
-                    <div className="text-sm text-center text-primary">This image has been challenged</div>
-                  </div>
-                ) : (
-                  <div className="flex justify-center">
-                    <button
+              ) : (
+                <div className="flex justify-center">
+                  <button
                     onClick={(e) => {
                       e.preventDefault(); // Prevent the default link behavior
                       handleChallenge(participant.up_id);
@@ -160,20 +167,17 @@ const ParticipantList: React.FC = () => {
                   >
                     Challenge
                   </button>
-                  </div>
-                )}
-              </div>
+                </div>
+              )}
             </div>
-         
+          </div>
         </div>
       ))}
-    </div>
+       </div>
   ) : (
     <Loading />
   )
 }
-
-
   
   <div className="flex justify-center items-center space-x-2 my-4">
     <button
