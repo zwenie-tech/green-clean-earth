@@ -448,7 +448,6 @@ const Participant = () => {
         dataWithIds.chapterId        =  missionChapter ? missionChapter.find((item) => item.chapter_name === selectMission)?.chapter_id || null : null;
         dataWithIds.zoneId           = missionZone ? missionZone.find((item) => item.zone_name === selectZone)?.zone_id || null : null;
 
-        console.log(dataWithIds)
     try {
       const response = await fetch(`${apiURL}/uploads/filter`, {
         method: "POST",
@@ -463,7 +462,7 @@ const Participant = () => {
       }
       try {
         const result = await response.json();
-        console.log(result.Uploads)
+      
 
         setParticipants(result.Uploads);
         setTreeNo('');
