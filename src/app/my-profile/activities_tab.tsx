@@ -13,8 +13,8 @@ const headings = [
   "Name",
   "Name of Art - Brief Description",
   "Category",
-  "Views, Likes, Comments, and Shares",
-  "Value",
+  "Views & Likes",
+  "Total",
 ];
 
 export default function ActivitiesTab({ token }: any) {

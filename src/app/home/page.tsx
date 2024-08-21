@@ -13,7 +13,7 @@ import React from 'react';
 import { FaCalendarAlt, FaMapMarkerAlt } from 'react-icons/fa';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';;
-const Home = () => {
+const HomePage = () => {
   const router = useRouter();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
@@ -469,4 +469,4 @@ Supported by indian Oil Corporation and myG, VKC,tecQ, Aqua garden, Mall of gard
     </div>
   );
 };
-export default Home;
+export default HomePage;
