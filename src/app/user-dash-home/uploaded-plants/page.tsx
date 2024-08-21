@@ -350,7 +350,6 @@ const UploadButton = ({imageNo,treeNo,isEdit}:any) => {
       const compressedImage = await resizeImage(selectedImage);
       formData.append("image", compressedImage);
     }
-    console.log(treeNo,imageNo)
     try {
       const response = await fetch(`${apiURL}/uploads/updateImage`, {
         method: "POST",
