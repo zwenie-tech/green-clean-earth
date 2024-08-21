@@ -9,7 +9,7 @@ import { apiURL, fetchActivityData } from "@/app/requestsapi/request";
 
 const headings = [
   "Sl No",
-  "Thumbnail",
+  "Activity Link",
   "Name",
   "Name of Art - Brief Description",
   "Category",
