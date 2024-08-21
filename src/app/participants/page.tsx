@@ -103,10 +103,10 @@ const Participant = () => {
 
   const [missionZone, setMissionZone] = useState<MissionZone[]>([]);
   const [selectZone, setSelectedZone] = useState('');
-  const [missionChapter, setMissionChapter] = useState<MissionChapter[]>([]);   
+  const [missionChapter, setMissionChapter] = useState<MissionChapter[]>([]);
   const [selectMission, setSelectedMission] = useState('');
   const [icdsProject, setIcdsProject] = useState<IcdsProject[]>([]);
-  const [selectIcdsProject, setSelectIcdsProject] = useState('');  
+  const [selectIcdsProject, setSelectIcdsProject] = useState('');
   const [icdsBlock, setIcdsBlock] = useState<IcdsBlock[]>([]);
   const [selectIcdsBlock, setSelectIcdsBlock] = useState('');
   const [sahodaya, setSahodaya] = useState<Sahodaya[]>([]);
@@ -133,7 +133,7 @@ const Participant = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 10;
-
+  const startIndex = (currentPage - 1) * itemsPerPage;
   useEffect(() => {
     const fetchClass = async () => {
       try {
@@ -151,16 +151,16 @@ const Participant = () => {
 
   useEffect(() => {
     const handleCbse = async () => {
-      if(selectschoolType === 'CBSE'){
+      if (selectschoolType === 'CBSE') {
         try {
-        const st_id = states.find((item) => item.st_name === selectedState)?.st_id;
+          const st_id = states.find((item) => item.st_name === selectedState)?.st_id;
           const response = await axios.get(`${apiURL}/sahodaya/${st_id}`);
           setSahodaya(response.data.sahodayaList);
         } catch (error) {
           console.error("Error fetching data:", error);
         }
       }
-      if(selectschoolType === 'ICDS'){
+      if (selectschoolType === 'ICDS') {
         try {
           const dis_id = districts.find((item) => item.dis_name === selectedDistrict)?.dis_id;
           const response = await axios.get(`${apiURL}/icdsBlock/${dis_id}`);
@@ -170,7 +170,7 @@ const Participant = () => {
         }
 
       }
-      if(selectschoolType === 'Malayalam Mission'){
+      if (selectschoolType === 'Malayalam Mission') {
         try {
           const response = await axios.get(`${apiURL}/malayalamMissionChapter`);
           setMissionChapter(response.data.chapterList);
@@ -438,15 +438,15 @@ const Participant = () => {
       }
     }
 
-        dataWithIds.subCategoryId    = subcategoryOptions ? subcategoryOptions.find((item) => item.gp_cat_name === selectedSubCategory)?.gp_cat_id || null : null;
-        dataWithIds.schoolTypeId     =  schoolType ? schoolType.find((item) => item.type_name === selectschoolType)?.id || null : null;
-        dataWithIds.eduDistrictId    = eduDistrict ? eduDistrict.find((item) => item.edu_district === selecteduDistrict)?.edu_district_id || null : null;
-        dataWithIds.eduSubDistrictId = eduSubDistrict ? eduSubDistrict.find((item) => item.edu_sub_district_name === selecteduSubDistrict)?.edu_sub_district_id || null : null;
-        dataWithIds.sahodayaId       = sahodaya ? sahodaya.find((item) => item.sahodaya_name === selectSahodaya)?.sahodaya_id || null : null;
-        dataWithIds.blockId          = icdsBlock ? icdsBlock.find((item) => item.block_name === selectIcdsBlock)?.icds_block_id || null : null;
-        dataWithIds.projectId        = icdsProject ? icdsProject.find((item) => item.project_name === selectIcdsProject)?.project_id || null : null;
-        dataWithIds.chapterId        =  missionChapter ? missionChapter.find((item) => item.chapter_name === selectMission)?.chapter_id || null : null;
-        dataWithIds.zoneId           = missionZone ? missionZone.find((item) => item.zone_name === selectZone)?.zone_id || null : null;
+    dataWithIds.subCategoryId = subcategoryOptions ? subcategoryOptions.find((item) => item.gp_cat_name === selectedSubCategory)?.gp_cat_id || null : null;
+    dataWithIds.schoolTypeId = schoolType ? schoolType.find((item) => item.type_name === selectschoolType)?.id || null : null;
+    dataWithIds.eduDistrictId = eduDistrict ? eduDistrict.find((item) => item.edu_district === selecteduDistrict)?.edu_district_id || null : null;
+    dataWithIds.eduSubDistrictId = eduSubDistrict ? eduSubDistrict.find((item) => item.edu_sub_district_name === selecteduSubDistrict)?.edu_sub_district_id || null : null;
+    dataWithIds.sahodayaId = sahodaya ? sahodaya.find((item) => item.sahodaya_name === selectSahodaya)?.sahodaya_id || null : null;
+    dataWithIds.blockId = icdsBlock ? icdsBlock.find((item) => item.block_name === selectIcdsBlock)?.icds_block_id || null : null;
+    dataWithIds.projectId = icdsProject ? icdsProject.find((item) => item.project_name === selectIcdsProject)?.project_id || null : null;
+    dataWithIds.chapterId = missionChapter ? missionChapter.find((item) => item.chapter_name === selectMission)?.chapter_id || null : null;
+    dataWithIds.zoneId = missionZone ? missionZone.find((item) => item.zone_name === selectZone)?.zone_id || null : null;
 
     try {
       const response = await fetch(`${apiURL}/uploads/filter`, {
@@ -462,7 +462,7 @@ const Participant = () => {
       }
       try {
         const result = await response.json();
-      
+
 
         setParticipants(result.Uploads);
         setTreeNo('');
@@ -583,52 +583,52 @@ const Participant = () => {
             </div>
           )}
 
-          {selectedSubCategory !== 'College' && selectschoolType==='Malayalam Mission' && (
+          {selectedSubCategory !== 'College' && selectschoolType === 'Malayalam Mission' && (
             <>
-            <div className="w-1/2 mb-3 md:w-1/3 p-1 md:p-2 bg-white">
-              <label className="block ml-5 mb-1">Select Mission Chapter</label>
-              <select
-                className="w-full p-1 md:p-2 border-0 rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
-                style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
-                value={selectMission}
-                onChange={(e) => {
-                  
-                  setSelectedMission(e.target.value);
-                  handleChapter(e.target.value);
-                } }
-              >
-                <option value="">Select Mission Chapter</option>
-                {missionChapter && missionChapter.map((e) => (
-                                      <option key={e.chapter_id} value={e.chapter_name}>
-                                        {e.chapter_name}
-                                      </option>
-                                    ))}
-              </select>
-            </div>
+              <div className="w-1/2 mb-3 md:w-1/3 p-1 md:p-2 bg-white">
+                <label className="block ml-5 mb-1">Select Mission Chapter</label>
+                <select
+                  className="w-full p-1 md:p-2 border-0 rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
+                  style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
+                  value={selectMission}
+                  onChange={(e) => {
 
-            <div className="w-1/2 mb-3 md:w-1/3 p-1 md:p-2 bg-white">
-              <label className="block ml-5 mb-1">Select Mission Zone</label>
-              <select
-                className="w-full p-1 md:p-2 border-0 rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
-                style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
-                value={selectZone}
-                onChange={(e) => {
-                  
-                  setSelectedZone(e.target.value);
-                } }
-              >
-                <option value="">Select Mission Zone</option>
-                {missionZone && missionZone.map((e) => (
-                                        <option key={e.zone_id} value={e.zone_name}>
-                                          {e.zone_name}
-                                        </option>
-                                      ))}
-              </select>
-            </div>
+                    setSelectedMission(e.target.value);
+                    handleChapter(e.target.value);
+                  }}
+                >
+                  <option value="">Select Mission Chapter</option>
+                  {missionChapter && missionChapter.map((e) => (
+                    <option key={e.chapter_id} value={e.chapter_name}>
+                      {e.chapter_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="w-1/2 mb-3 md:w-1/3 p-1 md:p-2 bg-white">
+                <label className="block ml-5 mb-1">Select Mission Zone</label>
+                <select
+                  className="w-full p-1 md:p-2 border-0 rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
+                  style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
+                  value={selectZone}
+                  onChange={(e) => {
+
+                    setSelectedZone(e.target.value);
+                  }}
+                >
+                  <option value="">Select Mission Zone</option>
+                  {missionZone && missionZone.map((e) => (
+                    <option key={e.zone_id} value={e.zone_name}>
+                      {e.zone_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </>
           )}
 
-          
+
 
 
 
@@ -709,47 +709,47 @@ const Participant = () => {
             </>
           )}
 
-{selectschoolType === 'ICDS' && selectedSubCategory !== 'College' && (
+          {selectschoolType === 'ICDS' && selectedSubCategory !== 'College' && (
             <>
-            <div className="w-1/2 mb-3 md:w-1/3 p-1 md:p-2">
-              <label className="block ml-5 mb-1">Select ICDS Block</label>
-              <select
-                className="w-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
-                style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
-                value={selectIcdsBlock}
-                onChange={(e) => {
-                  setSelectIcdsBlock(e.target.value)
-                  handleIcds(e.target.value);
-                }}
-              >
-                <option value="">Select ICDS Block</option>
-                {icdsBlock && icdsBlock.map((e) => (
-                                      <option key={e.icds_block_id} value={e.block_name}>
-                                        {e.block_name}
-                                      </option>
-                                    ))}
-              </select>
-            </div>
+              <div className="w-1/2 mb-3 md:w-1/3 p-1 md:p-2">
+                <label className="block ml-5 mb-1">Select ICDS Block</label>
+                <select
+                  className="w-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
+                  style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
+                  value={selectIcdsBlock}
+                  onChange={(e) => {
+                    setSelectIcdsBlock(e.target.value)
+                    handleIcds(e.target.value);
+                  }}
+                >
+                  <option value="">Select ICDS Block</option>
+                  {icdsBlock && icdsBlock.map((e) => (
+                    <option key={e.icds_block_id} value={e.block_name}>
+                      {e.block_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-            <div className="w-1/2 mb-3 md:w-1/3 p-1 md:p-2">
-              <label className="block ml-5 mb-1">Select ICDS Project</label>
-              <select
-                className="w-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
-                style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
-                value={selectIcdsProject}
-                onChange={(e) => {
-                  setSelectIcdsProject(e.target.value)
-                }}
-              >
-                <option value="">Select ICDS Project</option>
-                {icdsProject && icdsProject.map((e) => (
-                                        <option key={e.project_id} value={e.project_name}>
-                                          {e.project_name}
-                                        </option>
-                                      ))}
-              </select>
-            </div>
-          </>
+              <div className="w-1/2 mb-3 md:w-1/3 p-1 md:p-2">
+                <label className="block ml-5 mb-1">Select ICDS Project</label>
+                <select
+                  className="w-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
+                  style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
+                  value={selectIcdsProject}
+                  onChange={(e) => {
+                    setSelectIcdsProject(e.target.value)
+                  }}
+                >
+                  <option value="">Select ICDS Project</option>
+                  {icdsProject && icdsProject.map((e) => (
+                    <option key={e.project_id} value={e.project_name}>
+                      {e.project_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </>
           )}
 
           {(selectschoolType === 'General Education' && selectedSubCategory !== 'College') && (
@@ -858,6 +858,7 @@ const Participant = () => {
           <table className="min-w-full bg-white border-gray-200 rounded-t-lg">
             <thead>
               <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                <th className="py-3 px-6 text-left w-16 bd-2 rounded-tl-lg">SL .No</th>
                 <th className="py-3 px-6 text-left w-16 bd-2 rounded-tl-lg">Tree number</th>
                 <th className="py-3 px-6 text-left">Planter name</th>
                 <th className="py-3 px-6 text-left">Uploader name</th>
@@ -868,8 +869,10 @@ const Participant = () => {
             </thead>
             <tbody>
               {participants && participants.length > 0 ? (
-                participants.map((participant) => (
+                participants.map((participant, index) => (
                   <tr key={participant.up_id} className="border border-gray-200 hover:bg-gray-100">
+
+                    <td className="py-3 px-6 text-left">{startIndex + index + 1}</td>
                     <td className="py-3 px-6 text-left">{participant.up_id || 'N/A'}</td>
                     <td className="py-3 px-6 text-left">{participant.up_planter || 'N/A'}</td>
                     <td className="py-3 px-6 text-left"><a href={`/user-page?u=${participant.up_name}&id=${participant.up_reg_id}`}>{participant.up_name || 'N/A'}</a></td>
