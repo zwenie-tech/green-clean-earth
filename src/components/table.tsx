@@ -199,8 +199,8 @@ const handleEdit = async ()=>{
             </div>
           </div>
         </div>
-      )}
-        </>
+           )}
+        </div>
       )}
     </div>
   );
