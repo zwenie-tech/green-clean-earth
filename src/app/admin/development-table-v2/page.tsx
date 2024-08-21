@@ -1,25 +1,21 @@
 "use client";
 
+// DO NOT EDIT 
+
+
 import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
-import {
-  ColDef,
-  ModuleRegistry,
-  RowClickedEvent,
-} from "@ag-grid-community/core";
+import { ColDef, ModuleRegistry } from "@ag-grid-community/core";
 import { AgGridReact } from "@ag-grid-community/react";
 // import "@ag-grid-community/styles/ag-grid.css";
 // import "@ag-grid-community/styles/ag-theme-quartz.css";
 import "@ag-grid-community/styles/ag-grid-theme-builder.css";
-import { useRouter } from "next/navigation";
 import React, { StrictMode, useMemo, useState } from "react";
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
 const GridExample = () => {
-  const router = useRouter();
   const [rowData, setRowData] = useState([
     {
-      id: 1,
       uploader_name: "Nihad",
       planter_name: "Adam",
       tree_name: "Mango",
@@ -28,7 +24,6 @@ const GridExample = () => {
       group_type: "PQR",
     },
     {
-      id: 2,
       uploader_name: "David",
       planter_name: "Joseph",
       tree_name: "Oak",
@@ -37,7 +32,6 @@ const GridExample = () => {
       group_type: "XYZ",
     },
     {
-      id: 3,
       uploader_name: "Sarah",
       planter_name: "Rachel",
       tree_name: "Maple",
@@ -46,7 +40,6 @@ const GridExample = () => {
       group_type: "ABC",
     },
     {
-      id: 4,
       uploader_name: "Michael",
       planter_name: "Benjamin",
       tree_name: "Cedar",
@@ -55,7 +48,6 @@ const GridExample = () => {
       group_type: "PQR",
     },
     {
-      id: 5,
       uploader_name: "Rebecca",
       planter_name: "Leah",
       tree_name: "Birch",
@@ -64,7 +56,6 @@ const GridExample = () => {
       group_type: "DEF",
     },
     {
-      id: 6,
       uploader_name: "Daniel",
       planter_name: "Elijah",
       tree_name: "Spruce",
@@ -73,7 +64,6 @@ const GridExample = () => {
       group_type: "GHI",
     },
     {
-      id: 7,
       uploader_name: "Hannah",
       planter_name: "Miriam",
       tree_name: "Fir",
@@ -82,7 +72,6 @@ const GridExample = () => {
       group_type: "JKL",
     },
     {
-      id: 8,
       uploader_name: "Eli",
       planter_name: "Isaiah",
       tree_name: "Redwood",
@@ -91,7 +80,6 @@ const GridExample = () => {
       group_type: "MNO",
     },
     {
-      id: 9,
       uploader_name: "Naomi",
       planter_name: "Deborah",
       tree_name: "Cherry",
@@ -100,7 +88,6 @@ const GridExample = () => {
       group_type: "QRS",
     },
     {
-      id: 10,
       uploader_name: "Joshua",
       planter_name: "Gideon",
       tree_name: "Ash",
@@ -109,7 +96,6 @@ const GridExample = () => {
       group_type: "TUV",
     },
     {
-      id: 11,
       uploader_name: "Esther",
       planter_name: "Ruth",
       tree_name: "Elm",
@@ -118,7 +104,6 @@ const GridExample = () => {
       group_type: "WXY",
     },
     {
-      id: 12,
       uploader_name: "Caleb",
       planter_name: "Hosea",
       tree_name: "Willow",
@@ -127,7 +112,6 @@ const GridExample = () => {
       group_type: "ZAB",
     },
     {
-      id: 13,
       uploader_name: "Deborah",
       planter_name: "Hannah",
       tree_name: "Sycamore",
@@ -135,8 +119,8 @@ const GridExample = () => {
       coordinator_name: "Isaiah",
       group_type: "CDE",
     },
+
     {
-      id: 14,
       uploader_name: "Aaron",
       planter_name: "Samuel",
       tree_name: "Olive",
@@ -145,7 +129,6 @@ const GridExample = () => {
       group_type: "FGH",
     },
     {
-      id: 15,
       uploader_name: "Leah",
       planter_name: "Abigail",
       tree_name: "Palm",
@@ -154,7 +137,6 @@ const GridExample = () => {
       group_type: "IJK",
     },
     {
-      id: 16,
       uploader_name: "Moses",
       planter_name: "Joshua",
       tree_name: "Pine",
@@ -163,7 +145,6 @@ const GridExample = () => {
       group_type: "LMN",
     },
     {
-      id: 17,
       uploader_name: "Jacob",
       planter_name: "Noah",
       tree_name: "Cypress",
@@ -172,7 +153,6 @@ const GridExample = () => {
       group_type: "OPQ",
     },
     {
-      id: 18,
       uploader_name: "Ruth",
       planter_name: "Naomi",
       tree_name: "Sequoia",
@@ -181,7 +161,6 @@ const GridExample = () => {
       group_type: "RST",
     },
     {
-      id: 19,
       uploader_name: "Solomon",
       planter_name: "David",
       tree_name: "Cedar",
@@ -190,7 +169,6 @@ const GridExample = () => {
       group_type: "UVW",
     },
     {
-      id: 20,
       uploader_name: "Jonathan",
       planter_name: "Goliath",
       tree_name: "Redwood",
@@ -199,7 +177,6 @@ const GridExample = () => {
       group_type: "XYZ",
     },
     {
-      id: 21,
       uploader_name: "Ezekiel",
       planter_name: "Isaiah",
       tree_name: "Birch",
@@ -208,7 +185,6 @@ const GridExample = () => {
       group_type: "ABC",
     },
     {
-      id: 22,
       uploader_name: "Abigail",
       planter_name: "Hosea",
       tree_name: "Maple",
@@ -233,11 +209,6 @@ const GridExample = () => {
       floatingFilter: true,
     };
   }, []);
-  const onRowClicked = (event: RowClickedEvent) => {
-    // console.log(event.data);
-    const id = event.data.id;
-    router.push(`admin/uploads/${id}`);
-  };
 
   return (
     <div className=" bg-slate-100">
@@ -246,7 +217,6 @@ const GridExample = () => {
           rowData={rowData}
           columnDefs={columnDefs}
           defaultColDef={defaultColDef}
-          onRowClicked={onRowClicked}
           rowSelection="multiple"
           suppressRowClickSelection={true}
           pagination={true}
