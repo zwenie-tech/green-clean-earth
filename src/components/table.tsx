@@ -124,16 +124,16 @@ const handleEdit = async ()=>{
                   <td className="border border-black">{startIndex + i + 1}</td>
                   <td className="border border-black">
                     <a href={`${d.activity_social_media_link}`} className="flex place-content-center">
-                      <img className="max-h-56" src={`${imageURL}${d.activity_thumbnail}`} alt="Thumbnail" />
+                    {`${d.activity_social_media_link}`}
                     </a>
                   </td>
-                  <td>{d.participant_name}</td>
-                  <td>{d.activity_title}{d.activity_description}</td>
-                  <td>{categories[d.activity_category_id]}</td>
-                  <td className="p-4" onClick={() => {setShowDialog(true)
+                  <td className="p-4 border border-black">{d.participant_name}</td>
+                  <td className="p-4 border border-black">{d.activity_title}{d.activity_description}</td>
+                  <td className="p-4 border border-black">{categories[d.activity_category_id]}</td>
+                  <td className="p-4 border border-black" onClick={() => {setShowDialog(true)
                     setActId(d.personal_activity_id.toString())
                   }}>
-                    {d.activity_views} Views, {d.activity_likes} Likes
+                    {d.activity_views} Views, {d.activity_likes} Likes <p className="text-green-600 underline">Edit</p>
                   </td>
                   <td className="border border-black">{d.activity_value}</td>
                 </tr>

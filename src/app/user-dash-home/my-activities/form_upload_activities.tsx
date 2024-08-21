@@ -304,7 +304,7 @@ export function FormUploadActivities({ token }: ActivitiesTabProps) {
             </FormItem>
           )}
         />
-         <div className={cn("flex md:flex-row w-[100%] gap-4 flex-col")}>
+         {/* <div className={cn("flex md:flex-row w-[100%] gap-4 flex-col")}>
               <div className="flex w-[100%] gap-2 flex-col my-4">
               <FormLabel>Upload Image</FormLabel>
               <span className="text-xs text-gray-400"></span>
@@ -369,7 +369,7 @@ export function FormUploadActivities({ token }: ActivitiesTabProps) {
                 />
               </div>
             </div>
-          </div>
+          </div> */}
         <Button type="submit" className="bg-green-700 w-[100%]">
           Submit
         </Button>
