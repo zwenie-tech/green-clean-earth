@@ -6,17 +6,16 @@ import { useEffect, useState, Suspense } from "react";
 import ProfileTab from "./profile_tab";
 import MyUploadsTab from "./my_uploads_tab";
 import ActivitiesTab from "./activities_tab";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 import { useRouter, useSearchParams } from "next/navigation";
 import PageTitle from "@/components/sm/pageTitle";
 import GceBadge from "@/components/gceBadge";
 import JoinNow from "@/components/joinNow";
 
 function MyProfile() {
-  const token = Cookies.get('token');
-  const [openTab, setOpenTab] = useState(1);
+  const token = Cookies.get("token");
   const searchParams = useSearchParams();
-  
+
   const router = useRouter();
   useEffect(() => {
     if (!token) {
@@ -28,10 +27,10 @@ function MyProfile() {
     <main>
       <Navigationbar />
       <div className="container mx-auto md:max-w-5xl mt-4 min-h-screen">
-        <PageTitle title="My Profile"/>
+        <PageTitle title="My Profile" />
         <div className="flex flex-wrap">
           <div className="w-full">
-            <ul
+            {/* <ul
               className="flex mb-0 list-none flex-wrap flex-row"
               role="tablist"
             >
@@ -93,20 +92,18 @@ function MyProfile() {
                   <List size={28} strokeWidth={1.75} /> Activities
                 </a>
               </li>
-            </ul>
-            <div className="relative flex flex-col min-w-0 break-words bg-light-gray w-full mb-6 shadow">
+            </ul> */}
+            <div className="relative flex flex-col min-w-0 break-words bg-light-gray w-full mb-6 rounded-lg shadow">
               <div className="px-4 py-5 flex-auto">
-                <div className="">
-                  <div className={openTab === 1 ? "block" : "hidden"} id="link1">
-                    <ProfileTab token={token} />
-                  </div>
+                <ProfileTab token={token} />
+                {/* <div className="">
                   <div className={openTab === 2 ? "block" : "hidden"} id="link2">
                     <MyUploadsTab token={token} />
                   </div>
                   <div className={openTab === 3 ? "block" : "hidden"} id="link3">
                     <ActivitiesTab token={token} />
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -114,7 +111,7 @@ function MyProfile() {
       </div>
       <GceBadge />
       <JoinNow />
-      <Footer/>
+      <Footer />
     </main>
   );
 }
@@ -126,4 +123,3 @@ export default function MyPage() {
     </Suspense>
   );
 }
-

@@ -101,14 +101,14 @@ const handleEdit = async ()=>{
       {data.length === 0 ? (
         <div className="text-center py-5">No data available</div>
       ) : (
-        <>
-          <table className="table-auto md:w-full md:table-fixed">
+        <div className="w-full overflow-x-scroll">
+          <table className="mx-auto table-fixed border border-black border-collapse">
             <thead>
-              <tr className="border-b-2 border-green-300">
+              <tr className="">
                 {headings.map((h, i) => (
                   <th
                     key={i}
-                    className="bg-green-200 capitalize py-3 px-2 text-sm font-normal"
+                    className="border border-black capitalize py-3 px-2 text-sm font-normal"
                   >
                     {h}
                   </th>
@@ -119,12 +119,12 @@ const handleEdit = async ()=>{
               {records.map((d, i) => (
                 <tr
                   key={d.personal_activity_id}
-                  className={`${i % 2 !== 0 && "bg-gray-200"} text-center capitalize`}
+                  className={`text-center capitalize`}
                 >
-                  <td>{startIndex + i + 1}</td>
-                  <td>
-                    <a href={`${d.activity_social_media_link}`}>
-                      <img src={`${imageURL}${d.activity_thumbnail}`} alt="Thumbnail" />
+                  <td className="border border-black">{startIndex + i + 1}</td>
+                  <td className="border border-black">
+                    <a href={`${d.activity_social_media_link}`} className="flex place-content-center">
+                      <img className="max-h-56" src={`${imageURL}${d.activity_thumbnail}`} alt="Thumbnail" />
                     </a>
                   </td>
                   <td>{d.participant_name}</td>
@@ -135,7 +135,7 @@ const handleEdit = async ()=>{
                   }}>
                     {d.activity_views} Views, {d.activity_likes} Likes
                   </td>
-                  <td>{d.activity_value}</td>
+                  <td className="border border-black">{d.activity_value}</td>
                 </tr>
               ))}
             </tbody>
