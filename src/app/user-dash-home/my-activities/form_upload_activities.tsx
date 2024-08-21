@@ -74,16 +74,16 @@ const formSchema = z.object({
   activity_title: z.string().max(255),
   short_desc: z.string().max(255),
   social_link: z.string().max(255),
-  activityThumbnail: z
-  .any()
-  .refine(async (files) => {
-    const validFiles = await validateAndResizeImage(files);
-    return validFiles?.[0]?.size <= MAX_FILE_SIZE;
-  }, "Max image size is 100MB.")
-  .refine(
-    (files) => ACCEPTED_IMAGE_MIME_TYPES.includes(files?.[0]?.type),
-    "Only .jpg, .jpeg, .png and .webp formats are supported."
-  ),
+  // activityThumbnail: z
+  // .any()
+  // .refine(async (files) => {
+  //   const validFiles = await validateAndResizeImage(files);
+  //   return validFiles?.[0]?.size <= MAX_FILE_SIZE;
+  // }, "Max image size is 100MB.")
+  // .refine(
+  //   (files) => ACCEPTED_IMAGE_MIME_TYPES.includes(files?.[0]?.type),
+  //   "Only .jpg, .jpeg, .png and .webp formats are supported."
+  // ),
 });
 
 interface Category {
