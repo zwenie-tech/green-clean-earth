@@ -9,12 +9,12 @@ import { apiURL, fetchActivityData } from "@/app/requestsapi/request";
 
 const headings = [
   "Sl No",
-  "Thumbnail",
+  "Activity Link",
   "Name",
   "Name of Art - Brief Description",
   "Category",
-  "Views, Likes, Comments, and Shares",
-  "Value",
+  "Views & Likes",
+  "Total",
 ];
 
 export default function ActivitiesTab({ token }: any) {
