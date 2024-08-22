@@ -9,7 +9,7 @@ import {
 import { AgGridReact } from "@ag-grid-community/react";
 // import "@ag-grid-community/styles/ag-grid.css";
 // import "@ag-grid-community/styles/ag-theme-quartz.css";
-import "@ag-grid-community/styles/ag-grid-theme-builder.css";
+import "./ag-grid-theme-builder.css";
 import { useRouter } from "next/navigation";
 import React, { StrictMode, useMemo, useState } from "react";
 
