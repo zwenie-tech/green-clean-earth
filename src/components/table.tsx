@@ -165,9 +165,9 @@ const handleEdit = async ()=>{
             <label className="block ml-3 mb-1">Views</label>
             <input
               type="text"
-              className="w-full p-1  border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
+              className="w-full p-2 border-2 rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
               placeholder="Enter Views"
-              style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
+              // style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
               value={views}
               onChange={(e) => {setViews(e.target.value)}}
             />
@@ -176,30 +176,32 @@ const handleEdit = async ()=>{
             <label className="block ml-3 mb-1">Likes</label>
             <input
               type="text"
-              className="w-full p-1  border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
+              className="w-full p-2 border-2 rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
               placeholder="Enter Likes"
-              style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
+              // style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
               value={likes}
               onChange={(e) => {setLikes(e.target.value)}}
             />
           </div>
               
-              <button
-                className="w-1/2 bg-green-600 text-white py-2 px-4 rounded"
-                onClick={() => handleEdit()}
-              >
-                Edit
-              </button>
-              <button
-                className="w-1/2 bg-red-600 text-white py-2 px-4 rounded"
-                onClick={() => setShowDialog(false)}
-              >
-                Close
-              </button>
+              <div className="flex gap-2">
+                <button
+                  className="w-1/2 bg-primary text-white py-2 px-4 rounded-md"
+                  onClick={() => handleEdit()}
+                >
+                  Save
+                </button>
+                <button
+                  className="w-1/2 bg-red-100 text-red-600 py-2 px-4 rounded-md"
+                  onClick={() => setShowDialog(false)}
+                >
+                  Close
+                </button>
+              </div>
             </div>
           </div>
         </div>
-           )}
+        )}
         </div>
       )}
     </div>
