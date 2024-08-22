@@ -125,8 +125,8 @@ const ParticipantList: React.FC = () => {
             >
               <img
                 className="w-full h-48 object-cover rounded-tl-lg rounded-tr-lg"
-                //src={`${imageURL}${participant.up_file}`}
-                src="/images/image1.jpeg"
+                src={`${imageURL}${participant.up_file}`}
+                //src="/images/image1.jpeg"
                 alt="Image"
               />
               <div className="flex justify-center mt-2 gap-1">
