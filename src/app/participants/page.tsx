@@ -4,6 +4,7 @@ import NavigationBar from "@/components/navigationBar";
 import Footer from "@/components/footer";
 import { apiURL, imageURL } from "@/app/requestsapi/request";
 import { setgid } from "process";
+import { Button } from "@/components/ui/button";
 
 interface Participant {
   up_id: number,
@@ -319,10 +320,12 @@ const Participant = () => {
       <div className="mt-6 mb-3">
         <h2 className="text-2xl font-bold text-center items-center text-[#3C6E1F]">Participants list</h2>
       </div>
-      <form onSubmit={onSubmit}>
-        <div className="flex flex-wrap p-2 md:p-4">
-          <div className="w-1/2 mb-3 md:w-1/4 p-1 md:p-2">
-            <label className="block ml-3 mb-1">Tree Number</label>
+      <div className='search1'>
+        <h1 className='text-lg text-center m-3'>Search by Person Wise</h1>
+        <div className="mx-5 md:mx-9 lg:mx-16 border-2 border-gray-300 shadow-lg flex justify-center items-center bg-gray-100 rounded-lg">
+         <form onSubmit={onSubmit}>
+         <div className="flex flex-wrap p-2 md:p-4">
+          <div className="w-1/2 mb-3 lg:w-1/4 p-1 md:p-2">
             <input
                     type="text"
                     className="w-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
@@ -333,32 +336,30 @@ const Participant = () => {
                />
           </div>
 
-          <div className="w-1/2 mb-3 md:w-1/3 p-1 md:p-2 bg-white">
-            <label className="block ml-5 mb-1">Group Type</label>
+          <div className="w-1/2 mb-3 lg:w-1/4 p-1 md:p-2">
             <select
               className="w-full p-1 md:p-2 border-0 rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
               style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
               value={selectedCategory}
               onChange={(e)=> setSelectedCategory(e.target.value)}
             >
-              <option value="">Select Group Type</option>
+              <option className="bg-transparent" value="">Select Group Type</option>
               {category.map((c) => (
-                <option key={c.id} value={c.group_type}>
+                <option className="bg-white" key={c.id} value={c.group_type}>
                   {c.group_type}
                 </option>
               ))}
             </select>
           </div>
           {selectedCategory !=="" && (
-            <div className="w-1/2 mb-3 md:w-1/3 p-1 md:p-2 bg-white">
-            <label className="block ml-5 mb-1">Group Id</label>
+            <div className="w-1/2 mb-3 lg:w-1/4 p-1 md:p-2">
             <select
               className="w-full p-1 md:p-2 border-0 rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
               style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
               value={selectedgrpName}
               onChange={(e)=> setSelectedGrpName(e.target.value)}
             >
-              <option value="">Select Group Type</option>
+              <option  className="bg-white" value="">Select Group Type</option>
               {grpName.map((c) => (
                 <option key={c.gp_id} value={c.gp_name}>
                   {c.gp_name}
@@ -368,120 +369,121 @@ const Participant = () => {
           </div>
             
           )}
-          
-
-
-          <div className="w-1/2 mb-3 md:w-1/3 p-1 md:p-2 bg-white">
-            <label className="block ml-5 mb-1">Country</label>
-            <select
-              className="w-full p-1 md:p-2 border-0 rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
-              style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
-              value={selectedCountry}
-              onChange={handleCountryChange}
-            >
-              <option value="">Select Country</option>
-              {countries.map((country) => (
-                <option key={country.cntry_id} value={country.cntry_name}>
-                  {country.cntry_name}
-                </option>
-              ))}
-            </select>
-          </div>
-          
-          {selectedCountry === "India" && (
-            <div className="w-1/2 mb-3 md:w-1/3 p-1 md:p-2">
-              <label className="block ml-5 mb-1">State</label>
-              <select
-                className="w-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
-                style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
-                value={selectedState}
-                onChange={handleStateChange}
-              >
-                <option value="">Select State</option>
-                {states.map((state) => (
-                  <option key={state.st_id} value={state.st_name}>
-                    {state.st_name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
-          
-          {selectedCountry === "India" && selectedState === "Kerala" && (
-            <>
-              <div className="w-1/2 mb-3 md:w-1/3 p-1 md:p-2">
-                <label className="block ml-5 mb-1">District</label>
-                <select
-                  className="w-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
-                  style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
-                  value={selectedDistrict}
-                  onChange={handleDistrictChange}
-                >
-                  <option value="">Select District</option>
-                  {districts.map((district) => (
-                    <option key={district.dis_id} value={district.dis_name}>
-                      {district.dis_name}
-                    </option>
-                  ))}
-                </select>
+          <Button type="submit" className="w-full md:w-1/4 mt-2 bg-primary mx-auto text-center">
+                  Search
+                </Button>
               </div>
-              <div className="w-1/2 mb-3 md:w-1/4 p-1 md:p-2">
-                <label className="block ml-5 mb-1">Corporation</label>
-                <select
-                  className="w-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
-                  style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
-                  value={selectedCorp}
-                  onChange={handleCorpChange}
-                >
-                  <option value="">Select Corporation</option>
-                  {corporation.map((corp) => (
-                    <option key={corp.cop_id} value={corp.cop_name}>
-                      {corp.cop_name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="w-1/2 mb-3 md:w-1/4 p-1 md:p-2 bg-white">
-                <label className="block ml-5 mb-1">LSGD</label>
-                <select
-                  className="w-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
-                  style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
-                  value={selectedLsgd}
-                  onChange={(e) => setSelectedLsgd(e.target.value)}
-                >
-                  <option value="">Select LSGD</option>
-                  {lsgd.map((lsg) => (
-                    <option key={lsg.lsg_id} value={lsg.lsg_name}>
-                      {lsg.lsg_name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="w-1/2 mb-3 md:w-1/4 p-1 md:p-2">
-                <label className="block ml-3 mb-1">Ward No</label>
-                <input
-                  type="text"
-                  className="w-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
-                  placeholder="Enter ward number"
-                  style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
-                  value={wardNo}
-                  onChange={(e) => setWardNo(e.target.value)}
-                />
-              </div>
-            </>
-          )}
-          
-          <div className="w-full md:w-1/4 p-1 md:p-2 flex justify-center md:justify-start sm:items-center md:items-start">
-            <button
-              type="submit"
-              className="w-1/2 md:w-full mt-7 p-1 md:p-2 bg-[#3C6E1F] text-white rounded-md"
-              style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
-            >
-              Submit
-            </button>
-          </div>
+            </form>
         </div>
-      </form>
+      </div>
+          
+      <div className="mx-5  mt-3 md:mx-9 lg:mx-16 border-2 border-gray-300 shadow-lg flex justify-center items-center bg-gray-100 rounded-lg">
+  <form onSubmit={onSubmit} className="w-full md:w-2/3 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div className="w-full mb-3 p-1 md:p-2">
+      <select
+        className="w-full p-1 md:p-2 border-0 rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
+        style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
+        value={selectedCountry}
+        onChange={handleCountryChange}
+      >
+        <option value="">Select Country</option>
+        {countries.map((country) => (
+          <option key={country.cntry_id} value={country.cntry_name}>
+            {country.cntry_name}
+          </option>
+        ))}
+      </select>
+    </div>
+
+    {selectedCountry === "India" && (
+      <div className="w-full mb-3 p-1 md:p-2">
+        <select
+          className="w-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
+          style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
+          value={selectedState}
+          onChange={handleStateChange}
+        >
+          <option value="">Select State</option>
+          {states.map((state) => (
+            <option key={state.st_id} value={state.st_name}>
+              {state.st_name}
+            </option>
+          ))}
+        </select>
+      </div>
+    )}
+
+    {selectedCountry === "India" && selectedState === "Kerala" && (
+      <>
+        <div className="w-full mb-3 p-1 md:p-2">
+          <select
+            className="w-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
+            style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
+            value={selectedDistrict}
+            onChange={handleDistrictChange}
+          >
+            <option value="">Select District</option>
+            {districts.map((district) => (
+              <option key={district.dis_id} value={district.dis_name}>
+                {district.dis_name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="w-full mb-3 p-1 md:p-2">
+          <select
+            className="w-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
+            style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
+            value={selectedCorp}
+            onChange={handleCorpChange}
+          >
+            <option value="">Select Corporation</option>
+            {corporation.map((corp) => (
+              <option key={corp.cop_id} value={corp.cop_name}>
+                {corp.cop_name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="w-full mb-3 p-1 md:p-2">
+          <select
+            className="w-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
+            style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
+            value={selectedLsgd}
+            onChange={(e) => setSelectedLsgd(e.target.value)}
+          >
+            <option value="">Select LSGD</option>
+            {lsgd.map((lsg) => (
+              <option key={lsg.lsg_id} value={lsg.lsg_name}>
+                {lsg.lsg_name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="w-full mb-3 p-1 md:p-2">
+          <input
+            type="text"
+            className="w-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
+            placeholder="Enter ward number"
+            style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
+            value={wardNo}
+            onChange={(e) => setWardNo(e.target.value)}
+          />
+        </div>
+      </>
+    )}
+
+    <Button type="submit" className="w-full lg:w-full mt-2 mb-3 p-1 md:p-2 bg-primary mx-auto text-center">
+      Search
+    </Button>
+  </form>
+</div>
+
+
+
   <div className="container mx-auto p-6">
   <div className="overflow-x-auto">
     <table className="min-w-full bg-white border-gray-200 rounded-t-lg">
