@@ -1,10 +1,11 @@
 "use client";
-import Register from "./register/page";
+
+import HomePage from "./home/page";
 
 export default function Home() {
   return (
     <main>
-      <Register />
+      <HomePage />
     </main>
   );
 }
