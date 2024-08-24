@@ -122,6 +122,7 @@ const ActivityList = () => {
   const [eduSubDistrict, setEduSubDistrict] = useState<EduSubDistrict[]>([]);
   const [schoolType, setSchoolType] = useState<SchoolType[]>([]);
   const [selectschoolType, setSelectschoolType] = useState('');
+  const [selectMissionarea, setSelectMissionarea] = useState('');
   const [selecteduDistrict, setSelecteduDistrict] = useState('');
   const [selecteduSubDistrict, setSelecteduSubDistrict] = useState('');
   const [subcategoryOptions, setSubCategoryOptions] = useState<SubCategory[]>([]);
@@ -129,6 +130,11 @@ const ActivityList = () => {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedState, setSelectedState] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
+  
+  const [selectedCountryGrp, setSelectedCountryGrp] = useState("");
+  const [selectedStateGrp, setSelectedStateGrp] = useState("");
+  const [selectedDistrictGrp, setSelectedDistrictGrp] = useState("");
+
   const [selectedCorp, setSelectedCorp] = useState("");
   const [selectedLsgd, setSelectedLsgd] = useState("");
   const [selectedGrpType, setSelectedGrpType] = useState("new");
@@ -167,6 +173,7 @@ const ActivityList = () => {
       subCategory: '',
       schooltype: '',
       missionchapter: '',
+      missionarea:'',
       missionzone: '',
       country: '',
       state: '',
@@ -184,7 +191,7 @@ const ActivityList = () => {
       try {
         const responsetype = await axios.get(`${apiURL}/schoolType`);
         setSchoolType(responsetype.data.schoolType);
-        const dis_id = districts.find((item) => item.dis_name === selectedDistrict)?.dis_id;
+        const dis_id = districts.find((item) => item.dis_name === selectedDistrictGrp)?.dis_id;
        
         const responseedudistrict = dis_id ? await axios.get(`${apiURL}/eduDistrict/${dis_id}`) : null;
         responseedudistrict ? setEduDistrict(responseedudistrict.data.eduDistrict) : '';
@@ -193,32 +200,37 @@ const ActivityList = () => {
       }
     };
     fetchClass();
-  }, [districts, selectedDistrict]);
+  }, [districts, selectedDistrictGrp]);
 
   useEffect(() => {
     const handleCbse = async () => {
-      if (selectschoolType === 'CBSE') {
+      if (selectschoolType === 'CBSE' && selectedStateGrp) {
         try {
-          const st_id = states.find((item) => item.st_name === selectedState)?.st_id;
+          const st_id = states.find((item) => item.st_name === selectedStateGrp)?.st_id;
           const response = await axios.get(`${apiURL}/sahodaya/${st_id}`);
           setSahodaya(response.data.sahodayaList);
         } catch (error) {
           console.error("Error fetching data:", error);
         }
       }
-      if (selectschoolType === 'ICDS') {
+      if (selectschoolType === 'ICDS' && selectedDistrictGrp) {
+
         try {
-          const dis_id = districts.find((item) => item.dis_name === selectedDistrict)?.dis_id;
+          const dis_id = districts.find((item) => item.dis_name === selectedDistrictGrp)?.dis_id;
+        console.log('response.data.icdsBlockList',dis_id)
+
           const response = await axios.get(`${apiURL}/icdsBlock/${dis_id}`);
+
           setIcdsBlock(response.data.icdsBlockList);
         } catch (error) {
           console.error("Error fetching data:", error);
         }
 
       }
-      if (selectschoolType === 'Malayalam Mission') {
+      if (selectschoolType === 'Malayalam Mission' && selectMissionarea) {
+        
         try {
-          const response = await axios.get(`${apiURL}/malayalamMissionChapter`);
+          const response = await axios.get(`${apiURL}/malayalamMissionChapter/${selectMissionarea}`);
           setMissionChapter(response.data.chapterList);
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -227,7 +239,7 @@ const ActivityList = () => {
       }
     };
     handleCbse();
-  }, [districts, selectedDistrict, selectedState, selectschoolType, states]);
+  }, [districts, selectschoolType, states, selectMissionarea, selectedStateGrp, selectedDistrictGrp]);
 
   const handleEduDistrict = async (e: any) => {
     try {
@@ -366,7 +378,7 @@ const ActivityList = () => {
 
   useEffect(() => {
     async function fetchStates() {
-      if (selectedCountry === "India") {
+      if (selectedCountry === "India" || selectedCountryGrp === "India") {
         const stateResponse = await fetch(`${apiURL}/state`);
         const stateData = await stateResponse.json();
         setStates(stateData.state);
@@ -383,11 +395,11 @@ const ActivityList = () => {
       setWardNo("");
     }
     fetchStates();
-  }, [selectedCountry]);
+  }, [selectedCountry, selectedCountryGrp]);
 
   useEffect(() => {
     async function fetchDistricts() {
-      if (selectedCountry === "India" && selectedState === "Kerala") {
+      if ((selectedCountry === "India" && selectedState === "Kerala")|| (selectedCountryGrp === "India" && selectedStateGrp === "Kerala")) {
         const districtResponse = await fetch(`${apiURL}/district`);
         const districtData = await districtResponse.json();
         setDistricts(districtData.district);
@@ -402,7 +414,7 @@ const ActivityList = () => {
       setWardNo("");
     }
     fetchDistricts();
-  }, [selectedCountry, selectedState]);
+  }, [selectedCountry, selectedCountryGrp, selectedState, selectedStateGrp]);
 
   useEffect(() => {
     async function fetchCorpData() {
@@ -510,7 +522,7 @@ const ActivityList = () => {
         dataWithIds.districtId = districts.find((item) => item.dis_name === selectedDistrict)?.dis_id || null;
         dataWithIds.corporationId = corporation.find((item) => item.cop_name === selectedCorp)?.cop_id || null;
         dataWithIds.lsgdId = lsgd.find((item) => item.lsg_name === selectedLsgd)?.lsg_id || null;
-        dataWithIds.wardNo = wardNo ? parseInt(wardNo) || null : null;
+        dataWithIds.wardNo = data.wardNo ? parseInt(data.wardNo) || null : null;
       }
     }
 
@@ -753,7 +765,10 @@ const ActivityList = () => {
                     name="lsg"
                     render={({ field }) => (
                       <FormItem>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <Select onValueChange={(value) => {
+                          field.onChange(value);
+                          setSelectedLsgd(value);
+                        }} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
                               <SelectValue placeholder="Choose a LSG" />
@@ -901,7 +916,10 @@ const ActivityList = () => {
                       <FormItem>
                         <Select onValueChange={(value) => {
                           field.onChange(value);
-                          setSelectschoolType(value);
+                          setSelectschoolType(value); 
+                              value==='CBSE' ? setSelectedCountryGrp('India'):''
+                              value==='General Education' || 'ICDS' ? setSelectedCountryGrp('India'):''
+                              value==='General Education' || 'ICDS' ? setSelectedStateGrp('Kerala'):''
                         }} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
@@ -925,6 +943,37 @@ const ActivityList = () => {
 
                 {selectedSubCategory !== 'College' && selectschoolType === 'Malayalam Mission' && (
                   <>
+                  <FormField
+                      control={form.control}
+                      name="missionarea"
+                      render={({ field }) => (
+                        <FormItem>
+                          <Select onValueChange={(value) => {
+                            field.onChange(value);
+                            setSelectMissionarea(value);
+                            
+                          }} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Choose mission area" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              
+                                <SelectItem key='1' value="1">
+                                  Global
+                                </SelectItem>
+                                <SelectItem key='2' value="2">
+                                  India
+                                </SelectItem>
+                             
+
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                     <FormField
                       control={form.control}
                       name="missionchapter"
@@ -987,33 +1036,7 @@ const ActivityList = () => {
 
                 {selectschoolType === 'CBSE' && selectedSubCategory !== 'College' && (
                   <>
-                    <FormField
-                      control={form.control}
-                      name="country"
-                      render={({ field }) => (
-                        <FormItem>
-                          <Select onValueChange={(value) => {
-                            field.onChange(value);
-                            setSelectedCountry(value);
-                          }} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Choose a country" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {countries.map((country) => (
-                                <SelectItem key={country.cntry_id} value={country.cntry_name}>
-                                  {country.cntry_name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    {selectedCountry === 'India' && (
+                   
                       <FormField
                         control={form.control}
                         name="state"
@@ -1021,7 +1044,7 @@ const ActivityList = () => {
                           <FormItem>
                             <Select onValueChange={(value) => {
                               field.onChange(value);
-                              setSelectedState(value);
+                              setSelectedStateGrp(value);
                             }} defaultValue={field.value}>
                               <FormControl>
                                 <SelectTrigger>
@@ -1040,7 +1063,6 @@ const ActivityList = () => {
                           </FormItem>
                         )}
                       />
-                    )}
 
                     <FormField
                       control={form.control}
@@ -1074,61 +1096,8 @@ const ActivityList = () => {
 
                 {selectschoolType === 'ICDS' && selectedSubCategory !== 'College' && (
                   <>
-                    <FormField
-                      control={form.control}
-                      name="country"
-                      render={({ field }) => (
-                        <FormItem>
-                          <Select onValueChange={(value) => {
-                            field.onChange(value);
-                            setSelectedCountry(value);
-                          }} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Choose a country" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {countries.map((country) => (
-                                <SelectItem key={country.cntry_id} value={country.cntry_name}>
-                                  {country.cntry_name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    {selectedCountry === 'India' && (
-                      <FormField
-                        control={form.control}
-                        name="state"
-                        render={({ field }) => (
-                          <FormItem>
-                            <Select onValueChange={(value) => {
-                              field.onChange(value);
-                              setSelectedState(value);
-                            }} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Choose a state" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                {states.map((state) => (
-                                  <SelectItem key={state.st_id} value={state.st_name}>
-                                    {state.st_name}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    )}
-                    {selectedState === 'Kerala' && (
+                    
+                    {selectedStateGrp === 'Kerala' && (
                       <FormField
                         control={form.control}
                         name="district"
@@ -1136,7 +1105,7 @@ const ActivityList = () => {
                           <FormItem>
                             <Select onValueChange={(value) => {
                               field.onChange(value);
-                              setSelectedDistrict(value);
+                              setSelectedDistrictGrp(value);
                             }} defaultValue={field.value}>
                               <FormControl>
                                 <SelectTrigger>
@@ -1216,61 +1185,7 @@ const ActivityList = () => {
 
                 {(selectschoolType === 'General Education' && selectedSubCategory !== 'College') && (
                   <>
-                  <FormField
-                      control={form.control}
-                      name="country"
-                      render={({ field }) => (
-                        <FormItem>
-                          <Select onValueChange={(value) => {
-                            field.onChange(value);
-                            setSelectedCountry(value);
-                          }} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Choose a country" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {countries.map((country) => (
-                                <SelectItem key={country.cntry_id} value={country.cntry_name}>
-                                  {country.cntry_name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    {selectedCountry === 'India' && (
-                      <FormField
-                        control={form.control}
-                        name="state"
-                        render={({ field }) => (
-                          <FormItem>
-                            <Select onValueChange={(value) => {
-                              field.onChange(value);
-                              setSelectedState(value);
-                            }} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Choose a state" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                {states.map((state) => (
-                                  <SelectItem key={state.st_id} value={state.st_name}>
-                                    {state.st_name}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    )}
-                    {selectedState === 'Kerala' && (
+                    {selectedStateGrp === 'Kerala' && (
                       <FormField
                         control={form.control}
                         name="district"
@@ -1278,7 +1193,7 @@ const ActivityList = () => {
                           <FormItem>
                             <Select onValueChange={(value) => {
                               field.onChange(value);
-                              setSelectedDistrict(value);
+                              setSelectedDistrictGrp(value);
                             }} defaultValue={field.value}>
                               <FormControl>
                                 <SelectTrigger>
