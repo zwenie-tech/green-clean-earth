@@ -1,10 +1,16 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import NavigationBar from "@/components/navigationBar";
-import Footer from "@/components/footer";
-import { apiURL, imageURL } from "@/app/requestsapi/request";
-import { setgid } from "process";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import NavigationBar from '@/components/navigationBar';
+import Footer from '@/components/footer';
+import { useForm } from "react-hook-form";
+import { apiURL, imageURL } from '@/app/requestsapi/request';
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input"
+import axios from 'axios';
+import { Label } from '@radix-ui/react-label';
+
 
 interface Participant {
   up_id: number,
@@ -91,8 +97,9 @@ interface MissionZone {
   zone_name: string;
 }
 
-const Participant = () => {
-  const [participants, setParticipants] = useState<Participant[]>([]);
+
+const ActivityList = () => {  
+  const [participantlist, setParticipantList] = useState<Participant[]>([]);
   const [countries, setCountries] = useState<Country[]>([]);
   const [states, setStates] = useState<State[]>([]);
   const [districts, setDistricts] = useState<District[]>([]);
@@ -115,6 +122,7 @@ const Participant = () => {
   const [eduSubDistrict, setEduSubDistrict] = useState<EduSubDistrict[]>([]);
   const [schoolType, setSchoolType] = useState<SchoolType[]>([]);
   const [selectschoolType, setSelectschoolType] = useState('');
+  const [selectMissionarea, setSelectMissionarea] = useState('');
   const [selecteduDistrict, setSelecteduDistrict] = useState('');
   const [selecteduSubDistrict, setSelecteduSubDistrict] = useState('');
   const [subcategoryOptions, setSubCategoryOptions] = useState<SubCategory[]>([]);
@@ -122,24 +130,73 @@ const Participant = () => {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedState, setSelectedState] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
+  
+  const [selectedCountryGrp, setSelectedCountryGrp] = useState("");
+  const [selectedStateGrp, setSelectedStateGrp] = useState("");
+  const [selectedDistrictGrp, setSelectedDistrictGrp] = useState("");
+
   const [selectedCorp, setSelectedCorp] = useState("");
   const [selectedLsgd, setSelectedLsgd] = useState("");
-  const [selectedGrpType, setSelectedGrpType] = useState("");
+  const [selectedGrpType, setSelectedGrpType] = useState("new");
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
   const [wardNo, setWardNo] = useState("");
   const [treeNo, setTreeNo] = useState("");
+  const [coName, setConame] = useState("");
+  const [Phone, setPhone] = useState("");
   const [grpId, setGrpId] = useState("");
   const [selectedgrpName, setSelectedGrpName] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 10;
   const startIndex = (currentPage - 1) * itemsPerPage;
+  const formPersonal = useForm({
+    defaultValues: {
+      coname: '',
+      treeNumber: '',
+      phoneNumber: ''
+    },
+  });
+  const formCountry = useForm({
+    defaultValues: {
+      country: '',
+      state: '',
+      district: '',
+      corporation: '',
+      lsg: '',
+      wardNo: '',
+      city: '',
+    },
+  });
+  const form = useForm({
+    defaultValues: {
+      grptype: '',
+      grpid: '',
+      subCategory: '',
+      schooltype: '',
+      missionchapter: '',
+      missionarea:'',
+      missionzone: '',
+      country: '',
+      state: '',
+      district: '',
+      sahodaya: '',
+      icdsblock: '',
+      icdsproject: '',
+      edudistrict: '',
+      edusubdistrict: '',
+      twoupload:'',
+      threeupload:'',
+      fourupload:'',
+    },
+  });
+
   useEffect(() => {
     const fetchClass = async () => {
       try {
         const responsetype = await axios.get(`${apiURL}/schoolType`);
         setSchoolType(responsetype.data.schoolType);
-        const dis_id = districts.find((item) => item.dis_name === selectedDistrict)?.dis_id;
+        const dis_id = districts.find((item) => item.dis_name === selectedDistrictGrp)?.dis_id;
+       
         const responseedudistrict = dis_id ? await axios.get(`${apiURL}/eduDistrict/${dis_id}`) : null;
         responseedudistrict ? setEduDistrict(responseedudistrict.data.eduDistrict) : '';
       } catch (error) {
@@ -147,32 +204,37 @@ const Participant = () => {
       }
     };
     fetchClass();
-  }, [districts, selectedDistrict]);
+  }, [districts, selectedDistrictGrp]);
 
   useEffect(() => {
     const handleCbse = async () => {
-      if (selectschoolType === 'CBSE') {
+      if (selectschoolType === 'CBSE' && selectedStateGrp) {
         try {
-          const st_id = states.find((item) => item.st_name === selectedState)?.st_id;
+          const st_id = states.find((item) => item.st_name === selectedStateGrp)?.st_id;
           const response = await axios.get(`${apiURL}/sahodaya/${st_id}`);
           setSahodaya(response.data.sahodayaList);
         } catch (error) {
           console.error("Error fetching data:", error);
         }
       }
-      if (selectschoolType === 'ICDS') {
+      if (selectschoolType === 'ICDS' && selectedDistrictGrp) {
+
         try {
-          const dis_id = districts.find((item) => item.dis_name === selectedDistrict)?.dis_id;
+          const dis_id = districts.find((item) => item.dis_name === selectedDistrictGrp)?.dis_id;
+       
+
           const response = await axios.get(`${apiURL}/icdsBlock/${dis_id}`);
+
           setIcdsBlock(response.data.icdsBlockList);
         } catch (error) {
           console.error("Error fetching data:", error);
         }
 
       }
-      if (selectschoolType === 'Malayalam Mission') {
+      if (selectschoolType === 'Malayalam Mission' && selectMissionarea) {
+        
         try {
-          const response = await axios.get(`${apiURL}/malayalamMissionChapter`);
+          const response = await axios.get(`${apiURL}/malayalamMissionChapter/${selectMissionarea}`);
           setMissionChapter(response.data.chapterList);
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -181,7 +243,7 @@ const Participant = () => {
       }
     };
     handleCbse();
-  }, [districts, selectedDistrict, selectedState, selectschoolType, states]);
+  }, [districts, selectschoolType, states, selectMissionarea, selectedStateGrp, selectedDistrictGrp]);
 
   const handleEduDistrict = async (e: any) => {
     try {
@@ -256,10 +318,9 @@ const Participant = () => {
         try {
           const result = await response.json();
 
-
-          setParticipants(result.Uploads);
+          setParticipantList(result.Uploads);
         } catch {
-          setParticipants([]);
+          setParticipantList([]);
         }
       } catch (error) {
         console.error("Error:", error);
@@ -289,23 +350,22 @@ const Participant = () => {
     }
     fetchData();
   }, []);
+  
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     if (selectedGrpType) {
+  //       const groupId = category.find((item) => item.group_type === selectedGrpType)?.id;
+  //       const Response = await axios.get(`${apiURL}/common/groupName/${groupId}`);
+  //       setGrpName(Response.data.stateMapData);
 
-  useEffect(() => {
-    async function fetchData() {
-      if (selectedGrpType) {
-        const groupId = category.find((item) => item.group_type === selectedGrpType)?.id;
-        const Response = await fetch(`${apiURL}/common/groupName/${groupId}`);
-        const Data = await Response.json();
-        setGrpName(Data.stateMapData);
-
-      }
-    }
-    fetchData();
-  }, [category, grpName, selectedGrpType]);
+  //     }
+  //   }
+  //   fetchData();
+  // }, [category, grpName, selectedGrpType]);
 
   useEffect(() => {
     async function fetchStates() {
-      if (selectedCountry === "India") {
+      if (selectedCountry === "India" || selectedCountryGrp === "India") {
         const stateResponse = await fetch(`${apiURL}/state`);
         const stateData = await stateResponse.json();
         setStates(stateData.state);
@@ -322,11 +382,11 @@ const Participant = () => {
       setWardNo("");
     }
     fetchStates();
-  }, [selectedCountry]);
+  }, [selectedCountry, selectedCountryGrp]);
 
   useEffect(() => {
     async function fetchDistricts() {
-      if (selectedCountry === "India" && selectedState === "Kerala") {
+      if ((selectedCountry === "India" && selectedState === "Kerala")|| (selectedCountryGrp === "India" && selectedStateGrp === "Kerala")) {
         const districtResponse = await fetch(`${apiURL}/district`);
         const districtData = await districtResponse.json();
         setDistricts(districtData.district);
@@ -341,7 +401,7 @@ const Participant = () => {
       setWardNo("");
     }
     fetchDistricts();
-  }, [selectedCountry, selectedState]);
+  }, [selectedCountry, selectedCountryGrp, selectedState, selectedStateGrp]);
 
   useEffect(() => {
     async function fetchCorpData() {
@@ -411,14 +471,30 @@ const Participant = () => {
     setWardNo("");
   };
 
-  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  useEffect(() => {
+    handleGrpName();
+  }, [selectedGrpType]);
 
+
+  async function handleGrpName() {
+    if (selectedGrpType) {
+      const groupId = category.find((item) => item.group_type === selectedGrpType)?.id;
+      const Response = await axios.get(`${apiURL}/common/groupName/${groupId}`);
+      setGrpName(Response.data.stateMapData);
+
+    }
+  }
+
+  const onSubmit = async (data: any) => {
     const dataWithIds: any = {};
-    treeNo !== "" ? dataWithIds.treeNumber = parseInt(treeNo) : '';
+    // treeNo !== "" ? dataWithIds.treeNumber = parseInt(treeNo) : '';
+    data.treeNumber !== "" ? dataWithIds.treeNumber = parseInt(data.treeNumber) : '';
+    data.coname !== "" ? dataWithIds.name = data.coname : '';
+    data.phoneNumber !== "" ? dataWithIds.phoneNumber = data.phoneNumber : '';
+    
 
     if (selectedGrpType !== "") {
-      dataWithIds.groupTypeId = parseInt(category.find((item) => item.group_type === selectedGrpType)?.id!);
+      selectedGrpType ? dataWithIds.groupTypeId = parseInt(category.find((item) => item.group_type === selectedGrpType)?.id!):null;
       selectedgrpName !== "" ? dataWithIds.groupId = parseInt(grpName.find((item) => item.gp_name === selectedgrpName)?.gp_id!) : '';
 
     }
@@ -434,20 +510,19 @@ const Participant = () => {
         dataWithIds.districtId = districts.find((item) => item.dis_name === selectedDistrict)?.dis_id || null;
         dataWithIds.corporationId = corporation.find((item) => item.cop_name === selectedCorp)?.cop_id || null;
         dataWithIds.lsgdId = lsgd.find((item) => item.lsg_name === selectedLsgd)?.lsg_id || null;
-        dataWithIds.wardNo = wardNo ? parseInt(wardNo) || null : null;
+        dataWithIds.wardNo = data.wardNo ? parseInt(data.wardNo) || null : null;
       }
     }
 
-    dataWithIds.subCategoryId = subcategoryOptions ? subcategoryOptions.find((item) => item.gp_cat_name === selectedSubCategory)?.gp_cat_id || null : null;
-    dataWithIds.schoolTypeId = schoolType ? schoolType.find((item) => item.type_name === selectschoolType)?.id || null : null;
-    dataWithIds.eduDistrictId = eduDistrict ? eduDistrict.find((item) => item.edu_district === selecteduDistrict)?.edu_district_id || null : null;
-    dataWithIds.eduSubDistrictId = eduSubDistrict ? eduSubDistrict.find((item) => item.edu_sub_district_name === selecteduSubDistrict)?.edu_sub_district_id || null : null;
-    dataWithIds.sahodayaId = sahodaya ? sahodaya.find((item) => item.sahodaya_name === selectSahodaya)?.sahodaya_id || null : null;
-    dataWithIds.blockId = icdsBlock ? icdsBlock.find((item) => item.block_name === selectIcdsBlock)?.icds_block_id || null : null;
-    dataWithIds.projectId = icdsProject ? icdsProject.find((item) => item.project_name === selectIcdsProject)?.project_id || null : null;
-    dataWithIds.chapterId = missionChapter ? missionChapter.find((item) => item.chapter_name === selectMission)?.chapter_id || null : null;
-    dataWithIds.zoneId = missionZone ? missionZone.find((item) => item.zone_name === selectZone)?.zone_id || null : null;
-
+    selectedSubCategory ? dataWithIds.subCategoryId = subcategoryOptions.find((item) => item.gp_cat_name === selectedSubCategory)?.gp_cat_id || null : null;
+    selectschoolType ? dataWithIds.schoolTypeId =  schoolType.find((item) => item.type_name === selectschoolType)?.id || null : null;
+    selecteduDistrict ? dataWithIds.eduDistrictId =  eduDistrict.find((item) => item.edu_district === selecteduDistrict)?.edu_district_id || null : null;
+    selecteduSubDistrict ? dataWithIds.eduSubDistrictId =  eduSubDistrict.find((item) => item.edu_sub_district_name === selecteduSubDistrict)?.edu_sub_district_id || null : null;
+    selectSahodaya ? dataWithIds.sahodayaId = sahodaya.find((item) => item.sahodaya_name === selectSahodaya)?.sahodaya_id || null : null;
+    selectIcdsBlock ? dataWithIds.blockId = icdsBlock.find((item) => item.block_name === selectIcdsBlock)?.icds_block_id || null : null;
+    selectIcdsProject ? dataWithIds.projectId = icdsProject.find((item) => item.project_name === selectIcdsProject)?.project_id || null : null;
+    selectMission ? dataWithIds.chapterId = missionChapter.find((item) => item.chapter_name === selectMission)?.chapter_id || null : null;
+    selectZone ? dataWithIds.zoneId = missionZone.find((item) => item.zone_name === selectZone)?.zone_id || null : null;
     try {
       const response = await fetch(`${apiURL}/uploads/filter`, {
         method: "POST",
@@ -462,466 +537,768 @@ const Participant = () => {
       }
       try {
         const result = await response.json();
+        console.log(result);
+        setTotalPages(Math.ceil(result.Uploads.length / itemsPerPage));
 
-
-        setParticipants(result.Uploads);
-        setTreeNo('');
-        setSelectedGrpType('');
-        setSelectedGrpName('');
-        setSelectedSubCategory('');
-        setSelecteduDistrict('');
-        setSelecteduSubDistrict('');
-        setSelectschoolType('');
-        setSelectSahodaya('');
-        setSelectIcdsBlock('');
-        setSelectIcdsProject('');
-        setSelectedMission('');
-        setSelectedZone('');
-        setSelectedCountry('');
-        setSelectedState('');
-        setSelectedDistrict('');
-        setSelectedCorp('');
-        setSelectedLsgd('');
-        setWardNo('');
+        setParticipantList(result.Uploads);
+        // setTreeNo('');
+        // setSelectedGrpType('');
+        // setSelectedGrpName('');
+        // setSelectedSubCategory('');
+        // setSelecteduDistrict('');
+        // setSelecteduSubDistrict('');
+        // setSelectschoolType('');
+        // setSelectSahodaya('');
+        // setSelectIcdsBlock('');
+        // setSelectIcdsProject('');
+        // setSelectedMission('');
+        // setSelectedZone('');
+        // setSelectedCountry('');
+        // setSelectedState('');
+        // setSelectedDistrict('');
+        // setSelectedCorp('');
+        // setSelectedLsgd('');
+        // setWardNo('');
       } catch {
-        setParticipants([]);
+        setParticipantList([]);
       }
     } catch (error) {
       console.error("Error:", error);
     }
-  }
+  };
 
   return (
     <>
       <NavigationBar />
-        <div className="mt-6 mb-3">
-          <h2 className="text-2xl font-bold text-center items-center text-[#3C6E1F]">Participants list</h2>
-        </div>
-        <div className='search1'>
-          <h1 className='text-lg text-center m-3'>Search by Person Wise</h1>
-          <div className="mx-5 md:mx-9 lg:mx-16 border-2 border-gray-300 shadow-lg flex justify-center items-center bg-gray-100 rounded-lg">
-            <form onSubmit={onSubmit} className="w-full">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 p-4 items-stretch">
-                {/* Tree Number Input */}
-                <div className="w-full mb-3 p-1">
-                  <input
-                    type="text"
-                    className="w-full h-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F] cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10"
-                    placeholder="Enter Tree Number"
-                    style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
-                    value={treeNo}
-                    onChange={(e) => setTreeNo(e.target.value)}
-                  />
-                </div>
-
-                {/* Name Input */}
-                <div className="w-full mb-3 p-1">
-                  <input
-                    type="text"
-                    className="w-full h-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F] cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10"
-                    placeholder="Enter Name"
-                    style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
-                    // value={name}
-                    // onChange={(e) => setName(e.target.value)}
-                  />
-                </div>
-
-                {/* Phone Number Input */}
-                <div className="w-full mb-3 p-1">
-                  <input
-                    type="text"
-                    className="w-full h-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F] cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10"
-                    placeholder="Enter Phone Number"
-                    style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
-                    // value={phoneNumber}
-                    // onChange={(e) => setPhoneNumber(e.target.value)}
-                  />
-                </div>
-
-                {/* Submit Button */}
-                <div className="w-full mb-3 p-1 flex items-center">
-                  <button
-                    type="submit"
-                    className="w-full h-full bg-primary text-white rounded-lg p-1 md:p-2 cursor-pointer transform transition-all duration-300 hover:scale-110 hover:primary hover:z-10"
-                    style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
-                  >
-                    Search
-                  </button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        <div className='search1'>
-          <h1 className='text-lg text-center m-3'>Search by Country Wise</h1>
-          <div className="mx-5 md:mx-9 lg:mx-16 border-2 border-gray-300 shadow-lg flex justify-center items-center bg-gray-100 rounded-lg">
-            <form onSubmit={onSubmit} className="w-full">
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 p-4">
-                {/* Country Selection */}
-                <div className="w-full mb-3 p-1">
-                 <select
-                    className="w-full p-1 md:p-2 border-0 rounded-md bg-white focus:border-2 focus:border-[#3C6E1F] cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10"
-                    style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
-                    value={selectedCountry}
-                    onChange={handleCountryChange}
-                  >
-                    <option value="">Select Country</option>
-                    {countries.map((country) => (
-                      <option key={country.cntry_id} value={country.cntry_name}>
-                        {country.cntry_name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                    
-                {/* State Selection */}
-                {((selectedCountry === "India") || 
-                  (selectschoolType === 'General Education' && selectedSubCategory !== 'College')) && (
-                  <div className="w-full mb-3 p-1">
-                     <select
-                      className="w-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F] cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10"
-                      style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
-                      value={selectedState}
-                      onChange={handleStateChange}
-                    >
-                      <option value="">Select State</option>
-                      {states.map((state) => (
-                        <option key={state.st_id} value={state.st_name}>
-                          {state.st_name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-
-                {/* District Selection */}
-                {((selectedCountry === "India" && selectedState === "Kerala") || 
-                  (selectschoolType === 'General Education' && selectedSubCategory !== 'College')) && (
-                  <div className="w-full mb-3 p-1">
-                    <select
-                      className="w-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F] cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10"
-                      style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
-                      value={selectedDistrict}
-                      onChange={handleDistrictChange}
-                    >
-                      <option value="">Select District</option>
-                      {districts.map((district) => (
-                        <option key={district.dis_id} value={district.dis_name}>
-                          {district.dis_name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-
-                {/* Corporation Selection */}
-                {selectedCountry === "India" && selectedState === "Kerala" && (
-                  <div className="w-full mb-3 p-1">
-                     <select
-                      className="w-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F] cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10"
-                      style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
-                      value={selectedCorp}
-                      onChange={handleCorpChange}
-                    >
-                      <option value="">Select Corporation</option>
-                      {corporation.map((corp) => (
-                        <option key={corp.cop_id} value={corp.cop_name}>
-                          {corp.cop_name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-
-                {/* LSGD Selection */}
-                {selectedCountry === "India" && selectedState === "Kerala" && (
-                  <div className="w-full mb-3 p-1">
-                    <select
-                      className="w-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F] cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10"
-                      style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
-                      value={selectedLsgd}
-                      onChange={(e) => setSelectedLsgd(e.target.value)}
-                    >
-                      <option value="">Select LSGD</option>
-                      {lsgd.map((lsg) => (
-                        <option key={lsg.lsg_id} value={lsg.lsg_name}>
-                          {lsg.lsg_name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-
-                {/* Ward No */}
-                {selectedCountry === "India" && selectedState === "Kerala" && (
-                <div className="w-full mb-3 p-1">
-                  <input
-                    type="text"
-                    className="w-full p-1 md:p-2 border rounded-md bg-white focus:border-2 focus:border-[#3C6E1F] cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10"
-                    placeholder="Enter ward number"
-                    style={{ boxShadow: "1px 4px 5px 3px #00000040" }}
-                    value={wardNo}
-                    onChange={(e) => setWardNo(e.target.value)}
-                  />
-                </div>
-                )}
-               {/* Submit Button */}
-                  <div className="w-full mb-3 p-1 flex justify-center">
-                    <button type="submit" className="bg-primary text-white px-4 py-2 rounded-lg w-full cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-primary hover:z-10">
-                      Search
-                    </button>
-                  </div>                     
-              </div>
-            </form>
-          </div>
-        </div>
-
-        <div className="search1">
-  <h1 className="text-lg text-center m-3">Search by Group Wise</h1>
-  <div className="mx-5 md:mx-9 lg:mx-16 border-2 border-gray-300 shadow-lg flex justify-center items-center bg-gray-100 rounded-lg ">
-    <form onSubmit={onSubmit}>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 p-4 w-full">
-        
-        {/* Group Type Selection */}
-        <div className="w-full p-1">
-          <select
-            id="groupType"
-            className="w-full p-2 border-0 rounded-md bg-white focus:border-2 focus:border-[#3C6E1F] cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10"
-            style={{ boxShadow: "1px 4px 5px 3px #00000040", height: '2.5rem' }}
-            value={selectedGrpType}
-            onChange={(e) => setSelectedGrpType(e.target.value)}
-          >
-            <option value="">Select Group Type</option>
-            {category.map((c) => (
-              <option key={c.id} value={c.group_type}>
-                {c.group_type}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Group Name Selection */}
-        {selectedGrpType && (
-          <div className="w-full p-1">
-            <select
-              id="groupId"
-              className="w-full p-2 border-0 rounded-md bg-white focus:border-2 focus:border-[#3C6E1F] cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10"
-              style={{ boxShadow: "1px 4px 5px 3px #00000040", height: '2.5rem' }}
-              value={selectedgrpName}
-              onChange={(e) => setSelectedGrpName(e.target.value)}
-            >
-              <option value="">Select Group Name</option>
-              {grpName.map((c) => (
-                <option key={c.gp_id} value={c.gp_name}>
-                  {c.gp_name}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
-
-        {/* Sub Category Selection */}
-        <div className="w-full p-1">
-          <select
-            id="subCategory"
-            className="w-full p-2 border-0 rounded-md bg-white focus:border-2 focus:border-[#3C6E1F] cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10"
-            style={{ boxShadow: "1px 4px 5px 3px #00000040", height: '2.5rem' }}
-            value={selectedSubCategory}
-            onChange={(e) => setSelectedSubCategory(e.target.value)}
-          >
-            <option value="">Select Sub Category</option>
-            {subcategoryOptions.map((category) => (
-              <option key={category.gp_cat_id} value={category.gp_cat_name}>
-                {category.gp_cat_name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* School Type Selection */}
-        {selectedSubCategory !== "College" && selectedSubCategory && (
-          <div className="w-full p-1">
-            <select
-              id="schoolType"
-              className="w-full p-2 border-0 rounded-md bg-white focus:border-2 focus:border-[#3C6E1F] cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10"
-              style={{ boxShadow: "1px 4px 5px 3px #00000040", height: '2.5rem' }}
-              value={selectschoolType}
-              onChange={(e) => setSelectschoolType(e.target.value)}
-            >
-              <option value="">Select School Type</option>
-              {schoolType.map((s) => (
-                <option key={s.id} value={s.type_name}>
-                  {s.type_name}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
-
-        {/* Mission Chapter Selection */}
-        {selectedSubCategory !== "College" && selectschoolType === "Malayalam Mission" && (
-          <>
-            <div className="w-full p-1">
-              <select
-                id="missionChapter"
-                className="w-full p-2 border-0 rounded-md bg-white focus:border-2 focus:border-[#3C6E1F] cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10"
-                style={{ boxShadow: "1px 4px 5px 3px #00000040", height: '2.5rem' }}
-                value={selectMission}
-                onChange={(e) => {
-                  setSelectedMission(e.target.value);
-                  handleChapter(e.target.value);
-                }}
-              >
-                <option value="">Select Mission Chapter</option>
-                {missionChapter.map((e) => (
-                  <option key={e.chapter_id} value={e.chapter_name}>
-                    {e.chapter_name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="w-full p-1">
-              <select
-                id="missionZone"
-                className="w-full p-2 border-0 rounded-md bg-white focus:border-2 focus:border-[#3C6E1F] cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10"
-                style={{ boxShadow: "1px 4px 5px 3px #00000040", height: '2.5rem' }}
-                value={selectZone}
-                onChange={(e) => setSelectedZone(e.target.value)}
-              >
-                <option value="">Select Mission Zone</option>
-                {missionZone.map((e) => (
-                  <option key={e.zone_id} value={e.zone_name}>
-                    {e.zone_name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </>
-        )}
-
-        {/* Sahodaya Selection */}
-        {selectschoolType === "CBSE" && selectedSubCategory !== "College" && (
-          <div className="w-full p-1">
-            <select
-              id="sahodaya"
-              className="w-full p-2 border-0 rounded-md bg-white focus:border-2 focus:border-[#3C6E1F] cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10"
-              style={{ boxShadow: "1px 4px 5px 3px #00000040", height: '2.5rem' }}
-              value={selectSahodaya}
-              onChange={(e) => setSelectSahodaya(e.target.value)}
-            >
-              <option value="">Select Sahodaya</option>
-              {sahodaya.map((s) => (
-                <option key={s.sahodaya_id} value={s.sahodaya_name}>
-                  {s.sahodaya_name}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
-
-        {/* ICDS Block and Project Selection */}
-        {selectschoolType === "ICDS" && selectedSubCategory !== "College" && (
-          <>
-            <div className="w-full p-1">
-              <select
-                id="icdsBlock"
-                className="w-full p-2 border-0 rounded-md bg-white focus:border-2 focus:border-[#3C6E1F] cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10"
-                style={{ boxShadow: "1px 4px 5px 3px #00000040", height: '2.5rem' }}
-                value={selectIcdsBlock}
-                onChange={(e) => {
-                  setSelectIcdsBlock(e.target.value);
-                  handleIcds(e.target.value);
-                }}
-              >
-                <option value="">Select ICDS Block</option>
-                {icdsBlock.map((e) => (
-                  <option key={e.icds_block_id} value={e.block_name}>
-                    {e.block_name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="w-full p-1">
-              <select
-                id="icdsProject"
-                className="w-full p-2 border-0 rounded-md bg-white focus:border-2 focus:border-[#3C6E1F] cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10"
-                style={{ boxShadow: "1px 4px 5px 3px #00000040", height: '2.5rem' }}
-                value={selectIcdsProject}
-                onChange={(e) => setSelectIcdsProject(e.target.value)}
-              >
-                <option value="">Select ICDS Project</option>
-                {icdsProject && icdsProject.map((e) => (
-                  <option key={e.project_id} value={e.project_name}>
-                    {e.project_name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </>
-        )}
-
-        {/* Education District and SubDistrict Selection */}
-        {(selectschoolType === 'General Education' && selectedSubCategory !== 'College') && (
-          <>
-            <div className="w-full p-1">
-              <select
-                id="eduDistrict"
-                className="w-full p-2 border-0 rounded-md bg-white focus:border-2 focus:border-[#3C6E1F] cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10"
-                style={{ boxShadow: "1px 4px 5px 3px #00000040", height: '2.5rem' }}
-                value={selecteduDistrict}
-                onChange={(e) => {
-                  setSelecteduDistrict(e.target.value);
-                  handleEduDistrict(e.target.value);
-                }}
-              >
-                <option value="">Select Education District</option>
-                {eduDistrict && eduDistrict.map((e) => (
-                  <option key={e.edu_district_id} value={e.edu_district}>
-                    {e.edu_district}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="w-full p-1">
-              <select
-                id="eduSubDistrict"
-                className="w-full p-2 border-0 rounded-md bg-white focus:border-2 focus:border-[#3C6E1F] cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10"
-                style={{ boxShadow: "1px 4px 5px 3px #00000040", height: '2.5rem' }}
-                value={selecteduSubDistrict}
-                onChange={(e) => setSelecteduSubDistrict(e.target.value)}
-              >
-                <option value="">Select Education SubDistrict</option>
-                {eduSubDistrict && eduSubDistrict.map((e) => (
-                  <option key={e.edu_sub_district_id} value={e.edu_sub_district_name}>
-                    {e.edu_sub_district_name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </>
-        )}
-
-        {/* Submit Button */}
-        <div className="w-full mb-3 p-1 flex justify-center">
-          <button type="submit" className="bg-primary text-white px-4 py-2 rounded-lg w-full cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-primary hover:z-10">
-            Search
-          </button>
-        </div> 
-
+      <div className='relative flex justify-center p-4'>
+        <h1 className='text-3xl text-center mt-2 font-bold text-[#3C6E1F]'>Participants List</h1>
       </div>
-    </form>
-  </div>
-</div>
+
+      {/* Search by Person Wise */}
+      <div className='search1'>
+        <h1 className='text-lg text-center m-3'>Search by Person Wise</h1>
+        <div className="mx-5 md:mx-9 lg:mx-16 border-2 border-gray-300 shadow-lg flex justify-center items-center bg-gray-100 rounded-lg">
+          <Form {...formPersonal}>
+            <form onSubmit={formPersonal.handleSubmit(onSubmit)} noValidate className="space-y-8 w-full md:w-2/3">
+              <div className="flex m-2 flex-col gap-4 md:flex-row md:m-5 justify-center items-center">
+                <FormField
+                  control={formPersonal.control}
+                  name="treeNumber"
+                  render={({ field }) => (
+                    <FormItem className="flex-1 w-2/3 md:w-1/3">
+                      <FormControl>
+                        <Input {...field} placeholder="Enter Tree Number" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={formPersonal.control}
+                  name="coname"
+                  render={({ field }) => (
+                    <FormItem className="flex-1 w-2/3 md:w-1/3">
+                      <FormControl>
+                        <Input {...field} placeholder="Name" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={formPersonal.control}
+                  name="phoneNumber"
+                  render={({ field }) => (
+                    <FormItem className="flex-1 w-2/3 md:w-1/3">
+                      <FormControl>
+                        <Input type="number" {...field} placeholder="Phone Number" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <Button type="submit" className="w-full md:w-1/3 bg-primary mx-auto text-center">
+                  Search
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </div>
+      </div>
+
+
+      {/* Search by Country Wise */}
+      <div className='search1'>
+        <h1 className='text-lg text-center m-3'>Search by Country Wise</h1>
+        <div className="mx-5 md:mx-9 lg:mx-16 border-2 border-gray-300 shadow-lg flex justify-center items-center bg-gray-100 rounded-lg">
+          <Form {...formCountry}>
+            <form onSubmit={formCountry.handleSubmit(onSubmit)} noValidate className="space-y-4 w-full md:w-2/3">
+              <div className="flex m-1 flex-col gap-4 md:flex-row md:m-3 justify-center items-center">
+                <FormField
+                  control={formCountry.control}
+                  name="country"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Select onValueChange={(value) => {
+                        field.onChange(value);
+                        setSelectedCountry(value);
+                      }} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Choose a country" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {countries.map((country) => (
+                            <SelectItem key={country.cntry_id} value={country.cntry_name}>
+                              {country.cntry_name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {selectedCountry === 'India' && (
+                  <FormField
+                    control={formCountry.control}
+                    name="state"
+                    render={({ field }) => (
+                      <FormItem>
+                        <Select onValueChange={(value) => {
+                          field.onChange(value);
+                          setSelectedState(value);
+                        }} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Choose a state" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {states.map((state) => (
+                              <SelectItem key={state.st_id} value={state.st_name}>
+                                {state.st_name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+                {selectedState === 'Kerala' && (
+                  <FormField
+                    control={formCountry.control}
+                    name="district"
+                    render={({ field }) => (
+                      <FormItem>
+                        <Select onValueChange={(value) => {
+                          field.onChange(value);
+                          setSelectedDistrict(value);
+                        }} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Choose a district" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {districts.map((district) => (
+                              <SelectItem key={district.dis_id} value={district.dis_name}>
+                                {district.dis_name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+                
+                {selectedState === 'Kerala' && (
+                  <FormField
+                    control={formCountry.control}
+                    name="corporation"
+                    render={({ field }) => (
+                      <FormItem>
+                        <Select onValueChange={(value) => {
+                          field.onChange(value);
+                          setSelectedCorp(value);
+                        }} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Choose a corporation" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {corporation.map((corp) => (
+                              <SelectItem key={corp.cop_id} value={corp.cop_name}>
+                                {corp.cop_name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+                {selectedState === 'Kerala' && (
+                  <FormField
+                    control={formCountry.control}
+                    name="lsg"
+                    render={({ field }) => (
+                      <FormItem>
+                        <Select onValueChange={(value) => {
+                          field.onChange(value);
+                          setSelectedLsgd(value);
+                        }} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Choose a LSG" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {lsgd ? lsgd.map((lsg) => (
+                              <SelectItem key={lsg.lsg_id} value={lsg.lsg_name}>
+                                {lsg.lsg_name}
+                              </SelectItem>
+                            )) : <SelectItem key={1} value={'lsg'}>
+                              Choose a LSG
+                            </SelectItem>}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+                {selectedState === 'Kerala' && (
+                  <FormField
+                    control={formCountry.control}
+                    name="wardNo"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input type="number" {...field} placeholder='Ward Number' />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                )}
+                
+                <Button type="submit" className="w-full md:w-1/4 bg-primary mx-auto text-center">
+                  Search
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </div>
+      </div>
+
+      {/* Search by Group Wise */}
+      <div className='search1'>
+        <h1 className='text-lg text-center m-3'>Search by Group Wise</h1>
+        <div className="mx-5 md:mx-9 lg:mx-16 border-2 border-gray-300 shadow-lg flex justify-center items-center bg-gray-100 rounded-lg">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} noValidate className="space-y-4 w-full md:w-2/3">
+              <div className="flex m-1 flex-col gap-4 md:flex-row md:m-3 justify-center items-center">
+                <FormField
+                  control={form.control}
+                  name="grptype"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Select onValueChange={(value) => {
+                        field.onChange(value);
+                        setSelectedGrpType(value);
+                        handleGrpName();
+                      }} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Choose a group type" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {category.map((c,i) => (
+                            <SelectItem key={c.id} value={c.group_type}>
+                              {c.group_type}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {selectedGrpType !== "" && grpName && grpName.length>0 && (
+                   <div className="w-1/2 mb-3 md:w-1/3 p-1 md:p-2 bg-white">
+                   <select
+                     className="w-full p-1 md:p-2 border border-black rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
+                     
+                     value={selectedgrpName}
+                     onChange={(e) => setSelectedGrpName(e.target.value)}
+                   >
+                     <option value="">Select Group Name</option>
+                     {grpName.map((c) => (
+                       <option key={c.gp_id} value={c.gp_name}>
+                         {c.gp_name}
+                       </option>
+                     ))}
+                   </select>
+                 </div>
+                
+                )}
+
+                <FormField
+                  control={form.control}
+                  name="subCategory"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Select onValueChange={(value) => {
+                        field.onChange(value);
+                        setSelectedSubCategory(value);
+                      }} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Choose a sub category" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {subcategoryOptions.map((category) => (
+                            <SelectItem key={category.gp_cat_id} value={category.gp_cat_name}>
+                              {category.gp_cat_name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {selectedSubCategory !== 'College' && selectedSubCategory !== '' && (
+                  <FormField
+                    control={form.control}
+                    name="schooltype"
+                    render={({ field }) => (
+                      <FormItem>
+                        <Select onValueChange={(value) => {
+                          field.onChange(value);
+                          setSelectschoolType(value); 
+                              value==='CBSE' ? setSelectedCountryGrp('India'):''
+                              value==='General Education' || 'ICDS' ? setSelectedCountryGrp('India'):''
+                              value==='General Education' || 'ICDS' ? setSelectedStateGrp('Kerala'):''
+                        }} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Choose a school type" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {schoolType.map((s) => (
+                              <SelectItem key={s.id} value={s.type_name}>
+                                {s.type_name}
+                              </SelectItem>
+                            ))}
+
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+
+                {selectedSubCategory !== 'College' && selectschoolType === 'Malayalam Mission' && (
+                  <>
+                  <FormField
+                      control={form.control}
+                      name="missionarea"
+                      render={({ field }) => (
+                        <FormItem>
+                          <Select onValueChange={(value) => {
+                            field.onChange(value);
+                            setSelectMissionarea(value);
+                            
+                          }} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Choose mission area" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              
+                                <SelectItem key='1' value="1">
+                                  Global
+                                </SelectItem>
+                                <SelectItem key='2' value="2">
+                                  India
+                                </SelectItem>
+                             
+
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="missionchapter"
+                      render={({ field }) => (
+                        <FormItem>
+                          <Select onValueChange={(value) => {
+                            field.onChange(value);
+                            setSelectedMission(value);
+                            handleChapter(value);
+                          }} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Choose a mission chapter" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {missionChapter && missionChapter.map((e) => (
+                                <SelectItem key={e.chapter_id} value={e.chapter_name}>
+                                  {e.chapter_name}
+                                </SelectItem>
+                              ))}
+
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="missionzone"
+                      render={({ field }) => (
+                        <FormItem>
+                          <Select onValueChange={(value) => {
+                            field.onChange(value);
+                            setSelectedZone(value);
+
+                          }} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Choose a mission zone" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {missionZone && missionZone.map((e) => (
+                                <SelectItem key={e.zone_id} value={e.zone_name}>
+                                  {e.zone_name}
+                                </SelectItem>
+                              ))}
+
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </>
+                )}
+
+                {selectschoolType === 'CBSE' && selectedSubCategory !== 'College' && (
+                  <>
+                   
+                      <FormField
+                        control={form.control}
+                        name="state"
+                        render={({ field }) => (
+                          <FormItem>
+                            <Select onValueChange={(value) => {
+                              field.onChange(value);
+                              setSelectedStateGrp(value);
+                            }} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Choose a state" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {states.map((state) => (
+                                  <SelectItem key={state.st_id} value={state.st_name}>
+                                    {state.st_name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                    <FormField
+                      control={form.control}
+                      name="sahodaya"
+                      render={({ field }) => (
+                        <FormItem>
+                          <Select onValueChange={(value) => {
+                            field.onChange(value);
+                            setSelectSahodaya(value);
+                          }} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Choose a sahodaya" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {sahodaya && sahodaya.map((s) => (
+                                <SelectItem key={s.sahodaya_id} value={s.sahodaya_name}>
+                                  {s.sahodaya_name}
+                                </SelectItem>
+                              ))}
+
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                  </>)}
+
+                {selectschoolType === 'ICDS' && selectedSubCategory !== 'College' && (
+                  <>
+                    
+                    {selectedStateGrp === 'Kerala' && (
+                      <FormField
+                        control={form.control}
+                        name="district"
+                        render={({ field }) => (
+                          <FormItem>
+                            <Select onValueChange={(value) => {
+                              field.onChange(value);
+                              setSelectedDistrictGrp(value);
+                            }} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Choose a district" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {districts.map((district) => (
+                                  <SelectItem key={district.dis_id} value={district.dis_name}>
+                                    {district.dis_name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    )}
+                    <FormField
+                      control={form.control}
+                      name="icdsblock"
+                      render={({ field }) => (
+                        <FormItem>
+                          <Select onValueChange={(value) => {
+                            field.onChange(value);
+                            handleIcds(value);
+                            setSelectIcdsBlock(value);
+                          }} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Choose a icds block" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {icdsBlock && icdsBlock.map((e) => (
+                                <SelectItem key={e.icds_block_id} value={e.block_name}>
+                                  {e.block_name}
+                                </SelectItem>
+                              ))}
+
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="icdsproject"
+                      render={({ field }) => (
+                        <FormItem>
+                          <Select onValueChange={(value) => {
+                            field.onChange(value);
+
+                            setSelectIcdsProject(value);
+                          }} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Choose a icds project" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {icdsProject && icdsProject.map((e) => (
+                                <SelectItem key={e.project_id} value={e.project_name}>
+                                  {e.project_name}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </>)}
+
+
+                {(selectschoolType === 'General Education' && selectedSubCategory !== 'College') && (
+                  <>
+                    {selectedStateGrp === 'Kerala' && (
+                      <FormField
+                        control={form.control}
+                        name="district"
+                        render={({ field }) => (
+                          <FormItem>
+                            <Select onValueChange={(value) => {
+                              field.onChange(value);
+                              setSelectedDistrictGrp(value);
+                            }} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Choose a district" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {districts.map((district) => (
+                                  <SelectItem key={district.dis_id} value={district.dis_name}>
+                                    {district.dis_name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    )}
+                    <FormField
+                      control={form.control}
+                      name="edudistrict"
+                      render={({ field }) => (
+                        <FormItem>
+                          <Select onValueChange={(value) => {
+                            field.onChange(value);
+                            handleEduDistrict(value);
+                            setSelecteduDistrict(value);
+                          }} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Choose a education district" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {eduDistrict && eduDistrict.map((e) => (
+                                <SelectItem key={e.edu_district_id} value={e.edu_district}>
+                                  {e.edu_district}
+                                </SelectItem>
+                              ))}
+
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="edusubdistrict"
+                      render={({ field }) => (
+                        <FormItem>
+                          <Select onValueChange={(value) => {
+                            field.onChange(value);
+
+                            setSelecteduSubDistrict(value);
+                          }} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Choose a education subdistrict" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {eduSubDistrict && eduSubDistrict.map((e) => (
+                                <SelectItem key={e.edu_sub_district_id} value={e.edu_sub_district_name}>
+                                  {e.edu_sub_district_name}
+                                </SelectItem>
+                              ))}
+
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                  </>
+                )}
+                {/* <FormField
+                    control={form.control}
+                    name="twoupload"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input type="checkbox" {...field} placeholder='Ward Number' />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="threeupload"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input type="checkbox" {...field} placeholder='Ward Number' />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="fourupload"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          
+                          <Input type="checkbox" {...field} value={'false'} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  /> */}
+                <Button type="submit" className="w-full md:w-1/4 bg-primary mx-auto text-center">
+                  Search
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </div>
+      </div>
+
 
       <div className="container mx-auto p-6">
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white border-gray-200 rounded-t-lg">
             <thead>
-              <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+            <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                 <th className="py-3 px-6 text-left w-16 bd-2 rounded-tl-lg">SL .No</th>
                 <th className="py-3 px-6 text-left">Tree number</th>
                 <th className="py-3 px-6 text-left">Planter name</th>
@@ -932,35 +1309,38 @@ const Participant = () => {
               </tr>
             </thead>
             <tbody>
-              {participants && participants.length > 0 ? (
-                participants.map((participant, index) => (
-                  <tr key={participant.up_id} className="border border-gray-200 hover:bg-gray-100">
-
-                    <td className="py-3 px-6 text-left">{startIndex + index + 1}</td>
-                    <td className="py-3 px-6 text-left">{participant.up_id || 'N/A'}</td>
-                    <td className="py-3 px-6 text-left">{participant.up_planter || 'N/A'}</td>
-                    <td className="py-3 px-6 text-left"><a href={`/user-page?u=${participant.up_name}&id=${participant.up_reg_id}`}>{participant.up_name || 'N/A'}</a></td>
-                    <td className="py-3 px-6 text-left">{participant.gp_name || 'N/A'}</td>
-                    <td className="py-3 px-6 text-left">{participant.up_tree_name || 'N/A'}</td>
-                    <td className="py-3 px-6 text-left">
-                      {participant.up_file ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={`${imageURL}${participant.up_file}`}
-                          style={{ height: '100px', width: '110px' }}
-                          alt="Tree"
-                        // onError={(e) => {
-                        //   e.currentTarget.src = '/path/to/fallback/image.jpg';
-                        //   e.currentTarget.alt = 'Image not available';
-                        // }}
-                        />
-                      ) : (
-                        'No image available'
-                      )}
-                    </td>
-                  </tr>
+              {participantlist && participantlist.length > 0 && (
+                participantlist.map((p, index) => (
+                  
+                  <tr key={p.up_id} className="border border-gray-200 hover:bg-gray-100">
+              
+                  <td className="py-3 px-6 text-left">{startIndex + index + 1}</td>
+                  <td className="py-3 px-6 text-left">{p.up_id}</td>
+                  <td className="py-3 px-6 text-left">{p.up_planter}</td>
+                  <td className="py-3 px-6 text-left"><a href={`/user-page?u=${p.up_name}&id=${p.up_reg_id}`}>{p.up_name}</a></td>
+                  <td className="py-3 px-6 text-left">{p.gp_name}</td>
+                  <td className="py-3 px-6 text-left">{p.up_tree_name}</td>
+                  <td className="py-3 px-6 text-left">
+                    {p.up_file ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={`${imageURL}${p.up_file}`}
+                        style={{ height: '100px', width: '110px' }}
+                        alt="Tree"
+                      // onError={(e) => {
+                      //   e.currentTarget.src = '/path/to/fallback/image.jpg';
+                      //   e.currentTarget.alt = 'Image not available';
+                      // }}
+                      />
+                    ) : (
+                      'No image available'
+                    )}
+                  </td>
+                </tr>
+                  
                 ))
-              ) : (
+              )}
+              {!participantlist || participantlist.length <= 0 && (
                 <tr>
                   <td colSpan={6} className="py-3 px-6 text-center">No participants data available</td>
                 </tr>
@@ -997,9 +1377,6 @@ const Participant = () => {
       <Footer />
     </>
   );
-};
+}
 
-export default Participant;
-
-
-
+export default ActivityList;
