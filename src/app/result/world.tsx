@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
+import { apiURL } from '../requestsapi/request';
 
 const worldMapUrl = '/worldmads.json'; // Ensure this path is correct and accessible
 
@@ -20,7 +21,7 @@ const WorldMap = () => {
 
   useEffect(() => {
     // Fetch country data from the API
-    fetch('https://api-staging.greencleanearth.org/api/v1/common/countryMapData')
+    fetch(`${apiURL}/common/countryMapData`)
       .then(response => response.json())
       .then(data => {
         setCountryData(data.countryData);
@@ -36,7 +37,7 @@ const WorldMap = () => {
       .catch(error => console.error('Error fetching country data:', error));
 
     // Fetch total upload count for the world
-    fetch('https://api-staging.greencleanearth.org/api/v1/common/totalUploadCount')
+    fetch(`${apiURL}/common/totalUploadCount`)
       .then(response => response.json())
       .then(data => {
         if (data.success) {

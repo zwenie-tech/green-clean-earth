@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
+import { apiURL } from '../requestsapi/request';
 
 const keralaMapUrl = '/kerala.json'; // Ensure this path is correct and accessible
 
@@ -14,13 +15,13 @@ const KeralanewMap = () => {
 
   useEffect(() => {
     // Fetch the district data from the API
-    fetch('https://api-staging.greencleanearth.org/api/v1/common/districtList')
+    fetch(`${apiURL}/common/districtList`)
       .then(response => response.json())
       .then(data => setDistrictData(data.districtList))
       .catch(error => console.error("Error fetching district data:", error));
 
     // Fetch the total upload count for Kerala
-    fetch('https://api-staging.greencleanearth.org/api/v1/common/totalUploadKeralaCount')
+    fetch(`${apiURL}/common/totalUploadKeralaCount`)
       .then(response => response.json())
       .then(data => {
         if (data.success) {

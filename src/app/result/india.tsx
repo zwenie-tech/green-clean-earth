@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import { Container } from "react-bootstrap";
+import { apiURL } from '../requestsapi/request';
 
 interface StateData {
   st_id: number;
@@ -28,13 +29,13 @@ function IndiaMap() {
       .catch(error => console.error("Error loading map data:", error));
 
     // Fetch state data with upload counts
-    fetch('https://api-staging.greencleanearth.org/api/v1/common/stateMapData')
+    fetch(`${apiURL}/common/stateMapData`)
       .then(response => response.json())
       .then(data => setStateData(data.stateMapData))
       .catch(error => console.error("Error loading state data:", error));
 
     // Fetch total upload count for India
-    fetch('https://api-staging.greencleanearth.org/api/v1/common/totalUploadIndiaCount')
+    fetch(`${apiURL}/common/totalUploadIndiaCount`)
       .then(response => response.json())
       .then(data => {
         if (data.success) {
