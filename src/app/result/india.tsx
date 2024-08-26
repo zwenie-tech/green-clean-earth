@@ -17,18 +17,33 @@ function IndiaMap() {
   const [indiaTopoJson, setIndiaTopoJson] = useState<any>(null); 
   const [stateData, setStateData] = useState<StateData[]>([]); 
   const [uploadCount, setUploadCount] = useState<number | null>(null);
+  const [totalUploads, setTotalUploads] = useState<number | null>(null); // State to hold total uploads count for India
   const [mousePosition, setMousePosition] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
 
   useEffect(() => {
+    // Fetch the India map JSON data
     fetch('/india.json')
       .then(response => response.json())
       .then(data => setIndiaTopoJson(data))
       .catch(error => console.error("Error loading map data:", error));
 
+    // Fetch state data with upload counts
     fetch('https://api-staging.greencleanearth.org/api/v1/common/stateMapData')
       .then(response => response.json())
       .then(data => setStateData(data.stateMapData))
       .catch(error => console.error("Error loading state data:", error));
+
+    // Fetch total upload count for India
+    fetch('https://api-staging.greencleanearth.org/api/v1/common/totalUploadIndiaCount')
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          setTotalUploads(data.count); // Extract the count value
+        } else {
+          console.error("Failed to fetch total uploads for India: ", data);
+        }
+      })
+      .catch(error => console.error("Error fetching total uploads for India:", error));
   }, []);
 
   const handleStateHover = (geo: any, event: React.MouseEvent) => {
@@ -58,6 +73,7 @@ function IndiaMap() {
     <Container className="p-3">
       <div className="map-container">
         <h1 className='mb-1 text-primary text-center text-2xl font-bold'>India Details</h1>
+        <h1 className='mb-1 text-primary text-center text-2xl font-bold'>Total Uploads: {totalUploads !== null ? totalUploads : 'Loading...'}</h1>
         <ComposableMap
           projection="geoMercator"
           projectionConfig={{
@@ -119,7 +135,7 @@ function IndiaMap() {
         }
 
         .overlay {
-          position: absolute; /* Changed to absolute for relative positioning */
+          position: absolute;
           z-index: 10;
           max-width: 400px;
           width: 80%;
@@ -128,13 +144,13 @@ function IndiaMap() {
           border-radius: 8px;
           box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
           padding: 20px;
-          transform: translate(-50%, 0); /* Adjust if needed */
+          transform: translate(-50%, 0);
         }
 
         @media (max-width: 768px) {
           .overlay {
             width: 100%;
-            max-width: 300px; /* Adjust for smaller screens */
+            max-width: 300px;
           }
         }
 

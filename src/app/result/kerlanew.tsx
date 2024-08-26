@@ -8,6 +8,7 @@ const keralaMapUrl = '/kerala.json'; // Ensure this path is correct and accessib
 const KeralanewMap = () => {
   const [selectedDistrict, setSelectedDistrict] = useState<string>('');
   const [districtData, setDistrictData] = useState<any[]>([]);
+  const [totalUploads, setTotalUploads] = useState<number | null>(null); // State to hold total uploads count
   const [overlayPosition, setOverlayPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [isMobile, setIsMobile] = useState<boolean>(false); // Track if it's mobile view
 
@@ -17,6 +18,18 @@ const KeralanewMap = () => {
       .then(response => response.json())
       .then(data => setDistrictData(data.districtList))
       .catch(error => console.error("Error fetching district data:", error));
+
+    // Fetch the total upload count for Kerala
+    fetch('https://api-staging.greencleanearth.org/api/v1/common/totalUploadKeralaCount')
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          setTotalUploads(data.count);  // Extract the count value
+        } else {
+          console.error("Failed to fetch total uploads: ", data);
+        }
+      })
+      .catch(error => console.error("Error fetching total uploads:", error));
 
     // Determine if the device is mobile
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -56,6 +69,7 @@ const KeralanewMap = () => {
   return (
     <div style={{ textAlign: 'center', padding: '10px' }}>
       <h1 className='text-primary text-2xl font-bold mb-0'>Kerala Details</h1>
+      <h1 className='text-primary text-2xl font-bold mb-0'>Total Uploads: {totalUploads !== null ? totalUploads : 'Loading...'}</h1> {/* Display total uploads */}
       <div className='mt-0 mb-0'>
         <ComposableMap
           projection="geoMercator"

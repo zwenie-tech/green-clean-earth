@@ -5,7 +5,7 @@ import KeralanewMap from "./kerlanew";
 import WorldMap from "./world";
 
 const ResultImages = () => {
-  const [selectedMap, setSelectedMap] = useState("world");
+  const [selectedMap, setSelectedMap] = useState("kerala");
 
   const handleMapChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedMap(event.target.value);
@@ -18,8 +18,9 @@ const ResultImages = () => {
       case "kerala":
         return <KeralanewMap />;
       case "world":
-      default:
         return <WorldMap />;
+      default:
+        return <KeralanewMap />;
     }
   };
 
@@ -36,9 +37,9 @@ const ResultImages = () => {
             value={selectedMap}
             onChange={handleMapChange}
           >
-            <option value="world">World</option>
-            <option value="india">India</option>
             <option value="kerala">Kerala</option>
+            <option value="india">India</option>
+            <option value="world">World</option>
           </select>
         </div>
         {renderMap()}

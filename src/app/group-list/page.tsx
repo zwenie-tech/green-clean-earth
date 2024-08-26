@@ -13,6 +13,7 @@ interface Group {
   dis_name: string;
   gp_code: string;
   upload_count: number;
+  activity_count: number;
 }
 
 interface ApiResponse {
@@ -94,6 +95,7 @@ const GroupList = () => {
                 <th className="py-3 px-6 text-left">Group Name</th>
                 <th className="py-3 px-6 text-left">Group Code</th>
                 <th className="py-3 px-6 text-left">Upload Count</th>
+                <th className="py-3 px-6 text-left">Activity Count</th>
                 <th className="py-3 px-6 text-left rounded-tr-lg">District</th>
               </tr>
             </thead>
@@ -104,6 +106,7 @@ const GroupList = () => {
                   <a href={`/group-page?gname=${group.gp_name}&gid=${group.gp_id}&uc=${group.upload_count}`}><td className="py-3 px-6 text-left">{group.gp_name}</td></a>
                   <td className="py-3 px-6 text-left">{group.gp_code}</td>
                   <td className="py-3 px-6 text-left">{group.upload_count}</td>
+                  <td className="py-3 px-6 text-left">{group.activity_count}</td>
                   <td className="py-3 px-6 text-left">{group.dis_name}</td>
                 </tr>
               ))}
