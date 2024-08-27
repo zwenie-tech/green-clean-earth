@@ -571,6 +571,7 @@ const ActivityList = () => {
         // setSelectedLsgd('');
         // setWardNo('');
       } catch {
+        setTotalPages(1);
         setActivityList([]);
       }
     } catch (error) {
@@ -862,53 +863,7 @@ const ActivityList = () => {
                   )}
                 />
 
-                {selectedGrpType !== "" && grpName && grpName.length>0 && (
-                   <div className="w-1/2 mb-3 md:w-1/3 p-1 md:p-2 bg-white">
-                   <select
-                     className="w-full p-1 md:p-2 border border-black rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
-                     
-                     value={selectedgrpName}
-                     onChange={(e) => setSelectedGrpName(e.target.value)}
-                   >
-                     <option value="">Select Group Name</option>
-                     {grpName.map((c) => (
-                       <option key={c.gp_id} value={c.gp_name}>
-                         {c.gp_name}
-                       </option>
-                     ))}
-                   </select>
-                 </div>
-                
-                )}
-
-                <FormField
-                  control={form.control}
-                  name="subCategory"
-                  render={({ field }) => (
-                    <FormItem>
-                      <Select onValueChange={(value) => {
-                        field.onChange(value);
-                        setSelectedSubCategory(value);
-                      }} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Choose a sub category" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {subcategoryOptions.map((category) => (
-                            <SelectItem key={category.gp_cat_id} value={category.gp_cat_name}>
-                              {category.gp_cat_name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {selectedSubCategory !== 'College' && selectedSubCategory !== '' && (
+{selectedSubCategory !== 'College' && (
                   <FormField
                     control={form.control}
                     name="schooltype"
@@ -940,6 +895,10 @@ const ActivityList = () => {
                     )}
                   />
                 )}
+
+               
+
+               
 
                 {selectedSubCategory !== 'College' && selectschoolType === 'Malayalam Mission' && (
                   <>
@@ -1270,6 +1229,50 @@ const ActivityList = () => {
                       )}
                     />
                   </>
+                )}
+                 <FormField
+                  control={form.control}
+                  name="subCategory"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Select onValueChange={(value) => {
+                        field.onChange(value);
+                        setSelectedSubCategory(value);
+                      }} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Choose a sub category" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {subcategoryOptions.map((category) => (
+                            <SelectItem key={category.gp_cat_id} value={category.gp_cat_name}>
+                              {category.gp_cat_name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {selectedGrpType !== "" && grpName && grpName.length>0 && (
+                   <div className="w-1/2 mb-3 md:w-1/3 p-1 md:p-2 bg-white">
+                   <select
+                     className="w-full p-1 md:p-2 border border-black rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
+                     
+                     value={selectedgrpName}
+                     onChange={(e) => setSelectedGrpName(e.target.value)}
+                   >
+                     <option value="">Select Group Name</option>
+                     {grpName.map((c) => (
+                       <option key={c.gp_id} value={c.gp_name}>
+                         {c.gp_name}
+                       </option>
+                     ))}
+                   </select>
+                 </div>
+                
                 )}
                 
                 <Button type="submit" className="w-full md:w-1/4 bg-primary mx-auto text-center">
