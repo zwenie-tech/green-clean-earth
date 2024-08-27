@@ -15,6 +15,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import axios from "axios";
+import { apiURL } from "@/app/requestsapi/request";
+import Cookies from 'js-cookie';
+import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
+
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -26,6 +32,10 @@ const formSchema = z.object({
 });
 
 export default function ProfileForm() {
+
+  const { toast } = useToast();
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,8 +44,30 @@ export default function ProfileForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    
+    try{
+      const response = await axios.post(`${apiURL}/admin/login`,values);
+      if(response.data.success){
+        const token = response.data.data.token;
+        toast({
+          title: "Account logged in.",
+          description: "Successfully logged in.",
+        })
+        Cookies.set('token', token, { expires: 1 });
+        router.replace("/admin");
+
+      }
+    }catch (error) {
+      console.error("Error:", error);
+      toast({
+        variant: "destructive",
+        title: "Login failed",
+        description: "Please check your credentials.",
+      });
+    }
   }
 
   return (
