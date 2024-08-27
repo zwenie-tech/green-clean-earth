@@ -98,7 +98,7 @@ interface MissionZone {
 }
 
 
-const ActivityList = () => {  
+const ParticipateList = () => {
   const [participantlist, setParticipantList] = useState<Participant[]>([]);
   const [countries, setCountries] = useState<Country[]>([]);
   const [states, setStates] = useState<State[]>([]);
@@ -130,7 +130,7 @@ const ActivityList = () => {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedState, setSelectedState] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
-  
+
   const [selectedCountryGrp, setSelectedCountryGrp] = useState("");
   const [selectedStateGrp, setSelectedStateGrp] = useState("");
   const [selectedDistrictGrp, setSelectedDistrictGrp] = useState("");
@@ -174,7 +174,7 @@ const ActivityList = () => {
       subCategory: '',
       schooltype: '',
       missionchapter: '',
-      missionarea:'',
+      missionarea: '',
       missionzone: '',
       country: '',
       state: '',
@@ -184,9 +184,9 @@ const ActivityList = () => {
       icdsproject: '',
       edudistrict: '',
       edusubdistrict: '',
-      twoupload:'',
-      threeupload:'',
-      fourupload:'',
+      twoupload: '',
+      threeupload: '',
+      fourupload: '',
     },
   });
 
@@ -196,7 +196,7 @@ const ActivityList = () => {
         const responsetype = await axios.get(`${apiURL}/schoolType`);
         setSchoolType(responsetype.data.schoolType);
         const dis_id = districts.find((item) => item.dis_name === selectedDistrictGrp)?.dis_id;
-       
+
         const responseedudistrict = dis_id ? await axios.get(`${apiURL}/eduDistrict/${dis_id}`) : null;
         responseedudistrict ? setEduDistrict(responseedudistrict.data.eduDistrict) : '';
       } catch (error) {
@@ -221,7 +221,7 @@ const ActivityList = () => {
 
         try {
           const dis_id = districts.find((item) => item.dis_name === selectedDistrictGrp)?.dis_id;
-       
+
 
           const response = await axios.get(`${apiURL}/icdsBlock/${dis_id}`);
 
@@ -232,7 +232,7 @@ const ActivityList = () => {
 
       }
       if (selectschoolType === 'Malayalam Mission' && selectMissionarea) {
-        
+
         try {
           const response = await axios.get(`${apiURL}/malayalamMissionChapter/${selectMissionarea}`);
           setMissionChapter(response.data.chapterList);
@@ -350,7 +350,7 @@ const ActivityList = () => {
     }
     fetchData();
   }, []);
-  
+
   // useEffect(() => {
   //   async function fetchData() {
   //     if (selectedGrpType) {
@@ -386,7 +386,7 @@ const ActivityList = () => {
 
   useEffect(() => {
     async function fetchDistricts() {
-      if ((selectedCountry === "India" && selectedState === "Kerala")|| (selectedCountryGrp === "India" && selectedStateGrp === "Kerala")) {
+      if ((selectedCountry === "India" && selectedState === "Kerala") || (selectedCountryGrp === "India" && selectedStateGrp === "Kerala")) {
         const districtResponse = await fetch(`${apiURL}/district`);
         const districtData = await districtResponse.json();
         setDistricts(districtData.district);
@@ -491,10 +491,10 @@ const ActivityList = () => {
     data.treeNumber !== "" ? dataWithIds.treeNumber = parseInt(data.treeNumber) : '';
     data.coname !== "" ? dataWithIds.name = data.coname : '';
     data.phoneNumber !== "" ? dataWithIds.phoneNumber = data.phoneNumber : '';
-    
+
 
     if (selectedGrpType !== "") {
-      selectedGrpType ? dataWithIds.groupTypeId = parseInt(category.find((item) => item.group_type === selectedGrpType)?.id!):null;
+      selectedGrpType ? dataWithIds.groupTypeId = parseInt(category.find((item) => item.group_type === selectedGrpType)?.id!) : null;
       selectedgrpName !== "" ? dataWithIds.groupId = parseInt(grpName.find((item) => item.gp_name === selectedgrpName)?.gp_id!) : '';
 
     }
@@ -515,14 +515,15 @@ const ActivityList = () => {
     }
 
     selectedSubCategory ? dataWithIds.subCategoryId = subcategoryOptions.find((item) => item.gp_cat_name === selectedSubCategory)?.gp_cat_id || null : null;
-    selectschoolType ? dataWithIds.schoolTypeId =  schoolType.find((item) => item.type_name === selectschoolType)?.id || null : null;
-    selecteduDistrict ? dataWithIds.eduDistrictId =  eduDistrict.find((item) => item.edu_district === selecteduDistrict)?.edu_district_id || null : null;
-    selecteduSubDistrict ? dataWithIds.eduSubDistrictId =  eduSubDistrict.find((item) => item.edu_sub_district_name === selecteduSubDistrict)?.edu_sub_district_id || null : null;
+    selectschoolType ? dataWithIds.schoolTypeId = schoolType.find((item) => item.type_name === selectschoolType)?.id || null : null;
+    selecteduDistrict ? dataWithIds.eduDistrictId = eduDistrict.find((item) => item.edu_district === selecteduDistrict)?.edu_district_id || null : null;
+    selecteduSubDistrict ? dataWithIds.eduSubDistrictId = eduSubDistrict.find((item) => item.edu_sub_district_name === selecteduSubDistrict)?.edu_sub_district_id || null : null;
     selectSahodaya ? dataWithIds.sahodayaId = sahodaya.find((item) => item.sahodaya_name === selectSahodaya)?.sahodaya_id || null : null;
     selectIcdsBlock ? dataWithIds.blockId = icdsBlock.find((item) => item.block_name === selectIcdsBlock)?.icds_block_id || null : null;
     selectIcdsProject ? dataWithIds.projectId = icdsProject.find((item) => item.project_name === selectIcdsProject)?.project_id || null : null;
     selectMission ? dataWithIds.chapterId = missionChapter.find((item) => item.chapter_name === selectMission)?.chapter_id || null : null;
     selectZone ? dataWithIds.zoneId = missionZone.find((item) => item.zone_name === selectZone)?.zone_id || null : null;
+
     try {
       const response = await fetch(`${apiURL}/uploads/filter`, {
         method: "POST",
@@ -537,7 +538,7 @@ const ActivityList = () => {
       }
       try {
         const result = await response.json();
-        console.log(result);
+
         setTotalPages(Math.ceil(result.Uploads.length / itemsPerPage));
 
         setParticipantList(result.Uploads);
@@ -560,6 +561,9 @@ const ActivityList = () => {
         // setSelectedLsgd('');
         // setWardNo('');
       } catch {
+
+        setTotalPages(1);
+
         setParticipantList([]);
       }
     } catch (error) {
@@ -718,7 +722,7 @@ const ActivityList = () => {
                     )}
                   />
                 )}
-                
+
                 {selectedState === 'Kerala' && (
                   <FormField
                     control={formCountry.control}
@@ -792,7 +796,7 @@ const ActivityList = () => {
                   />
 
                 )}
-                
+
                 <Button type="submit" className="w-full md:w-1/4 bg-primary mx-auto text-center">
                   Search
                 </Button>
@@ -825,7 +829,7 @@ const ActivityList = () => {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {category.map((c,i) => (
+                          {category.map((c, i) => (
                             <SelectItem key={c.id} value={c.group_type}>
                               {c.group_type}
                             </SelectItem>
@@ -837,53 +841,9 @@ const ActivityList = () => {
                   )}
                 />
 
-                {selectedGrpType !== "" && grpName && grpName.length>0 && (
-                   <div className="w-1/2 mb-3 md:w-1/3 p-1 md:p-2 bg-white">
-                   <select
-                     className="w-full p-1 md:p-2 border border-black rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
-                     
-                     value={selectedgrpName}
-                     onChange={(e) => setSelectedGrpName(e.target.value)}
-                   >
-                     <option value="">Select Group Name</option>
-                     {grpName.map((c) => (
-                       <option key={c.gp_id} value={c.gp_name}>
-                         {c.gp_name}
-                       </option>
-                     ))}
-                   </select>
-                 </div>
-                
-                )}
 
-                <FormField
-                  control={form.control}
-                  name="subCategory"
-                  render={({ field }) => (
-                    <FormItem>
-                      <Select onValueChange={(value) => {
-                        field.onChange(value);
-                        setSelectedSubCategory(value);
-                      }} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Choose a sub category" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {subcategoryOptions.map((category) => (
-                            <SelectItem key={category.gp_cat_id} value={category.gp_cat_name}>
-                              {category.gp_cat_name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
 
-                {selectedSubCategory !== 'College' && selectedSubCategory !== '' && (
+                {selectedSubCategory !== 'College' && (
                   <FormField
                     control={form.control}
                     name="schooltype"
@@ -891,10 +851,10 @@ const ActivityList = () => {
                       <FormItem>
                         <Select onValueChange={(value) => {
                           field.onChange(value);
-                          setSelectschoolType(value); 
-                              value==='CBSE' ? setSelectedCountryGrp('India'):''
-                              value==='General Education' || 'ICDS' ? setSelectedCountryGrp('India'):''
-                              value==='General Education' || 'ICDS' ? setSelectedStateGrp('Kerala'):''
+                          setSelectschoolType(value);
+                          value === 'CBSE' ? setSelectedCountryGrp('India') : ''
+                          value === 'General Education' || 'ICDS' ? setSelectedCountryGrp('India') : ''
+                          value === 'General Education' || 'ICDS' ? setSelectedStateGrp('Kerala') : ''
                         }} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
@@ -916,9 +876,13 @@ const ActivityList = () => {
                   />
                 )}
 
+
+
+
+
                 {selectedSubCategory !== 'College' && selectschoolType === 'Malayalam Mission' && (
                   <>
-                  <FormField
+                    <FormField
                       control={form.control}
                       name="missionarea"
                       render={({ field }) => (
@@ -926,7 +890,7 @@ const ActivityList = () => {
                           <Select onValueChange={(value) => {
                             field.onChange(value);
                             setSelectMissionarea(value);
-                            
+
                           }} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
@@ -934,14 +898,14 @@ const ActivityList = () => {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              
-                                <SelectItem key='1' value="1">
-                                  Global
-                                </SelectItem>
-                                <SelectItem key='2' value="2">
-                                  India
-                                </SelectItem>
-                             
+
+                              <SelectItem key='1' value="1">
+                                Global
+                              </SelectItem>
+                              <SelectItem key='2' value="2">
+                                India
+                              </SelectItem>
+
 
                             </SelectContent>
                           </Select>
@@ -1011,33 +975,33 @@ const ActivityList = () => {
 
                 {selectschoolType === 'CBSE' && selectedSubCategory !== 'College' && (
                   <>
-                   
-                      <FormField
-                        control={form.control}
-                        name="state"
-                        render={({ field }) => (
-                          <FormItem>
-                            <Select onValueChange={(value) => {
-                              field.onChange(value);
-                              setSelectedStateGrp(value);
-                            }} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Choose a state" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                {states.map((state) => (
-                                  <SelectItem key={state.st_id} value={state.st_name}>
-                                    {state.st_name}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+
+                    <FormField
+                      control={form.control}
+                      name="state"
+                      render={({ field }) => (
+                        <FormItem>
+                          <Select onValueChange={(value) => {
+                            field.onChange(value);
+                            setSelectedStateGrp(value);
+                          }} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Choose a state" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {states.map((state) => (
+                                <SelectItem key={state.st_id} value={state.st_name}>
+                                  {state.st_name}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
                     <FormField
                       control={form.control}
@@ -1071,7 +1035,7 @@ const ActivityList = () => {
 
                 {selectschoolType === 'ICDS' && selectedSubCategory !== 'College' && (
                   <>
-                    
+
                     {selectedStateGrp === 'Kerala' && (
                       <FormField
                         control={form.control}
@@ -1244,8 +1208,52 @@ const ActivityList = () => {
                         </FormItem>
                       )}
                     />
-                    
+
                   </>
+                )}
+                <FormField
+                  control={form.control}
+                  name="subCategory"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Select onValueChange={(value) => {
+                        field.onChange(value);
+                        setSelectedSubCategory(value);
+                      }} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Choose a sub category" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {subcategoryOptions.map((category) => (
+                            <SelectItem key={category.gp_cat_id} value={category.gp_cat_name}>
+                              {category.gp_cat_name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {selectedGrpType !== "" && grpName && grpName.length > 0 && (
+                  <div className="w-1/2 mb-3 md:w-1/3 p-1 md:p-2 bg-white">
+                    <select
+                      className="w-full p-1 md:p-2 border border-black rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
+
+                      value={selectedgrpName}
+                      onChange={(e) => setSelectedGrpName(e.target.value)}
+                    >
+                      <option value="">Select Group Name</option>
+                      {grpName.map((c) => (
+                        <option key={c.gp_id} value={c.gp_name}>
+                          {c.gp_name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
                 )}
                 {/* <FormField
                     control={form.control}
@@ -1298,7 +1306,7 @@ const ActivityList = () => {
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white border-gray-200 rounded-t-lg">
             <thead>
-            <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+              <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                 <th className="py-3 px-6 text-left w-16 bd-2 rounded-tl-lg">SL .No</th>
                 <th className="py-3 px-6 text-left">Tree number</th>
                 <th className="py-3 px-6 text-left">Planter name</th>
@@ -1311,33 +1319,33 @@ const ActivityList = () => {
             <tbody>
               {participantlist && participantlist.length > 0 && (
                 participantlist.map((p, index) => (
-                  
+
                   <tr key={p.up_id} className="border border-gray-200 hover:bg-gray-100">
-              
-                  <td className="py-3 px-6 text-left">{startIndex + index + 1}</td>
-                  <td className="py-3 px-6 text-left">{p.up_id}</td>
-                  <td className="py-3 px-6 text-left">{p.up_planter}</td>
-                  <td className="py-3 px-6 text-left"><a href={`/user-page?u=${p.up_name}&id=${p.up_reg_id}`}>{p.up_name}</a></td>
-                  <td className="py-3 px-6 text-left">{p.gp_name}</td>
-                  <td className="py-3 px-6 text-left">{p.up_tree_name}</td>
-                  <td className="py-3 px-6 text-left">
-                    {p.up_file ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={`${imageURL}${p.up_file}`}
-                        style={{ height: '100px', width: '110px' }}
-                        alt="Tree"
-                      // onError={(e) => {
-                      //   e.currentTarget.src = '/path/to/fallback/image.jpg';
-                      //   e.currentTarget.alt = 'Image not available';
-                      // }}
-                      />
-                    ) : (
-                      'No image available'
-                    )}
-                  </td>
-                </tr>
-                  
+
+                    <td className="py-3 px-6 text-left">{startIndex + index + 1}</td>
+                    <td className="py-3 px-6 text-left">{p.up_id}</td>
+                    <td className="py-3 px-6 text-left">{p.up_planter}</td>
+                    <td className="py-3 px-6 text-left"><a href={`/user-page?u=${p.up_name}&id=${p.up_reg_id}`}>{p.up_name}</a></td>
+                    <td className="py-3 px-6 text-left">{p.gp_name}</td>
+                    <td className="py-3 px-6 text-left">{p.up_tree_name}</td>
+                    <td className="py-3 px-6 text-left">
+                      {p.up_file ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={`${imageURL}${p.up_file}`}
+                          style={{ height: '100px', width: '110px' }}
+                          alt="Tree"
+                        // onError={(e) => {
+                        //   e.currentTarget.src = '/path/to/fallback/image.jpg';
+                        //   e.currentTarget.alt = 'Image not available';
+                        // }}
+                        />
+                      ) : (
+                        'No image available'
+                      )}
+                    </td>
+                  </tr>
+
                 ))
               )}
               {!participantlist || participantlist.length <= 0 && (
@@ -1362,14 +1370,14 @@ const ActivityList = () => {
         </button>
         <span className="text-xl">{currentPage}</span>
         <button
-          className={currentPage === totalPages ?
+          className={currentPage === totalPages || totalPages === 1 ?
             "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
             : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
           }
           onClick={() => {
             handlePageChange(currentPage + 1)
           }}
-          disabled={currentPage === totalPages}
+          disabled={currentPage === totalPages || totalPages === 1}
         >
           Next
         </button>
@@ -1379,4 +1387,4 @@ const ActivityList = () => {
   );
 }
 
-export default ActivityList;
+export default ParticipateList;

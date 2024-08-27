@@ -571,6 +571,7 @@ const ActivityList = () => {
         // setSelectedLsgd('');
         // setWardNo('');
       } catch {
+        setTotalPages(1);
         setActivityList([]);
       }
     } catch (error) {
