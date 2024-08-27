@@ -36,6 +36,7 @@ const NavigationBar = () => {
     { href: "/get-plant", label: "Get Plant" },
     { href: "/group-list", label: "Group List" },
     { href: "/participant-list", label: "Participant List" },
+    { href: "/activityList", label: "Activity List" },
     { href: "/faq", label: "FAQ" },
     { href: "/result", label: "Result" },
     { href: "/about-us", label: "About Us" },
@@ -54,6 +55,7 @@ const NavigationBar = () => {
     { href: "/get-plant", label: "Get Plant" },
     { href: "/group-list", label: "Group List" },
     { href: "/participant-list", label: "Participant List" },
+    { href: "/activityList", label: "Activity List" },
     { href: "/faq", label: "FAQ" },
     { href: "/result", label: "Result" },
     { href: "/about-us", label: "About Us" },
@@ -66,7 +68,7 @@ const NavigationBar = () => {
     <header className="bg-primary py-5">
       <div className="w-full mx-auto px-5 flex flex-row md:flex-col justify-between md:justify-center items-center">
         <h1 className="text-2xl text-primary text-white font-medium font-sans md:mb-5">
-          <a href="https://www.greencleanearth.org/" target="_blank" rel="noreferrer">
+          <a href="/" target="_blank" rel="noreferrer">
             <span className="text-[#a0d034]">Green</span>
             <span className="text-[#ffffff]">Clean</span>
             <span className="text-[#fc4203]">Earth</span>

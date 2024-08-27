@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
+import { apiURL } from '../requestsapi/request';
 
 const worldMapUrl = '/worldmads.json'; // Ensure this path is correct and accessible
 
@@ -16,10 +17,11 @@ const WorldMap = () => {
   const [mousePosition, setMousePosition] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
   const [countryColors, setCountryColors] = useState<{ [key: string]: string }>({});
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [totalUploads, setTotalUploads] = useState<number | null>(null); // State to hold total uploads count for the world
 
   useEffect(() => {
     // Fetch country data from the API
-    fetch('https://api-staging.greencleanearth.org/api/v1/common/countryMapData')
+    fetch(`${apiURL}/common/countryMapData`)
       .then(response => response.json())
       .then(data => {
         setCountryData(data.countryData);
@@ -33,6 +35,18 @@ const WorldMap = () => {
         setCountryColors(colors);
       })
       .catch(error => console.error('Error fetching country data:', error));
+
+    // Fetch total upload count for the world
+    fetch(`${apiURL}/common/totalUploadCount`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          setTotalUploads(data.count); // Extract the count value
+        } else {
+          console.error("Failed to fetch total uploads for the world: ", data);
+        }
+      })
+      .catch(error => console.error("Error fetching total uploads for the world:", error));
 
     // Set isMobile based on screen size
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -64,6 +78,9 @@ const WorldMap = () => {
   return (
     <div style={{ textAlign: 'center', padding: '10px', position: 'relative' }}>
       <h1 className='mb-1 text-primary text-2xl font-bold'>World Details</h1>
+      <h2 className='mb-1 text-primary text-xl font-bold'>
+        Total Uploads: {totalUploads !== null ? totalUploads : 'Loading...'}
+      </h2>
       <div className='mt-0'>
         <ComposableMap
           projectionConfig={{

@@ -9,20 +9,19 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input"
 import axios from 'axios';
-import { Label } from '@radix-ui/react-label';
 
-
-interface Participant {
-  up_id: number,
-  up_reg_id: number,
-  up_name: string,
-  up_planter: string,
-  up_tree_name: string,
-  up_cord_id: number,
-  up_date: string,
-  up_file: string,
-  us_corporation: number,
-  gp_name: string
+interface Acivitylist {
+  personal_activity_id: number,
+  login_id: number,
+  participant_name: string,
+  activity_category_id: number,
+  activity_title: string,
+  activity_description: string,
+  activity_social_media_link: string,
+  activity_likes: string,
+  activity_views: string,
+  activity_value: string,
+  activity_on: string
 }
 
 type Country = {
@@ -98,8 +97,9 @@ interface MissionZone {
 }
 
 
-const ActivityList = () => {  
-  const [participantlist, setParticipantList] = useState<Participant[]>([]);
+const ActivityList = () => {
+  const [categories, setCategories] = useState<{ [key: number]: string }>({});
+  const [activitylist, setActivityList] = useState<Acivitylist[]>([]);
   const [countries, setCountries] = useState<Country[]>([]);
   const [states, setStates] = useState<State[]>([]);
   const [districts, setDistricts] = useState<District[]>([]);
@@ -152,7 +152,6 @@ const ActivityList = () => {
   const formPersonal = useForm({
     defaultValues: {
       coname: '',
-      treeNumber: '',
       phoneNumber: ''
     },
   });
@@ -184,9 +183,6 @@ const ActivityList = () => {
       icdsproject: '',
       edudistrict: '',
       edusubdistrict: '',
-      twoupload:'',
-      threeupload:'',
-      fourupload:'',
     },
   });
 
@@ -221,7 +217,7 @@ const ActivityList = () => {
 
         try {
           const dis_id = districts.find((item) => item.dis_name === selectedDistrictGrp)?.dis_id;
-       
+        console.log('response.data.icdsBlockList',dis_id)
 
           const response = await axios.get(`${apiURL}/icdsBlock/${dis_id}`);
 
@@ -278,7 +274,7 @@ const ActivityList = () => {
   }
   useEffect(() => {
     async function fetchfirstData() {
-      const responseall = await fetch(`${apiURL}/uploads/filter?limit=100000000000`, {
+      const responseall = await fetch(`${apiURL}/activity/all?limit=100000000000`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -286,7 +282,7 @@ const ActivityList = () => {
       });
       const dataall = await responseall.json();
 
-      setTotalPages(Math.ceil(dataall.Uploads.length / itemsPerPage));
+      setTotalPages(Math.ceil(dataall.activity.length / itemsPerPage));
     }
     fetchfirstData();
   }, []);
@@ -304,7 +300,7 @@ const ActivityList = () => {
       const countryData = await countryResponse.json();
       setCountries(countryData.country);
       try {
-        const response = await fetch(`${apiURL}/uploads/filter?page=${currentPage}&limit=${itemsPerPage}`, {
+        const response = await fetch(`${apiURL}/activity/all?page=${currentPage}&limit=${itemsPerPage}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -318,9 +314,10 @@ const ActivityList = () => {
         try {
           const result = await response.json();
 
-          setParticipantList(result.Uploads);
+
+          setActivityList(result.activity);
         } catch {
-          setParticipantList([]);
+          setActivityList([]);
         }
       } catch (error) {
         console.error("Error:", error);
@@ -350,7 +347,23 @@ const ActivityList = () => {
     }
     fetchData();
   }, []);
-  
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(`${apiURL}/activity_category`);
+        const categoriesData = response.data.activity_category;
+        const categoriesMap = categoriesData.reduce((acc: any, category: any) => {
+          acc[category.activity_category_id] = category.activity_category;
+          return acc;
+        }, {});
+        setCategories(categoriesMap);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
   // useEffect(() => {
   //   async function fetchData() {
   //     if (selectedGrpType) {
@@ -487,8 +500,7 @@ const ActivityList = () => {
 
   const onSubmit = async (data: any) => {
     const dataWithIds: any = {};
-    // treeNo !== "" ? dataWithIds.treeNumber = parseInt(treeNo) : '';
-    data.treeNumber !== "" ? dataWithIds.treeNumber = parseInt(data.treeNumber) : '';
+    treeNo !== "" ? dataWithIds.treeNumber = parseInt(treeNo) : '';
     data.coname !== "" ? dataWithIds.name = data.coname : '';
     data.phoneNumber !== "" ? dataWithIds.phoneNumber = data.phoneNumber : '';
     
@@ -523,8 +535,9 @@ const ActivityList = () => {
     selectIcdsProject ? dataWithIds.projectId = icdsProject.find((item) => item.project_name === selectIcdsProject)?.project_id || null : null;
     selectMission ? dataWithIds.chapterId = missionChapter.find((item) => item.chapter_name === selectMission)?.chapter_id || null : null;
     selectZone ? dataWithIds.zoneId = missionZone.find((item) => item.zone_name === selectZone)?.zone_id || null : null;
+
     try {
-      const response = await fetch(`${apiURL}/uploads/filter`, {
+      const response = await fetch(`${apiURL}/activity/all`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -537,10 +550,8 @@ const ActivityList = () => {
       }
       try {
         const result = await response.json();
-        console.log(result);
-        setTotalPages(Math.ceil(result.Uploads.length / itemsPerPage));
-
-        setParticipantList(result.Uploads);
+        setTotalPages(Math.ceil(result.activity.length / itemsPerPage));
+        setActivityList(result.activity);
         // setTreeNo('');
         // setSelectedGrpType('');
         // setSelectedGrpName('');
@@ -560,7 +571,7 @@ const ActivityList = () => {
         // setSelectedLsgd('');
         // setWardNo('');
       } catch {
-        setParticipantList([]);
+        setActivityList([]);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -571,7 +582,7 @@ const ActivityList = () => {
     <>
       <NavigationBar />
       <div className='relative flex justify-center p-4'>
-        <h1 className='text-3xl text-center mt-2 font-bold text-[#3C6E1F]'>Participants List</h1>
+        <h1 className='text-3xl text-center mt-2 font-bold'>Activities</h1>
       </div>
 
       {/* Search by Person Wise */}
@@ -581,18 +592,6 @@ const ActivityList = () => {
           <Form {...formPersonal}>
             <form onSubmit={formPersonal.handleSubmit(onSubmit)} noValidate className="space-y-8 w-full md:w-2/3">
               <div className="flex m-2 flex-col gap-4 md:flex-row md:m-5 justify-center items-center">
-                <FormField
-                  control={formPersonal.control}
-                  name="treeNumber"
-                  render={({ field }) => (
-                    <FormItem className="flex-1 w-2/3 md:w-1/3">
-                      <FormControl>
-                        <Input {...field} placeholder="Enter Tree Number" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
                 <FormField
                   control={formPersonal.control}
                   name="coname"
@@ -718,7 +717,20 @@ const ActivityList = () => {
                     )}
                   />
                 )}
-                
+                {selectedState !== 'Kerala' && selectedCountry === 'India' && (
+                  <FormField
+                    control={formCountry.control}
+                    name="district"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input {...field} placeholder='District' />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
                 {selectedState === 'Kerala' && (
                   <FormField
                     control={formCountry.control}
@@ -792,7 +804,20 @@ const ActivityList = () => {
                   />
 
                 )}
-                
+                {selectedCountry != 'India' && (
+                  <FormField
+                    control={formCountry.control}
+                    name="city"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input {...field} placeholder='City / Province' />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
                 <Button type="submit" className="w-full md:w-1/4 bg-primary mx-auto text-center">
                   Search
                 </Button>
@@ -1244,46 +1269,9 @@ const ActivityList = () => {
                         </FormItem>
                       )}
                     />
-                    
                   </>
                 )}
-                {/* <FormField
-                    control={form.control}
-                    name="twoupload"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input type="checkbox" {...field} placeholder='Ward Number' />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="threeupload"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input type="checkbox" {...field} placeholder='Ward Number' />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="fourupload"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          
-                          <Input type="checkbox" {...field} value={'false'} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  /> */}
+                
                 <Button type="submit" className="w-full md:w-1/4 bg-primary mx-auto text-center">
                   Search
                 </Button>
@@ -1298,49 +1286,35 @@ const ActivityList = () => {
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white border-gray-200 rounded-t-lg">
             <thead>
-            <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+              <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                 <th className="py-3 px-6 text-left w-16 bd-2 rounded-tl-lg">SL .No</th>
-                <th className="py-3 px-6 text-left">Tree number</th>
-                <th className="py-3 px-6 text-left">Planter name</th>
-                <th className="py-3 px-6 text-left">Uploader name</th>
-                <th className="py-3 px-6 text-left">Group code/count</th>
-                <th className="py-3 px-6 text-left">Tree name/scientific name</th>
-                <th className="py-3 px-6 text-left rounded-tr-lg">Image last uploaded</th>
+                <th className="py-3 px-6 text-left w-16 bd-2 rounded-tl-lg">Thumbnail</th>
+                <th className="py-3 px-6 text-left">Name</th>
+                <th className="py-3 px-6 text-left">Name of Art - Brief Description</th>
+                <th className="py-3 px-6 text-left">Category</th>
+                <th className="py-3 px-6 text-left">Views and Likes</th>
+                <th className="py-3 px-6 text-left rounded-tr-lg">Value</th>
               </tr>
             </thead>
             <tbody>
-              {participantlist && participantlist.length > 0 && (
-                participantlist.map((p, index) => (
-                  
-                  <tr key={p.up_id} className="border border-gray-200 hover:bg-gray-100">
-              
-                  <td className="py-3 px-6 text-left">{startIndex + index + 1}</td>
-                  <td className="py-3 px-6 text-left">{p.up_id}</td>
-                  <td className="py-3 px-6 text-left">{p.up_planter}</td>
-                  <td className="py-3 px-6 text-left"><a href={`/user-page?u=${p.up_name}&id=${p.up_reg_id}`}>{p.up_name}</a></td>
-                  <td className="py-3 px-6 text-left">{p.gp_name}</td>
-                  <td className="py-3 px-6 text-left">{p.up_tree_name}</td>
-                  <td className="py-3 px-6 text-left">
-                    {p.up_file ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={`${imageURL}${p.up_file}`}
-                        style={{ height: '100px', width: '110px' }}
-                        alt="Tree"
-                      // onError={(e) => {
-                      //   e.currentTarget.src = '/path/to/fallback/image.jpg';
-                      //   e.currentTarget.alt = 'Image not available';
-                      // }}
-                      />
-                    ) : (
-                      'No image available'
-                    )}
-                  </td>
-                </tr>
-                  
+              {activitylist && activitylist.length > 0 ? (
+                activitylist.map((activity, index) => (
+                  <>
+                  <tr key={activity.personal_activity_id} className="border border-gray-200 hover:bg-gray-100">
+
+                    <td className="py-3 px-6 text-left">{startIndex + index + 1}</td>
+                    <td className="py-3 px-6 text-left"><a href={activity.activity_social_media_link}>{activity.activity_social_media_link}</a></td>
+                    <td className="py-3 px-6 text-left">{activity.participant_name}</td>
+                    <td className="py-3 px-6 text-left">{activity.activity_title }{activity.activity_description}</td>
+                    <td className="py-3 px-6 text-left">{categories[activity.activity_category_id]}</td>
+                    <td className="py-3 px-6 text-left">{activity.activity_views} Views, {activity.activity_likes} Likes</td>
+                    <td className="py-3 px-6 text-left">
+                      {activity.activity_value}
+                    </td>
+                  </tr>
+                  </>
                 ))
-              )}
-              {!participantlist || participantlist.length <= 0 && (
+              ) : (
                 <tr>
                   <td colSpan={6} className="py-3 px-6 text-center">No participants data available</td>
                 </tr>
