@@ -15,7 +15,7 @@ const Competition = () => {
             <div className="ml-9 mr-7 mt-9 shadow-xl">
                 <div className="flex">
                     {/* Small green part */}
-                    <div style={{ backgroundColor: '#FBD784', width: '6%', borderRadius: '8px 0 0 8px' }}></div>
+                    <div style={{ backgroundColor: '#FBD784', width: '20px',boxSizing: 'border-box',boxSizing: 'border-box', borderRadius: '8px 0 0 8px' }}></div>
                     {/* Larger part with heading and paragraph */}
                     <div className="ml-10 mb-10 mt-7 p-5">
                         <h2 className="text-xl font-bold">ഗ്രീൻ ക്ലീൻ കേരള -വൃക്ഷത്തൈ പരിപാലന മത്സരം 2023-24 ടാർഗറ്റ്-ഈ വർഷം 10 ലക്ഷം തൈകൾ</h2>
@@ -30,7 +30,7 @@ const Competition = () => {
             <div className="ml-9 mr-7 mt-9 shadow-xl">
                 <div className="flex">
                     {/* Small green part */}
-                    <div style={{ backgroundColor: '#FBD784', width: '4%', borderRadius: '8px 0 0 8px' }}></div>
+                    <div style={{ backgroundColor: '#FBD784', width: '20px',boxSizing: 'border-box' , borderRadius: '8px 0 0 8px' }}></div>
                     {/* Larger part with heading and paragraph */}
                     <div className="ml-10 mb-10 mt-7 p-5">
                         <h2 className="text-xl font-bold">ഹരിത മത്സരങ്ങൾ 2023-24 വിദ്യാർത്ഥികൾക്ക് -ശാസ്ത്ര-ഹരിത-മത്സരങ്ങളും, അവാർഡുകളും, സമ്മാനങ്ങളും</h2>
@@ -45,7 +45,7 @@ const Competition = () => {
             <div className="ml-9 mr-7 mt-9 shadow-xl">
                 <div className="flex">
                     {/* Small green part */}
-                    <div style={{ backgroundColor: '#FBD784', width: '8%', borderRadius: '8px 0 0 8px' }}></div>
+                    <div style={{ backgroundColor: '#FBD784', width: '20px',boxSizing: 'border-box',boxSizing: 'border-box', borderRadius: '8px 0 0 8px' }}></div>
                     {/* Larger part with heading and paragraph */}
                     <div className="ml-10 mb-10 mt-7 p-5">
                         <h2 className="text-xl font-bold">പ്രൊഫസ്സർ ശോഭീന്ദ്രൻ സ്മാരക പരിസ്ഥിതി അവാർഡ്</h2>
@@ -65,7 +65,7 @@ const Competition = () => {
             <div className="ml-9 mr-7 mt-9 shadow-xl">
                 <div className="flex">
                     {/* Small green part */}
-                    <div style={{ backgroundColor: '#FBD784', width: '4%', borderRadius: '8px 0 0 8px' }}></div>
+                    <div style={{ backgroundColor: '#FBD784',  width: '20px',boxSizing: 'border-box', borderRadius: '8px 0 0 8px' }}></div>
                     {/* Larger part with heading and paragraph */}
                     <div className="ml-10 mb-10 mt-7 p-5">
                         <h2 className="text-xl font-bold">ലക്ഷ്യം -മൂന്നരക്കോടി വൃക്ഷങ്ങൾ -ഓരോ മലയാളിയും ഓരോ തൈ 14 ലക്ഷം ഹരിത ഭവനങ്ങൾ 1000 കാർബൺ ന്യൂട്രൽ ഗ്രാമങ്ങൾ</h2>
@@ -80,7 +80,7 @@ const Competition = () => {
             <div className="ml-9 mr-7 mt-9 shadow-xl">
                 <div className="flex">
                     {/* Small green part */}
-                    <div style={{ backgroundColor: '#FBD784', width: '10%', borderRadius: '8px 0 0 8px' }}></div>
+                    <div style={{ backgroundColor: '#FBD784',  width: '20px',boxSizing: 'border-box', borderRadius: '8px 0 0 8px' }}></div>
                     {/* Larger part with heading and paragraph */}
                     <div className="ml-10 mb-10 mt-7 p-5">
                         <h2 className="text-xl font-bold">1000 കോടി രൂപയുടെ-ഗ്രീൻ ക്ലീൻ എസ്റ്റിമേറ്റ്</h2>

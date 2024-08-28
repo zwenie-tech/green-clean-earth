@@ -206,7 +206,7 @@ const cards = [
           </svg>
         </button>
       </div>
-      <div className="container mx-auto p-0">
+      <div className="container mx-4 p-0" style={{ boxSizing: 'border-box' }}>
         <div className="grid gap-0 md:grid-cols-3 sm:grid-cols-1">   
           {/* Box 1 */}
           <div className=" bg-light-gray flex flex-col justify-center items-center px-4 py-8 m-3 rounded-2xl">
@@ -242,7 +242,7 @@ const cards = [
         </div>
       </div>
      {/* container 1 */}
-       <div className={`p-4 my-4 mt-6 mx-auto shadow-md rounded-lg ${isOpen1 ? 'bg-light-green' : 'bg-light-gray'}`} >
+      <div className={`p-4 my-4 mt-6 mx-4 shadow-md rounded-lg ${isOpen1 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold " style={{color:'#3C6E1F'}}>ഒരുകോടി വൃക്ഷത്തൈ സെൽഫികളുമായി കേരളം UNEP യിലേക്ക്...</h2>
         <button onClick={toggleOpen1} className="text-xl">
@@ -259,7 +259,7 @@ const cards = [
       )}
     </div>
     {/* container 2 */}
-   <div className={`p-4 my-4 mx-auto shadow-md rounded-lg ${isOpen2 ? 'bg-light-green' : 'bg-light-gray'}`} >
+   <div className={`p-4 my-4 mx-4 shadow-md rounded-lg ${isOpen2 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold " style={{color:'#3C6E1F'}}>ആയിരം കോടി രൂപയുടെ ഗ്രീൻ ക്ലീൻ എസ്റ്റിമേറ്റ്</h2>
         <button onClick={toggleOpen2} className="text-xl">
@@ -276,7 +276,7 @@ const cards = [
       )}
     </div>
     {/* container 3 */}
-    <div className={`p-4 my-4 mx-auto shadow-md rounded-lg ${isOpen3 ? 'bg-light-green' : 'bg-light-gray'}`} >
+    <div className={`p-4 my-4 mx-4 shadow-md rounded-lg ${isOpen3 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold " style={{color:'#3C6E1F'}}>പ്രൊഫസ്സർ ശോഭീന്ദ്രൻ സ്മാരക പരിസ്ഥിതി അവാർഡ് -
 ഒരു ലക്ഷം രൂപയുടെ പുരസ്കാരങ്ങളും സമ്മാനങ്ങളും</h2>
@@ -294,7 +294,7 @@ const cards = [
       )}
     </div>
     {/* container 4 */}
-    <div className={`p-4  my-4 mx-auto  shadow-md rounded-lg ${isOpen4 ? 'bg-light-green' : 'bg-light-gray'}`} >
+    <div className={`p-4  my-4 mx-4  shadow-md rounded-lg ${isOpen4 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold " style={{color:'#3C6E1F'}}>ഹരിത മത്സരങ്ങൾ - 2023-24</h2>
         <button onClick={toggleOpen4} className="text-xl">
@@ -311,7 +311,7 @@ const cards = [
       )}
     </div>
     {/* container 5 */}
-    <div className={`p-4  my-4 mx-auto  shadow-md rounded-lg ${isOpen5 ? 'bg-light-green' : 'bg-light-gray'}`} >
+    <div className={`p-4  my-4 mx-4 shadow-md rounded-lg ${isOpen5 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold" style={{color:'#3C6E1F'}}>ഗ്രീനിങ് കോഴിക്കോട് - 2023-24</h2>
         <button onClick={toggleOpen5} className="text-xl">
@@ -328,7 +328,7 @@ const cards = [
       )}
     </div>
     {/* container 6 */}
-    <div className={`p-4  my-4 mx-auto  shadow-md rounded-lg ${isOpen6 ? 'bg-light-green' : 'bg-light-gray'}`} >
+    <div className={`p-4  my-4 mx-4  shadow-md rounded-lg ${isOpen6 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold " style={{color:'#3C6E1F'}}>ഗ്രീൻ ക്ലീൻ കേരള മിഷൻ</h2>
         <button onClick={toggleOpen6} className="text-xl">
@@ -346,7 +346,7 @@ const cards = [
     </div>
 
     {/* container 7 */}
-    <div className={`p-4  my-4 mx-auto  shadow-md rounded-lg ${isOpen7 ? 'bg-light-green' : 'bg-light-gray'}`} >
+    <div className={`p-4  my-4 mx-4  shadow-md rounded-lg ${isOpen7 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold " style={{color:'#3C6E1F'}}>നാഴികക്കല്ലുകൾ -ഗ്രീൻ ക്ലീൻ കേരള -വൃക്ഷത്തൈ പരിപാലന മത്സരം</h2>
         <button onClick={toggleOpen7} className="text-xl">
@@ -365,7 +365,7 @@ Supported by indian Oil Corporation and myG, VKC,tecQ, Aqua garden, Mall of gard
       )}
     </div>
     {/*textSlide */}
-    <div className="relative w-full mx-auto">
+  <div className="relative w-full mx-4" style={{ boxSizing: 'border-box' }}>
     <div className="absolute top-0 left-0 right-0 z-20 flex justify-between items-center p-4 h-full pointer-events-none">
       <button
         onClick={handlePrevClick}
@@ -418,7 +418,7 @@ Supported by indian Oil Corporation and myG, VKC,tecQ, Aqua garden, Mall of gard
             <Image src="/images/line.png" alt="Line" style={{ width: '50%', height: '40px' ,marginLeft:'25%'}} />
           </div>
     {/*card with image */}
-    <div className="container mx-auto p-4 ">
+    <div className="container mx-4 p-4" style={{ boxSizing: 'border-box' }}>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4" >
         {cards.map((card, index) => (
           <div key={index} className="bg-light-gray p-4  shadow-md" style={{borderRadius:'9px'}} >
@@ -447,7 +447,7 @@ Supported by indian Oil Corporation and myG, VKC,tecQ, Aqua garden, Mall of gard
   </button>
 </div>
 
-    <div className="mx-auto">
+    <div className="mx-4" style={{ boxSizing: 'border-box' }}>
       <h1 className="m-2 flex justify-center items-center text-2xl font-bold">Videos</h1>
         <div className="container mx-auto p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -13,7 +13,7 @@ const project=()=>{
             <div className="ml-9 mr-7 mt-9 shadow-lg ">
             <div className="flex">
                 {/* Small green part */}
-                <div style={{ backgroundColor: '#3C6E1F', width: '25px', borderRadius: '8px 0 0 8px' }}></div>
+                <div style={{ backgroundColor: '#3C6E1F',  width: '20px',boxSizing: 'border-box', borderRadius: '8px 0 0 8px' }}></div>
 
                 {/* Larger part with heading and paragraph */}
                 <div className="ml-10 mb-10 mt-7 p-5">
@@ -28,7 +28,7 @@ const project=()=>{
           <div className="ml-9 mr-7 mt-9 shadow-lg ">
             <div className="flex">
                 {/* Small green part */}
-                <div style={{ backgroundColor: '#3C6E1F', width: '25px', borderRadius: '8px 0 0 8px' }}></div>
+                <div style={{ backgroundColor: '#3C6E1F',  width: '20px',boxSizing: 'border-box', borderRadius: '8px 0 0 8px' }}></div>
 
                 {/* Larger part with heading and paragraph */}
                 <div className="ml-10 mb-10 mt-7 p-5">
@@ -44,7 +44,7 @@ const project=()=>{
           <div className="ml-9 mr-7 mt-9 shadow-lg ">
             <div className="flex">
                 {/* Small green part */}
-                <div style={{ backgroundColor: '#3C6E1F', width: '55px', borderRadius: '8px 0 0 8px' }}></div>
+                <div style={{ backgroundColor: '#3C6E1F',  width: '20px',boxSizing: 'border-box', borderRadius: '8px 0 0 8px' }}></div>
 
                 {/* Larger part with heading and paragraph */}
                 <div className="ml-10 mb-10 mt-7 p-5">
@@ -63,7 +63,7 @@ const project=()=>{
         <div className="ml-9 mr-7 mt-9 shadow-lg ">
             <div className="flex">
                 {/* Small green part */}
-                <div style={{ backgroundColor: '#3C6E1F', width: '25px', borderRadius: '8px 0 0 8px' }}></div>
+                <div style={{ backgroundColor: '#3C6E1F',  width: '20px',boxSizing: 'border-box', borderRadius: '8px 0 0 8px' }}></div>
                 {/* Larger part with heading and paragraph */}
                 <div className="ml-10 mb-10 mt-7 p-5">
                     <h2 className="text-xl font-bold">ലക്ഷ്യം -മൂന്നരക്കോടി വൃക്ഷങ്ങൾ -ഓരോ മലയാളിയും ഓരോ തൈ 14 ലക്ഷം ഹരിത ഭവനങ്ങൾ 1000 കാർബൺ ന്യൂട്രൽ ഗ്രാമങ്ങൾ</h2>
@@ -77,7 +77,7 @@ const project=()=>{
           <div className="ml-9 mr-7 mt-9 shadow-lg ">
             <div className="flex">
                 {/* Small green part */}
-                <div style={{ backgroundColor: '#3C6E1F', width:'65px', borderRadius: '8px 0 0 8px' }}></div>
+                <div style={{ backgroundColor: '#3C6E1F',  width: '20px',boxSizing: 'border-box', borderRadius: '8px 0 0 8px' }}></div>
 
                 {/* Larger part with heading and paragraph */}
                 <div className="ml-10 mb-10 mt-7 p-5">
