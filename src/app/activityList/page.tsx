@@ -130,6 +130,7 @@ const ActivityList = () => {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedState, setSelectedState] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [filterData, setFilterData] = useState({});
   
   const [selectedCountryGrp, setSelectedCountryGrp] = useState("");
   const [selectedStateGrp, setSelectedStateGrp] = useState("");
@@ -498,6 +499,65 @@ const ActivityList = () => {
     }
   }
 
+  const onDataSubmit = async (data: any) => {
+    try {
+      const responseall = await fetch(`${apiURL}/activity/all?limit=10000000`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const response = await fetch(`${apiURL}/activity/all`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      try {
+        const resultall = await responseall.json();
+        const result = await response.json();
+        setTotalPages(Math.ceil(resultall.activity.length / itemsPerPage));
+        setActivityList(result.activity);
+        // setTreeNo('');
+        // setSelectedGrpType('');
+        // setSelectedGrpName('');
+        // setSelectedSubCategory('');
+        // setSelecteduDistrict('');
+        // setSelecteduSubDistrict('');
+        // setSelectschoolType('');
+        // setSelectSahodaya('');
+        // setSelectIcdsBlock('');
+        // setSelectIcdsProject('');
+        // setSelectedMission('');
+        // setSelectedZone('');
+        // setSelectedCountry('');
+        // setSelectedState('');
+        // setSelectedDistrict('');
+        // setSelectedCorp('');
+        // setSelectedLsgd('');
+        // setWardNo('');
+      } catch {
+        setTotalPages(1);
+        setActivityList([]);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
+  useEffect(() => {
+    if(filterData){
+      onDataSubmit(filterData);
+    }
+  }, [filterData]);
+
   const onSubmit = async (data: any) => {
     const dataWithIds: any = {};
     treeNo !== "" ? dataWithIds.treeNumber = parseInt(treeNo) : '';
@@ -535,48 +595,9 @@ const ActivityList = () => {
     selectIcdsProject ? dataWithIds.projectId = icdsProject.find((item) => item.project_name === selectIcdsProject)?.project_id || null : null;
     selectMission ? dataWithIds.chapterId = missionChapter.find((item) => item.chapter_name === selectMission)?.chapter_id || null : null;
     selectZone ? dataWithIds.zoneId = missionZone.find((item) => item.zone_name === selectZone)?.zone_id || null : null;
-
-    try {
-      const response = await fetch(`${apiURL}/activity/all`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dataWithIds),
-      });
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      try {
-        const result = await response.json();
-        setTotalPages(Math.ceil(result.activity.length / itemsPerPage));
-        setActivityList(result.activity);
-        // setTreeNo('');
-        // setSelectedGrpType('');
-        // setSelectedGrpName('');
-        // setSelectedSubCategory('');
-        // setSelecteduDistrict('');
-        // setSelecteduSubDistrict('');
-        // setSelectschoolType('');
-        // setSelectSahodaya('');
-        // setSelectIcdsBlock('');
-        // setSelectIcdsProject('');
-        // setSelectedMission('');
-        // setSelectedZone('');
-        // setSelectedCountry('');
-        // setSelectedState('');
-        // setSelectedDistrict('');
-        // setSelectedCorp('');
-        // setSelectedLsgd('');
-        // setWardNo('');
-      } catch {
-        setTotalPages(1);
-        setActivityList([]);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
+    setFilterData(dataWithIds);
+    onDataSubmit(dataWithIds);
+    
   };
 
   return (

@@ -126,6 +126,7 @@ const ParticipateList = () => {
   const [selecteduDistrict, setSelecteduDistrict] = useState('');
   const [selecteduSubDistrict, setSelecteduSubDistrict] = useState('');
   const [subcategoryOptions, setSubCategoryOptions] = useState<SubCategory[]>([]);
+  const [filterData, setFilterData] = useState({});
 
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedState, setSelectedState] = useState("");
@@ -485,6 +486,68 @@ const ParticipateList = () => {
     }
   }
 
+  const onDataSubmit = async (data: any) => {
+    try {
+      const responseall = await fetch(`${apiURL}/uploads/filter?limit=10000000`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const response = await fetch(`${apiURL}/uploads/filter?page=${currentPage}&limit=${itemsPerPage}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      try {
+        const resultall = await responseall.json();
+        const result = await response.json();
+
+        setTotalPages(Math.ceil(resultall.Uploads.length / itemsPerPage));
+        
+        setParticipantList(result.Uploads);
+        // setTreeNo('');
+        // setSelectedGrpType('');
+        // setSelectedGrpName('');
+        // setSelectedSubCategory('');
+        // setSelecteduDistrict('');
+        // setSelecteduSubDistrict('');
+        // setSelectschoolType('');
+        // setSelectSahodaya('');
+        // setSelectIcdsBlock('');
+        // setSelectIcdsProject('');
+        // setSelectedMission('');
+        // setSelectedZone('');
+        // setSelectedCountry('');
+        // setSelectedState('');
+        // setSelectedDistrict('');
+        // setSelectedCorp('');
+        // setSelectedLsgd('');
+        // setWardNo('');
+      } catch {
+
+        setTotalPages(1);
+
+        setParticipantList([]);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
+  useEffect(() => {
+    if(filterData){
+      onDataSubmit(filterData);
+    }
+  }, [filterData]);
+
   const onSubmit = async (data: any) => {
     const dataWithIds: any = {};
     // treeNo !== "" ? dataWithIds.treeNumber = parseInt(treeNo) : '';
@@ -523,52 +586,9 @@ const ParticipateList = () => {
     selectIcdsProject ? dataWithIds.projectId = icdsProject.find((item) => item.project_name === selectIcdsProject)?.project_id || null : null;
     selectMission ? dataWithIds.chapterId = missionChapter.find((item) => item.chapter_name === selectMission)?.chapter_id || null : null;
     selectZone ? dataWithIds.zoneId = missionZone.find((item) => item.zone_name === selectZone)?.zone_id || null : null;
-
-    try {
-      const response = await fetch(`${apiURL}/uploads/filter`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dataWithIds),
-      });
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      try {
-        const result = await response.json();
-
-        setTotalPages(Math.ceil(result.Uploads.length / itemsPerPage));
-        
-        setParticipantList(result.Uploads);
-        // setTreeNo('');
-        // setSelectedGrpType('');
-        // setSelectedGrpName('');
-        // setSelectedSubCategory('');
-        // setSelecteduDistrict('');
-        // setSelecteduSubDistrict('');
-        // setSelectschoolType('');
-        // setSelectSahodaya('');
-        // setSelectIcdsBlock('');
-        // setSelectIcdsProject('');
-        // setSelectedMission('');
-        // setSelectedZone('');
-        // setSelectedCountry('');
-        // setSelectedState('');
-        // setSelectedDistrict('');
-        // setSelectedCorp('');
-        // setSelectedLsgd('');
-        // setWardNo('');
-      } catch {
-
-        setTotalPages(1);
-
-        setParticipantList([]);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
+    setFilterData(dataWithIds);
+    onDataSubmit(dataWithIds);
+    
   };
 
   return (
