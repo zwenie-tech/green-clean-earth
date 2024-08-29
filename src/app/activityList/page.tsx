@@ -217,7 +217,7 @@ const ActivityList = () => {
 
         try {
           const dis_id = districts.find((item) => item.dis_name === selectedDistrictGrp)?.dis_id;
-        console.log('response.data.icdsBlockList',dis_id)
+        
 
           const response = await axios.get(`${apiURL}/icdsBlock/${dis_id}`);
 

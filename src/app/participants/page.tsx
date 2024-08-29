@@ -540,7 +540,7 @@ const ParticipateList = () => {
         const result = await response.json();
 
         setTotalPages(Math.ceil(result.Uploads.length / itemsPerPage));
-
+        
         setParticipantList(result.Uploads);
         // setTreeNo('');
         // setSelectedGrpType('');
