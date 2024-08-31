@@ -126,6 +126,7 @@ const ParticipateList = () => {
   const [selecteduDistrict, setSelecteduDistrict] = useState('');
   const [selecteduSubDistrict, setSelecteduSubDistrict] = useState('');
   const [subcategoryOptions, setSubCategoryOptions] = useState<SubCategory[]>([]);
+  const [filterData, setFilterData] = useState({});
 
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedState, setSelectedState] = useState("");
@@ -184,9 +185,9 @@ const ParticipateList = () => {
       icdsproject: '',
       edudistrict: '',
       edusubdistrict: '',
-      twoupload: '',
-      threeupload: '',
-      fourupload: '',
+      twoupload: false,
+      threeupload: false,
+      fourupload: false,
     },
   });
 
@@ -485,6 +486,68 @@ const ParticipateList = () => {
     }
   }
 
+  const onDataSubmit = async (data: any) => {
+    try {
+      const responseall = await fetch(`${apiURL}/uploads/filter?limit=10000000`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const response = await fetch(`${apiURL}/uploads/filter?page=${currentPage}&limit=${itemsPerPage}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      try {
+        const resultall = await responseall.json();
+        const result = await response.json();
+
+        setTotalPages(Math.ceil(resultall.Uploads.length / itemsPerPage));
+
+        setParticipantList(result.Uploads);
+        // setTreeNo('');
+        // setSelectedGrpType('');
+        // setSelectedGrpName('');
+        // setSelectedSubCategory('');
+        // setSelecteduDistrict('');
+        // setSelecteduSubDistrict('');
+        // setSelectschoolType('');
+        // setSelectSahodaya('');
+        // setSelectIcdsBlock('');
+        // setSelectIcdsProject('');
+        // setSelectedMission('');
+        // setSelectedZone('');
+        // setSelectedCountry('');
+        // setSelectedState('');
+        // setSelectedDistrict('');
+        // setSelectedCorp('');
+        // setSelectedLsgd('');
+        // setWardNo('');
+      } catch {
+
+        setTotalPages(1);
+
+        setParticipantList([]);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
+  useEffect(() => {
+    if (filterData) {
+      onDataSubmit(filterData);
+    }
+  }, [filterData]);
+
   const onSubmit = async (data: any) => {
     const dataWithIds: any = {};
     // treeNo !== "" ? dataWithIds.treeNumber = parseInt(treeNo) : '';
@@ -524,51 +587,14 @@ const ParticipateList = () => {
     selectMission ? dataWithIds.chapterId = missionChapter.find((item) => item.chapter_name === selectMission)?.chapter_id || null : null;
     selectZone ? dataWithIds.zoneId = missionZone.find((item) => item.zone_name === selectZone)?.zone_id || null : null;
 
-    try {
-      const response = await fetch(`${apiURL}/uploads/filter`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dataWithIds),
-      });
+    data.twoupload===true ? dataWithIds.hasTwoUploads = data.twoupload : null;
+    data.threeupload===true ? dataWithIds.hasThreeUploads = data.threeupload : null;
+    data.fourupload===true ? dataWithIds.hasFourUploads = data.fourupload : null;
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      try {
-        const result = await response.json();
 
-        setTotalPages(Math.ceil(result.Uploads.length / itemsPerPage));
-        
-        setParticipantList(result.Uploads);
-        // setTreeNo('');
-        // setSelectedGrpType('');
-        // setSelectedGrpName('');
-        // setSelectedSubCategory('');
-        // setSelecteduDistrict('');
-        // setSelecteduSubDistrict('');
-        // setSelectschoolType('');
-        // setSelectSahodaya('');
-        // setSelectIcdsBlock('');
-        // setSelectIcdsProject('');
-        // setSelectedMission('');
-        // setSelectedZone('');
-        // setSelectedCountry('');
-        // setSelectedState('');
-        // setSelectedDistrict('');
-        // setSelectedCorp('');
-        // setSelectedLsgd('');
-        // setWardNo('');
-      } catch {
+    setFilterData(dataWithIds);
+    onDataSubmit(dataWithIds);
 
-        setTotalPages(1);
-
-        setParticipantList([]);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
   };
 
   return (
@@ -1255,43 +1281,48 @@ const ParticipateList = () => {
                   </div>
 
                 )}
-                {/* <FormField
-                    control={form.control}
-                    name="twoupload"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input type="checkbox" {...field} placeholder='Ward Number' />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="threeupload"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input type="checkbox" {...field} placeholder='Ward Number' />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="fourupload"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          
-                          <Input type="checkbox" {...field} value={'false'} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  /> */}
+                <FormField
+                  control={form.control}
+                  name="twoupload"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input type="checkbox" checked={field.value} onChange={field.onChange} onBlur={field.onBlur} ref={field.ref} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <p>Have Two Upload</p>
+
+                <FormField
+                  control={form.control}
+                  name="threeupload"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input type="checkbox" checked={field.value} onChange={field.onChange} onBlur={field.onBlur} ref={field.ref} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <p>Have Three Upload</p>
+
+                <FormField
+                  control={form.control}
+                  name="fourupload"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input type="checkbox" checked={field.value} onChange={field.onChange} onBlur={field.onBlur} ref={field.ref} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <p>Have Four Upload</p>
+
                 <Button type="submit" className="w-full md:w-1/4 bg-primary mx-auto text-center">
                   Search
                 </Button>
