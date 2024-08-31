@@ -185,9 +185,9 @@ const ParticipateList = () => {
       icdsproject: '',
       edudistrict: '',
       edusubdistrict: '',
-      twoupload: '',
-      threeupload: '',
-      fourupload: '',
+      twoupload: false,
+      threeupload: false,
+      fourupload: false,
     },
   });
 
@@ -511,7 +511,7 @@ const ParticipateList = () => {
         const result = await response.json();
 
         setTotalPages(Math.ceil(resultall.Uploads.length / itemsPerPage));
-        
+
         setParticipantList(result.Uploads);
         // setTreeNo('');
         // setSelectedGrpType('');
@@ -543,7 +543,7 @@ const ParticipateList = () => {
   }
 
   useEffect(() => {
-    if(filterData){
+    if (filterData) {
       onDataSubmit(filterData);
     }
   }, [filterData]);
@@ -586,9 +586,15 @@ const ParticipateList = () => {
     selectIcdsProject ? dataWithIds.projectId = icdsProject.find((item) => item.project_name === selectIcdsProject)?.project_id || null : null;
     selectMission ? dataWithIds.chapterId = missionChapter.find((item) => item.chapter_name === selectMission)?.chapter_id || null : null;
     selectZone ? dataWithIds.zoneId = missionZone.find((item) => item.zone_name === selectZone)?.zone_id || null : null;
+
+    data.twoupload===true ? dataWithIds.hasTwoUploads = data.twoupload : null;
+    data.threeupload===true ? dataWithIds.hasThreeUploads = data.threeupload : null;
+    data.fourupload===true ? dataWithIds.hasFourUploads = data.fourupload : null;
+
+
     setFilterData(dataWithIds);
     onDataSubmit(dataWithIds);
-    
+
   };
 
   return (
@@ -1275,43 +1281,48 @@ const ParticipateList = () => {
                   </div>
 
                 )}
-                {/* <FormField
-                    control={form.control}
-                    name="twoupload"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input type="checkbox" {...field} placeholder='Ward Number' />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="threeupload"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input type="checkbox" {...field} placeholder='Ward Number' />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="fourupload"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          
-                          <Input type="checkbox" {...field} value={'false'} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  /> */}
+                <FormField
+                  control={form.control}
+                  name="twoupload"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input type="checkbox" checked={field.value} onChange={field.onChange} onBlur={field.onBlur} ref={field.ref} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <p>Have Two Upload</p>
+
+                <FormField
+                  control={form.control}
+                  name="threeupload"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input type="checkbox" checked={field.value} onChange={field.onChange} onBlur={field.onBlur} ref={field.ref} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <p>Have Three Upload</p>
+
+                <FormField
+                  control={form.control}
+                  name="fourupload"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input type="checkbox" checked={field.value} onChange={field.onChange} onBlur={field.onBlur} ref={field.ref} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <p>Have Four Upload</p>
+
                 <Button type="submit" className="w-full md:w-1/4 bg-primary mx-auto text-center">
                   Search
                 </Button>

@@ -8,6 +8,8 @@ import { imageURL } from "../requestsapi/request";
 import Link from "next/link";
 import Loading from "@/components/loading";
 import axios from "axios";
+import Cookies from "js-cookie";
+
 
 type Participant = {
   up_file: string;
@@ -25,6 +27,8 @@ const ParticipantList: React.FC = () => {
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 10;
   const [challenge,setchallenge]=useState(false)
+  const token = Cookies.get("token");
+  
 
  
     useEffect(() => {
@@ -72,11 +76,14 @@ const ParticipantList: React.FC = () => {
   }
 
   async function handleChallenge(treeno: number) {
-    try {
-      const response = await axios.post(`${apiURL}/uploads/markChallenged`, { treeNumber:treeno });
-      fetchData(currentPage);
-    } catch (error) {
-      console.error("Error challenging tree:", error);
+    if(token!=null){
+      try {
+        const response = await axios.post(`${apiURL}/uploads/markChallenged`, { treeNumber:treeno });
+        fetchData(currentPage);
+      } catch (error) {
+        console.error("Error challenging tree:", error);
+      }
+
     }
   }
 
@@ -156,7 +163,7 @@ const ParticipantList: React.FC = () => {
                 <div className="flex m-auto">
                   <div className="text-sm text-center text-primary">This image has been challenged</div>
                 </div>
-              ) : (
+              ) : token!=null ? (
                 <div className="flex justify-center">
                   <button
                     onClick={(e) => {
@@ -168,7 +175,7 @@ const ParticipantList: React.FC = () => {
                     Challenge
                   </button>
                 </div>
-              )}
+              ):''}
             </div>
           </div>
         </div>

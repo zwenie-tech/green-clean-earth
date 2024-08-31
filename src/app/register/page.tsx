@@ -60,7 +60,7 @@ const formSchema = z.object({
   wardNo: z.string().optional(),
   lsg: z.string().optional(),
   city: z.string().optional(),
-  email: z.string().max(255),
+  email: z.string().max(255).optional(),
   username: z.string().max(255),
   password: z.string().min(8).max(255),
 })
@@ -557,7 +557,7 @@ export default function Register() {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input {...field} required/>
+                        <Input {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

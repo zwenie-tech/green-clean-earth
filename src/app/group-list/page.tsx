@@ -26,6 +26,7 @@ const GroupList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 10;
+  const startIndex = (currentPage - 1) * itemsPerPage;
 
  
     useEffect(() => {
@@ -102,7 +103,7 @@ const GroupList = () => {
             <tbody>
               {groups.map((group, index) => (
                 <tr key={group.gp_id} className="border border-gray-200 hover:bg-gray-100">
-                  <td className="py-3 px-6 text-left">{index + 1}</td>
+                  <td className="py-3 px-6 text-left">{startIndex + index + 1}</td>
                   <a href={`/group-page?gname=${group.gp_name}&gid=${group.gp_id}&uc=${group.upload_count}`}><td className="py-3 px-6 text-left">{group.gp_name}</td></a>
                   <td className="py-3 px-6 text-left">{group.gp_code}</td>
                   <td className="py-3 px-6 text-left">{group.upload_count}</td>
