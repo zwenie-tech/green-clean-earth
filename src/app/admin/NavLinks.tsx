@@ -25,8 +25,10 @@ const links = [
   { name: "Manage Activity", href: "/admin/activity" },
   { name: "Manage Challenges", href: "/admin/challenges" },
   { name: "Manage Contact us form", href: "/admin/contact-us-form" },
+  { name: "Manage Corporations", href: "/admin/corporation" },
   { name: "Manage LSGD", href: "/admin/lsgd" },
   { name: "Manage School Division", href: "/admin/school-division" },
+  { name: "Manage News and Events", href: "/admin/news-and-events" },
 ];
 
 function NavLinks() {
