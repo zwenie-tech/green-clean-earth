@@ -24,7 +24,6 @@ const AdminGrid = () => {
     { field: "state", headerName: "State" },
     { field: "district", headerName: "District" },
     { field: "corporation", headerName: "Corporation" },
-    { field: "lsgd", headerName: "LSGD" },
   ]);
 
   const defaultColDef = useMemo(() => {

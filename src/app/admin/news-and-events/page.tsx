@@ -21,10 +21,11 @@ const AdminGrid = () => {
   const [rowData, setRowData] = useState([]);
 
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
-    { field: "state", headerName: "State" },
-    { field: "district", headerName: "District" },
-    { field: "corporation", headerName: "Corporation" },
-    { field: "lsgd", headerName: "LSGD" },
+    { field: "heading", headerName: "Heading" },
+    { field: "body", headerName: "Body" },
+    { field: "date", headerName: "Date" },
+    { field: "place", headerName: "Place" },
+    { field: "image", headerName: "Image" },
   ]);
 
   const defaultColDef = useMemo(() => {
