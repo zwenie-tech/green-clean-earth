@@ -20,6 +20,7 @@ import { apiURL } from "@/app/requestsapi/request";
 import Cookies from 'js-cookie';
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 
 const formSchema = z.object({
@@ -36,6 +37,7 @@ export default function ProfileForm() {
   const { toast } = useToast();
   const router = useRouter();
 
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -44,7 +46,6 @@ export default function ProfileForm() {
     },
   });
 
-  
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     
@@ -56,7 +57,7 @@ export default function ProfileForm() {
           title: "Account logged in.",
           description: "Successfully logged in.",
         })
-        Cookies.set('token', token, { expires: 1 });
+        Cookies.set('adtoken', token, { expires: 1 });
         router.replace("/admin");
 
       }

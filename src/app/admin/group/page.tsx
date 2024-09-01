@@ -19,9 +19,15 @@ ModuleRegistry.registerModules([ClientSideRowModelModule]);
 const AdminGrid = () => {
   const router = useRouter();
   const [rowData, setRowData] = useState([]);
+  const token = Cookies.get("adtoken");
 
+  useEffect(() => {
+    if (!token) {
+      router.push("/admin/login");
+    }
+  }, [token, router]);
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
-    { field: "gorup_name", headerName: "Group name" },
+    { field: "gp_name", headerName: "Group name" },
     { field: "group_type", headerName: "Group type" },
     { field: "school_category", headerName: "School category" },
     { field: "school_type", headerName: "School type" },
@@ -32,9 +38,9 @@ const AdminGrid = () => {
     { field: "project", headerName: "Project" },
     { field: "chapter", headerName: "Chapter" },
     { field: "zone", headerName: "Zone" },
-    { field: "state", headerName: "State" },
-    { field: "country", headerName: "Country" },
-    { field: "coordinator_name", headerName: "Coordinator name" },
+    { field: "st_name", headerName: "State" },
+    { field: "cntry_name", headerName: "Country" },
+    { field: "co_ord_name", headerName: "Coordinator name" },
   ]);
 
   const defaultColDef = useMemo(() => {
@@ -51,19 +57,21 @@ const AdminGrid = () => {
 
   useEffect(() => {
     async function fetchdata(){
-      // const token = Cookies.get('token');
-      // const response = await axios.post(`${apiURL}/admin/adminUploads`,{},{
-      //   headers: {
-      //     'Authorization': `Bearer ${token}`,
-      //     'Content-Type': 'application/json'
-      //   }
-      // })
-      // if(response.data.success){
-      //   setRowData(response.data.Uploads);
-      // }
+      if(token){
+
+        const response = await axios.post(`${apiURL}/admin/adminGroupList?limit=100000`,{},{
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+        if(response.data.success){
+          setRowData(response.data.groupList);
+        }
+      }
     };
-    // fetchdata();
-  }, []);
+    fetchdata();
+  }, [token]);
   return (
     <div className=" bg-slate-100">
       <div className={"ag-theme-quartz"} style={{ height: 600 }}>

@@ -21,6 +21,13 @@ ModuleRegistry.registerModules([ClientSideRowModelModule]);
 const GridExample = () => {
   const router = useRouter();
   const [rowData, setRowData] = useState([]);
+  const token = Cookies.get("adtoken");
+
+  useEffect(() => {
+    if (!token) {
+      router.push("/admin/login");
+    }
+  }, [token, router]);
 
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
     { field: "up_name", headerName: "Uploader name" },
@@ -37,6 +44,7 @@ const GridExample = () => {
       floatingFilter: true,
     };
   }, []);
+  
   const onRowClicked = (event: RowClickedEvent) => {
 
     const id = event.data.up_id;
@@ -45,19 +53,21 @@ const GridExample = () => {
 
   useEffect(() => {
     async function fetchdata(){
-      const token = Cookies.get('token');
-      const response = await axios.post(`${apiURL}/admin/adminUploads`,{},{
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+        if(token){
+        const response = await axios.post(`${apiURL}/admin/adminUploads?limit=100000`,{},{
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+        if(response.data.success){
+          setRowData(response.data.Uploads);
         }
-      })
-      if(response.data.success){
-        setRowData(response.data.Uploads);
       }
-    };
+    }
+
     fetchdata();
-  }, []);
+  }, [token]);
   return (
     <div className=" bg-slate-100">
       <div className={"ag-theme-quartz"} style={{ height: 600 }}>
