@@ -9,6 +9,8 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input"
 import axios from 'axios';
+import Link from "next/link";
+
 import { Label } from '@radix-ui/react-label';
 
 
@@ -1362,6 +1364,12 @@ const ParticipateList = () => {
                     <td className="py-3 px-6 text-left">
                       {p.up_file ? (
                         // eslint-disable-next-line @next/next/no-img-element
+                        <Link
+              href={{
+                pathname: 'participant-list/item',
+                query: { id: p.up_id },
+              }}
+            >
                         <img
                           src={`${imageURL}${p.up_file}`}
                           style={{ height: '100px', width: '110px' }}
@@ -1371,6 +1379,7 @@ const ParticipateList = () => {
                         //   e.currentTarget.alt = 'Image not available';
                         // }}
                         />
+                        </Link>
                       ) : (
                         'No image available'
                       )}
