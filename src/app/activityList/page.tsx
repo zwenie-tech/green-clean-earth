@@ -283,7 +283,7 @@ const ActivityList = () => {
       });
       const dataall = await responseall.json();
 
-      setTotalPages(Math.ceil(dataall.activity.length / itemsPerPage));
+      dataall.activity ? setTotalPages(Math.ceil(dataall.activity.length / itemsPerPage)):'';
     }
     fetchfirstData();
   }, []);
@@ -1347,6 +1347,8 @@ const ActivityList = () => {
           </table>
         </div>
       </div>
+     
+
       <div className="flex justify-center items-center space-x-2 my-4">
         <button
           className={currentPage === 1 ?
@@ -1358,16 +1360,25 @@ const ActivityList = () => {
         >
           Previous
         </button>
-        <span className="text-xl">{currentPage}</span>
+
+        {/* Dynamically generate page numbers */}
+        {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+          <span
+            key={page}
+            className={`text-xl cursor-pointer  text-gray-600 ${page === currentPage ? 'font-bold  ' : 'underline'}`}
+            onClick={() => handlePageChange(page)}
+          >
+            {page}
+          </span>
+        ))}
+
         <button
-          className={currentPage === totalPages ?
+          className={currentPage === totalPages || totalPages === 1 ?
             "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
             : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
           }
-          onClick={() => {
-            handlePageChange(currentPage + 1)
-          }}
-          disabled={currentPage === totalPages}
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages || totalPages === 1}
         >
           Next
         </button>

@@ -19,18 +19,25 @@ ModuleRegistry.registerModules([ClientSideRowModelModule]);
 const AdminGrid = () => {
   const router = useRouter();
   const [rowData, setRowData] = useState([]);
+  const token = Cookies.get("adtoken");
+
+  useEffect(() => {
+    if (!token) {
+      router.push("/admin/login");
+    }
+  }, [token, router]);
 
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
-    { field: "name", headerName: "Name" },
-    { field: "email", headerName: "Email" },
-    { field: "mobile", headerName: "Mobile" },
-    { field: "district", headerName: "District" },
-    { field: "state", headerName: "State" },
-    { field: "country", headerName: "Country" },
-    { field: "address", headerName: "Address" },
-    { field: "registered_date", headerName: "Registered date" },
-    { field: "group_name", headerName: "Group name" },
-    { field: "coordinator_name", headerName: "Coordinator name" },
+    { field: "us_name", headerName: "Name" },
+    { field: "us_email", headerName: "Email" },
+    { field: "us_mobile", headerName: "Mobile" },
+    { field: "dis_name", headerName: "District" },
+    { field: "st_name", headerName: "State" },
+    { field: "cntry_name", headerName: "Country" },
+    { field: "us_address", headerName: "Address" },
+    { field: "created_on", headerName: "Registered date" },
+    { field: "gp_name", headerName: "Group name" },
+    { field: "co_ord_name", headerName: "Coordinator name" },
   ]);
 
   const defaultColDef = useMemo(() => {
@@ -39,27 +46,28 @@ const AdminGrid = () => {
       floatingFilter: true,
     };
   }, []);
-  const onRowClicked = (event: RowClickedEvent) => {
+  // const onRowClicked = (event: RowClickedEvent) => {
 
-    const id = event.data.up_id;
-    router.push(`admin/uploads/${id}`);
-  };
+  //   const id = event.data.up_id;
+  //   router.push(`admin/uploads/${id}`);
+  // };
 
   useEffect(() => {
-    async function fetchdata(){
-      // const token = Cookies.get('token');
-      // const response = await axios.post(`${apiURL}/admin/adminUploads`,{},{
-      //   headers: {
-      //     'Authorization': `Bearer ${token}`,
-      //     'Content-Type': 'application/json'
-      //   }
-      // })
-      // if(response.data.success){
-      //   setRowData(response.data.Uploads);
-      // }
-    };
-    // fetchdata();
-  }, []);
+    async function fetchdata() {
+      if (token) {
+        const response = await axios.post(`${apiURL}/admin/adminUserList?limit=100000`, {}, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+        if (response.data.success) {
+          setRowData(response.data.userList);
+        }
+      };
+    }
+    fetchdata();
+  }, [token]);
   return (
     <div className=" bg-slate-100">
       <div className={"ag-theme-quartz"} style={{ height: 600 }}>
@@ -67,7 +75,7 @@ const AdminGrid = () => {
           rowData={rowData}
           columnDefs={columnDefs}
           defaultColDef={defaultColDef}
-          onRowClicked={onRowClicked}
+          // onRowClicked={onRowClicked}
           rowSelection="multiple"
           suppressRowClickSelection={true}
           pagination={true}

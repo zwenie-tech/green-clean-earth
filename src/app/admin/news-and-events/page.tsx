@@ -19,7 +19,13 @@ ModuleRegistry.registerModules([ClientSideRowModelModule]);
 const AdminGrid = () => {
   const router = useRouter();
   const [rowData, setRowData] = useState([]);
+  const token = Cookies.get("adtoken");
 
+  useEffect(() => {
+    if (!token) {
+      router.push("/admin/login");
+    }
+  }, [token, router]);
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
     { field: "heading", headerName: "Heading" },
     { field: "body", headerName: "Body" },
@@ -42,19 +48,21 @@ const AdminGrid = () => {
 
   useEffect(() => {
     async function fetchdata(){
-      // const token = Cookies.get('token');
-      // const response = await axios.post(`${apiURL}/admin/adminUploads`,{},{
-      //   headers: {
-      //     'Authorization': `Bearer ${token}`,
-      //     'Content-Type': 'application/json'
-      //   }
-      // })
-      // if(response.data.success){
-      //   setRowData(response.data.Uploads);
-      // }
+      if(token){
+
+        // const response = await axios.post(`${apiURL}/admin/adminUploads?limit=100000`,{},{
+        //   headers: {
+        //     'Authorization': `Bearer ${token}`,
+        //     'Content-Type': 'application/json'
+        //   }
+        // })
+        // if(response.data.success){
+        //   setRowData(response.data.Uploads);
+        // }
+      }
     };
     // fetchdata();
-  }, []);
+  }, [token]);
   return (
     <div className=" bg-slate-100">
       <div className={"ag-theme-quartz"} style={{ height: 600 }}>

@@ -19,12 +19,18 @@ ModuleRegistry.registerModules([ClientSideRowModelModule]);
 const AdminGrid = () => {
   const router = useRouter();
   const [rowData, setRowData] = useState([]);
+  const token = Cookies.get("adtoken");
 
+  useEffect(() => {
+    if (!token) {
+      router.push("/admin/login");
+    }
+  }, [token, router]);
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
-    { field: "state", headerName: "State" },
-    { field: "district", headerName: "District" },
-    { field: "corporation", headerName: "Corporation" },
-    { field: "lsgd", headerName: "LSGD" },
+    // { field: "state", headerName: "State" },
+    { field: "dis_name", headerName: "District" },
+    { field: "cop_name", headerName: "Corporation" },
+    { field: "lsg_name", headerName: "LSGD" },
   ]);
 
   const defaultColDef = useMemo(() => {
@@ -41,19 +47,21 @@ const AdminGrid = () => {
 
   useEffect(() => {
     async function fetchdata(){
-      // const token = Cookies.get('token');
-      // const response = await axios.post(`${apiURL}/admin/adminUploads`,{},{
-      //   headers: {
-      //     'Authorization': `Bearer ${token}`,
-      //     'Content-Type': 'application/json'
-      //   }
-      // })
-      // if(response.data.success){
-      //   setRowData(response.data.Uploads);
-      // }
+      if(token){
+
+        const response = await axios.post(`${apiURL}/admin/adminLsgdList?limit=100000`,{},{
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+        if(response.data.success){
+          setRowData(response.data.lsgdList);
+        }
+      }
     };
-    // fetchdata();
-  }, []);
+    fetchdata();
+  }, [token]);
   return (
     <div className=" bg-slate-100">
       <div className={"ag-theme-quartz"} style={{ height: 600 }}>

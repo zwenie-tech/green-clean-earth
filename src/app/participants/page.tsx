@@ -587,9 +587,9 @@ const ParticipateList = () => {
     selectMission ? dataWithIds.chapterId = missionChapter.find((item) => item.chapter_name === selectMission)?.chapter_id || null : null;
     selectZone ? dataWithIds.zoneId = missionZone.find((item) => item.zone_name === selectZone)?.zone_id || null : null;
 
-    data.twoupload===true ? dataWithIds.hasTwoUploads = data.twoupload : null;
-    data.threeupload===true ? dataWithIds.hasThreeUploads = data.threeupload : null;
-    data.fourupload===true ? dataWithIds.hasFourUploads = data.fourupload : null;
+    data.twoupload === true ? dataWithIds.hasTwoUploads = data.twoupload : null;
+    data.threeupload === true ? dataWithIds.hasThreeUploads = data.threeupload : null;
+    data.fourupload === true ? dataWithIds.hasFourUploads = data.fourupload : null;
 
 
     setFilterData(dataWithIds);
@@ -1399,20 +1399,30 @@ const ParticipateList = () => {
         >
           Previous
         </button>
-        <span className="text-xl">{currentPage}</span>
+
+        {/* Dynamically generate page numbers */}
+        {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+          <span
+            key={page}
+            className={`text-xl cursor-pointer  text-gray-600 ${page === currentPage ? 'font-bold  ' : 'underline'}`}
+            onClick={() => handlePageChange(page)}
+          >
+            {page}
+          </span>
+        ))}
+
         <button
           className={currentPage === totalPages || totalPages === 1 ?
             "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
             : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
           }
-          onClick={() => {
-            handlePageChange(currentPage + 1)
-          }}
+          onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages || totalPages === 1}
         >
           Next
         </button>
       </div>
+
       <Footer />
     </>
   );
