@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import LogoutDialog from "./LogoutDialog";
 import { Separator } from "@/components/ui/separator";
+import Cookies from 'js-cookie';
 
 // 1. Manage Uploads
 // 2. Manage Users
@@ -34,47 +35,50 @@ const links = [
 function NavLinks() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(true);
+  const token = Cookies.get("adtoken");
+
   const toggleNav = () => {
     setIsOpen((prev) => !prev);
   };
   return (
     <div className="">
-      <button
+    {token ? (
+      <><button
         className="md:hidden flex h-[48px] grow items-center gap-2 rounded-md text-black p-3 text-sm font-medium hover:bg-light-green hover:text-primary md:flex-none md:justify-start md:p-2 md:px-3"
         onClick={toggleNav}
       >
         <Menu />
         Menu
-      </button>
-      <div
+      </button><div
         className={clsx(
           "grid",
           isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
           "overflow-hidden transition-[grid-template-rows] duration-500 ease-in-out w-full"
         )}
       >
-        <div className="flex flex-col gap-1 overflow-hidden bg-white">
-          {links.map((link) => {
-            return (
-              <Link
-                key={link.name}
-                href={link.href}
-                className={clsx(
-                  "grow-0 flex items-center gap-2 rounded-md text-black p-4 text-sm font-medium hover:bg-light-green hover:text-primary md:flex-none md:justify-start md:p-2 md:px-3",
-                  {
-                    "bg-light-green text-primary": pathname === link.href,
-                  }
-                )}
-              >
-                <p className="">{link.name}</p>
-              </Link>
-            );
-          })}
-          <Separator className="my-2"/>
-          {/* logout */}
-          <LogoutDialog />
-        </div>
-      </div>
+          <div className="flex flex-col gap-1 overflow-hidden bg-white">
+            {links.map((link) => {
+              return (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className={clsx(
+                    "grow-0 flex items-center gap-2 rounded-md text-black p-4 text-sm font-medium hover:bg-light-green hover:text-primary md:flex-none md:justify-start md:p-2 md:px-3",
+                    {
+                      "bg-light-green text-primary": pathname === link.href,
+                    }
+                  )}
+                >
+                  <p className="">{link.name}</p>
+                </Link>
+              );
+            })}
+            <Separator className="my-2" />
+            {/* logout */}
+            <LogoutDialog />
+          </div>
+
+        </div></>):''}
     </div>
   );
 }
