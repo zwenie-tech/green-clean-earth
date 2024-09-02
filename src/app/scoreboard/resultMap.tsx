@@ -26,21 +26,23 @@ const ResultImages = () => {
 
   return (
     <>
-      <div className="container mt-4">
-        <div className="mb-4">
-          <label htmlFor="mapSelect" className="form-label bg-primary-gray">
-            Select Map:
-          </label>
-          <select
-            id="mapSelect"
-            className="ml-5 form-select border-primary text-primary px-5 py-2 rounded-lg focus:border-primary active:border-primary focus:outline-primary active:outline-primary"
-            value={selectedMap}
-            onChange={handleMapChange}
-          >
-            <option value="kerala">Kerala</option>
-            <option value="india">India</option>
-            <option value="world">World</option>
-          </select>
+      <div className="container mt-4 relative">
+        <div className="mb-2 inline-block">
+          <div className="flex flex-col gap-2">
+            <label htmlFor="mapSelect" className="form-label">
+              Select Map:
+            </label>
+            <select
+              id="mapSelect"
+              className="form-select border border-primary text-primary px-5 py-2 rounded-lg focus:border-primary active:border-primary focus:outline-primary active:outline-primary"
+              value={selectedMap}
+              onChange={handleMapChange}
+            >
+              <option value="kerala">Kerala</option>
+              <option value="india">India</option>
+              <option value="world">World</option>
+            </select>
+          </div>
         </div>
         {renderMap()}
       </div>
