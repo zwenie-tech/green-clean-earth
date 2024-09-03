@@ -72,9 +72,11 @@ function IndiaMap() {
 
   return (
     <Container className="p-3">
+      <div className="md:inline-block md:absolute md:top-0 md:right-0">
+        <h1 className='mb-1 text-primary text-2xl font-bold'>India Details</h1>
+        <h1 className='mb-1 text-primary text-2xl font-bold'>Total Uploads: {totalUploads !== null ? totalUploads : 'Loading...'}</h1>
+      </div>
       <div className="map-container">
-        <h1 className='mb-1 text-primary text-center text-2xl font-bold'>India Details</h1>
-        <h1 className='mb-1 text-primary text-center text-2xl font-bold'>Total Uploads: {totalUploads !== null ? totalUploads : 'Loading...'}</h1>
         <ComposableMap
           projection="geoMercator"
           projectionConfig={{

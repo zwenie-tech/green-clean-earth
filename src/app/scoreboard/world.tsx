@@ -76,11 +76,13 @@ const WorldMap = () => {
   };
 
   return (
-    <div style={{ textAlign: 'center', padding: '10px', position: 'relative' }}>
-      <h1 className='mb-1 text-primary text-2xl font-bold'>World Details</h1>
-      <h2 className='mb-1 text-primary text-xl font-bold'>
-        Total Uploads: {totalUploads !== null ? totalUploads : 'Loading...'}
-      </h2>
+    <div style={{ padding: '10px' }}>
+      <div className="md:absolute md:top-0 md:right-0">
+        <h1 className='mb-1 text-primary text-2xl font-bold'>World Details</h1>
+        <h2 className='mb-1 text-primary text-xl font-bold'>
+          Total Uploads: {totalUploads !== null ? totalUploads : 'Loading...'}
+        </h2>
+      </div>
       <div className='mt-0'>
         <ComposableMap
           projectionConfig={{

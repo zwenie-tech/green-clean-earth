@@ -32,11 +32,11 @@ const AboutUs = () => {
                 <h1 className="text-3xl font-bold text-center">About Us</h1>
             </div>
             <div className="bg-[#D9E4C1] p-10 text-center">
-                <p>
-                    Gcem Foundation - A non-profitable organization to make earth smart green and clean. Reg no. 246 / 4 / 16.<br />
-                    Haritha puraskaram Sammanapddathi Vrikshathai selfi Malsaram is a GCEM Foundation project for saving the earth supported by www.a2z4home.com.<br />
-                    It is a &quot;Prize win&quot; program for those who are ready to plant trees in Kerala. Plant a new tree and upload the images every 3 months.<br />
-                    Prize winners will be selected by draw in each period. This is to encourage people to plant trees against global warming.
+                <p className='max-w-5xl mx-auto leading-7'>
+                ഗ്രീൻ  ക്ലീൻ  കേരള  മിഷൻ.
+                സുസ്ഥിര  വികസിത  കേരളം എന്ന ലക്‌ഷ്യം സാക്ഷാൽക്കരിക്കാനായി GCEM Foundation (Green Clean Earth Movement Foundation) 2016 ൽ  പ്രൊഫസർ  ശോഭീന്ദ്രൻ്റെ  നേതൃത്വത്തിൽ ആരംഭിച്ച  പദ്ധതിയാണ് ഗ്രീൻ ക്ലീൻ  കേരള  ഹരിത  മത്സരങ്ങൾ.
+                പരിസ്ഥിതി  ദിനത്തിലും  തുടർന്നും  നടുന്ന വൃക്ഷത്തൈകളുടെ  വിവിധ  ഘട്ടങ്ങളിലുള്ള  വളർച്ച  പ്രകടമാവുന്ന  ഫോട്ടോ  www.GreenCleanEarth.org   എന്ന  വെബ്‌സൈറ്റിൽ  അപ്‌ലോഡ്  ചെയ്താൽ  ഭാഗ്യ  ശാലികൾക്കും, തുടർന്നുള്ള  ഹരിത  മത്സരങ്ങളിൽ  മികച്ച  പ്രകടനം  നടത്തുന്നവർക്കും   പുരസ്കാരങ്ങളും  സമ്മാനങ്ങളും  നൽകുന്ന പദ്ധതിയാണിത്.
+                ഇങ്ങനെ  ഒരു കോടി വൃക്ഷത്തൈകൾ സംരക്ഷിച്ച്, അതിൻറെ  ഓരോ മൂന്ന് മാസത്തെയും  വളർച്ച പ്രകടമാവുന്ന  ഫോട്ടോയും  മറ്റു വിവരങ്ങളും വെബ്സൈറ്റിൽ പ്രസിദ്ധീകരിച്ച്, മത്സരാർത്ഥികൾ  തയ്യാറാക്കുന്ന  സുസ്ഥിര  വികസിത  പ്രൊജക്റ്റ് റിപ്പോർട്ടിനൊപ്പം   UNEP (United Nations Environmental Program) യിലേക്ക് സമർപ്പിക്കുവാനും  ഈ പദ്ധതിയിലൂടെ  ലക്ഷ്യമിടുന്നു.
                 </p>
             </div>
             <div className="flex justify-center items-center mt-10">
