@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Input } from "@/components/ui/input"
+
 const TableComponent = () => {
   const router = useRouter();
 
@@ -20,23 +20,23 @@ const TableComponent = () => {
   });
 
   // Handle search input in the second row
-  const handleSearchChange = (e, column) => {
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>, column: keyof typeof initialData[0]) => {
     const value = e.target.value;
     setSearchTerm(prev => ({ ...prev, [column]: value }));
-
+  
     // Filter the table data based on the search
     const filteredData = initialData.filter(row =>
       row[column]?.toString().toLowerCase().includes(value.toLowerCase())
     );
     setData(filteredData);
   };
+  
 
   // Handle double-click to navigate to another page
-  const handleDoubleClick = (rowData) => {
+  const handleDoubleClick = (rowData: any) => {
     router.push(`/admin/checking/details?name=${rowData.name}&email=${rowData.email}&username=${rowData.username}&group=${rowData.group}&country=${rowData.country}&state=${rowData.state}&district=${rowData.district}&cooperation=${rowData.cooperation}&Ward=${rowData.Ward}&LSGD=${rowData.LSGD}&groupname=${rowData.groupname}&referredBy=${rowData.referredBy}`);
   };
   
-
   return (
     <div>
       <div className="container mx-auto p-6">
@@ -60,9 +60,9 @@ const TableComponent = () => {
             </thead>
             <tbody>
               <tr>
-                <td ><input className="rounded-md border-primary outline-primary-300 border rounded-md px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 gap-5" type="text" placeholder="Search Name" value={searchTerm.name} onChange={(e) => handleSearchChange(e, 'name')} /></td> 
-                <td ><input className="rounded-md border-primary outline-primary-300 border rounded-md px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 gap-5" type="email" placeholder="Search Email" value={searchTerm.email} onChange={(e) => handleSearchChange(e, 'email')} /></td>
-                <td><input  className="rounded-md border-primary outline-primary-300 border rounded-md px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 gap-5"type="text" placeholder="Search Username" value={searchTerm.username} onChange={(e) => handleSearchChange(e, 'username')} /></td>
+                <td><input className="rounded-md border-primary outline-primary-300 border rounded-md px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 gap-5" type="text" placeholder="Search Name" value={searchTerm.name} onChange={(e) => handleSearchChange(e, 'name')} /></td> 
+                <td><input className="rounded-md border-primary outline-primary-300 border rounded-md px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 gap-5" type="email" placeholder="Search Email" value={searchTerm.email} onChange={(e) => handleSearchChange(e, 'email')} /></td>
+                <td><input className="rounded-md border-primary outline-primary-300 border rounded-md px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 gap-5" type="text" placeholder="Search Username" value={searchTerm.username} onChange={(e) => handleSearchChange(e, 'username')} /></td>
                 <td><input className="rounded-md border-primary outline-primary-300 border rounded-md px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 gap-5" type="text" placeholder="Search Group" value={searchTerm.group} onChange={(e) => handleSearchChange(e, 'group')} /></td>
                 <td><input className="rounded-md border-primary outline-primary-300 border rounded-md px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 gap-5" type="text" placeholder="Search Country" value={searchTerm.country} onChange={(e) => handleSearchChange(e, 'country')} /></td>
                 <td><input className="rounded-md border-primary outline-primary-300 border rounded-md px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 gap-5" type="text" placeholder="Search State" value={searchTerm.state} onChange={(e) => handleSearchChange(e, 'state')} /></td>
@@ -74,7 +74,7 @@ const TableComponent = () => {
                 <td><input className="rounded-md border-primary outline-primary-300 border rounded-md px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 gap-5" type="text" placeholder="Search Referred By" value={searchTerm.referredBy} onChange={(e) => handleSearchChange(e, 'referredBy')} /></td>
               </tr>
               {data.map((row, index) => (
-                <tr key={index} onDoubleClick={() => handleDoubleClick(row)}>
+                <tr key={index} className="hover:bg-gray-100 cursor-pointer" onDoubleClick={() => handleDoubleClick(row)}>
                   <td>{row.name}</td>
                   <td>{row.email}</td>
                   <td>{row.username}</td>
