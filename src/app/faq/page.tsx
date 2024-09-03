@@ -21,31 +21,84 @@ const Faq = () => {
         <div className="max-w-screen-xl mx-auto p-4 mb-6">
           <Accordion type="single" collapsible className='flex flex-col gap-6'>
             <AccordionItem value="item-1" className='bg-light-gray px-4 rounded-xl'>
-              <AccordionTrigger>എങ്ങിനെ അപ്ലോഡ് ചെയ്യാം?</AccordionTrigger>
+              <AccordionTrigger>CORDINATOR രജിസ്‌ട്രേഷൻ എങ്ങിനെ?</AccordionTrigger>
               <AccordionContent>
                 <ol className='px-4 list-decimal'>
-                  <li>www.GreenCleanEarth.org എന്ന വെബ്സൈറ്റ് ഓപ്പൺ ചെയ്തു Register എന്ന ബട്ടൺ ക്ലിക്ക് ചെയ്തുനിങ്ങളുടെ പേരും  മൊബൈൽ നമ്പറും നൽകി സബ്മിറ്റ് ചെയ്യുക .എസ്എംഎസ് ആയി ലഭിക്കുന്ന OTP  എന്റർ ചെയ്തു രജിസ്ട്രേഷൻ പൂർത്തിയാക്കുക.</li>
-                  <li>തുടർന്ന് login  ചെയ്തു Upload plants എന്ന ബട്ടൺ ക്ലിക്ക് ചെയ്ത് ഫോട്ടോ അപ്‌ലോഡ് ചെയ്യുക.</li>
-                  <li>അതിനുശേഷം My uploads  എന്ന ബട്ടൺ ക്ലിക്ക് ചെയ്ത് വിശദ വിവരങ്ങൾ നൽകുക.</li>
+                  <li>മത്സരത്തിൽ  പങ്കെടുക്കുന്ന  സ്ഥാപനത്തിലെ   കോർഡിനേറ്റർമാർ ആദ്യം സ്ഥാപനത്തിന്റെ  വിശദാംശങ്ങൾ www.GreenCleanEarth.org  എന്ന  ഈ വെബ്‌സൈറ്റിൽ   നൽകി  കോർഡിനേറ്റർ രജിസ്ട്രഷൻ ചെയ്യേണ്ടതാണ് . ഇത്  ഒരു സ്ഥാപനത്തിൽ  നിന്നും  ഒരിക്കൽ  മാത്രം  ചെയ്താൽ  മതി.</li>
+                  <li>അതിന്  ശേഷം കോർഡിനേറ്റർ  വെബ്‌സൈറ്റിൽ  നിന്നും  ലഭിക്കുന്ന  ഒരു  ലിങ്ക്  സ്ഥാപനത്തിലെ  മുഴുവൻ  വിദ്യാർത്ഥികൾക്കും  അദ്ധ്യാപകർക്കും അയച്ച് കൊടുക്കേണ്ടതാണ്.</li>
+                  <li>കോർഡിനേറ്റർമാർക്ക്  രെജിസ്റ്റർ  ചെയ്യാൻ ഒരു  REFERAL CODE  എന്റർ ചെയ്യേണ്ടതുണ്ട്.</li>
+                  <li>നിങ്ങളുടെ  PROMOTER  നിങ്ങളെ  INVITE  ചെയ്യുമ്പോൾ  നിങ്ങൾക്ക്  ലഭിക്കുന്ന CODE  ആണ്  REFERAL  CODE .ആരും  നിങ്ങളെ  INVITE  ചെയ്യാതെയാണ്  നിങ്ങൾ  ഈ മത്സരത്തിൽ  പങ്കെടുക്കുന്നതെങ്കിൽ   REFERAL  CODE 
+                  ലഭിക്കാൻ 9645964592  എന്ന  നമ്പറിൽ  WHATASPP  ചെയ്യുക .</li>
                 </ol>
+                <div className="mt-4">
+                  <a 
+                    href="https://youtu.be/SlF--brGIHE?si=K-hM57fLt5VZlgnq" 
+                    className="text-primary underline hover:text-green-700"
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                  >
+                    Click here
+                  </a>
+                </div>
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-2" className='bg-light-gray px-4 rounded-xl'>
-              <AccordionTrigger>എന്താണ് TREE NUMBER?</AccordionTrigger>
+              <AccordionTrigger>USER രജിസ്‌ട്രേഷൻ എങ്ങിനെ?</AccordionTrigger>
               <AccordionContent>
-              <p>നിങ്ങൾഈ വെബ്‌സൈറ്റിൽ അപ്ലോഡ് ചെയ്ത വൃക്ഷത്തൈകളുടെ രെജിസ്ട്രേഷൻ നമ്പറുകളാണ് നിങ്ങളുടെ TREE NUMBER. Login ചെയ്തതിന് ശേഷം PARICIPANT LIST-ൽ നിങ്ങൾ അപ്ലോഡ് ചെയ്ത വൃക്ഷത്തൈയുടെ ഫോട്ടോയുടെ ഇടത് ഭാഗത്ത് നിങ്ങളുടെ TREE NUMBER കാണാവുന്നതാണ്. ഈ നമ്പർ പ്രകാരമാണ് പ്പിൽ സമ്മാനങ്ങൾ നൽകുന്നത്.</p>
+                <p>നിങ്ങളുടെ  സ്ഥാപനത്തിലെ കോർഡിനേറ്റർ  അയച്ച്  തന്ന  ലിങ്കിൽ  ക്ലിക്ക്  ചെയ്ത് സ്വന്തം  ഫോൺ  നമ്പർ ഉപയോഗിച്ച്   ഒരു  പാസ്സ്‌വേർഡ്  ക്രിയേറ്റ്  ചെയ്ത് USER  ആയി രജിസ്റ്റർ ചെയ്യേണ്ടതാണ് . കോർഡിനേറ്റരും മത്സരത്തിൽ  പങ്കെടുക്കുന്ന  എല്ലാ  അദ്ധ്യാപകരും  വിദ്യാർത്ഥികളും USER രജിസ്‌ട്രേഷൻ നടത്തേണ്ടതാണ് . തുടർന്ന്  LOGIN  ചെയ്ത്  മത്സരത്തിൽ  പങ്കെടുക്കാവുന്നതാണ്.</p>
+                <div className="mt-4">
+                  <a 
+                    href="https://youtu.be/yO4RHNa7xRs?si=mGrnuMg3WzlK6txo" 
+                    className="text-primary underline hover:text-green-700"
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                  >
+                    Click here
+                  </a>
+                </div>
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-3" className='bg-light-gray px-4 rounded-xl'>
-              <AccordionTrigger>എന്താണ് GROUP CODE?</AccordionTrigger>
+              <AccordionTrigger>തൈകൾ  അപ്‌ലോഡ്  ചെയ്യുന്നതെങ്ങിനെ ?</AccordionTrigger>
               <AccordionContent>
               <p>
-                പരിസ്ഥിതി തൽപരരായ സന്നദ്ധ സംഘടനകൾ, വിദ്യാലയങ്ങൾ, സ്ഥാപനങ്ങൾ, സർക്കാർ ഓഫീസുകൾ, റസിഡൻസ് അസ്സോസ്സിയേഷനുകൾ, സോഷ്യൽ മീഡിയ കൂട്ടായ്മകൾ, കുടുംബശ്രീ യൂണിറ്റുകൾ എന്നിവയ്ക്ക് ഗ്രൂപ്പ് ആയി മത്സരത്തിൽ പങ്കെടുക്കാവുന്നതാണ്. ഇങ്ങനെ മത്സരത്തിൽ പങ്കെടുക്കാൻ അപേക്ഷ നൽകിയ ഓരോ ഗ്രൂപ്പുകൾക്കും സംഘാടകർ പ്രത്യേകം നൽകുന്ന കോഡ് ആണ് GROUP CODE.
-                <br />ഒരു സ്ഥാപനത്തിലെ മുഴുവൻ പേർക്കും ഒരേ ഗ്രൂപ്പ് കോഡ് ആയിരിക്കുന്നതാണ്.
-                ഓരോ ഗ്രൂപ്പിലെ പ്രവർത്തകരും തൈകൾ അപ്ലോഡ് ചെയ്യുമ്പോൾ അവരവരുടെ GROUP CODE സെലക്ട് ചെയ്യേണ്ടതാണ്. പങ്കെടുക്കുന്ന ഗ്രൂപ്പുകൾക്ക് സ്വന്തം ഗ്രൂപ്പിൽ ഏറ്റവും മികച്ച പ്രകടനം കാഴ്ച വെക്കുന്ന മെമ്പർമാരെ തിരഞ്ഞെടുക്കാനും അവർക്ക് പ്രത്യേക സമ്മാനം നൽകാനും അവസരം ലഭിക്കുന്നതാണ്.
-                <br />GROUP CODE ലഭിച്ചിട്ടില്ലാത്ത വ്യക്തികൾക്ക് മത്സരത്തിൽ പങ്കെടുക്കാൻ No GROUP CODE എന്ന് സെലക്ട് ചെയ്താൽ മതി.
-                <br />GROUP CODE ലഭിച്ചിട്ടുള്ളവർ സ്വന്തം കൂട്ടായ്മയുടെ ഗ്രൂപ്പ് കാറ്റഗറി സെലക്ട് ചെയ്തതിന് ശേഷം GROUP CODE സെലക്ട് ചെയ്യുക.
-                <br />താങ്കളുടെ സ്ഥാപനത്തിന്റെ GROUP CODE അറിയാനും പുതിയ ഗ്രൂപ്പ് കോഡ് ലഭിക്കാനും ഇവിടെ <a href="">CLICK</a> ചെയ്യുക.
+              നിങ്ങളുടെ  സ്ഥാപനത്തിലെ കോർഡിനേറ്റർ  അയച്ച്  തന്ന  ലിങ്കിൽ  ക്ലിക്ക്  ചെയ്ത് സ്വന്തം  ഫോൺ  നമ്പർ ഉപയോഗിച്ച്   ഒരു  പാസ്സ്‌വേർഡ്  ക്രിയേറ്റ്  ചെയ്ത് USER  ആയി രജിസ്റ്റർ  ചെയ്തതിന്  ശേഷം  LOGIN  ചെയ്ത്  DASH BORD ൽ  പോയി  UPLOAD  PLANTS  എന്ന  ബട്ടൺ  ക്ലിക്ക്  ചെയ്ത്  അപ്‌ലോഡ് ചെയ്യാവുന്നതാണ് .
+              </p>
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-4" className='bg-light-gray px-4 rounded-xl'>
+              <AccordionTrigger>ഹരിത  - കലാ മത്സരങ്ങളിൽ  സൃഷ്ടികൾ  സമർപ്പിക്കുന്നതെങ്ങിനെ?</AccordionTrigger>
+              <AccordionContent>
+              <p>
+              മത്സരാർത്ഥികൾ പ്രകടനത്തിന്റെ  വീഡിയോ തയ്യാറാക്കിയതിന്   ശേഷം,    സ്‌കൂൾ  കോർഡിനേറ്റർ ആയ  അദ്ധ്യാപകനെ  സമീപിച്ച് IGAR Number (Institution Green Art fest Registration Number)   വാങ്ങിയതിന്  ശേഷം   9645964592  എന്ന നമ്പറിലേക്ക് Whatsapp / Telegram വഴി send ചെയ്യേണ്ടതാണ് .
+              <br/>
+              <br/>
+              IGAR നമ്പർ  ഇല്ലാതെ  അയക്കുന്ന  വീഡിയോകൾ  മത്സരത്തിൽ  പരിഗണിക്കുന്നതല്ല .
+              <br/>
+              <br/>
+              ചാനലിൽ  Title കൊടുക്കുവാൻ  വേണ്ടി ഓരോ കലാ സൃഷ്ടിയോടുമൊപ്പം   താഴെ  ചേർത്ത    വിവരങ്ങൾ  അതേഓർഡറിൽ  ഇംഗ്ലീഷിൽ ടെക്സ്റ്റ്  ആയി അയക്കേണ്ടതാണ് .
+              <br/>
+              <br/>
+              Name of competition- Name of student- Name of Institution(mention KG/ LP/UP/HS/HSS/College)-Students /IGAR Number
+              </p>
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-5" className='bg-light-gray px-4 rounded-xl'>
+              <AccordionTrigger>എന്താണ് TREE NUMBER?</AccordionTrigger>
+              <AccordionContent>
+              <p>
+              നിങ്ങൾഈ വെബ്‌സൈറ്റിൽ അപ്ലോഡ് ചെയ്ത വൃക്ഷത്തൈകളുടെ രെജിസ്ട്രേഷൻ നമ്പറുകളാണ് നിങ്ങളുടെ TREE NUMBER. Login ചെയ്തതിന് ശേഷം PARICIPANT LIST-ൽ നിങ്ങൾ അപ്ലോഡ് ചെയ്ത വൃക്ഷത്തൈയുടെ ഫോട്ടോയുടെ ഇടത് ഭാഗത്ത് നിങ്ങളുടെ TREE NUMBER കാണാവുന്നതാണ്. ഈ നമ്പർ പ്രകാരമാണ് നറുക്കെടുപ്പിൽ സമ്മാനങ്ങൾ നൽകുന്നത്.
+              <br/>
+              <br/>
+              കലാമത്സരങ്ങളിൽ  പങ്കെടുക്കാനും  TREE NUMBER  ഓ  ഹരിത  മത്സരങ്ങളിൽ  പങ്കെടുത്തതിന്റെ  CHEST NUMBER  ഓ  ചേർക്കേണ്ടതാണ് .
+              </p>
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-6" className='bg-light-gray px-4 rounded-xl'>
+              <AccordionTrigger>എന്താണ്  CHEST  NUMBER ?</AccordionTrigger>
+              <AccordionContent>
+              <p>
+              നിങ്ങളുടെ  വീഡിയോകൾ  GREEN CLEAN KERALA  എന്ന യൂട്യൂബ്  ചാനലിൽ  അപ്‌ലോഡ്  ചെയ്യുമ്പോൾ   സംഘാടകർ  അതിന്ന്  നൽകുന്ന  പ്രത്യേക  നമ്പറാണ്  CHEST NUMBER.
               </p>
               </AccordionContent>
             </AccordionItem>
