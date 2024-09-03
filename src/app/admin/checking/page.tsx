@@ -74,7 +74,7 @@ const TableComponent = () => {
                 <td><input className="rounded-md border-primary outline-primary-300 border rounded-md px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 gap-5" type="text" placeholder="Search Referred By" value={searchTerm.referredBy} onChange={(e) => handleSearchChange(e, 'referredBy')} /></td>
               </tr>
               {data.map((row, index) => (
-                <tr key={index} className="hover:bg-gray-100 cursor-pointer" onDoubleClick={() => handleDoubleClick(row)}>
+                <tr key={index} className="hover:bg-gray-100 cursor-pointer" onClick={() => handleDoubleClick(row)}>
                   <td>{row.name}</td>
                   <td>{row.email}</td>
                   <td>{row.username}</td>
