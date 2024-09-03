@@ -38,7 +38,7 @@ const NavigationBar = () => {
     { href: "/participant-list", label: "Participant List" },
     { href: "/activityList", label: "Activity List" },
     { href: "/faq", label: "FAQ" },
-    { href: "/result", label: "Result" },
+    { href: "/scoreboard", label: "Scoreboard" },
     { href: "/about-us", label: "About Us" },
     { href: "/contact", label: "Contact" },
   ];
