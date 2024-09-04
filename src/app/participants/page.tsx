@@ -1335,7 +1335,7 @@ const ParticipateList = () => {
         </div>
       </div>
 
-      <div className="float-right mr-6 font-bold">
+      <div className="flex justify-center font-bold my-4">
         <p>Total Count: {totalCount}</p>
       </div>
 

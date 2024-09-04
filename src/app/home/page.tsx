@@ -210,9 +210,8 @@ const cards = [
         <div className="grid gap-0 md:grid-cols-3 sm:grid-cols-1">   
           {/* Box 1 */}
           <div className=" bg-light-gray flex flex-col justify-center items-center px-4 py-8 my-3 rounded-2xl">
-            <h2 className="text-2xl p-2" style={{fontWeight:'bold'}}>ഗ്രീൻ ക്ലീൻ കേരള-വൃക്ഷത്തൈ പരിപാലന മത്സരം -</h2>
-            <p className="mt-4 px-2">
-              പരിസ്ഥിതി ദിനത്തിലും തുടർന്നും നടുന്ന വൃക്ഷത്തൈകൾ വേനൽക്കാലത്ത്‌ സംരക്ഷിക്കുന്നതിനെ പ്രോത്സാഹിപ്പിക്കാൻ, അതിന്റെ കൂടെ ഓരോ മൂന്ന് മാസം കൂടുമ്പോഴും ഒരു സെൽഫി എടുത്ത് ഈ വെബ് സൈറ്റിൽ അപ്ലോഡ് ചെയ്താൽ ഭാഗ്യശാലികൾക് സമ്മാനങ്ങൾ നൽകുന്നു. കൂടാതെ…
+            <h2 className="text-2xl p-2" style={{fontWeight:'bold'}}>ഗ്രീൻ ക്ലീൻ കേരള -ഹരിത മത്സരങ്ങൾ</h2>
+            <p className="mt-4 px-2">സുസ്ഥിര വികസിതവും  മാലിന്യമുക്തവും  ഹരിതാഭവും  ആയ  കേരളം  എന്ന  ലക്‌ഷ്യം സാക്ഷാൽക്കരിക്കാനായി Green Clean Kerala Mission , വിദ്യാർത്ഥികൾക്കും  പരിസ്ഥിതി  തല്പരർക്കുമായി സംഘടിപ്പിക്കുന്ന മത്സരാധിഷ്ഠിതമായ ഒരു പദ്ധതിയാണ്  ഗ്രീൻ ക്ലീൻ കേരള -ഹരിത മത്സരങ്ങൾ.
             </p>
             <Link href="/project" legacyBehavior>
             <a className="mt-2 self-start px-2 font-bold no-underline">
@@ -228,9 +227,10 @@ const cards = [
           {/* Box 3 */}
           <div className=" bg-light-gray relative flex justify-center items-center bg-cover my-3 rounded-2xl ">
             <div className="bg-opacity-50 bg-none p-4">
-              <h2 className="text-2xl"style={{fontWeight:'bold'}}>ഹരിത കേരളം -സുന്ദര  കേരളം – ഗ്രീൻ ക്ലീൻ കേരള -ഹരിത മത്സരങ്ങൾ</h2>
+              <h2 className="text-2xl"style={{fontWeight:'bold'}}>പ്രൊഫസ്സർ  ശോഭീന്ദ്രൻ  സ്മാരക പരിസ്ഥിതി അവാർഡ് –2024-25
+              (ഒരു ലക്ഷം രൂപയുടെ പുരസ്കാരങ്ങളും സമ്മാനങ്ങളും)</h2>
               <p className="mt-4">
-                സുസ്ഥിര വികസിത  കേരളം  എന്ന  ലക്‌ഷ്യം സാക്ഷാൽക്കരിക്കാനായി Green Clean Kerala Mission, വിദ്യാർത്ഥികൾക്കും  പരിസ്ഥിതി  തല്പരർക്കുമായി സംഘടിപ്പിക്കുന്ന മത്സരാധിഷ്ഠിതമായ ഒരു പദ്ധതിയാണ്  ഗ്രീൻ ക്ലീൻ കേരള -ഹരിത മത്സരങ്ങൾ.
+              ഹരിത  മത്സരങ്ങളിൽ മികച്ചപ്രകടനം  നടത്തുന്ന   വിദ്യാലയങ്ങൾക്കും , വിദ്യാർത്ഥികൾക്കും , അധ്യാപകർക്കും പരിസ്ഥിതി പ്രവർത്തകർക്കും പ്രൊഫസ്സർ  ശോഭീന്ദ്രൻ സാറിന്റെ  പേരിൽ  പ്രത്യേക  പുരസ്കാരങ്ങളും  ക്യാഷ്  പ്രൈസും  നൽകുന്നതാണ് . ആയതിനായി  2024  ജൂൺ  5  മുതൽ  2025  ജൂൺ  5  വരെ  വിവിധ വിഭാഗങ്ങൾക്കായി പ്രത്യേക  ഹരിത  മത്സരങ്ങൾ  സംഘടിപ്പിക്കുന്നുണ്ട് .
               </p>
               <Link href="/project" legacyBehavior>
                 <a className=" mt-2 self-start px-2" style={{ textDecoration: 'none',fontWeight:'bold' }}>Read more

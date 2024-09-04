@@ -1308,7 +1308,7 @@ const ActivityList = () => {
         </div>
       </div>
 
-      <div className="float-right mr-6 font-bold">
+      <div className="flex justify-center font-bold my-4">
         <p>Total Count: {totalCount}</p>
       </div>
 
@@ -1318,7 +1318,7 @@ const ActivityList = () => {
             <thead>
               <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                 <th className="py-3 px-6 text-left w-16 bd-2 rounded-tl-lg">SL .No</th>
-                <th className="py-3 px-6 text-left w-16 bd-2 rounded-tl-lg">Thumbnail</th>
+                <th className="py-3 px-6 text-left w-16 bd-2 rounded-tl-lg">Activity Link</th>
                 <th className="py-3 px-6 text-left">Name</th>
                 <th className="py-3 px-6 text-left">Name of Art - Brief Description</th>
                 <th className="py-3 px-6 text-left">Category</th>
