@@ -56,7 +56,7 @@ type Corp = {
 
 const formSchema = z.object({
   name: z.string().min(1).max(255),
-  email: z.string().email().max(255),
+  email: z.string().email().max(255).optional(),
   mobile: z.coerce.number().gte(1).lte(9999999999),
   country: z.string(),
   state: z.string().optional(),
