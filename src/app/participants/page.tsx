@@ -143,7 +143,7 @@ const ParticipateList = () => {
   const [selectedGrpType, setSelectedGrpType] = useState("new");
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
   const [wardNo, setWardNo] = useState("");
-  const [treeNo, setTreeNo] = useState("");
+  const [totalCount, setTotalCount] = useState("");
   const [coName, setConame] = useState("");
   const [Phone, setPhone] = useState("");
   const [grpId, setGrpId] = useState("");
@@ -511,6 +511,7 @@ const ParticipateList = () => {
       try {
         const resultall = await responseall.json();
         const result = await response.json();
+        setTotalCount(result.total);
 
         setTotalPages(Math.ceil(resultall.Uploads.length / itemsPerPage));
 
@@ -835,7 +836,7 @@ const ParticipateList = () => {
       </div>
 
       {/* Search by Group Wise */}
-      <div className='search1'>
+      <div className='search1 mb-5'>
         <h1 className='text-lg text-center m-3'>Search by Group Wise</h1>
         <div className="mx-5 md:mx-9 lg:mx-16 border-2 border-gray-300 shadow-lg flex justify-center items-center bg-gray-100 rounded-lg">
           <Form {...form}>
@@ -1334,6 +1335,9 @@ const ParticipateList = () => {
         </div>
       </div>
 
+      <div className="float-right mr-6 font-bold">
+        <p>Total Count: {totalCount}</p>
+      </div>
 
       <div className="container mx-auto p-6">
         <div className="overflow-x-auto">
@@ -1365,20 +1369,20 @@ const ParticipateList = () => {
                       {p.up_file ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <Link
-              href={{
-                pathname: 'participant-list/item',
-                query: { id: p.up_id },
-              }}
-            >
-                        <img
-                          src={`${imageURL}${p.up_file}`}
-                          style={{ height: '100px', width: '110px' }}
-                          alt="Tree"
-                        // onError={(e) => {
-                        //   e.currentTarget.src = '/path/to/fallback/image.jpg';
-                        //   e.currentTarget.alt = 'Image not available';
-                        // }}
-                        />
+                          href={{
+                            pathname: 'participant-list/item',
+                            query: { id: p.up_id },
+                          }}
+                        >
+                          <img
+                            src={`${imageURL}${p.up_file}`}
+                            style={{ height: '100px', width: '110px' }}
+                            alt="Tree"
+                          // onError={(e) => {
+                          //   e.currentTarget.src = '/path/to/fallback/image.jpg';
+                          //   e.currentTarget.alt = 'Image not available';
+                          // }}
+                          />
                         </Link>
                       ) : (
                         'No image available'
