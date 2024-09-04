@@ -39,7 +39,7 @@ const GceBadge = () => {
                         className="w-full h-auto object-cover rounded-lg"
                     />
                 </div>
-                <div className="md:w-[70%] md:pl-6" style={{textAlign:'right'}}>
+                <div className="md:w-[70%] md:pl-6" style={{textAlign:'left'}}>
                     <h2 className="font-bold mb-2 text-3xl mt-10" style={{ color: '#3C6E1F' }}>നിങ്ങൾക്കും പങ്കെടുക്കാം</h2>
                     <p>
                     നിങ്ങൾക്കും പങ്കെടുക്കാം
