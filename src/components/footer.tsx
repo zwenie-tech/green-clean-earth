@@ -69,18 +69,17 @@ export default function Footer() {
                   }}></div>
                   <div className="relative bg-light-gray p-5 rounded-lg" style={{ maxWidth: '90%', textAlign: 'center', margin: '4rem auto' }}>
                       <h1 className="text-black font-block mb-4">
-                          വൃക്ഷത്തൈ സെൽഫി മത്സരം 2020-21
+                        വൃക്ഷത്തൈ സെൽഫി മത്സരം 2024-25
                       </h1>
                       <p className="mb-4">
-                          വൃക്ഷങ്ങൾ സംരക്ഷിക്കൂ... ഫോട്ടോ അപ്‌ലോഡ് ചെയ്യൂ.. സമ്മാനങ്ങൾ നേടൂ...
-                      </p>
+                        വൃക്ഷങ്ങൾ സംരക്ഷിക്കൂ... ഫോട്ടോ അപ്‌ലോഡ് ചെയ്യൂ.. സമ്മാനങ്ങൾ നേടൂ...                      </p>
                       <p className="mb-4">
                           <a href="#">www.greencleanearth.org</a>
                       </p>
                       <div>
                       <button
                           className="text-white bg-[#3C6E1F] px-4 py-2 rounded-xl"
-                           onClick={() => { router.push('/join'); }} 
+                           onClick={() => { router.push('/Join'); }} 
                            style={{boxShadow:'0px 4px 4px 0px #00000040' }}
                       >
                         Join Now

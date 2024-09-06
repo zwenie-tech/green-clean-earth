@@ -16,10 +16,10 @@ const JoinNow = () => {
           className="absolute object-cover top-0 left-0 w-full h-full opacity-50 rounded-lg"
         />
         <div className="relative z-10 bg-white bg-opacity-70 rounded-lg p-6">
-          <p className="text-xl font-bold mb-4 bg-opacity-70">വൃക്ഷത്തൈ സെൽഫി മത്സരം 2020-21</p>
-          <p className="mb-4">വ്യക്ഷങ്ങൾ സമർപ്പിക്കുക... ഫോട്ടോ അപ്ലോഡ് ചെയ്യൂ... സമ്മാനങ്ങൾ നേടൂ...</p>
+          <p className="text-xl font-bold mb-4 bg-opacity-70">വൃക്ഷത്തൈ സെൽഫി മത്സരം 2024-25</p>
+          <p className="mb-4">വൃക്ഷങ്ങൾ സംരക്ഷിക്കൂ... ഫോട്ടോ അപ്‌ലോഡ് ചെയ്യൂ.. സമ്മാനങ്ങൾ നേടൂ...</p>
           <p className="mb-4">www.greencleanearth.org</p>
-          <button className="bg-primary hover:bg-primary/75 text-white px-4 py-2 rounded-md">Join Now</button>
+          <button className="bg-primary hover:bg-primary/75 text-white px-4 py-2 rounded-md onClick={() => { router.push('/Join'); }}">Join Now</button>
         </div>
       </div>
     </div>
