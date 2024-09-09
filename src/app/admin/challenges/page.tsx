@@ -20,7 +20,15 @@ const AdminGrid = () => {
   const router = useRouter();
   const [rowData, setRowData] = useState([]);
   const token = Cookies.get("adtoken");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 10;
+  const handlePageChange = (newPage: number) => {
+    if (newPage > 0 && newPage <= totalPages) {
 
+      setCurrentPage(newPage);
+    }
+  }
   useEffect(() => {
     if (!token) {
       router.push("/admin/login");
@@ -51,19 +59,24 @@ const AdminGrid = () => {
     async function fetchdata(){
      if(token){
 
-       const response = await axios.post(`${apiURL}/admin/adminChallenges?limit=100000`,{},{
-         headers: {
-           'Authorization': `Bearer ${token}`,
-           'Content-Type': 'application/json'
-         }
-       })
-       if(response.data.success){
+      
+      const response = await axios.post(`${apiURL}/admin/adminChallenges?page=${currentPage}&limit=${itemsPerPage}`,{},{
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      
+       if(response.data.success && response.status!=203){
+        console.log(response.data)
+        setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
          setRowData(response.data.Uploads);
        }
+       
      }
     }
     fetchdata();
-  }, [token]);
+  }, [currentPage, token]);
   return (
     <div className=" bg-slate-100">
       <div className={"ag-theme-quartz"} style={{ height: 600 }}>
@@ -78,6 +91,44 @@ const AdminGrid = () => {
           paginationPageSize={10}
           paginationPageSizeSelector={[10, 25, 50]}
         />
+      </div>
+      <div className="flex justify-center items-center space-x-2 my-4">
+        <button
+          className={currentPage === 1 ?
+            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
+            : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+          }
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        {currentPage >= 4 && totalPages > 3 && <span className="text-xl text-gray-600">...</span>}
+
+        {Array.from({ length: totalPages >= 3 ? 3 : totalPages }, (_, index) => currentPage < 4 ? index+1:currentPage+index-2).map((page) => (
+          <span
+            key={page}
+            className={`text-xl cursor-pointer text-gray-600 ${page === currentPage ? 'font-bold' : 'underline'}`}
+            onClick={() => handlePageChange(page)}
+          >
+            {page > 0 ? page : ''}
+          </span>
+        ))}
+
+        {currentPage > 1 && totalPages > 3 && currentPage!=totalPages && <span className="text-xl text-gray-600">...</span>}
+        {currentPage === 1 && totalPages > 3 && currentPage!=totalPages && <span className="text-xl text-gray-600">...</span>}
+
+
+        <button
+          className={currentPage === totalPages || totalPages === 1 ?
+            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
+            : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+          }
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages || totalPages === 1}
+        >
+          Next
+        </button>
       </div>
     </div>
   );

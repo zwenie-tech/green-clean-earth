@@ -22,7 +22,9 @@ const GridExample = () => {
   const router = useRouter();
   const [rowData, setRowData] = useState([]);
   const token = Cookies.get("adtoken");
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 10;
   useEffect(() => {
     if (!token) {
       router.push("/admin/login");
@@ -44,30 +46,45 @@ const GridExample = () => {
       floatingFilter: true,
     };
   }, []);
-  
+
   const onRowClicked = (event: RowClickedEvent) => {
 
     const id = event.data.up_id;
     router.push(`admin/uploads/${id}`);
   };
+  const handlePageChange = (newPage: number) => {
+    if (newPage > 0 && newPage <= totalPages) {
 
+      setCurrentPage(newPage);
+    }
+  }
   useEffect(() => {
-    async function fetchdata(){
-        if(token){
-        const response = await axios.post(`${apiURL}/admin/adminUploads?limit=100000`,{},{
+    async function fetchdata() {
+      if (token) {
+        const response = await axios.post(`${apiURL}/admin/adminUploads?page=${currentPage}&limit=${itemsPerPage}`, {}, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         })
-        if(response.data.success){
-          setRowData(response.data.Uploads);
+        try {
+          
+          if (response.data.success && response.status!=203) {
+            setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
+            setRowData(response.data.Uploads);
+          } else {
+            setRowData([]);
+
+          }
+
+        } catch (error) {
+          console.error("Error:", error);
         }
       }
     }
 
     fetchdata();
-  }, [token]);
+  }, [currentPage, token]);
   return (
     <div className=" bg-slate-100">
       <div className={"ag-theme-quartz"} style={{ height: 600 }}>
@@ -78,10 +95,48 @@ const GridExample = () => {
           onRowClicked={onRowClicked}
           rowSelection="multiple"
           suppressRowClickSelection={true}
-          pagination={true}
-          paginationPageSize={10}
-          paginationPageSizeSelector={[10, 25, 50]}
+          pagination={false}
+        // paginationPageSize={10}
+        // paginationPageSizeSelector={[10, 25, 50]}
         />
+      </div>
+      <div className="flex justify-center items-center space-x-2 my-4">
+        <button
+          className={currentPage === 1 ?
+            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
+            : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+          }
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        {currentPage >= 4 && totalPages > 3 && <span className="text-xl text-gray-600">...</span>}
+
+        {Array.from({ length: totalPages >= 3 ? 3 : totalPages }, (_, index) => currentPage < 4 ? index+1:currentPage+index-2).map((page) => (
+          <span
+            key={page}
+            className={`text-xl cursor-pointer text-gray-600 ${page === currentPage ? 'font-bold' : 'underline'}`}
+            onClick={() => handlePageChange(page)}
+          >
+            {page > 0 ? page : ''}
+          </span>
+        ))}
+
+        {currentPage > 1 && totalPages > 3 && currentPage!=totalPages && <span className="text-xl text-gray-600">...</span>}
+        {currentPage === 1 && totalPages > 3 && currentPage!=totalPages && <span className="text-xl text-gray-600">...</span>}
+
+
+        <button
+          className={currentPage === totalPages || totalPages === 1 ?
+            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
+            : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+          }
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages || totalPages === 1}
+        >
+          Next
+        </button>
       </div>
     </div>
   );
