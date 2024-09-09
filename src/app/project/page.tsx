@@ -13,7 +13,7 @@ const project=()=>{
             <div className="ml-9 mr-7 mt-9 shadow-lg ">
             <div className="flex">
                 {/* Small green part */}
-                <div style={{ backgroundColor: '#3C6E1F', width: '25px', borderRadius: '8px 0 0 8px' }}></div>
+                <div className='w-4 bg-primary rounded-s-sm basis-4 shrink-0'></div>
 
                 {/* Larger part with heading and paragraph */}
                 <div className="ml-10 mb-10 mt-7 p-5">
@@ -34,7 +34,7 @@ const project=()=>{
           <div className="ml-9 mr-7 mt-9 shadow-lg ">
             <div className="flex">
                 {/* Small green part */}
-                <div style={{ backgroundColor: '#3C6E1F', width: '25px', borderRadius: '8px 0 0 8px' }}></div>
+                <div className='w-4 bg-primary rounded-s-sm basis-4 shrink-0'></div>
 
                 {/* Larger part with heading and paragraph */}
                 <div className="ml-10 mb-10 mt-7 p-5">
@@ -69,7 +69,7 @@ const project=()=>{
           <div className="ml-9 mr-7 mt-9 shadow-lg ">
             <div className="flex">
                 {/* Small green part */}
-                <div style={{ backgroundColor: '#3C6E1F', width: '55px', borderRadius: '8px 0 0 8px' }}></div>
+                <div className='w-4 bg-primary rounded-s-sm basis-4 shrink-0'></div>
 
                 {/* Larger part with heading and paragraph */}
                 <div className="ml-10 mb-10 mt-7 p-5">
@@ -87,7 +87,7 @@ const project=()=>{
         <div className="ml-9 mr-7 mt-9 shadow-lg ">
             <div className="flex">
                 {/* Small green part */}
-                <div style={{ backgroundColor: '#3C6E1F', width: '55px', borderRadius: '8px 0 0 8px' }}></div>
+                <div className='w-4 bg-primary rounded-s-sm basis-4 shrink-0'></div>
 
                 {/* Larger part with heading and paragraph */}
                 <div className="ml-10 mb-10 mt-7 p-5">
@@ -103,7 +103,7 @@ const project=()=>{
         <div className="ml-9 mr-7 mt-9 shadow-lg ">
             <div className="flex">
                 {/* Small green part */}
-                <div style={{ backgroundColor: '#3C6E1F', width: '55px', borderRadius: '8px 0 0 8px' }}></div>
+                <div className='w-4 bg-primary rounded-s-sm basis-4 shrink-0'></div>
 
                 {/* Larger part with heading and paragraph */}
                 <div className="ml-10 mb-10 mt-7 p-5">
@@ -122,7 +122,7 @@ const project=()=>{
         <div className="ml-9 mr-7 mt-9 shadow-lg ">
             <div className="flex">
                 {/* Small green part */}
-                <div style={{ backgroundColor: '#3C6E1F', width: '55px', borderRadius: '8px 0 0 8px' }}></div>
+                <div className='w-4 bg-primary rounded-s-sm basis-4 shrink-0'></div>
 
                 {/* Larger part with heading and paragraph */}
                 <div className="ml-10 mb-10 mt-7 p-5">
@@ -138,7 +138,7 @@ const project=()=>{
         <div className="ml-9 mr-7 mt-9 shadow-lg ">
             <div className="flex">
                 {/* Small green part */}
-                <div style={{ backgroundColor: '#3C6E1F', width: '55px', borderRadius: '8px 0 0 8px' }}></div>
+                <div className='w-4 bg-primary rounded-s-sm basis-4 shrink-0'></div>
 
                 {/* Larger part with heading and paragraph */}
                 <div className="ml-10 mb-10 mt-7 p-5">

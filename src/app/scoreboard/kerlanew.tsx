@@ -68,9 +68,11 @@ const KeralanewMap = () => {
   };
 
   return (
-    <div style={{ textAlign: 'center', padding: '10px' }}>
-      <h1 className='text-primary text-2xl font-bold mb-0'>Kerala Details</h1>
-      <h1 className='text-primary text-2xl font-bold mb-0'>Total Uploads: {totalUploads !== null ? totalUploads : 'Loading...'}</h1> {/* Display total uploads */}
+    <div style={{ padding: '0px' }}>
+      <div className="md:inline-block md:absolute md:right-0 md:top-0">
+        <h1 className='text-primary text-2xl font-bold mb-0'>Kerala Details</h1>
+        <h1 className='text-primary text-2xl font-bold mb-0'>Total Uploads: {totalUploads !== null ? totalUploads : 'Loading...'}</h1> {/* Display total uploads */}
+      </div>
       <div className='mt-0 mb-0'>
         <ComposableMap
           projection="geoMercator"

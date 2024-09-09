@@ -46,22 +46,22 @@ const Contact = () => {
         <div className="mx-4 mb-10 flex flex-col gap-4 md:flex md:flex-row-reverse">
           <div className='mx-8'>
             <div className='my-4'>
-              <h3 className='text-primary text-2xl text-center'>About us</h3>
-              <p className='border-l p-2 border-black'>ഭൂമിയെ ഹരിതാഭമാക്കാനും, മാലിന്യ മുക്തമാക്കാനും ജനങ്ങളെ പ്രേരിപ്പിക്കാൻവിവിധ സ്ഥാപങ്ങളുടെയും,സംഘടനകളുടെയും , സഹകരണത്തോടെ GCEM Foundation ആവിഷ്‌കരിച്ച് നടപ്പിൽ വരുത്തുന്ന ഒരു ബഹുജനമുന്നേറ്റമാണ് Green Clean Earth Movement(GCEM).</p>
+              {/* <h3 className='text-primary text-2xl text-center'>About us</h3> */}
+              <p className='p-2'>ഭൂമിയെ ഹരിതാഭമാക്കാനും, മാലിന്യ മുക്തമാക്കാനും ജനങ്ങളെ പ്രേരിപ്പിക്കാൻവിവിധ സ്ഥാപങ്ങളുടെയും,സംഘടനകളുടെയും , സഹകരണത്തോടെ GCEM Foundation ആവിഷ്‌കരിച്ച് നടപ്പിൽ വരുത്തുന്ന ഒരു ബഹുജനമുന്നേറ്റമാണ് Green Clean Earth Movement(GCEM).</p>
             </div>
             <div>
               <div className='flex flex-col gap-4 my-8'>
                 <Link href='mailto:gcemfoundation@gmail.com' className='flex gap-4'>
-                  <Mail size={30}/>
+                  <Mail size={30} color='#3c6e1f' className='shrink-0' />
                   <p className='text-lg'>gcemfoundation@gmail.com</p>
                 </Link>
                 <Link href='tel:+919645964592' className='flex gap-4'>
-                  <Phone size={30}/>
+                  <Phone size={30} color='#3c6e1f' className='shrink-0'/>
                   <p className='text-lg'>+91 9645 9645 92</p>
                 </Link>
-                <Link href='' className='flex gap-4'>
-                  <MapPin size={30}/>
-                  <p className='text-lg'>M Square Building Pavamani Road Kozhikode, Kerala India</p>
+                <Link href='#' className='flex gap-4'>
+                  <MapPin size={30} color='#3c6e1f' className='shrink-0' />
+                  <p className='text-lg'>FF.Madrass Building, Pannur, Kizhakkoth, (po), Koduvally, Kozhikkode, Kerala,  India</p>
                 </Link>
               </div>
               <div className='my-4 p-2'>

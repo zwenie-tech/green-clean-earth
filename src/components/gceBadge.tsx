@@ -1,36 +1,65 @@
-// import Image from "next/image";
+import React from 'react';
+import Link from 'next/link';
 
 
 const GceBadge = () => {
   return (
-    <div className='px-10 py-4 mb-10 shadow-top-bottom'>
-      <div className="flex flex-col md:flex-row gap-2 items-center">
-        <div className='p-10 md:hidden'>
-          <img src="/images/planting_trees.jpg" className="w-full md:w-[100%] px-5" alt="image: planting trees"/>
+    <div className="container mt-3 mx-auto shadow-xl p-6">
+        <div className="grid gap-4">
+            {/* First div */}
+            <div className="flex flex-col md:flex-row">
+                <div className="md:w-[70%] md:pr-6 ml-8 mb-4 md:mb-0">
+                    <h2 className="font-bold mb-2 text-3xl" style={{ color: '#3C6E1F' }}>Green Clean Earth Movement</h2>
+                    <p>
+                    ഭൂമിയെ ഹരിതാഭമാക്കാനും, മാലിന്യ മുക്തമാക്കാനും ജനങ്ങളെ പ്രേരിപ്പിക്കാൻവിവിധ സ്ഥാപങ്ങളുടെയും, സംഘടനകളുടെയും , സഹകരണത്തോടെ GCEM Foundation ആവിഷ്‌കരിച്ച് നടപ്പിൽ വരുത്തുന്ന ഒരു ബഹുജനമുന്നേറ്റമാണ് Green Clean Earth Movement(GCEM).
+                    </p>
+                    <h2 className="font-bold mb-2 text-3xl mt-10" style={{ color: '#3C6E1F' }}>GCEM Foundation</h2>
+                    <Link href="/" legacyBehavior>
+                        <a className="font-bold mb-2" target="_blank" rel="noopener noreferrer">www.GreenCleanEarth.Org</a>
+                    </Link>
+                    <p>
+                        ഭൂമിയെ ഹരിതാഭമാക്കാനും, മാലിന്യ മുക്തമാക്കാനും ജനങ്ങളെ പ്രേരിപ്പിക്കാൻവിവിധ സ്ഥാപങ്ങളുടെയും, സംഘടനകളുടെയും , സഹകരണത്തോടെ GCEM Foundation ആവിഷ്‌കരിച്ച് നടപ്പിൽ വരുത്തുന്ന ഒരു ബഹുജനമുന്നേറ്റമാണ് Green Clean Earth Movement(GCEM).
+                    </p>
+                    
+                </div>
+                <div className="md:w-[30%] md:pl-6">
+                    <img
+                        src="/images/planting_trees.jpg"
+                        alt="Description of image"
+                        className="w-full h-auto object-cover rounded-lg"
+                    />
+                </div>
+            </div>
+            {/* Second div */}
+            <div className="flex flex-col md:flex-row mt-4">
+                <div className="md:w-[30%] md:pr-6">
+                    <img
+                        src="/images/planting_trees_2.jpg"
+                        alt="Description of image"
+                        className="w-full h-auto object-cover rounded-lg"
+                    />
+                </div>
+                <div className="md:w-[70%] md:pl-6" style={{textAlign:'left'}}>
+                    <h2 className="font-bold mb-2 text-3xl mt-10" style={{ color: '#3C6E1F' }}>നിങ്ങൾക്കും പങ്കെടുക്കാം</h2>
+                    <p>
+                    നിങ്ങൾക്കും പങ്കെടുക്കാം
+
+                        ഗ്രീൻ ക്ലീൻ കേരള ഹരിത  മത്സരങ്ങളിലേക്ക്  താങ്കളെ സ്വാഗതം  ചെയ്യുന്നു.
+                        നാല്  രീതിയിൽ  താങ്കൾക്ക്  ഈ പദ്ധതിയിൽ  പങ്കാളിയാവാം .
+                        <br/>
+                        <br/>
+                        1 ) Planter  cum Uploader : താങ്കളുടെ  ഉടമസ്ഥതയിലും  സ്വാധീന  മേഖലയിലുമുള്ള  സ്ഥലങ്ങളിൽ  തൈകൾ  നട്ട വളർത്തി  സംരക്ഷിച്ച്  കൊണ്ട്  ഫോട്ടോ അപ്ലോഡ് ചെയ്ത കൊണ്ട്.
+                        <br/>
+                        2 )  Uploader : വിവര സാങ്കേതിക വിദ്യാ  പരിജ്ഞാനമില്ലാത്ത   തങ്കളുടെ  സുഹൃത്തുക്കളെ  താങ്കളുടെ  അക്കൗണ്ടിൽ  അപ്‌ലോഡ്  ചെയ്യാൻ  സഹായിച്ച്  കൊണ്ട് .Planter  ആയി  അവരുടെ  പേരും Uploader  ആയി  നിങ്ങളുടെ  പേരും ചേർക്കുക.
+                        <br/>
+                        3 ) Coordinator നിങ്ങളുടെ  ഗ്രൂപ്പിൻറെ കോർഡിനേറ്റർ  ആയി  കൊണ്ട് .ഗ്രീൻ  ക്ളീൻ  കേരള  മിഷനിൽ  നിന്നും ലഭിക്കുന്ന   സന്ദേശങ്ങൾ  നിങ്ങളുടെ  ഗ്രൂപ്പിന്റെ മെമ്പർ  മാരെ  അറിയിക്കുകയും  അവരെ  സഹായിക്കുകയും  ചെയ്ത്  കൊണ്ട്. 
+                        <br/>
+                        4 ) Promoter :  സ്വന്തം  സ്ഥാപനത്തിന്  പുറമെ മറ്റു  സ്ഥാപങ്ങളെയും കൂട്ടായ്മകളെയും  ഈ പദ്ധതിയിലേക്ക്  സ്വാഗതം  ചെയ്ത അവർക്ക്  വേണ്ട  മാർഗ്ഗ നിർദ്ദേശങ്ങൾ  നൽകിക്കൊണ്ട് 
+                    </p>
+                </div>
+            </div>
         </div>
-        <div className="flex flex-col gap-2">
-          <h2 className='text-primary font-medium text-xl'>Green Clean Earth Movement</h2>
-          <p>ഭൂമിയെ ഹരിതാഭമാക്കാനും, മാലിന്യ മുക്തമാക്കാനും ജനങ്ങളെ പ്രേരിപ്പിക്കാൻവിവിധ സ്ഥാപങ്ങളുടെയും,സംഘടനകളുടെയും , സഹകരണത്തോടെ GCEM Foundation ആവിഷ്‌കരിച്ച് നടപ്പിൽ വരുത്തുന്ന ഒരു ബഹുജനമുന്നേറ്റമാണ് Green Clean Earth Movement(GCEM).</p>
-          <h2 className='text-primary font-medium text-xl mt-4'>GCEM Foundation</h2>
-          <p>Www.GreenCleanEarth.Org</p>
-          <p>മനുഷ്യൻെറ പ്രാഥമിക ആവശ്യങ്ങളായ ഭക്ഷണം ,വസ്ത്രം,പാർപ്പിടം,വിദ്യാഭ്യാസം ,ആരോഗ്യം ,ഗതാഗതം വാർത്താ വിനിമയം എന്നീ മേഖലകളിൽ മെച്ചപ്പെട്ട സേവനം എല്ലാവർക്കും ലഭ്യമാക്കാൻ വേണ്ടിയും, ആഗോള താപനം ,വരൾച്ച ,മലിനീകരണം എന്നിവയുടെ മഹാവിപത്തിൽ നിന്നും ഭൂമിയെ രക്ഷിക്കാൻ വേണ്ടിയും, കാരുണ്യ പ്രവർത്തനങ്ങൾ നടത്താനും വേണ്ടിയും രൂപീകൃതമായ ഒരു സന്നദ്ധസംഘടനയാണ് GCEM Foundation (ജിസം ഫൗണ്ടേഷൻ).Rg number 246/4 16</p>
-        </div>
-        <div className='p-10 hidden md:block'>
-          <img src="/images/planting_trees.jpg" className="w-full md:w-[100%] px-5" alt="image: planting trees"/>
-        </div>
-      </div>
-      
-      <div className="flex flex-col md:flex-row gap-2 items-center">
-        <div className='p-10'>
-          <img src="/images/planting_trees_2.jpg" alt="" className='w-full md:w-[100%] px-5' />
-        </div>
-        <div className="flex flex-col gap-2">
-          <h2 className='mlfont-400 text-primary font-medium text-xl'>നിങ്ങൾക്കും പങ്കെടുക്കാം</h2>
-          <p>ഗ്രീൻ ക്ളീൻ എർത്ത് മൂവ്മെന്റ് പ്രവർത്തനങ്ങളിലേക്ക് താങ്കളെ സ്വാഗതം ചെയ്യുന്നു. മെമ്പർഷിപ്പ്. ഒരു വൃക്ഷത്തൈ നട്ട് ഹരിതപുരസ്കാരം സമ്മാന പദ്ധതിയിൽ അപ്‌ലോഡ് ചെയ്യാൻ തയ്യാറുള്ളവരും പരിസ്ഥിതി പ്രവർത്തനങ്ങളിൽ സേവനം ചെയ്യാൻ താല്പര്യവുമുള്ളവരുമായ ആർക്കും മെമ്പർഷിപ്പിന് അപേക്ഷിക്കാവുന്നതാണ്.അപേക്ഷയൊപ്പം താങ്കൾ ഇതുവരെ ചെയ്തതും ചെയ്യാൻ ഉദ്ദേശിക്കുന്നതുമായ സാമൂഹ്യപ്രവർത്തനങ്ങളെ കുറിച്ച് ഒരു ലഘു വിവരണവും നല്കേണ്ടതാണ്. കമ്മിറ്റിയുടെ അംഗീകാരം ലഭിച്ചാൽ താങ്കൾക്ക് മെമ്പർഷിപ്പ് ലഭിക്കുന്നതാണ്. അപേക്ഷകൾ സമർപ്പിക്കേണ്ടത്. Mail id- gcemfoundation@gmail.com</p>
-        </div>
-      </div>
-      
     </div>
-  )
+);
 }
 export default GceBadge;

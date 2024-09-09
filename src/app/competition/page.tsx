@@ -15,7 +15,7 @@ const Competition = () => {
             <div className="ml-9 mr-7 mt-9 shadow-xl">
                 <div className="flex">
                     {/* Small green part */}
-                    <div style={{ backgroundColor: '#FBD784', width: '6%', borderRadius: '8px 0 0 8px' }}></div>
+                    <div className='w-4 bg-primary rounded-s-sm basis-4 shrink-0'></div>
                     {/* Larger part with heading and paragraph */}
                     <div className="ml-10 mb-10 mt-7 p-5">
                         <h2 className="text-xl font-bold">ഹരിത കലാ മത്സരങ്ങൾ   2024-25 - പ്രൊഫസ്സർ  ശോഭീന്ദ്രൻ  സ്മാരക പരിസ്ഥിതി അവാർഡ്  .
@@ -31,7 +31,7 @@ const Competition = () => {
             <div className="ml-9 mr-7 mt-9 shadow-xl">
                 <div className="flex">
                     {/* Small green part */}
-                    <div style={{ backgroundColor: '#FBD784', width: '4%', borderRadius: '8px 0 0 8px' }}></div>
+                    <div className='w-4 bg-primary rounded-s-sm basis-4 shrink-0'></div>
                     {/* Larger part with heading and paragraph */}
                     <div className="ml-10 mb-10 mt-7 p-5">
                         <h2 className="text-xl font-bold">ഹരിത മത്സരങ്ങൾ</h2>
@@ -49,7 +49,7 @@ const Competition = () => {
             <div className="ml-9 mr-7 mt-9 shadow-xl">
                 <div className="flex">
                     {/* Small green part */}
-                    <div style={{ backgroundColor: '#FBD784', width: '8%', borderRadius: '8px 0 0 8px' }}></div>
+                    <div className='w-4 bg-primary rounded-s-sm basis-4 shrink-0'></div>
                     {/* Larger part with heading and paragraph */}
                     <div className="ml-10 mb-10 mt-7 p-5">
                         <h2 className="text-xl font-bold">വൃക്ഷത്തൈ പരിപാലന മത്സരം</h2>
@@ -70,7 +70,7 @@ const Competition = () => {
             <div className="ml-9 mr-7 mt-9 shadow-xl">
                 <div className="flex">
                     {/* Small green part */}
-                    <div style={{ backgroundColor: '#FBD784', width: '4%', borderRadius: '8px 0 0 8px' }}></div>
+                    <div className='w-4 bg-primary rounded-s-sm basis-4 shrink-0'></div>
                     {/* Larger part with heading and paragraph */}
                     <div className="ml-10 mb-10 mt-7 p-5">
                         <h2 className="text-xl font-bold">സുസ്‌ഥിര വികസന   സെമിനാർ</h2>
@@ -85,7 +85,7 @@ const Competition = () => {
             <div className="ml-9 mr-7 mt-9 shadow-xl">
                 <div className="flex">
                     {/* Small green part */}
-                    <div style={{ backgroundColor: '#FBD784', width: '10%', borderRadius: '8px 0 0 8px' }}></div>
+                    <div className='w-4 bg-primary rounded-s-sm basis-4 shrink-0'></div>
                     {/* Larger part with heading and paragraph */}
                     <div className="ml-10 mb-10 mt-7 p-5">
                         <h2 className="text-xl font-bold">സുസ്‌ഥിര വികസന   പ്രോജെക്ട്  റിപ്പോർട്ട്</h2>
@@ -100,7 +100,7 @@ const Competition = () => {
             <div className="ml-9 mr-7 mt-9 shadow-xl">
                 <div className="flex">
                     {/* Small green part */}
-                    <div style={{ backgroundColor: '#FBD784', width: '10%', borderRadius: '8px 0 0 8px' }}></div>
+                    <div className='w-4 bg-primary rounded-s-sm basis-4 shrink-0'></div>
                     {/* Larger part with heading and paragraph */}
                     <div className="ml-10 mb-10 mt-7 p-5">
                         <h2 className="text-xl font-bold">കലാ മത്സരങ്ങൾ</h2>
@@ -118,7 +118,7 @@ const Competition = () => {
             <div className="ml-9 mr-7 mt-9 shadow-xl">
                 <div className="flex">
                     {/* Small green part */}
-                    <div style={{ backgroundColor: '#FBD784', width: '10%', borderRadius: '8px 0 0 8px' }}></div>
+                    <div className='w-4 bg-primary rounded-s-sm basis-4 shrink-0'></div>
                     {/* Larger part with heading and paragraph */}
                     <div className="ml-10 mb-10 mt-7 p-5">
                         <h2 className="text-xl font-bold">പ്രൊഫസ്സർ  ശോഭീന്ദ്രൻ  സ്മാരക പരിസ്ഥിതി അവാർഡ്  </h2>
@@ -136,7 +136,7 @@ const Competition = () => {
             <div className="ml-9 mr-7 mt-9 shadow-xl">
                 <div className="flex">
                     {/* Small green part */}
-                    <div style={{ backgroundColor: '#FBD784', width: '10%', borderRadius: '8px 0 0 8px' }}></div>
+                    <div className='w-4 bg-primary rounded-s-sm basis-4 shrink-0'></div>
                     {/* Larger part with heading and paragraph */}
                     <div className="ml-10 mb-10 mt-7 p-5">
                         <h2 className="text-xl font-bold">രെജിസ്ട്രേഷൻ</h2>
@@ -154,7 +154,7 @@ const Competition = () => {
             <div className="ml-9 mr-7 mt-9 shadow-xl">
                 <div className="flex">
                     {/* Small green part */}
-                    <div style={{ backgroundColor: '#FBD784', width: '10%', borderRadius: '8px 0 0 8px' }}></div>
+                    <div className='w-4 bg-primary rounded-s-sm basis-4 shrink-0'></div>
                     {/* Larger part with heading and paragraph */}
                     <div className="ml-10 mb-10 mt-7 p-5">
                         <h2 className="text-xl font-bold">മത്സര  രീതി</h2>
@@ -175,7 +175,7 @@ const Competition = () => {
             <div className="ml-9 mr-7 mt-9 shadow-xl">
                 <div className="flex">
                     {/* Small green part */}
-                    <div style={{ backgroundColor: '#FBD784', width: '10%', borderRadius: '8px 0 0 8px' }}></div>
+                    <div className='w-4 bg-primary rounded-s-sm basis-4 shrink-0'></div>
                     {/* Larger part with heading and paragraph */}
                     <div className="ml-10 mb-10 mt-7 p-5">
                         <h2 className="text-xl font-bold">സൃഷ്ടികൾ  സമർപ്പിക്കൽ</h2>
@@ -198,7 +198,7 @@ const Competition = () => {
             <div className="ml-9 mr-7 mt-9 shadow-xl">
                 <div className="flex">
                     {/* Small green part */}
-                    <div style={{ backgroundColor: '#FBD784', width: '10%', borderRadius: '8px 0 0 8px' }}></div>
+                    <div className='w-4 bg-primary rounded-s-sm basis-4 shrink-0'></div>
                     {/* Larger part with heading and paragraph */}
                     <div className="ml-10 mb-10 mt-7 p-5">
                         <h2 className="text-xl font-bold">മാർഗ്ഗനിർദ്ദേശങ്ങൾ</h2>
@@ -219,7 +219,7 @@ const Competition = () => {
             <div className="ml-9 mr-7 mt-9 shadow-xl">
                 <div className="flex">
                     {/* Small green part */}
-                    <div style={{ backgroundColor: '#FBD784', width: '10%', borderRadius: '8px 0 0 8px' }}></div>
+                    <div className='w-4 bg-primary rounded-s-sm basis-4 shrink-0'></div>
                     {/* Larger part with heading and paragraph */}
                     <div className="ml-10 mb-10 mt-7 p-5">
                         <h2 className="text-xl font-bold">മത്സരത്തിൽ  കൂടുതൽ  പോയിന്റ് ലഭിക്കാൻ  നിങ്ങൾ  ചെയ്യേണ്ടത് </h2>
@@ -239,7 +239,7 @@ const Competition = () => {
             <div className="ml-9 mr-7 mt-9 shadow-xl">
                 <div className="flex">
                     {/* Small green part */}
-                    <div style={{ backgroundColor: '#FBD784', width: '10%', borderRadius: '8px 0 0 8px' }}></div>
+                    <div className='w-4 bg-primary rounded-s-sm basis-4 shrink-0'></div>
                     {/* Larger part with heading and paragraph */}
                     <div className="ml-10 mb-10 mt-7 p-5">
                         <h2 className="text-xl font-bold">മൂല്യ  നിർണ്ണയം</h2>

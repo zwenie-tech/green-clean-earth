@@ -8,8 +8,10 @@ const Results = () => {
     <>
       <NavigationBar />
       <div className='flex flex-col items-center m-5'>
-        <h1 className='text-2xl font-bold mb-5'>Result</h1>
-        <div className='w-full flex justify-center items-center gap-4 m-5'>
+        
+        <h1 className='text-2xl font-bold my-2 text-center'>SCOREBOARD <br /> <span className="text-xl">GREEN CLEAN EARTH MOVEMENT</span></h1>
+        
+        {/* <div className='w-full flex justify-center items-center gap-4 m-5'>
           <button className='text-sm md:text-md w-1/2 md:w-1/4 bg-[#FFF6E4] pt-6 pb-5 sm:pt-3 sm:pb-3 rounded-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10' style={{boxShadow:'0px 4px 10px 3px #00000040'}}>
             Winners List
           </button>
@@ -30,7 +32,8 @@ const Results = () => {
           <button className='text-sm md:text-md w-1/2 md:w-1/4 bg-[#FFF6E4] pt-3 pb-3 rounded-lg justify-center items-center cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10' style={{boxShadow:'0px 4px 10px 3px #00000040'}}>
             Click here &gt;
           </button>
-        </div>
+        </div> */}
+
         <ResultImages/>
         <div className='m-5'>
             <p className='text-center text-[#3C6E1F]'>

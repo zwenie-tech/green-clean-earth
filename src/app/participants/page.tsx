@@ -24,7 +24,8 @@ interface Participant {
   up_date: string,
   up_file: string,
   us_corporation: number,
-  gp_name: string
+  gp_name: string,
+  total_upload: number
 }
 
 type Country = {
@@ -1335,7 +1336,7 @@ const ParticipateList = () => {
         </div>
       </div>
 
-      <div className="float-right mr-6 font-bold">
+      <div className="flex justify-center font-bold my-4">
         <p>Total Count: {totalCount}</p>
       </div>
 
@@ -1363,7 +1364,7 @@ const ParticipateList = () => {
                     <td className="py-3 px-6 text-left">{p.up_id}</td>
                     <td className="py-3 px-6 text-left">{p.up_planter}</td>
                     <td className="py-3 px-6 text-left"><a href={`/user-page?u=${p.up_name}&id=${p.up_reg_id}`}>{p.up_name}</a></td>
-                    <td className="py-3 px-6 text-left">{p.gp_name}</td>
+                    <td className="py-3 px-6 text-left">{p.gp_name}/{p.total_upload}</td>
                     <td className="py-3 px-6 text-left">{p.up_tree_name}</td>
                     <td className="py-3 px-6 text-left">
                       {p.up_file ? (
