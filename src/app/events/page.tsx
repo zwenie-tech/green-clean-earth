@@ -84,13 +84,13 @@ const Events = () => {
               ) : (
                 events.slice().reverse().map((event) => {
                   return (
-                    <div key={event.id} className='flex flex-col gap-2 my-2 md:my-4 mx-auto p-4 max-w-screen-xl bg-light-gray rounded-lg'>
+                    <div key={event.id} className='flex flex-col gap-2 my-2 md:my-4 mx-auto p-4 max-w-screen-xl bg-light-gray rounded-lg shadow-md'>
                       <h2 className='text-xl font-bold'>{event.event_heading}</h2>
                       <div className="flex flex-col md:flex-row gap-4"> 
                         <div className="min-w-fit flex flex-col gap-4 ">
                           {event.image_link ? (
                             <a href={`/events/${event.id}?slug=${event.id}`}>
-                            <img src={event.image_link} alt="Event Image" className="h-52 w-52 object-cover bg-primary" />
+                            <img src={event.image_link} alt="Event Image" className="w-full md:h-52 md:w-52 object-cover bg-primary" />
                             </a>
                           ) : (
                             <div className="h-52 w-52 bg-primary"></div>
