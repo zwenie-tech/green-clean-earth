@@ -127,16 +127,19 @@ const NavigationBar = () => {
       </div>
 
       {nav && (
-        <ul className="z-10 flex flex-col justify-center items-center absolute top-0 left-0 w-full h-screen bg-white text-gray-800">
+        // <ul className="z-10 flex flex-col items-center w-full h-fit  bg-white text-gray-800">
+        <ul className="z-10 grid grid-cols-2 gap-4 p-4 pt-20 pb-10 w-full h-fit absolute top-0 bg-light-gray text-gray-800 shadow-2xl">
+          
+          {/* logged in */}
           {token ? (login_links.map((link) => (
             <li
               key={link.href}
-              className="mx-4 my-2 cursor-pointer capitalize text-base"
+              className="cursor-pointer capitalize text-base bg-white rounded-md border"
             >
               <Link href={link.href} passHref>
                 <p
                   onClick={() => setNav(!nav)}
-                  className={`no-underline px-4 py-2 rounded-full transition-colors duration-300 ${
+                  className={`no-underline h-full w-full p-2 rounded-md transition-colors duration-300 ${
                     pathname === link.href
                       ? "bg-primary text-white"
                       : "hover:bg-primary/60"
@@ -147,15 +150,16 @@ const NavigationBar = () => {
               </Link>
             </li>
           ))):
+          // logged out
           (links.map((link) => (
             <li
               key={link.href}
-              className="mx-4 my-2 cursor-pointer capitalize text-base"
+              className="cursor-pointer capitalize text-base bg-white rounded-md border"
             >
               <Link href={link.href} passHref>
                 <p
                   onClick={() => setNav(!nav)}
-                  className={`no-underline px-4 py-2 rounded-full transition-colors duration-300 ${
+                  className={`no-underline h-full w-full p-2 rounded-md transition-colors duration-300 ${
                     pathname === link.href
                       ? "bg-primary text-white"
                       : "hover:bg-primary/60"
