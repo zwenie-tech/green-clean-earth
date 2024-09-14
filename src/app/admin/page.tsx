@@ -15,6 +15,7 @@ import React, { StrictMode, useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { apiURL } from "../requestsapi/request";
 import Cookies from 'js-cookie';
+import * as XLSX from 'xlsx';
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
@@ -85,12 +86,43 @@ const GridExample = () => {
 
     fetchdata();
   }, [currentPage, token]);
+
+  const handleExportToExcel = async () => {
+    try {
+      const response = await axios.post(`${apiURL}/admin/adminUploads`, {
+        "isExcel": true
+    },{
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+      if (response.data.success && response.status!=203) {
+        // Convert response zoneList into Excel
+        const datalist = response.data.Uploads
+  
+        // Create a worksheet from the zoneList data
+        const worksheet = XLSX.utils.json_to_sheet(datalist);
+  
+        // Create a new workbook and append the worksheet
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
+  
+        // Export the workbook to Excel
+        XLSX.writeFile(workbook, 'data.xlsx');
+      } else {
+        console.error("Failed to export data");
+      }
+    } catch (error) {
+      console.error("Error during exporting:", error);
+    }
+  };
   return (
     <div className=" bg-slate-100">
       <button
           className= "text-white m-3 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
           
-          // onClick={}
+          onClick={handleExportToExcel}
         >
           Export To Excel
         </button>
