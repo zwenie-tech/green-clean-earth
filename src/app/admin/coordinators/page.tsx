@@ -1,12 +1,3 @@
-// import React from 'react'
-
-// function Page() {
-//   return (
-//     <div>coordinators</div>
-//   )
-// }
-
-// export default Page
 "use client";
 
 import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
@@ -16,361 +7,48 @@ import {
   RowClickedEvent,
 } from "@ag-grid-community/core";
 import { AgGridReact } from "@ag-grid-community/react";
-// import "@ag-grid-community/styles/ag-grid.css";
-// import "@ag-grid-community/styles/ag-theme-quartz.css";
-import "../../admin/ag-grid-theme-builder.css";
+import "@/app/admin/ag-grid-theme-builder.css"
 import { useRouter } from "next/navigation";
-import React, { StrictMode, useMemo, useState } from "react";
+import React, { StrictMode, useEffect, useMemo, useState } from "react";
+import axios from "axios";
+import { apiURL } from "@/app/requestsapi/request";
+import Cookies from 'js-cookie';
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
-const GridExample = () => {
+const AdminGrid = () => {
   const router = useRouter();
-  const [rowData, setRowData] = useState([
-    {
-      id: 1,
-      name: "John",
-      email: "john@gmail.com",
-      username: "jonh",
-      group: "abc",
-      country: "India",
-      state: "Kerala",
-      district:"MLP",
-      cooperation:"Tirur",
-      LSGD:"edfs",
-      Ward:12,
-      groupname:"ABCD",
-      referredBy:"Anus"
-    },
-    {
-      id: 2,
-      name: "anus",
-      email: "anus@gmail.com",
-      username: "anu",
-      group: "ertyuioiuyg",
-      country: "India",
-      state: "Kerala",
-      district:"MLP",
-      cooperation:"Tirur",
-      LSGD:"Tirur",
-      Ward:12,
-      groupname:"ABCD",
-      referredBy:"Alex"
-    },
-    {
-      id: 3,
-      name: "alex",
-      email: "alex@gmail.com",
-      username: "New York",
-      group: "ertyuioiuyg",
-      country: "India",
-      state: "Kerala",
-      district:"MLP",
-      cooperation:"Tirur",
-      LSGD:"Tirur",
-      Ward:12,
-      groupname:"ABCD",
-      referredBy:"Anusz"
-    },
-    {
-      id: 4,
-      name: "John",
-      email: "abc@gmail.com",
-      username: "New York",
-      group: "ertyuioiuyg",
-      country: "India",
-      state: "Kerala",
-      district:"MLP",
-      cooperation:"Tirur",
-      LSGD:"Tirur",
-      Ward:12,
-      groupname:"ABCD",
-      referredBy:"Anusz"},
-    {
-      id: 5,
-      name: "John",
-      email: "abc@gmail.com",
-      username: "New York",
-      group: "ertyuioiuyg",
-      country: "India",
-      state: "Kerala",
-      district:"MLP",
-      cooperation:"Tirur",
-      LSGD:"Tirur",
-      Ward:12,
-      groupname:"ABCD",
-      referredBy:"Anusz"
-    },
-    {
-      id: 6,
-      name: "John",
-      email: "abc@gmail.com",
-      username: "New York",
-      group: "ertyuioiuyg",
-      country: "India",
-      state: "Kerala",
-      district:"MLP",
-      cooperation:"Tirur",
-      LSGD:"Tirur",
-      Ward:12,
-      groupname:"ABCD",
-      referredBy:"Anusz"
-    },
-    {
-      id: 7,
-      name: "John",
-      email: "abc@gmail.com",
-      username: "New York",
-      group: "ertyuioiuyg",
-      country: "India",
-      state: "Kerala",
-      district:"MLP",
-      cooperation:"Tirur",
-      LSGD:"Tirur",
-      Ward:12,
-      groupname:"ABCD",
-      referredBy:"Anusz"
-    },
-    {
-      id: 8,
-      name: "John",
-      email: "abc@gmail.com",
-      username: "New York",
-      group: "ertyuioiuyg",
-      country: "India",
-      state: "Kerala",
-      district:"MLP",
-      cooperation:"Tirur",
-      LSGD:"Tirur",
-      Ward:12,
-      groupname:"ABCD",
-      referredBy:"Anusz"
-    },
-    {
-      id: 9,
-      name: "John",
-      email: "abc@gmail.com",
-      username: "New York",
-      group: "ertyuioiuyg",
-      country: "India",
-      state: "Kerala",
-      district:"MLP",
-      cooperation:"Tirur",
-      LSGD:"Tirur",
-      Ward:12,
-      groupname:"ABCD",
-      referredBy:"Anusz"
-    },
-    {
-      id: 10,
-      name: "John",
-      email: "abc@gmail.com",
-      username: "New York",
-      group: "ertyuioiuyg",
-      country: "India",
-      state: "Kerala",
-      district:"MLP",
-      cooperation:"Tirur",
-      LSGD:"Tirur",
-      Ward:12,
-      groupname:"ABCD",
-      referredBy:"Anusz"
-    },
-    {
-      id: 11,
-      name: "John",
-      email: "abc@gmail.com",
-      username: "New York",
-      group: "ertyuioiuyg",
-      country: "India",
-      state: "Kerala",
-      district:"MLP",
-      cooperation:"Tirur",
-      LSGD:"Tirur",
-      Ward:12,
-      groupname:"ABCD",
-      referredBy:"Anusz"
-    },
-    {
-      id: 12,
-      name: "John",
-      email: "abc@gmail.com",
-      username: "New York",
-      group: "ertyuioiuyg",
-      country: "India",
-      state: "Kerala",
-      district:"MLP",
-      cooperation:"Tirur",
-      LSGD:"Tirur",
-      Ward:12,
-      groupname:"ABCD",
-      referredBy:"Anusz"
-    },
-    {
-      id: 13,
-      name: "John",
-      email: "abc@gmail.com",
-      username: "New York",
-      group: "ertyuioiuyg",
-      country: "India",
-      state: "Kerala",
-      district:"MLP",
-      cooperation:"Tirur",
-      LSGD:"Tirur",
-      Ward:12,
-      groupname:"ABCD",
-      referredBy:"Anusz"
-    },
-    {
-      id: 14,
-      name: "John",
-      email: "abc@gmail.com",
-      username: "New York",
-      group: "ertyuioiuyg",
-      country: "India",
-      state: "Kerala",
-      district:"MLP",
-      cooperation:"Tirur",
-      LSGD:"Tirur",
-      Ward:12,
-      groupname:"ABCD",
-      referredBy:"Anusz"
-    },
-    {
-      id: 15,
-      name: "John",
-      email: "abc@gmail.com",
-      username: "New York",
-      group: "ertyuioiuyg",
-      country: "India",
-      state: "Kerala",
-      district:"MLP",
-      cooperation:"Tirur",
-      LSGD:"Tirur",
-      Ward:12,
-      groupname:"ABCD",
-      referredBy:"Anusz"
-    },
-    {
-      id: 16,
-      name: "John",
-      email: "abc@gmail.com",
-      username: "New York",
-      group: "ertyuioiuyg",
-      country: "India",
-      state: "Kerala",
-      district:"MLP",
-      cooperation:"Tirur",
-      LSGD:"Tirur",
-      Ward:12,
-      groupname:"ABCD",
-      referredBy:"Anusz"
-    },
-    {
-      id: 17,
-      name: "John",
-      email: "abc@gmail.com",
-      username: "New York",
-      group: "ertyuioiuyg",
-      country: "India",
-      state: "Kerala",
-      district:"MLP",
-      cooperation:"Tirur",
-      LSGD:"Tirur",
-      Ward:12,
-      groupname:"ABCD",
-      referredBy:"Anusz"
-    },
-    {
-      id: 18,
-      name: "John",
-      email: "abc@gmail.com",
-      username: "New York",
-      group: "ertyuioiuyg",
-      country: "India",
-      state: "Kerala",
-      district:"MLP",
-      cooperation:"Tirur",
-      LSGD:"Tirur",
-      Ward:12,
-      groupname:"ABCD",
-      referredBy:"Anusz"
-    },
-    {
-      id: 19,
-      name: "John",
-      email: "abc@gmail.com",
-      username: "New York",
-      group: "ertyuioiuyg",
-      country: "India",
-      state: "Kerala",
-      district:"MLP",
-      cooperation:"Tirur",
-      LSGD:"Tirur",
-      Ward:12,
-      groupname:"ABCD",
-      referredBy:"Anusz"
-    },
-    {
-      id: 20,
-      name: "John",
-      email: "abc@gmail.com",
-      username: "New York",
-      group: "ertyuioiuyg",
-      country: "India",
-      state: "Kerala",
-      district:"MLP",
-      cooperation:"Tirur",
-      LSGD:"Tirur",
-      Ward:12,
-      groupname:"ABCD",
-      referredBy:"Anusz"
-    },
-    {
-      id: 21,
-      name: "John",
-      email: "abc@gmail.com",
-      username: "New York",
-      group: "ertyuioiuyg",
-      country: "India",
-      state: "Kerala",
-      district:"MLP",
-      cooperation:"Tirur",
-      LSGD:"Tirur",
-      Ward:12,
-      groupname:"ABCD",
-      referredBy:"Anusz"
-    },
-    {
-      id: 22,
-      name: "John",
-      email: "abc@gmail.com",
-      username: "New York",
-      group: "ertyuioiuyg",
-      country: "India",
-      state: "Kerala",
-      district:"MLP",
-      cooperation:"Tirur",
-      LSGD:"Tirur",
-      Ward:12,
-      groupname:"ABCD",
-      referredBy:"Anusz"
-    },
-  ]);
+  const [rowData, setRowData] = useState([]);
+  const token = Cookies.get("adtoken");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 10;
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage > 0 && newPage <= totalPages) {
+
+      setCurrentPage(newPage);
+    }
+  }
+  useEffect(() => {
+    if (!token) {
+      router.push("/admin/login");
+    }
+  }, [token, router]);
 
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
-    { field: "name", headerName: "Name" },
+    { field: "co_ord_name", headerName: "Name" },
     { field: "email", headerName: "Email" },
     { field: "username", headerName: "Username" },
-    { field: "group", headerName: "Group" },
-    { field: "country", headerName: "Country" },
-    { field: "state", headerName: "State" },
-    { field: "district", headerName: "District" },
-    { field: "cooperation", headerName: "Cooperation" },
-    { field: "LSGD", headerName: "LSGD" },
-    { field: "Ward", headerName: "Ward" },
-    { field: "groupname", headerName: "Group Name" },
-    { field: "referredBy", headerName: "Referred By" },
+    { field: "group_type", headerName: "Group" },
+    { field: "cntry_name", headerName: "Country" },
+    { field: "st_name", headerName: "State" },
+    { field: "dis_name", headerName: "District" },
+    { field: "cop_name", headerName: "Cooperation" },
+    { field: "lsg_name", headerName: "LSGD" },
+    { field: "gp_ward_no", headerName: "Ward" },
+    { field: "gp_name", headerName: "Group Name" },
+    { field: "gp_refferal_name", headerName: "Referral Name" },
 
   ]);
 
@@ -380,14 +58,42 @@ const GridExample = () => {
       floatingFilter: true,
     };
   }, []);
+
   const onRowClicked = (event: RowClickedEvent) => {
-    // console.log(event.data);
+   
     const id = event.data.id;
     router.push(`coordinators/edit-coordinator/${id}`);
   };
 
+
+  useEffect(() => {
+    async function fetchdata() {
+      if (token) {
+
+        const response = await axios.post(`${apiURL}/admin/adminCordinatorsList?page=${currentPage}&limit=${itemsPerPage}`, {}, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+        
+        if (response.data.success && response.status!=203) {
+          setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
+          setRowData(response.data.cordinatorList);
+        }
+      }
+    };
+    fetchdata();
+  }, [currentPage, token]);
   return (
     <div className=" bg-slate-100">
+      <button
+          className= "text-white m-3 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+          
+          // onClick={}
+        >
+          Export To Excel
+        </button>
       <div className={"ag-theme-quartz"} style={{ height: 600 }}>
         <AgGridReact
           rowData={rowData}
@@ -396,12 +102,50 @@ const GridExample = () => {
           onRowClicked={onRowClicked}
           rowSelection="multiple"
           suppressRowClickSelection={true}
-          pagination={true}
-          paginationPageSize={10}
-          paginationPageSizeSelector={[10, 25, 50]}
+          pagination={false}
+          // paginationPageSize={10}
+          // paginationPageSizeSelector={[10, 25, 50]}
         />
+      </div>
+      <div className="flex justify-center items-center space-x-2 my-4">
+        <button
+          className={currentPage === 1 ?
+            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
+            : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+          }
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        {currentPage >= 4 && totalPages > 3 && <span className="text-xl text-gray-600">...</span>}
+
+        {Array.from({ length: totalPages >= 3 ? 3 : totalPages }, (_, index) => currentPage < 4 ? index+1:currentPage+index-2).map((page) => (
+          <span
+            key={page}
+            className={`text-xl cursor-pointer text-gray-600 ${page === currentPage ? 'font-bold' : 'underline'}`}
+            onClick={() => handlePageChange(page)}
+          >
+            {page > 0 ? page : ''}
+          </span>
+        ))}
+
+        {currentPage > 1 && totalPages > 3 && currentPage!=totalPages && <span className="text-xl text-gray-600">...</span>}
+        {currentPage === 1 && totalPages > 3 && currentPage!=totalPages && <span className="text-xl text-gray-600">...</span>}
+
+
+        <button
+          className={currentPage === totalPages || totalPages === 1 ?
+            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
+            : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+          }
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages || totalPages === 1}
+        >
+          Next
+        </button>
       </div>
     </div>
   );
 };
-export default GridExample;
+export default AdminGrid;

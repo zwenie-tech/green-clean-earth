@@ -37,23 +37,10 @@ const AdminGrid = () => {
   }, [token, router]);
 
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
-    { field: "participant_name", headerName: "Name" },
-    { field: "activity_social_media_link", headerName: "Activity Link" },
-    { field: "activity_description", headerName: "Description" },
-    { field: "activity_views", headerName: "View" },
-    { field: "activity_likes", headerName: "Like" },
-    { field: "activity_value", headerName: "Value" },
-    { field: "gp_name", headerName: "Group Name" },
-    { field: "group_type", headerName: "Category" },
-    { field: "activity_sub_category", headerName: "School Type" },
-    { field: "edu_district", headerName: "Education District" },
-    { field: "edu_sub_district_name", headerName: "Education Sub District" },
-    { field: "sahodaya_name", headerName: "Sahodaya" },
-    { field: "block_name", headerName: "Block" },
-    { field: "project_name", headerName: "Project" },
-    { field: "chapter_name", headerName: "Chapter" },
-    { field: "cntry_name", headerName: "Country" },
-    { field: "st_name", headerName: "State" },
+    { field: "dis_name", headerName: "District Name" },
+    { field: "edu_district", headerName: "Edu District Name" },
+    { field: "edu_sub_district_name", headerName: "Edu SubDistrict Name" },
+    
   ]);
 
   const defaultColDef = useMemo(() => {
@@ -73,7 +60,7 @@ const AdminGrid = () => {
     async function fetchdata() {
       if (token) {
 
-        const response = await axios.post(`${apiURL}/admin/adminActivityList?page=${currentPage}&limit=${itemsPerPage}`, {}, {
+        const response = await axios.post(`${apiURL}/admin/adminEduSubDistrict?page=${currentPage}&limit=${itemsPerPage}`, {}, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -82,8 +69,8 @@ const AdminGrid = () => {
         
         if (response.data.success && response.status!=203) {
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
-         
-          setRowData(response.data.userList); 
+        
+          setRowData(response.data.eduSubDistrict); 
         }
       }
     };

@@ -90,13 +90,20 @@ const Contact = () => {
     };
   }, []);
   const onRowClicked = (event: RowClickedEvent) => {
-    // console.log(event.data);
+   
     const id = event.data.id;
     router.push(`contact-us-form/edit-contact/${id}`);
   };
 
   return (
     <div className=" bg-slate-100">
+      <button
+          className= "text-white m-3 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+          
+          // onClick={}
+        >
+          Export To Excel
+        </button>
       <div className={"ag-theme-quartz"} style={{ height: 600 }}>
         <AgGridReact
           rowData={rowData}
