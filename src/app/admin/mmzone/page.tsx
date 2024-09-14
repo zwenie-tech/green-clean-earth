@@ -52,7 +52,7 @@ const AdminGrid = () => {
   }, []);
 
   const onRowClicked = (event: RowClickedEvent) => {
-    // console.log(event.data);
+   
     const id = event.data.id;
     router.push(`activity/edit-activity/${id}`);
   };
@@ -74,7 +74,7 @@ const AdminGrid = () => {
             ...chapter,
             chapter_type_name: chapter.chapter_type_id === 1 ? 'Global' : 'India'
           }));
-         console.log(updatedChapterList)
+         
           setRowData(updatedChapterList); 
         }
       }

@@ -163,7 +163,6 @@ export function FormUploadActivities({ token }: ActivitiesTabProps) {
     formData.append("shortDesc", values.short_desc);
     formData.append("socialMediaLink", values.social_link);
     
-    console.log(formData);
     
     
     if (selectedImage) {

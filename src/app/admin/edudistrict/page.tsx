@@ -50,7 +50,7 @@ const AdminGrid = () => {
   }, []);
 
   const onRowClicked = (event: RowClickedEvent) => {
-    // console.log(event.data);
+   
     const id = event.data.id;
     router.push(`activity/edit-activity/${id}`);
   };

@@ -90,7 +90,7 @@ const Contact = () => {
     };
   }, []);
   const onRowClicked = (event: RowClickedEvent) => {
-    // console.log(event.data);
+   
     const id = event.data.id;
     router.push(`contact-us-form/edit-contact/${id}`);
   };
