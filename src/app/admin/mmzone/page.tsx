@@ -37,19 +37,11 @@ const AdminGrid = () => {
   }, [token, router]);
 
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
-    { field: "co_ord_name", headerName: "Name" },
-    { field: "email", headerName: "Email" },
-    { field: "username", headerName: "Username" },
-    { field: "group_type", headerName: "Group" },
-    { field: "cntry_name", headerName: "Country" },
-    { field: "st_name", headerName: "State" },
-    { field: "dis_name", headerName: "District" },
-    { field: "cop_name", headerName: "Cooperation" },
-    { field: "lsg_name", headerName: "LSGD" },
-    { field: "gp_ward_no", headerName: "Ward" },
-    { field: "gp_name", headerName: "Group Name" },
-    { field: "gp_refferal_name", headerName: "Referral Name" },
-
+    { field: "chapter_type_name", headerName: "Chapter Type" },
+    { field: "chapter_name", headerName: "Chapter Name" },
+    { field: "zone_name", headerName: "Zone Name" },
+    
+    
   ]);
 
   const defaultColDef = useMemo(() => {
@@ -62,15 +54,14 @@ const AdminGrid = () => {
   const onRowClicked = (event: RowClickedEvent) => {
     // console.log(event.data);
     const id = event.data.id;
-    router.push(`coordinators/edit-coordinator/${id}`);
+    router.push(`activity/edit-activity/${id}`);
   };
-
 
   useEffect(() => {
     async function fetchdata() {
       if (token) {
 
-        const response = await axios.post(`${apiURL}/admin/adminCordinatorsList?page=${currentPage}&limit=${itemsPerPage}`, {}, {
+        const response = await axios.post(`${apiURL}/admin/adminMMZone?page=${currentPage}&limit=${itemsPerPage}`, {}, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -79,7 +70,12 @@ const AdminGrid = () => {
         
         if (response.data.success && response.status!=203) {
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
-          setRowData(response.data.cordinatorList);
+          const updatedChapterList = response.data.zoneList.map((chapter: { chapter_type_id: number; }) => ({
+            ...chapter,
+            chapter_type_name: chapter.chapter_type_id === 1 ? 'Global' : 'India'
+          }));
+         console.log(updatedChapterList)
+          setRowData(updatedChapterList); 
         }
       }
     };
@@ -87,7 +83,7 @@ const AdminGrid = () => {
   }, [currentPage, token]);
   return (
     <div className=" bg-slate-100">
-      <button
+     <button
           className= "text-white m-3 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
           
           // onClick={}

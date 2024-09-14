@@ -20,7 +20,13 @@ const links = [
   { name: "Manage Contact us form", href: "/admin/contact-us-form" },
   { name: "Manage Corporations", href: "/admin/corporation" },
   { name: "Manage LSGD", href: "/admin/lsgd" },
-  { name: "Manage School Division", href: "/admin/school-division" },
+  { name: "Manage Edu District", href: "/admin/edudistrict" },
+  { name: "Manage Edu SubDistrict", href: "/admin/edusubdistrict" },
+  { name: "Manage Sahodaya", href: "/admin/sahodaya" },
+  { name: "Manage Icds Block", href: "/admin/icdsblock" },
+  { name: "Manage Icds Project", href: "/admin/icdsproject" },
+  { name: "Manage Malayalam Mission Chapter", href: "/admin/mmchapter" },
+  { name: "Manage Malayalam Mission Zone", href: "/admin/mmzone" },
   { name: "Manage News and Events", href: "/admin/news-and-events" },
 ];
 
