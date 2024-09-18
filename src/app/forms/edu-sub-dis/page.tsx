@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
+import { useForm ,SubmitHandler} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod"; // import Zod for form validation
 import {
@@ -19,10 +19,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+
+// Define the form schema using Zod
 const formSchema = z.object({
-    district: z.string().nonempty("District is required"),
-    edudistrict: z.string().nonempty("education district is required"),
-    edusubdistrict: z.string().nonempty("Education Subdistrict is required"),
+  district: z.string().nonempty("District is required"),
+  edudistrict: z.string().nonempty("Education district is required"),
+  edusubdistrict: z.string().nonempty("Education subdistrict is required"),
+  lsgdname: z.string().nonempty("LSGD Name is required"),
 });
 
 const EduSubform = () => {
@@ -32,20 +35,24 @@ const EduSubform = () => {
     setIsEditing(true);
   };
 
-  const form = useForm<z.infer<typeof formSchema>>({
+
+type FormData = z.infer<typeof formSchema>;
+  // Use the form hook with Zod schema validation
+  const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-        district: "",
-        edudistrict: "",
-        edusubdistrict: "",
-      
+      district: "",
+      edudistrict: "",
+      edusubdistrict: "",
+      lsgdname: "",
     },
   });
 
-  const handleSubmit = (data) => {
-    console.log(data); // Handle form submit logic here
-    setIsEditing(false); // Reset to non-editing mode after submission
-  };
+ // Define handleSubmit with proper typing for form data
+ const handleSubmit: SubmitHandler<FormData> = (data) => {
+  console.log(data); // Handle form submit logic here
+  setIsEditing(false); // Reset to non-editing mode after submission
+};
 
   return (
     <div className="flex flex-col md:flex-row">
@@ -54,26 +61,29 @@ const EduSubform = () => {
         className="md:w-1/2 w-full"
         style={{ backgroundColor: "#f7f7f7", padding: "5px", borderRadius: "8px" }}
       >
-        <Form {...form} onSubmit={form.handleSubmit(handleSubmit)}>
+        <Form {...form}>
           <div className="w-full mb-4 md:mb-0 rounded-lg border-1 border-black shadow-xl bg-light-gray">
             <div className="card p-3">
               <div className="flex items-center mb-3 gap-5">
-              <h1 className="text-center font-bold text-xl ">Education Subdistrict</h1>
+                <h1 className="text-center font-bold text-xl">Education Subdistrict</h1>
                 <button
                   type="button"
                   className="btn text-primary bg-light-gray py-3 px-4 rounded-lg btn-lg shadow-lg ml-auto"
                   onClick={handleEditClick}
+                  disabled={isEditing} // Disable the button when editing
                 >
                   {isEditing ? "Editing..." : "Edit"}
                 </button>
               </div>
 
+              {/* District Field */}
               <FormField
+                control={form.control}
                 name="district"
                 render={({ field }) => (
                   <FormItem className="mb-4">
                     <FormLabel>District</FormLabel>
-                    <Select disabled={!isEditing}>
+                    <Select disabled={!isEditing} {...field}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Choose a Category" />
@@ -88,12 +98,15 @@ const EduSubform = () => {
                   </FormItem>
                 )}
               />
+
+              {/* Education District Field */}
               <FormField
+                control={form.control}
                 name="edudistrict"
                 render={({ field }) => (
                   <FormItem className="mb-4">
                     <FormLabel>Education District</FormLabel>
-                    <Select disabled={!isEditing}>
+                    <Select disabled={!isEditing} {...field}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Choose a Category" />
@@ -108,12 +121,15 @@ const EduSubform = () => {
                   </FormItem>
                 )}
               />
-               <FormField
+
+              {/* Education Subdistrict Field */}
+              <FormField
+                control={form.control}
                 name="edusubdistrict"
                 render={({ field }) => (
                   <FormItem className="mb-4">
-                    <FormLabel>Education Subdistrict </FormLabel>
-                    <Select disabled={!isEditing}>
+                    <FormLabel>Education Subdistrict</FormLabel>
+                    <Select disabled={!isEditing} {...field}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Choose a Category" />
@@ -128,21 +144,15 @@ const EduSubform = () => {
                   </FormItem>
                 )}
               />
-               <FormField
-                name="lsgdname"
-                render={({ field }) => (
-                  <FormItem className="mb-4">
-                    <FormLabel>Lsgd Name </FormLabel>
-                    <FormControl>
-                      <Input {...field} disabled={!isEditing} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> {isEditing && (
+
+             
+
+              {/* Submit Button */}
+              {isEditing && (
                 <div className="flex justify-center">
                   <button
                     type="submit"
+                    onClick={form.handleSubmit(handleSubmit)} // Ensure correct handleSubmit usage
                     className="btn m-3 text-white bg-primary py-2 px-5 rounded-sm shadow-lg"
                   >
                     Submit

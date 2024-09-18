@@ -1,9 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import React ,{useState}from "react";
 import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod"; // import Zod for form validation
+import * as z from "zod";
 import {
   Select,
   SelectContent,
@@ -19,82 +19,89 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+
+// Define the form schema using Zod
 const formSchema = z.object({
   name: z.string().nonempty("Name is required"),
   email: z.string().nonempty("Email is required"),
   username: z.string().nonempty("Username is required"),
-  contactnumber : z.string().nonempty("Name is required"),
-  createddate: z.string().nonempty("Category is required"),
-  profession: z.string().nonempty("City is required"),
-  groupname: z.string().nonempty("Name is required"),
-  grouptype: z.string().nonempty("Category is required"),
-  schooltype: z.string().nonempty("City is required"),
-  schoolcategory: z.string().nonempty("Name is required"),
-  edudistrict : z.string().nonempty("Category is required"),
-  edusubdistrict: z.string().nonempty("City is required"),
-  sahodaya: z.string().nonempty("Name is required"),
-  block: z.string().nonempty("Category is required"),
-  project: z.string().nonempty("City is required"),
-  chapter: z.string().nonempty("Name is required"),
-  zone: z.string().nonempty("Category is required"),
+  contactnumber: z.string().nonempty("Contact number is required"),
+  createddate: z.string().nonempty("Created date is required"),
+  profession: z.string().nonempty("Profession is required"),
+  groupname: z.string().nonempty("Group name is required"),
+  grouptype: z.string().nonempty("Group type is required"),
+  schooltype: z.string().nonempty("School type is required"),
+  schoolcategory: z.string().nonempty("School category is required"),
+  edudistrict: z.string().nonempty("Education district is required"),
+  edusubdistrict: z.string().nonempty("Education subdistrict is required"),
+  sahodaya: z.string().nonempty("Sahodaya is required"),
+  block: z.string().nonempty("Block is required"),
+  project: z.string().nonempty("Project is required"),
+  chapter: z.string().nonempty("Chapter is required"),
+  zone: z.string().nonempty("Zone is required"),
 });
 
+type FormData = z.infer<typeof formSchema>;
+
 const Cordinate = () => {
-  const [isEditing, setIsEditing] = useState(false);
-
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
-
-  const form = useForm<z.infer<typeof formSchema>>({
+  // Use the form hook with Zod schema validation
+  const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       email: "",
       username: "",
-      contactnumber:"",
+      contactnumber: "",
       createddate: "",
       profession: "",
       groupname: "",
-      grouptype:"",
+      grouptype: "",
       schooltype: "",
       schoolcategory: "",
       edudistrict: "",
-      edusubdistrict:"",
+      edusubdistrict: "",
       sahodaya: "",
       block: "",
-      project:"",
+      project: "",
       chapter: "",
-      zone:"",
+      zone: "",
     },
   });
+  const [isEditing, setIsEditing] = useState(false);
 
-  const handleSubmit = (data) => {
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+  // Define handleSubmit with proper typing for form data
+  const handleSubmit: SubmitHandler<FormData> = (data) => {
     console.log(data); // Handle form submit logic here
     setIsEditing(false); // Reset to non-editing mode after submission
   };
 
   return (
+    
     <div
-  className="w-full"
-  style={{ backgroundColor: "#f7f7f7", padding: "5px", borderRadius: "8px" }}
->
-  <Form {...form} onSubmit={form.handleSubmit(handleSubmit)}>
-    <div className="w-full mb-4 md:mb-0 rounded-lg border-1 border-black shadow-xl bg-light-gray">
-      <div className="card p-3">
-        <div className="flex items-center mb-3 gap-5">
-          <h1 className="text-center font-bold text-xl">Coordinator</h1>
-          <button
-            type="button"
-            className="btn text-primary bg-light-gray py-3 px-4 rounded-lg btn-lg shadow-lg ml-auto"
-            onClick={handleEditClick}
-          >
-            {isEditing ? "Editing..." : "Edit"}
-          </button>
-        </div>
+      className=" w-full"
+      style={{ backgroundColor: "#f7f7f7", padding: "5px", borderRadius: "8px" }}
+    >
+      <Form {...form}>
+        <div className="w-full mb-4 md:mb-0 rounded-lg border-1 border-black shadow-xl bg-light-gray">
+          <div className="card p-3">
+            <div className="flex items-center mb-3 gap-5">
+              <h1 className="text-center font-bold text-xl">Coordinator</h1>
+              <button
+                  type="button"
+                  className="btn text-primary bg-light-gray py-3 px-4 rounded-lg btn-lg shadow-lg ml-auto"
+                  onClick={handleEditClick}
+                  disabled={isEditing} // Disable the button when editing
+                >
+                  {isEditing ? "Editing..." : "Edit"}
+                </button>
+            </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <FormField 
+          control={form.control}
             name="name"
             render={({ field }) => (
               <FormItem className="mb-4">
@@ -107,6 +114,7 @@ const Cordinate = () => {
             )}
           />
           <FormField
+          control={form.control}
             name="email"
             render={({ field }) => (
               <FormItem className="mb-4">
@@ -119,6 +127,7 @@ const Cordinate = () => {
             )}
           />
            <FormField
+           control={form.control}
             name="username"
             render={({ field }) => (
               <FormItem className="mb-4">
@@ -131,6 +140,7 @@ const Cordinate = () => {
             )}
           /> 
           <FormField
+          control={form.control}
             name="contactnumber"
             render={({ field }) => (
               <FormItem className="mb-4">
@@ -145,6 +155,7 @@ const Cordinate = () => {
           </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
           <FormField
+          control={form.control}
             name="createddate"
             render={({ field }) => (
               <FormItem className="mb-4">
@@ -157,6 +168,7 @@ const Cordinate = () => {
             )}
           />
           <FormField
+          control={form.control}
             name="profession"
             render={({ field }) => (
               <FormItem className="mb-4">
@@ -169,6 +181,7 @@ const Cordinate = () => {
             )}
           />
         <FormField
+        control={form.control}
             name="groupname"
             render={({ field }) => (
               <FormItem className="mb-4">
@@ -181,6 +194,7 @@ const Cordinate = () => {
             )}
           />
           <FormField
+          control={form.control}
             name="grouptype"
             render={({ field }) => (
               <FormItem className="mb-4">
@@ -203,6 +217,7 @@ const Cordinate = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
           <FormField
+          control={form.control}
             name="schooltype"
             render={({ field }) => (
               <FormItem className="mb-4">
@@ -223,6 +238,7 @@ const Cordinate = () => {
             )}
           />
           <FormField
+          control={form.control}
             name="schoolcategory"
             render={({ field }) => (
               <FormItem className="mb-4">
@@ -243,6 +259,7 @@ const Cordinate = () => {
             )}
           />
           <FormField
+          control={form.control}
             name="edudistrict"
             render={({ field }) => (
               <FormItem className="mb-4">
@@ -265,6 +282,7 @@ const Cordinate = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
           <FormField
+          control={form.control}
             name="edusubdistrict"
             render={({ field }) => (
               <FormItem className="mb-4">
@@ -285,6 +303,7 @@ const Cordinate = () => {
             )}
           />
            <FormField
+           control={form.control}
             name="sahodaya"
             render={({ field }) => (
               <FormItem className="mb-4">
@@ -297,6 +316,7 @@ const Cordinate = () => {
             )}
           />
           <FormField
+          control={form.control}
             name="block"
             render={({ field }) => (
               <FormItem className="mb-4">
@@ -312,6 +332,7 @@ const Cordinate = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
           <FormField
+          control={form.control}
             name="project"
             render={({ field }) => (
               <FormItem className="mb-4">
@@ -324,6 +345,7 @@ const Cordinate = () => {
             )}
           />
           <FormField
+          control={form.control}
             name="chapter"
             render={({ field }) => (
               <FormItem className="mb-4">
@@ -335,8 +357,9 @@ const Cordinate = () => {
               </FormItem>
             )}
           />
-        
+
           <FormField
+          control={form.control}
             name="zone"
             render={({ field }) => (
               <FormItem className="mb-4">
@@ -351,20 +374,20 @@ const Cordinate = () => {
         </div>
 
         {isEditing && (
-          <div className="flex justify-center mt-4">
-            <button
-              type="submit"
-              className="btn m-3 text-white bg-primary py-2 px-5 rounded-sm shadow-lg"
-            >
-              Submit
-            </button>
-          </div>
-        )}
+                <div className="flex justify-center">
+                  <button
+                    type="submit"
+                    onClick={form.handleSubmit(handleSubmit)} // Ensure correct handleSubmit usage
+                    className="btn m-3 text-white bg-primary py-2 px-5 rounded-sm shadow-lg"
+                  >
+                    Submit
+                  </button>
+                </div>
+              )}
       </div>
     </div>
   </Form>
 </div>
-
   );
 };
 

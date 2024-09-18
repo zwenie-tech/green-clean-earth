@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
+import { useForm ,SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod"; // import Zod for form validation
+import * as z from "zod"; // Import Zod for form validation
 import {
   Select,
   SelectContent,
@@ -19,33 +19,37 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+
+// Define the validation schema
 const formSchema = z.object({
-    state: z.string().nonempty("state is required"),
-    district: z.string().nonempty("district is required"),
-    corporation: z.string().nonempty("cooperation is required"),
-  lsgdname : z.string().nonempty("LSGDname is required"),
- 
+  state: z.string().nonempty("State is required"),
+  district: z.string().nonempty("District is required"),
+  corporation: z.string().nonempty("Corporation is required"),
+  lsgdname: z.string().nonempty("LSGD name is required"),
 });
 
+type FormData = z.infer<typeof formSchema>;
 const LSGDform = () => {
   const [isEditing, setIsEditing] = useState(false);
 
+  // Handle edit mode toggling
   const handleEditClick = () => {
     setIsEditing(true);
   };
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  // Initialize the form
+  const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       state: "",
       district: "",
       corporation: "",
-      lsgdname:"",
-      
+      lsgdname: "",
     },
   });
 
-  const handleSubmit = (data) => {
+  // Define handleSubmit with proper typing for form data
+  const handleSubmit: SubmitHandler<FormData> = (data) => {
     console.log(data); // Handle form submit logic here
     setIsEditing(false); // Reset to non-editing mode after submission
   };
@@ -57,103 +61,118 @@ const LSGDform = () => {
         className="md:w-1/2 w-full"
         style={{ backgroundColor: "#f7f7f7", padding: "5px", borderRadius: "8px" }}
       >
-        <Form {...form} onSubmit={form.handleSubmit(handleSubmit)}>
-          <div className="w-full mb-4 md:mb-0 rounded-lg border-1 border-black shadow-xl bg-light-gray">
-            <div className="card p-3">
-              <div className="flex items-center mb-3 gap-5">
-              <h1 className="text-center font-bold text-xl ">LSGD</h1>
-                <button
-                  type="button"
-                  className="btn text-primary bg-light-gray py-3 px-4 rounded-lg btn-lg shadow-lg ml-auto"
-                  onClick={handleEditClick}
-                >
-                  {isEditing ? "Editing..." : "Edit"}
-                </button>
-              </div>
+        <Form {...form}>
+            <div className="w-full mb-4 md:mb-0 rounded-lg border-1 border-black shadow-xl bg-light-gray">
+              <div className="card p-3">
+                <div className="flex items-center mb-3 gap-5">
+                  <h1 className="text-center font-bold text-xl ">LSGD</h1>
+                  <button
+                    type="button"
+                    className="btn text-primary bg-light-gray py-3 px-4 rounded-lg btn-lg shadow-lg ml-auto"
+                    onClick={handleEditClick}
+                  >
+                    {isEditing ? "Editing..." : "Edit"}
+                  </button>
+                </div>
 
-              <FormField
-                name="state"
-                render={({ field }) => (
-                  <FormItem className="mb-4">
-                    <FormLabel>State</FormLabel>
-                    <Select disabled={!isEditing}>
+                {/* State Field */}
+                <FormField
+                  control={form.control}
+                  name="state"
+                  render={({ field }) => (
+                    <FormItem className="mb-4">
+                      <FormLabel>State</FormLabel>
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Choose a Category" />
-                        </SelectTrigger>
+                        <Select disabled={!isEditing} {...field}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Choose a State" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="state1">State 1</SelectItem>
+                            <SelectItem value="state2">State 2</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </FormControl>
-                      <SelectContent>
-                        <SelectItem value="type1">Type 1</SelectItem>
-                        <SelectItem value="type2">Type 2</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                name="district"
-                render={({ field }) => (
-                  <FormItem className="mb-4">
-                    <FormLabel>District</FormLabel>
-                    <Select disabled={!isEditing}>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* District Field */}
+                <FormField
+                  control={form.control}
+                  name="district"
+                  render={({ field }) => (
+                    <FormItem className="mb-4">
+                      <FormLabel>District</FormLabel>
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Choose a Category" />
-                        </SelectTrigger>
+                        <Select disabled={!isEditing} {...field}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Choose a District" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="district1">District 1</SelectItem>
+                            <SelectItem value="district2">District 2</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </FormControl>
-                      <SelectContent>
-                        <SelectItem value="type1">Type 1</SelectItem>
-                        <SelectItem value="type2">Type 2</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-               <FormField
-                name="corporation"
-                render={({ field }) => (
-                  <FormItem className="mb-4">
-                    <FormLabel>Corporation </FormLabel>
-                    <Select disabled={!isEditing}>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Corporation Field */}
+                <FormField
+                  control={form.control}
+                  name="corporation"
+                  render={({ field }) => (
+                    <FormItem className="mb-4">
+                      <FormLabel>Corporation</FormLabel>
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Choose a Category" />
-                        </SelectTrigger>
+                        <Select disabled={!isEditing} {...field}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Choose a Corporation" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="corp1">Corporation 1</SelectItem>
+                            <SelectItem value="corp2">Corporation 2</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </FormControl>
-                      <SelectContent>
-                        <SelectItem value="type1">Type 1</SelectItem>
-                        <SelectItem value="type2">Type 2</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-               <FormField
-                name="lsgdname"
-                render={({ field }) => (
-                  <FormItem className="mb-4">
-                    <FormLabel>Lsgd Name </FormLabel>
-                    <FormControl>
-                      <Input {...field} disabled={!isEditing} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> {isEditing && (
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* LSGD Name Field */}
+                <FormField
+                  control={form.control}
+                  name="lsgdname"
+                  render={({ field }) => (
+                    <FormItem className="mb-4">
+                      <FormLabel>LSGD Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} disabled={!isEditing} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Submit Button (only visible when editing) */}
+                 {isEditing && (
                 <div className="flex justify-center">
                   <button
                     type="submit"
+                    onClick={form.handleSubmit(handleSubmit)} // Ensure correct handleSubmit usage
                     className="btn m-3 text-white bg-primary py-2 px-5 rounded-sm shadow-lg"
                   >
                     Submit
                   </button>
                 </div>
               )}
+              </div>
             </div>
-          </div>
         </Form>
       </div>
 

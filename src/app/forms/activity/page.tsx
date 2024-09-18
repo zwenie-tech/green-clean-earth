@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
+import { useForm ,SubmitHandler} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod"; // import Zod for form validation
 import {
@@ -41,6 +41,8 @@ const formSchema = z.object({
   zone: z.string().nonempty("Zone is required"),
 });
 
+type FormData = z.infer<typeof formSchema>;
+
 const ActivityForm = () => {
   const [isEditing, setIsEditing] = useState(false);
 
@@ -48,7 +50,7 @@ const ActivityForm = () => {
     setIsEditing(true);
   };
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       parname: "",
@@ -73,17 +75,18 @@ const ActivityForm = () => {
     },
   });
 
-  const handleSubmit = (data) => {
-    console.log(data); // Handle form submit logic here
-    setIsEditing(false); // Reset to non-editing mode after submission
-  };
+    // Define handleSubmit with proper typing for form data
+    const handleSubmit: SubmitHandler<FormData> = (data) => {
+      console.log(data); // Handle form submit logic here
+      setIsEditing(false); // Reset to non-editing mode after submission
+    };
 
   return (
       <div
         className=" w-full"
         style={{ backgroundColor: "#f7f7f7", padding: "5px", borderRadius: "8px" }}
       >
-        <Form {...form} onSubmit={form.handleSubmit(handleSubmit)}>
+        <Form {...form}>
           <div className="w-full mb-4 md:mb-0 rounded-lg border-1 border-black shadow-xl bg-light-gray">
             <div className="card p-3">
               <div className="flex items-center mb-3 gap-5">
@@ -99,6 +102,7 @@ const ActivityForm = () => {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
               <FormField 
                 name="parname"
+                control={form.control}
                 render={({ field }) => (
                   <FormItem className="mb-4">
                     <FormLabel>Participant Name</FormLabel>
@@ -110,6 +114,7 @@ const ActivityForm = () => {
                 )}
               />
               <FormField
+              control={form.control}
                 name="activitylink"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -122,6 +127,7 @@ const ActivityForm = () => {
                 )}
               />
                <FormField
+               control={form.control}
                 name="description"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -134,6 +140,7 @@ const ActivityForm = () => {
                 )}
               />
                <FormField
+               control={form.control}
                 name="view"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -148,6 +155,7 @@ const ActivityForm = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
               <FormField
+              control={form.control}
                 name="like"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -160,6 +168,7 @@ const ActivityForm = () => {
                 )}
               />
                 <FormField
+                control={form.control}
                 name="value"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -171,7 +180,8 @@ const ActivityForm = () => {
                   </FormItem>
                 )}
               />
-              <FormField
+              <FormField 
+              control={form.control}
                 name="createddate"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -184,6 +194,7 @@ const ActivityForm = () => {
                 )}
               />
                <FormField
+               control={form.control}
                 name="category"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -198,6 +209,7 @@ const ActivityForm = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
               <FormField
+              control={form.control}
                 name="schoolcategory"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -219,6 +231,7 @@ const ActivityForm = () => {
               />
               <FormField
                 name="groupname"
+                control={form.control}
                 render={({ field }) => (
                   <FormItem className="mb-4">
                     <FormLabel>Group Name</FormLabel>
@@ -231,6 +244,7 @@ const ActivityForm = () => {
               />   
               <FormField
                 name="grouptype"
+                control={form.control}
                 render={({ field }) => (
                   <FormItem className="mb-4">
                     <FormLabel>Group Type</FormLabel>
@@ -251,6 +265,7 @@ const ActivityForm = () => {
               />
               <FormField
                 name="schooltype"
+                control={form.control}
                 render={({ field }) => (
                   <FormItem className="mb-4">
                     <FormLabel>School Type</FormLabel>
@@ -271,6 +286,7 @@ const ActivityForm = () => {
               />
               <FormField
               name="edudistrict"
+              control={form.control}
               render={({ field }) => (
                 <FormItem className="mb-4">
                   <FormLabel> Education District</FormLabel>
@@ -291,6 +307,7 @@ const ActivityForm = () => {
             />
             <FormField
             name="edusubdistrict"
+            control={form.control}
             render={({ field }) => (
               <FormItem className="mb-4">
                 <FormLabel>Education Subdistrict </FormLabel>
@@ -311,6 +328,7 @@ const ActivityForm = () => {
           />
               <FormField
                 name="sahodaya"
+                control={form.control}
                 render={({ field }) => (
                   <FormItem className="mb-4">
                     <FormLabel>Sahodaya</FormLabel>
@@ -323,6 +341,7 @@ const ActivityForm = () => {
               />
               <FormField
                 name="block"
+                control={form.control}
                 render={({ field }) => (
                   <FormItem className="mb-4">
                     <FormLabel>Block</FormLabel>
@@ -337,6 +356,7 @@ const ActivityForm = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
               <FormField
                 name="project"
+                control={form.control}
                 render={({ field }) => (
                   <FormItem className="mb-4">
                     <FormLabel>Project</FormLabel>
@@ -349,6 +369,7 @@ const ActivityForm = () => {
               />
               <FormField
                 name="chapter"
+                control={form.control}
                 render={({ field }) => (
                   <FormItem className="mb-4">
                     <FormLabel>Chapter</FormLabel>
@@ -361,6 +382,7 @@ const ActivityForm = () => {
               />
               <FormField
                 name="zone"
+                control={form.control}
                 render={({ field }) => (
                   <FormItem className="mb-4">
                     <FormLabel>Zone</FormLabel>
@@ -372,10 +394,11 @@ const ActivityForm = () => {
                 )}
               />
             </div>
-              {isEditing && (
+            {isEditing && (
                 <div className="flex justify-center">
                   <button
                     type="submit"
+                    onClick={form.handleSubmit(handleSubmit)} // Ensure correct handleSubmit usage
                     className="btn m-3 text-white bg-primary py-2 px-5 rounded-sm shadow-lg"
                   >
                     Submit

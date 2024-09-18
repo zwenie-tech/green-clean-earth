@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
+import { useForm ,SubmitHandler} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod"; // import Zod for form validation
 import {
@@ -49,7 +49,7 @@ const formSchema = z.object({
   chapter: z.string().nonempty("Name is required"),
   zone: z.string().nonempty("Category is required"),
 });
-
+type FormData = z.infer<typeof formSchema>;
 const Cordinate = () => {
   const [isEditing, setIsEditing] = useState(false);
 
@@ -57,7 +57,7 @@ const Cordinate = () => {
     setIsEditing(true);
   };
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       image1:"",
@@ -91,7 +91,7 @@ const Cordinate = () => {
     },
   });
 
-  const handleSubmit = (data) => {
+  const handleSubmit: SubmitHandler<FormData> = (data) => {
     console.log(data); // Handle form submit logic here
     setIsEditing(false); // Reset to non-editing mode after submission
   };
@@ -103,7 +103,7 @@ const Cordinate = () => {
         className="w-full"
         style={{ backgroundColor: "#f7f7f7", padding: "5px", borderRadius: "8px" }}
       >
-        <Form {...form} onSubmit={form.handleSubmit(handleSubmit)}>
+        <Form {...form}>
           <div className="w-full mb-4 md:mb-0 rounded-lg border-1 border-black shadow-xl bg-light-gray">
             <div className="card p-3">
               <div className="flex items-center mb-3 gap-5">
@@ -118,6 +118,7 @@ const Cordinate = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
               <FormField 
+              control={form.control}
                 name="image1"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -130,6 +131,7 @@ const Cordinate = () => {
                 )}
               />
               <FormField 
+              control={form.control}
                 name="image2"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -142,6 +144,7 @@ const Cordinate = () => {
                 )}
               />
                <FormField 
+               control={form.control}
                 name="image3"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -154,6 +157,7 @@ const Cordinate = () => {
                 )}
               />
               <FormField 
+              control={form.control}
                 name="image4"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -168,6 +172,7 @@ const Cordinate = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
               <FormField 
+              control={form.control}
                 name="treeno"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -180,6 +185,7 @@ const Cordinate = () => {
                 )}
               />
               <FormField
+              control={form.control}
                 name="uploadid"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -192,6 +198,7 @@ const Cordinate = () => {
                 )}
               />
                <FormField
+               control={form.control}
                 name="uploadname"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -205,6 +212,7 @@ const Cordinate = () => {
               />
               
                <FormField
+               control={form.control}
                 name="plantername"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -219,6 +227,7 @@ const Cordinate = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
               <FormField
+              control={form.control}
                 name="country"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -239,6 +248,7 @@ const Cordinate = () => {
                 )}
               />
                <FormField
+               control={form.control}
                 name="state"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -259,6 +269,7 @@ const Cordinate = () => {
                 )}
               />
               <FormField
+              control={form.control}
                 name="district"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -279,6 +290,7 @@ const Cordinate = () => {
                 )}
               />   
               <FormField
+              control={form.control}
                 name="cooperation"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -301,6 +313,7 @@ const Cordinate = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
               <FormField
+              control={form.control}
                 name="lsgd"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -321,6 +334,7 @@ const Cordinate = () => {
                 )}
               />
               <FormField
+              control={form.control}
                 name="source"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -333,6 +347,7 @@ const Cordinate = () => {
                 )}
               />
               <FormField
+              control={form.control}
                 name="landmark"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -345,6 +360,7 @@ const Cordinate = () => {
                 )}
               />
               <FormField
+              control={form.control}
                 name="treename"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -359,6 +375,7 @@ const Cordinate = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
               <FormField
+              control={form.control}
                 name="coordinatorname"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -371,6 +388,7 @@ const Cordinate = () => {
                 )}
               />
                <FormField
+               control={form.control}
                 name="groupname"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -384,6 +402,7 @@ const Cordinate = () => {
               />
               
                <FormField
+               control={form.control}
                 name="grouptype"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -396,6 +415,7 @@ const Cordinate = () => {
                 )}
               />
               <FormField
+              control={form.control}
                 name="schooltype"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -410,6 +430,7 @@ const Cordinate = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
               <FormField
+              control={form.control}
                 name="schoolcategory"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -430,6 +451,7 @@ const Cordinate = () => {
                 )}
               />
               <FormField
+              control={form.control}
               name="edudistrict"
               render={({ field }) => (
                 <FormItem className="mb-4">
@@ -449,6 +471,7 @@ const Cordinate = () => {
                 </FormItem>
               )}
             /><FormField
+            control={form.control}
             name="edusubdistrict"
             render={({ field }) => (
               <FormItem className="mb-4">
@@ -469,6 +492,7 @@ const Cordinate = () => {
             )}
           />
               <FormField
+              control={form.control}
                 name="sahodaya"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -483,6 +507,7 @@ const Cordinate = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
               <FormField
+              control={form.control}
                 name="block"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -495,6 +520,7 @@ const Cordinate = () => {
                 )}
               />
               <FormField
+              control={form.control}
                 name="project"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -507,6 +533,7 @@ const Cordinate = () => {
                 )}
               />
               <FormField
+              control={form.control}
                 name="chapter"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -519,6 +546,7 @@ const Cordinate = () => {
                 )}
               />
               <FormField
+              control={form.control}
                 name="zone"
                 render={({ field }) => (
                   <FormItem className="mb-4">
@@ -535,6 +563,7 @@ const Cordinate = () => {
                 <div className="flex justify-center">
                   <button
                     type="submit"
+                    onClick={form.handleSubmit(handleSubmit)} // Ensure correct handleSubmit usage
                     className="btn m-3 text-white bg-primary py-2 px-5 rounded-sm shadow-lg"
                   >
                     Submit
