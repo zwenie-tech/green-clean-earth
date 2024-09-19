@@ -47,11 +47,11 @@ const AdminGrid = () => {
       floatingFilter: true,
     };
   }, []);
-  // const onRowClicked = (event: RowClickedEvent) => {
+  const onRowClicked = (event: RowClickedEvent) => {
 
-  //   const id = event.data.up_id;
-  //   router.push(`admin/uploads/${id}`);
-  // };
+    const id = event.data.us_id;
+    router.push(`users/${id}`);
+  };
   const handlePageChange = (newPage: number) => {
     if (newPage > 0 && newPage <= totalPages) {
 
@@ -107,14 +107,14 @@ const AdminGrid = () => {
           rowData={rowData}
           columnDefs={columnDefs}
           defaultColDef={defaultColDef}
-          // onRowClicked={onRowClicked}
+          onRowClicked={onRowClicked}
           rowSelection="multiple"
           suppressRowClickSelection={true}
           pagination={false}
         // paginationPageSize={10}
         // paginationPageSizeSelector={[10, 25, 50]}
         />
-       
+
       </div>
       <div className="flex justify-center items-center space-x-2 my-4">
         <button
