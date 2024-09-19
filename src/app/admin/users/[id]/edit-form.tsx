@@ -41,22 +41,22 @@ import {
 import { cn } from "@/lib/utils";
 import { DateTimePicker } from "@/components/ui/dateTimePicker";
 const formSchema = z.object({
-  name: z.string().max(255),
-  email: z.string().email().min(1).max(255),
-  phoneNumber: z.coerce.number().gte(1).lte(255),
-  country: z.string().max(255),
-  state: z.string().max(255),
-  district: z.string().max(255),
-  corporation: z.string().max(255),
-  lsgd: z.string().max(255),
-  ward: z.string().min(1).max(255),
-  address: z.string().max(255),
+  name: z.string().min(2).max(255),
+  email: z.string().email().min(3).max(255),
+  phoneNumber: z.coerce.number(),
+  country: z.string().min(2).max(255),
+  state: z.string().min(2).max(255),
+  district: z.string().min(2).max(255),
+  corporation: z.string().min(2).max(255),
+  lsgd: z.string().min(2).max(255),
+  ward: z.string().min(2).max(255),
+  address: z.string().min(2).max(255),
   gender: z.string(),
   createdDate: z.date(),
-  city: z.string().max(255),
-  province: z.string().max(255),
-  coordinatorName: z.string().max(255),
-  groupName: z.string().max(255),
+  city: z.string().min(2).max(255),
+  province: z.string().min(2).max(255),
+  coordinatorName: z.string().min(2).max(255),
+  groupName: z.string().min(2).max(255),
 });
 
 export function EditForm() {
