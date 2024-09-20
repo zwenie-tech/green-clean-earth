@@ -56,7 +56,7 @@ const AdminGrid = () => {
   const onRowClicked = (event: RowClickedEvent) => {
 
     const id = event.data.up_id;
-    router.push(`admin/uploads/${id}`);
+    router.push(`group/${id}`);
   };
   const handlePageChange = (newPage: number) => {
     if (newPage > 0 && newPage <= totalPages) {
