@@ -919,11 +919,6 @@ const ActivityList = () => {
                     )}
                   />
                 )}
-
-
-
-
-
                 {selectedSubCategory !== 'College' && selectschoolType === 'Malayalam Mission' && (
                   <>
                     <FormField

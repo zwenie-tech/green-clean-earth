@@ -53,7 +53,7 @@ const AdminGrid = () => {
   const onRowClicked = (event: RowClickedEvent) => {
    
     const id = event.data.id;
-    router.push(`activity/edit-activity/${id}`);
+    router.push(`mmchapter/${id}`);
   };
   const handleExportToExcel = async () => {
     
