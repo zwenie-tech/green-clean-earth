@@ -1,12 +1,4 @@
-// import React from 'react'
 
-// function Page() {
-//   return (
-//     <div>coordinators</div>
-//   )
-// }
-
-// export default Page
 "use client";
 
 import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
@@ -92,7 +84,7 @@ const Contact = () => {
   const onRowClicked = (event: RowClickedEvent) => {
    
     const id = event.data.id;
-    router.push(`contact-us-form/edit-contact/${id}`);
+    router.push(`contact-us-form/${id}`);
   };
 
   return (

@@ -1,9 +1,28 @@
-"use client";
-import React, { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { useForm ,SubmitHandler} from "react-hook-form";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Edit } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod"; // import Zod for form validation
+import * as z from "zod";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -11,46 +30,40 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { DateTimePicker } from "@/components/ui/dateTimePicker";
 const formSchema = z.object({
-  parname: z.string().nonempty(" Participant Name is required"),
-  activitylink: z.string().nonempty("Activity link is required"),
-  description: z.string().nonempty("Descripton is required"),
-  view : z.string().nonempty("View is required"),
-  like: z.string().nonempty("Link is required"),
-  value : z.string().nonempty("Value is required"),
-  createddate: z.string().nonempty("Created Date is required"),
-  category: z.string().nonempty("Category is required"),
-  groupname: z.string().nonempty("Group Name is required"),
-  grouptype: z.string().nonempty("Group Type is required"),
-  schooltype: z.string().nonempty("School Type is required"),
-  schoolcategory: z.string().nonempty(" School Category is required"),
-  edudistrict : z.string().nonempty("Education District is required"),
-  edusubdistrict: z.string().nonempty("Education Subdistrict is required"),
-  sahodaya: z.string().nonempty("Name is required"),
-  block: z.string().nonempty("Sahodaya is required"),
-  project: z.string().nonempty("Project is required"),
-  chapter: z.string().nonempty("Chapter is required"),
-  zone: z.string().nonempty("Zone is required"),
+  parname: z.string().min(2).max(255),
+  activitylink: z.string().min(2).max(255),
+  description: z.string().min(2).max(255),
+  view: z.string().min(2).max(255),
+  like: z.string().min(2).max(255),
+  value: z.string().min(2).max(255),
+  category: z.string().min(2).max(255),
+  groupname: z.string().min(2).max(255),
+  createddate: z.date(),
+  grouptype: z.string().min(2).max(255),
+  schooltype: z.string().min(2).max(255),
+  schoolcategory: z.string().min(2).max(255),
+  edudistrict: z.string().min(2).max(255),
+  edusubdistrict: z.string().min(2).max(255),
+  sahodaya: z.string().min(2).max(255),
+  project: z.string().min(2).max(255),
+  block: z.string().min(2).max(255),
+  chapter: z.string().min(2).max(255),
+  zone: z.string().min(2).max(255),
 });
 
-type FormData = z.infer<typeof formSchema>;
-
-const ActivityForm = () => {
-  const [isEditing, setIsEditing] = useState(false);
-
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
-
-  const form = useForm<FormData>({
+export function Activityforms() {
+  const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       parname: "",
@@ -59,7 +72,7 @@ const ActivityForm = () => {
       view:"",
       like: "",
       value: "",
-      createddate:"",
+      //createddate:"",
       category:"",
       schoolcategory: "",
       groupname: "",
@@ -75,31 +88,32 @@ const ActivityForm = () => {
     },
   });
 
-    // Define handleSubmit with proper typing for form data
-    const handleSubmit: SubmitHandler<FormData> = (data) => {
-      console.log(data); // Handle form submit logic here
-      setIsEditing(false); // Reset to non-editing mode after submission
-    };
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values);
+  }
 
   return (
-      <div
-        className=" w-full"
-        style={{ backgroundColor: "#f7f7f7", padding: "5px", borderRadius: "8px" }}
-      >
-        <Form {...form}>
-          <div className="w-full mb-4 md:mb-0 rounded-lg border-1 border-black shadow-xl bg-light-gray">
-            <div className="card p-3">
-              <div className="flex items-center mb-3 gap-5">
-              <h1 className="text-center font-bold text-xl ">Activity</h1>
-                <button
-                  type="button"
-                  className="btn text-primary bg-light-gray py-3 px-4 rounded-lg btn-lg shadow-lg ml-auto"
-                  onClick={handleEditClick}
-                >
-                  {isEditing ? "Editing..." : "Edit"}
-                </button>
-              </div>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
+    <Dialog>
+      <DialogTrigger asChild>
+        <div className="flex items-center justify-start gap-2 my-4 cursor-pointer text-primary">
+          <Edit />
+          <span className="text-base">Edit</span>
+        </div>
+      </DialogTrigger>
+      <DialogContent className="max-w-4xl overflow-y-scroll max-h-[98%]">
+        <DialogHeader>
+          <DialogTitle>Edit Activity</DialogTitle>
+          <DialogDescription></DialogDescription>
+        </DialogHeader>
+        <div className="">
+          <Form {...form}>
+            <form
+              noValidate
+              onSubmit={form.handleSubmit(onSubmit)}
+              className=""
+            >
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                
               <FormField 
                 name="parname"
                 control={form.control}
@@ -107,7 +121,7 @@ const ActivityForm = () => {
                   <FormItem className="mb-4">
                     <FormLabel>Participant Name</FormLabel>
                     <FormControl>
-                      <Input {...field} disabled={!isEditing} />
+                      <Input {...field}  />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -120,7 +134,7 @@ const ActivityForm = () => {
                   <FormItem className="mb-4">
                     <FormLabel>Activity Link</FormLabel>
                     <FormControl >
-                      <Input {...field} disabled={!isEditing} />
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -133,7 +147,7 @@ const ActivityForm = () => {
                   <FormItem className="mb-4">
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Input {...field} disabled={!isEditing} />
+                      <Input {...field}  />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -146,14 +160,12 @@ const ActivityForm = () => {
                   <FormItem className="mb-4">
                     <FormLabel>View </FormLabel>
                     <FormControl>
-                      <Input {...field} disabled={!isEditing} />
+                      <Input {...field}/>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
               <FormField
               control={form.control}
                 name="like"
@@ -161,7 +173,7 @@ const ActivityForm = () => {
                   <FormItem className="mb-4">
                     <FormLabel>Like </FormLabel>
                     <FormControl>
-                      <Input {...field} disabled={!isEditing} />
+                      <Input {...field}  />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -174,25 +186,32 @@ const ActivityForm = () => {
                   <FormItem className="mb-4">
                     <FormLabel>Value </FormLabel>
                     <FormControl>
-                      <Input {...field} disabled={!isEditing} />
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <FormField 
-              control={form.control}
-                name="createddate"
-                render={({ field }) => (
-                  <FormItem className="mb-4">
-                    <FormLabel>Created Date</FormLabel>
-                    <FormControl>
-                      <Input {...field} disabled={!isEditing} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+
+                <FormField
+                  control={form.control}
+                  name="createddate"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <FormLabel className="mb-4">Created date</FormLabel>
+                      <FormControl>
+                        <DateTimePicker
+                          value={field.value}
+                          onChange={field.onChange}
+                          granularity="day"
+                          yearRange={30}
+                        />
+                      </FormControl>
+                      <FormDescription></FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                <FormField
                control={form.control}
                 name="category"
@@ -200,21 +219,19 @@ const ActivityForm = () => {
                   <FormItem className="mb-4">
                     <FormLabel>Category</FormLabel>
                     <FormControl>
-                      <Input {...field} disabled={!isEditing} />
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
               <FormField
               control={form.control}
                 name="schoolcategory"
                 render={({ field }) => (
                   <FormItem className="mb-4">
                     <FormLabel>School Category</FormLabel>
-                    <Select disabled={!isEditing}>
+                    <Select >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Choose a Category" />
@@ -236,7 +253,7 @@ const ActivityForm = () => {
                   <FormItem className="mb-4">
                     <FormLabel>Group Name</FormLabel>
                     <FormControl>
-                      <Input {...field} disabled={!isEditing} />
+                      <Input {...field}  />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -248,7 +265,7 @@ const ActivityForm = () => {
                 render={({ field }) => (
                   <FormItem className="mb-4">
                     <FormLabel>Group Type</FormLabel>
-                    <Select disabled={!isEditing}>
+                    <Select >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Choose a Category" />
@@ -269,7 +286,7 @@ const ActivityForm = () => {
                 render={({ field }) => (
                   <FormItem className="mb-4">
                     <FormLabel>School Type</FormLabel>
-                    <Select disabled={!isEditing}>
+                    <Select>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Choose a Category" />
@@ -290,7 +307,7 @@ const ActivityForm = () => {
               render={({ field }) => (
                 <FormItem className="mb-4">
                   <FormLabel> Education District</FormLabel>
-                  <Select disabled={!isEditing}>
+                  <Select >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Choose a Category" />
@@ -311,7 +328,7 @@ const ActivityForm = () => {
             render={({ field }) => (
               <FormItem className="mb-4">
                 <FormLabel>Education Subdistrict </FormLabel>
-                <Select disabled={!isEditing}>
+                <Select >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Choose a Category" />
@@ -333,7 +350,7 @@ const ActivityForm = () => {
                   <FormItem className="mb-4">
                     <FormLabel>Sahodaya</FormLabel>
                     <FormControl>
-                      <Input {...field} disabled={!isEditing} />
+                      <Input {...field}  />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -346,14 +363,13 @@ const ActivityForm = () => {
                   <FormItem className="mb-4">
                     <FormLabel>Block</FormLabel>
                     <FormControl>
-                      <Input {...field} disabled={!isEditing} />
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+              
               <FormField
                 name="project"
                 control={form.control}
@@ -361,7 +377,7 @@ const ActivityForm = () => {
                   <FormItem className="mb-4">
                     <FormLabel>Project</FormLabel>
                     <FormControl>
-                      <Input {...field} disabled={!isEditing} />
+                      <Input {...field}  />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -374,7 +390,7 @@ const ActivityForm = () => {
                   <FormItem className="mb-4">
                     <FormLabel>Chapter</FormLabel>
                     <FormControl>
-                      <Input {...field} disabled={!isEditing} />
+                      <Input {...field}  />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -387,29 +403,24 @@ const ActivityForm = () => {
                   <FormItem className="mb-4">
                     <FormLabel>Zone</FormLabel>
                     <FormControl>
-                      <Input {...field} disabled={!isEditing} />
+                      <Input {...field}  />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-            </div>
-            {isEditing && (
-                <div className="flex justify-center">
-                  <button
-                    type="submit"
-                    onClick={form.handleSubmit(handleSubmit)} // Ensure correct handleSubmit usage
-                    className="btn m-3 text-white bg-primary py-2 px-5 rounded-sm shadow-lg"
-                  >
-                    Submit
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        </Form>
-    </div>
-  );
-};
+              </div>
 
-export default ActivityForm;
+              <div className="mt-3">
+                <Button type="submit">Submit</Button>
+              </div>
+            </form>
+          </Form>
+        </div>
+        <DialogFooter>
+          {/* <Button type="submit">Save changes</Button> */}
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}

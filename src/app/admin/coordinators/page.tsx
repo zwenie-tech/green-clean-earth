@@ -63,7 +63,7 @@ const AdminGrid = () => {
   const onRowClicked = (event: RowClickedEvent) => {
    
     const id = event.data.id;
-    router.push(`coordinators/edit-coordinator/${id}`);
+    router.push(`coordinators/${id}`);
   };
 
   const handleExportToExcel = async () => {
