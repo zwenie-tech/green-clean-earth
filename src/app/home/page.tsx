@@ -244,7 +244,7 @@ const cards = [
           </div>
         </div>
       </div>
-     <div className="max-w-screen-lg mx-auto">
+     <div className="container">
        {/* container 1 */}
         <div onClick={toggleOpen1} className={`p-4 my-4 mt-6 mx-4 shadow-md rounded-lg ${isOpen1 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
         <div className="flex justify-between items-center">
