@@ -69,10 +69,11 @@ const NavigationBar = () => {
       <div className="w-full mx-auto px-5 flex flex-row md:flex-col justify-between md:justify-center items-center">
         <h1 className="text-2xl text-primary text-white font-medium font-sans md:mb-5">
           <a href="/" target="_blank" rel="noreferrer">
+            <span className="text-[#7ba960]">www.</span>
             <span className="text-[#a0d034]">Green</span>
             <span className="text-[#ffffff]">Clean</span>
             <span className="text-[#fc4203]">Earth</span>
-            <span>.org</span>
+            <span className="text-[#7ba960]">.org</span>
           </a>
         </h1>
 
