@@ -13,13 +13,13 @@ const GceBadge = () => {
                     <p>
                     ഭൂമിയെ ഹരിതാഭമാക്കാനും, മാലിന്യ മുക്തമാക്കാനും ജനങ്ങളെ പ്രേരിപ്പിക്കാൻവിവിധ സ്ഥാപങ്ങളുടെയും, സംഘടനകളുടെയും , സഹകരണത്തോടെ GCEM Foundation ആവിഷ്‌കരിച്ച് നടപ്പിൽ വരുത്തുന്ന ഒരു ബഹുജനമുന്നേറ്റമാണ് Green Clean Earth Movement(GCEM).
                     </p>
-                    <h2 className="font-bold mb-2 text-3xl mt-10" style={{ color: '#3C6E1F' }}>GCEM Foundation</h2>
+                    {/* <h2 className="font-bold mb-2 text-3xl mt-10" style={{ color: '#3C6E1F' }}>GCEM Foundation</h2>
                     <Link href="/" legacyBehavior>
                         <a className="font-bold mb-2" target="_blank" rel="noopener noreferrer">www.GreenCleanEarth.Org</a>
                     </Link>
                     <p>
                         ഭൂമിയെ ഹരിതാഭമാക്കാനും, മാലിന്യ മുക്തമാക്കാനും ജനങ്ങളെ പ്രേരിപ്പിക്കാൻവിവിധ സ്ഥാപങ്ങളുടെയും, സംഘടനകളുടെയും , സഹകരണത്തോടെ GCEM Foundation ആവിഷ്‌കരിച്ച് നടപ്പിൽ വരുത്തുന്ന ഒരു ബഹുജനമുന്നേറ്റമാണ് Green Clean Earth Movement(GCEM).
-                    </p>
+                    </p> */}
                     
                 </div>
                 <div className="md:w-[30%] md:pl-6">

@@ -102,6 +102,13 @@ const Faq = () => {
               </p>
               </AccordionContent>
             </AccordionItem>
+            <AccordionItem value="item-6" className='bg-light-gray px-4 rounded-xl'>
+              <AccordionTrigger>എന്താണ്  IGAR Number?</AccordionTrigger>
+              <AccordionContent>
+              <p>
+              ഒരു വിദ്യാലയത്തിലെ  കോർഡിനേറ്റർ  അവിടുത്തെ  വിദ്യാർഥികൾ  സബ്മിറ്റ്  ചെയ്യുന്ന  സൃഷ്ടികൾക്ക്  നൽകുന്ന  സീരിയൽ നമ്പർ ആണ്  IGAR NUMBER-(Institution Green Art fest Registration Number)</p>
+              </AccordionContent>
+            </AccordionItem>
           </Accordion>
         </div>
       </div>
