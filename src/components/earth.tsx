@@ -6,7 +6,7 @@ const Earth = () => {
         <div className="container mt-3 mx-auto shadow-xl p-6">
             <div className="grid gap-4">
                 {/* First div */}
-                <div className="flex flex-col md:flex-row">
+                <div className="flex flex-col md:flex-row md:items-center">
                     <div className="md:w-[70%] md:pr-6 ml-8 mb-4 md:mb-0">
                         <h2 className="font-bold mb-2 text-3xl" style={{ color: '#3C6E1F' }}>Green Clean Earth Movement</h2>
                         <p>
