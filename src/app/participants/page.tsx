@@ -25,7 +25,12 @@ interface Participant {
   up_file: string,
   us_corporation: number,
   gp_name: string,
-  total_upload: number
+  total_upload: number,
+  cntry_name: string,
+  st_name: string, 
+  dis_name: string,
+  cop_name: string,
+  lsg_name: string
 }
 
 type Country = {
@@ -1351,7 +1356,12 @@ const ParticipateList = () => {
                 <th className="py-3 px-6 text-left">Uploader name/User Id</th>
                 <th className="py-3 px-6 text-left">Group Name/Count</th>
                 <th className="py-3 px-6 text-left">Tree name/Scientific Name</th>
-                <th className="py-3 px-6 text-left rounded-tr-lg">Image last uploaded</th>
+                <th className="py-3 px-6 text-left">Image last uploaded</th>
+                <th className="py-3 px-6 text-left">Country</th>
+                <th className="py-3 px-6 text-left">State</th>
+                <th className="py-3 px-6 text-left">District</th>
+                <th className="py-3 px-6 text-left">Corporation</th>
+                <th className="py-3 px-6 text-left rounded-tr-lg">LSGD</th>
               </tr>
             </thead>
             <tbody>
@@ -1389,6 +1399,11 @@ const ParticipateList = () => {
                         'No image available'
                       )}
                     </td>
+                    <td className="py-3 px-6 text-left">{p.cntry_name}</td>
+                    <td className="py-3 px-6 text-left">{p.st_name}</td>
+                    <td className="py-3 px-6 text-left">{p.dis_name}</td>
+                    <td className="py-3 px-6 text-left">{p.cop_name}</td>
+                    <td className="py-3 px-6 text-left">{p.lsg_name}</td>
                   </tr>
 
                 ))

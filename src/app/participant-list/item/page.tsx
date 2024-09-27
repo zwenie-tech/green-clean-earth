@@ -19,6 +19,11 @@ interface TreeDetails {
   up_landmark_details: string | null;
   source_name: string | null;
   gp_name: string | null;
+  cntry_name: string | null;
+  st_name: string | null;
+  dis_name: string | null;
+  cop_name: string | null;
+  lsg_name: string | null;
 }
 interface Participant {
   id : number;
@@ -91,16 +96,28 @@ const Item: React.FC = () => {
               <div className="text-sm">{treeDetails.up_tree_name}</div>
             </div>
             <div className="flex ml-2 mt-2 gap-2">
-              <div className="text-sm pl-5 mb-2">Group code: </div>
+              <div className="text-sm pl-5 mb-2">Group Name: </div>
               <div className="text-sm">{treeDetails.gp_name || 'N/A'}</div>
             </div>
             <div className="flex ml-2 mt-2 gap-2">
-              <div className="text-sm pl-5 mb-2">District: </div>
-              <div className="text-sm">{treeDetails.up_district || 'N/A'}</div>
+              <div className="text-sm pl-5 mb-2">Country: </div>
+              <div className="text-sm">{treeDetails.cntry_name || 'N/A'}</div>
             </div>
             <div className="flex ml-2 mt-2 gap-2">
-              <div className="text-sm pl-5 mb-2">LSGD Type: </div>
-              <div className="text-sm">{treeDetails.up_lsgd || 'N/A'}</div>
+              <div className="text-sm pl-5 mb-2">State: </div>
+              <div className="text-sm">{treeDetails.st_name || 'N/A'}</div>
+            </div>
+            <div className="flex ml-2 mt-2 gap-2">
+              <div className="text-sm pl-5 mb-2">District: </div>
+              <div className="text-sm">{treeDetails.dis_name || 'N/A'}</div>
+            </div>
+            <div className="flex ml-2 mt-2 gap-2">
+              <div className="text-sm pl-5 mb-2">Corporation: </div>
+              <div className="text-sm">{treeDetails.cop_name || 'N/A'}</div>
+            </div>
+            <div className="flex ml-2 mt-2 gap-2">
+              <div className="text-sm pl-5 mb-2">LSGD: </div>
+              <div className="text-sm">{treeDetails.lsg_name || 'N/A'}</div>
             </div>
             <div className="flex ml-2 mt-2 gap-2">
               <div className="text-sm pl-5 mb-2">Ward Name: </div>

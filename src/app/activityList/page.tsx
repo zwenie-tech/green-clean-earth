@@ -1313,7 +1313,7 @@ const ActivityList = () => {
             <thead>
               <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                 <th className="py-3 px-6 text-left w-16 bd-2 rounded-tl-lg">SL .No</th>
-                <th className="py-3 px-6 text-left w-16 bd-2 rounded-tl-lg">Activity Link</th>
+                <th className="py-3 px-6 text-left">Activity Link</th>
                 <th className="py-3 px-6 text-left">Name</th>
                 <th className="py-3 px-6 text-left">User Id</th>
                 <th className="py-3 px-6 text-left">Name of Art - Brief Description</th>
