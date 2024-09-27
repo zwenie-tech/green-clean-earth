@@ -605,7 +605,7 @@ const ParticipateList = () => {
     <>
       <NavigationBar />
       <div className='relative flex justify-center p-4'>
-        <h1 className='text-3xl text-center mt-2 font-bold text-[#3C6E1F]'>Participants List</h1>
+        <h1 className='text-3xl text-center mt-2 font-bold text-[#3C6E1F]'>Sorting Page</h1>
       </div>
 
       {/* Search by Person Wise */}
@@ -1348,9 +1348,9 @@ const ParticipateList = () => {
                 <th className="py-3 px-6 text-left w-16 bd-2 rounded-tl-lg">SL .No</th>
                 <th className="py-3 px-6 text-left">Tree number</th>
                 <th className="py-3 px-6 text-left">Planter name</th>
-                <th className="py-3 px-6 text-left">Uploader name</th>
-                <th className="py-3 px-6 text-left">Group code/count</th>
-                <th className="py-3 px-6 text-left">Tree name/scientific name</th>
+                <th className="py-3 px-6 text-left">Uploader name/User Id</th>
+                <th className="py-3 px-6 text-left">Group Name/Count</th>
+                <th className="py-3 px-6 text-left">Tree name/Scientific Name</th>
                 <th className="py-3 px-6 text-left rounded-tr-lg">Image last uploaded</th>
               </tr>
             </thead>
@@ -1363,7 +1363,7 @@ const ParticipateList = () => {
                     <td className="py-3 px-6 text-left">{startIndex + index + 1}</td>
                     <td className="py-3 px-6 text-left">{p.up_id}</td>
                     <td className="py-3 px-6 text-left">{p.up_planter}</td>
-                    <td className="py-3 px-6 text-left"><a href={`/user-page?u=${p.up_name}&id=${p.up_reg_id}`}>{p.up_name}</a></td>
+                    <td className="py-3 px-6 text-left"><a href={`/user-page?u=${p.up_name}&id=${p.up_reg_id}`}>{p.up_name}/{p.up_reg_id}</a></td>
                     <td className="py-3 px-6 text-left">{p.gp_name}/{p.total_upload}</td>
                     <td className="py-3 px-6 text-left">{p.up_tree_name}</td>
                     <td className="py-3 px-6 text-left">

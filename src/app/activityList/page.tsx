@@ -1315,6 +1315,7 @@ const ActivityList = () => {
                 <th className="py-3 px-6 text-left w-16 bd-2 rounded-tl-lg">SL .No</th>
                 <th className="py-3 px-6 text-left w-16 bd-2 rounded-tl-lg">Activity Link</th>
                 <th className="py-3 px-6 text-left">Name</th>
+                <th className="py-3 px-6 text-left">User Id</th>
                 <th className="py-3 px-6 text-left">Name of Art - Brief Description</th>
                 <th className="py-3 px-6 text-left">Category</th>
                 <th className="py-3 px-6 text-left">Views and Likes</th>
@@ -1330,6 +1331,7 @@ const ActivityList = () => {
                       <td className="py-3 px-6 text-left">{startIndex + index + 1}</td>
                       <td className="py-3 px-6 text-left"><a href={activity.activity_social_media_link}>{activity.activity_social_media_link}</a></td>
                       <td className="py-3 px-6 text-left">{activity.participant_name}</td>
+                      <td className="py-3 px-6 text-left"><a href={`/user-page?u=${activity.participant_name}&id=${activity.login_id}`}>{activity.login_id}</a></td>
                       <td className="py-3 px-6 text-left">{activity.activity_title}{activity.activity_description}</td>
                       <td className="py-3 px-6 text-left">{categories[activity.activity_category_id]}</td>
                       <td className="py-3 px-6 text-left">{activity.activity_views} Views, {activity.activity_likes} Likes</td>
