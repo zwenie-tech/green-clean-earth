@@ -414,6 +414,7 @@ const cards = [
     </div>
   </div>
     {/*lteat news............. */}
+    
    <div className="flex justify-center mt-2">
       <div>
         <span className="text-black text-3xl font-bold">Latest</span>
@@ -424,12 +425,13 @@ const cards = [
             <Image src="/images/line.png" alt="Line" style={{ width: '50%', height: '40px' ,marginLeft:'25%'}} />
           </div>
     {/*card with image */}
-    <div className="container mx-1 md:mx-4 p-4" style={{ boxSizing: 'border-box' }}>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4" >
+    {/* Card with image */}
+    <div className="container mx-auto p-4" style={{ boxSizing: 'border-box' }}>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4" style={{ justifyItems: 'center' }}>
         {cards.map((card, index) => (
-          <div key={index} className="bg-light-gray p-4  shadow-md" style={{borderRadius:'9px'}} >
+          <div key={index} className="bg-light-gray p-4 shadow-md" style={{ borderRadius: '9px', maxWidth: '400px' }}>
             <Image src={card.imageSrc} alt={`Card Image ${index + 1}`} width={500} height={300} className="rounded-lg" />
-            <div className="flex justify-between items-center mt-4" >
+            <div className="flex justify-between items-center mt-4">
               <div className="flex items-center">
                 <FaCalendarAlt className="text-gray-500" />
                 <span className="ml-2 text-gray-600">{card.date}</span>
@@ -445,6 +447,7 @@ const cards = [
         ))}
       </div>
     </div>
+
   <div className="m-2 flex justify-center items-center">
   <button 
     onClick={handleReadmoreClick}
