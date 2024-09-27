@@ -227,7 +227,7 @@ const cards = [
           {dynamicContent}
           
           {/* Box 3 */}
-          <div className=" bg-light-gray relative flex justify-center items-center bg-cover my-3 rounded-2xl ">
+          <div className=" bg-light-gray relative flex justify-center items-center bg-cover my-8 rounded-2xl ">
             <div className="bg-opacity-50 bg-none p-4">
               <h2 className="text-2xl"style={{fontWeight:'bold'}}>പ്രൊഫസ്സർ  ശോഭീന്ദ്രൻ  സ്മാരക പരിസ്ഥിതി അവാർഡ് –2024-25
               (ഒരു ലക്ഷം രൂപയുടെ പുരസ്കാരങ്ങളും സമ്മാനങ്ങളും)</h2>
