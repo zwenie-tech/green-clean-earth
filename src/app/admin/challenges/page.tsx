@@ -53,7 +53,7 @@ const AdminGrid = () => {
   const onRowClicked = (event: RowClickedEvent) => {
 
     const id = event.data.up_id;
-    router.push(`admin/uploads/${id}`);
+    router.push(`challenges/${id}`);
   };
   const handleExportToExcel = async () => {
     try {
@@ -100,6 +100,7 @@ const AdminGrid = () => {
        if(response.data.success && response.status!=203){
        
         setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
+        console.log(response.data)
          setRowData(response.data.Uploads);
        }
        

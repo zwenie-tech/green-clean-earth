@@ -39,8 +39,8 @@ const AdminGrid = () => {
 
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
     { field: "co_ord_name", headerName: "Name" },
-    { field: "email", headerName: "Email" },
-    { field: "username", headerName: "Username" },
+    { field: "co_email_id", headerName: "Email" },
+    { field: "co_username", headerName: "Username" },
     { field: "group_type", headerName: "Group" },
     { field: "cntry_name", headerName: "Country" },
     { field: "st_name", headerName: "State" },
@@ -62,7 +62,7 @@ const AdminGrid = () => {
 
   const onRowClicked = (event: RowClickedEvent) => {
    
-    const id = event.data.id;
+    const id = event.data.co_ord_id;
     router.push(`coordinators/${id}`);
   };
 
@@ -107,9 +107,11 @@ const AdminGrid = () => {
           }
         })
         
+        console.log(response.data)
         if (response.data.success && response.status!=203) {
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
           setRowData(response.data.cordinatorList);
+
         }
       }
     };
