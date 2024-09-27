@@ -58,12 +58,12 @@ const AdminGrid = () => {
 
       setCurrentPage(newPage);
     }
-  }
-  
+  } 
+
   useEffect(() => {
     async function fetchdata() {
       if (token) {
-        
+
         const response = await axios.post(`${apiURL}/admin/adminUserList?page=${currentPage}&limit=${itemsPerPage}`, {}, {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -71,7 +71,7 @@ const AdminGrid = () => {
           }
         })
         try {
-          
+
           if (response.data.success && response.status != 203) {
             setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
             setRowData(response.data.userList);
@@ -93,23 +93,23 @@ const AdminGrid = () => {
     try {
       const response = await axios.post(`${apiURL}/admin/adminUserList`, {
         "isExcel": true
-    },{
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    });
-      if (response.data.success && response.status!=203) {
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      if (response.data.success && response.status != 203) {
         // Convert response zoneList into Excel
         const datalist = response.data.userList
-  
+
         // Create a worksheet from the zoneList data
         const worksheet = XLSX.utils.json_to_sheet(datalist);
-  
+
         // Create a new workbook and append the worksheet
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
-  
+
         // Export the workbook to Excel
         XLSX.writeFile(workbook, 'data.xlsx');
       } else {
@@ -121,13 +121,13 @@ const AdminGrid = () => {
   };
   return (
     <div className=" bg-slate-100">
-<button
-          className= "text-white m-3 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-          
-          onClick={handleExportToExcel}
-        >
-          Export To Excel
-        </button>
+      <button
+        className="text-white m-3 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+
+        onClick={handleExportToExcel}
+      >
+        Export To Excel
+      </button>
       <div className={"ag-theme-quartz"} style={{ height: 600 }}>
         <AgGridReact
           rowData={rowData}
@@ -155,18 +155,18 @@ const AdminGrid = () => {
         </button>
         {currentPage >= 4 && totalPages > 3 && <span className="text-xl text-gray-600">...</span>}
 
-        {Array.from({ length: totalPages >= 3 ? 3 : totalPages }, (_, index) => currentPage < 4 ? index+1:currentPage+index-2).map((page) => (
+        {Array.from({ length: totalPages >= 3 ? 3 : totalPages }, (_, index) => currentPage < 4 ? index + 1 : currentPage + index - 2).map((page) => (
           <span
             key={page}
             className={`text-xl cursor-pointer text-gray-600 ${page === currentPage ? 'font-bold' : 'underline'}`}
             onClick={() => handlePageChange(page)}
           >
-            {page > 0 ? page : ''}
+            {page > 0 ? page : ''} 
           </span>
         ))}
 
-        {currentPage > 1 && totalPages > 3 && currentPage!=totalPages && <span className="text-xl text-gray-600">...</span>}
-        {currentPage === 1 && totalPages > 3 && currentPage!=totalPages && <span className="text-xl text-gray-600">...</span>}
+        {currentPage > 1 && totalPages > 3 && currentPage != totalPages && <span className="text-xl text-gray-600">...</span>}
+        {currentPage === 1 && totalPages > 3 && currentPage != totalPages && <span className="text-xl text-gray-600">...</span>}
 
 
         <button

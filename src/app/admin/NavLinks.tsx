@@ -30,6 +30,8 @@ const links = [
   { name: "Manage News and Events", href: "/admin/news-and-events" },
 ];
 
+
+
 function NavLinks() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(true);
@@ -61,7 +63,7 @@ function NavLinks() {
           "overflow-hidden transition-[grid-template-rows] duration-500 ease-in-out w-full"
         )}
       >
-        <div className="flex flex-col gap-1 overflow-hidden bg-white">
+        <div className="flex flex-col gap-1 overflow-y-auto max-h-96 bg-white">
           {links.map((link) => (
             <Link
               key={link.name}
