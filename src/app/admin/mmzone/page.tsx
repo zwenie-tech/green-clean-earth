@@ -113,6 +113,8 @@ const AdminGrid = () => {
             chapter_type_name: chapter.chapter_type_id === 1 ? 'Global' : 'India'
           }));
          console.log(updatedChapterList)
+    localStorage.setItem("mmzData", JSON.stringify(updatedChapterList));
+
           setRowData(updatedChapterList); 
         }
       }

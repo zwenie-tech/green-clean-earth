@@ -50,6 +50,7 @@ import axios from "axios";
 const formSchema = z.object({
     chapter_name: z.string().min(2).max(255),
     chapter_type_name: z.string().min(2).max(255),
+    zone_name: z.string().min(2).max(255),
 });
 
 interface ActivityData {
@@ -62,7 +63,10 @@ interface MissionChapter {
     chapter_id: string;
     chapter_name: string;
   }
-
+  interface MissionZone {
+    zone_id: string;
+    zone_name: string;
+  }
 export function Eduform() {
     const router = useRouter();
     const pathname = usePathname();
@@ -74,17 +78,22 @@ export function Eduform() {
     const [missionChapter, setMissionChapter] = useState<MissionChapter[]>([]);
   const [selectMissionarea, setSelectMissionarea] = useState('');
   const [selectMission, setSelectedMission] = useState('');
-    
+  const [missionZone, setMissionZone] = useState<MissionZone[]>([]);
+  const [selectZone, setSelectedZone] = useState('');
 
     const chapter_type_name = Cookies.get("chapter_type_name");
     const chapter_name = Cookies.get("chapter_name");
+    const zone_name = Cookies.get("zone_name");
     
     useEffect(() => {
         async function fetchData() {
 
             chapter_name ? setSelectedMission(chapter_name) : '';
+            zone_name ? setSelectedZone(zone_name) : '';
             const response = await axios.get(`${apiURL}/malayalamMissionChapter/2`);
             setMissionChapter(response.data.chapterList);
+            const responses = await axios.get(`${apiURL}/malayalamMissionZone/1`);
+        setMissionZone(responses.data.zoneList);
         }
         fetchData();
     }, []);
@@ -105,14 +114,25 @@ export function Eduform() {
     }, [selectMissionarea]);
 
    
-   
+    const handleChapter = async (e: any) => {
+      try {
+        const chapterid = missionChapter.find((item) => item.chapter_name === e)?.chapter_id
+        const response = await axios.get(`${apiURL}/malayalamMissionZone/${chapterid}`);
+        setMissionZone(response.data.zoneList);
+  
+  
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             
             chapter_name:chapter_name,
-            chapter_type_name:chapter_type_name == "Global" ? '1' : '2'
+            chapter_type_name:chapter_type_name == "Global" ? '1' : '2',
+            zone_name:zone_name
 
         },
     });
@@ -131,7 +151,7 @@ export function Eduform() {
             </DialogTrigger>
             <DialogContent className="max-w-4xl overflow-y-scroll max-h-[98%]">
                 <DialogHeader>
-                    <DialogTitle>Edit Mission Chapter</DialogTitle>
+                    <DialogTitle>Edit Mission Zone</DialogTitle>
                     <DialogDescription></DialogDescription>
                 </DialogHeader>
                 <div className="">
@@ -186,7 +206,7 @@ export function Eduform() {
                           <Select onValueChange={(value) => {
                             field.onChange(value);
                             setSelectedMission(value);
-                            
+                            handleChapter(value);
                           }} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
@@ -197,6 +217,36 @@ export function Eduform() {
                               {missionChapter && missionChapter.map((e) => (
                                 <SelectItem key={e.chapter_id} value={e.chapter_name}>
                                   {e.chapter_name}
+                                </SelectItem>
+                              ))}
+
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                     <FormField
+                      control={form.control}
+                      name="zone_name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Zone</FormLabel>
+
+                          <Select onValueChange={(value) => {
+                            field.onChange(value);
+                            setSelectedZone(value);
+
+                          }} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Choose a mission zone" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {missionZone && missionZone.map((e) => (
+                                <SelectItem key={e.zone_id} value={e.zone_name}>
+                                  {e.zone_name}
                                 </SelectItem>
                               ))}
 
