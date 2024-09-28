@@ -58,7 +58,7 @@ function ActivityLabel() {
   const token = Cookies.get("adtoken");
   const [userData, setUserData] = useState<ActivityData[]>([]);
 
-  useEffect(() => {
+  useEffect(() => { 
     if (!token) {
       router.push("/admin/login");
     }

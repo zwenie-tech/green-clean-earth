@@ -1,13 +1,55 @@
 "use client";
 import { ChevronLeft } from "lucide-react";
-import { usePathname } from "next/navigation";
-import React from "react";
-import { MalayalamZone } from "./mmform";
+import { usePathname, useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
+import Cookies from 'js-cookie';
+import { Eduform } from "./mmcform";
+
+interface ActivityData {
+
+  chapter_type_name : string;
+  chapter_name: string;
+}
 function Page() {
+  const router = useRouter();
   const pathname = usePathname();
+  const coId = pathname.split("/")[3];
   const segments = pathname.split("/").filter(Boolean);
   const lastSegment = segments[segments.length - 1];
+  const token = Cookies.get("adtoken");
+  const [userData, setUserData] = useState<ActivityData[]>([]);
+
+  useEffect(() => { 
+    if (!token) {
+      router.push("/admin/login");
+    }
+  }, [token, router]);
+  useEffect(() => {
+    async function fetchdata() {
+      if(token){
+        const retrievedData = JSON.parse(localStorage.getItem("mmcData") || "[]");
+        const itemdata = retrievedData.find((item: { chapter_id  : string; }) => item.chapter_id == coId)
+        console.log([itemdata][0])
+          // Get all cookies
+          const allCookies = Cookies.get();
+
+          // Remove all cookies
+          Object.keys(allCookies).forEach(cookieName => {
+              Cookies.remove(cookieName);
+          });
+
+         Cookies.set('adtoken', token, { expires: 1 });
+        Cookies.set('chapter_name', [itemdata][0].chapter_name, { expires: 1 });
+        Cookies.set('chapter_name', [itemdata][0].chapter_type_name, { expires: 1 });
+        
+
+      setUserData([itemdata]);
+      }
+    }
+    fetchdata();
+  }, []);
+  
   return (
     <div className="">
       {/* {lastSegment} */}
@@ -19,21 +61,24 @@ function Page() {
           }}
         >
           <ChevronLeft />
-          <span className="text-base">Manage Mlalayalam Mission Chapter</span>
+          <span className="text-base">Manage Icds Block</span>
         </div>
 
-        <MalayalamZone />
+        <Eduform />
       </div>
-      <div className="grid gap-4 grid-cols-1 p-2 md:p-5 md:border md:shadow-md md:rounded-lg">
+      {userData[0] &&
+      <div className="grid gap-4 md:gap-6 grid-cols-1 md:grid-cols-2 p-2 md:p-5 md:border md:shadow-md md:rounded-lg">
         <div className="">
-          <p className="text-sm text-gray-500">Chapter Name</p>
-          <p className="text-base">Lorem, ipsum dolor.</p>
+          <p className="text-sm text-gray-500">Chapter</p>
+          <p className="text-base">{userData[0].chapter_name}</p>
         </div>
         <div className="">
-          <p className="text-sm text-gray-500">Chapter Type</p>
-          <p className="text-base">Lorem, ipsum dolor.</p>
+          <p className="text-sm text-gray-500">Type</p>
+          <p className="text-base">{userData[0].chapter_type_name}</p>
         </div>
+       
       </div>
+      }
     </div>
   );
 }

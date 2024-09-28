@@ -53,8 +53,8 @@ const AdminGrid = () => {
 
   const onRowClicked = (event: RowClickedEvent) => {
    
-    const id = event.data.id;
-    router.push(`activity/edit-activity/${id}`);
+    const id = event.data.project_id;
+    router.push(`icdsproject/${id}`);
   };
 
   useEffect(() => {
@@ -70,7 +70,9 @@ const AdminGrid = () => {
         
         if (response.data.success && response.status!=203) {
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
-         
+         console.log(response.data.projectList)
+    localStorage.setItem("projectData", JSON.stringify(response.data.projectList));
+
           setRowData(response.data.projectList); 
         }
       }

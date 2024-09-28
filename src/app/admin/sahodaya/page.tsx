@@ -52,8 +52,8 @@ const AdminGrid = () => {
 
   const onRowClicked = (event: RowClickedEvent) => {
    
-    const id = event.data.id;
-    router.push(`activity/edit-activity/${id}`);
+    const id = event.data.sahodaya_id;
+    router.push(`sahodaya/${id}`);
   };
 
   useEffect(() => {
@@ -69,7 +69,9 @@ const AdminGrid = () => {
         
         if (response.data.success && response.status!=203) {
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
-         
+         console.log(response.data.sahodayaList[0])
+    localStorage.setItem("sahodayaData", JSON.stringify(response.data.sahodayaList));
+
           setRowData(response.data.sahodayaList); 
         }
       }

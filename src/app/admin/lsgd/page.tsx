@@ -51,7 +51,7 @@ const AdminGrid = () => {
   }, []);
   const onRowClicked = (event: RowClickedEvent) => {
 
-    const id = event.data.up_id;
+    const id = event.data.lsg_id;
     router.push(`lsgd/${id}`);
   };
 
@@ -71,6 +71,9 @@ const AdminGrid = () => {
         if (response.data.success && response.status!=203) {
           
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
+    localStorage.setItem("lsgdData", JSON.stringify(response.data.lsgdList));
+
+          console.log(response.data.lsgdList)
           setRowData(response.data.lsgdList);
         }
       }
