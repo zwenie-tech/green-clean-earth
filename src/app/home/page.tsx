@@ -73,7 +73,7 @@ const cards = [
     <>
   {/* Box 2 */}
   <div className="flex justify-center items-center p-0 m-3 rounded-2xl overflow-hidden" style={{ height: '100%' }}>
-    <ReactPlayer url="https://youtu.be/7VY3L7m6iyM" width="100%" height="100%" />
+    <ReactPlayer url="https://youtu.be/GXCqljYDBEU?si=KF6A-8r8YmAEFgsm" width="100%" height="100%" />
   </div>
 </>
 
