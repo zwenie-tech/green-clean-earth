@@ -211,9 +211,9 @@ const cards = [
         <div className="grid gap-0 grid-cols-1 md:grid-cols-3">   
           {/* Box 1 */}
           <div className=" bg-light-gray flex flex-col justify-center items-center px-4 py-8 my-3 rounded-2xl">
-            <h2 className="text-2xl p-2" style={{fontWeight:'bold'}}>ഗ്രീൻ ക്ലീൻ കേരള-വൃക്ഷത്തൈ പരിപാലന മത്സരം -</h2>
+            <h2 className="text-2xl p-2" style={{fontWeight:'bold'}}>ഗ്രീൻ ക്ലീൻ കേരള -ഹരിത മത്സരങ്ങൾ</h2>
             <p className="mt-4 px-2">
-              പരിസ്ഥിതി ദിനത്തിലും തുടർന്നും നടുന്ന വൃക്ഷത്തൈകൾ വേനൽക്കാലത്ത്‌ സംരക്ഷിക്കുന്നതിനെ പ്രോത്സാഹിപ്പിക്കാൻ, അതിന്റെ കൂടെ ഓരോ മൂന്ന് മാസം കൂടുമ്പോഴും ഒരു സെൽഫി എടുത്ത് ഈ വെബ് സൈറ്റിൽ അപ്ലോഡ് ചെയ്താൽ ഭാഗ്യശാലികൾക് സമ്മാനങ്ങൾ നൽകുന്നു. കൂടാതെ…
+           സുസ്ഥിര വികസിതവും  മാലിന്യമുക്തവും  ഹരിതാഭവും  ആയ  കേരളം  എന്ന  ലക്‌ഷ്യം സാക്ഷാൽക്കരിക്കാനായി Green Clean Kerala Mission , വിദ്യാർത്ഥികൾക്കും  പരിസ്ഥിതി  തല്പരർക്കുമായി സംഘടിപ്പിക്കുന്ന മത്സരാധിഷ്ഠിതമായ ഒരു പദ്ധതിയാണ്  ഗ്രീൻ ക്ലീൻ കേരള -ഹരിത മത്സരങ്ങൾ.   
             </p>
             <Link href="/project" legacyBehavior>
             <a className="mt-2 self-start p-2 font-bold no-underline flex place-items-center">
