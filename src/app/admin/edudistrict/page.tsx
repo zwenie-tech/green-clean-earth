@@ -52,8 +52,8 @@ const AdminGrid = () => {
 
   const onRowClicked = (event: RowClickedEvent) => {
    
-    const id = event.data.id;
-    router.push(`activity/edit-activity/${id}`);
+    const id = event.data.edu_district_id;
+    router.push(`edudistrict/${id}`);
   };
   const handleExportToExcel = async () => {
     try {
@@ -98,7 +98,9 @@ const AdminGrid = () => {
         
         if (response.data.success && response.status!=203) {
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
-         
+         console.log(response.data.eduDistrict)
+    localStorage.setItem("eduData", JSON.stringify(response.data.eduDistrict));
+
           setRowData(response.data.eduDistrict); 
         }
       }

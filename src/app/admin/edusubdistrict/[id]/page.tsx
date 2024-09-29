@@ -1,13 +1,57 @@
 "use client";
 import { ChevronLeft } from "lucide-react";
-import { usePathname } from "next/navigation";
-import React from "react";
-import { EducationSubDistrict } from "./edu-sub-form";
+import { usePathname, useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
+import Cookies from 'js-cookie';
+import { Eduform } from "./eduform";
+
+interface ActivityData {
+
+  dis_name : string;
+  edu_district : string;
+  edu_sub_district_name: string;
+}
 function Page() {
+  const router = useRouter();
   const pathname = usePathname();
+  const coId = pathname.split("/")[3];
   const segments = pathname.split("/").filter(Boolean);
   const lastSegment = segments[segments.length - 1];
+  const token = Cookies.get("adtoken");
+  const [userData, setUserData] = useState<ActivityData[]>([]);
+
+  useEffect(() => { 
+    if (!token) {
+      router.push("/admin/login");
+    }
+  }, [token, router]);
+  useEffect(() => {
+    async function fetchdata() {
+      if(token){
+        const retrievedData = JSON.parse(localStorage.getItem("edusubData") || "[]");
+        const itemdata = retrievedData.find((item: { edu_sub_district_id  : string; }) => item.edu_sub_district_id == coId)
+        console.log([itemdata][0])
+          // Get all cookies
+          const allCookies = Cookies.get();
+
+          // Remove all cookies
+          Object.keys(allCookies).forEach(cookieName => {
+              Cookies.remove(cookieName);
+          });
+
+         Cookies.set('adtoken', token, { expires: 1 });
+        Cookies.set('dis_name', [itemdata][0].dis_name, { expires: 1 });
+        Cookies.set('edu_district', [itemdata][0].edu_district, { expires: 1 });
+        Cookies.set('edu_sub_district_name', [itemdata][0].edu_sub_district_name, { expires: 1 });
+        
+
+      setUserData([itemdata]);
+      }
+    }
+    fetchdata();
+  }, []);
+  
   return (
     <div className="">
       {/* {lastSegment} */}
@@ -19,25 +63,27 @@ function Page() {
           }}
         >
           <ChevronLeft />
-          <span className="text-base">Manage Educational Subdistricts</span>
+          <span className="text-base">Manage Education District</span>
         </div>
 
-        <EducationSubDistrict />
+        <Eduform />
       </div>
-      <div className="grid gap-4  grid-cols-1  p-2 md:p-5 md:border md:shadow-md md:rounded-lg">
+      {userData[0] &&
+      <div className="grid gap-4 md:gap-6 grid-cols-1 md:grid-cols-2 p-2 md:p-5 md:border md:shadow-md md:rounded-lg">
         <div className="">
           <p className="text-sm text-gray-500">District</p>
-          <p className="text-base">Lorem, ipsum dolor.</p>
+          <p className="text-base">{userData[0].dis_name}</p>
         </div>
         <div className="">
-          <p className="text-sm text-gray-500">Educational District</p>
-          <p className="text-base">Lorem, ipsum dolor.</p>
+          <p className="text-sm text-gray-500">Edu District</p>
+          <p className="text-base">{userData[0].edu_district}</p>
         </div>
         <div className="">
-          <p className="text-sm text-gray-500">Educational Subdistrict </p>
-          <p className="text-base">dfghj</p>
+          <p className="text-sm text-gray-500">Edu Sub District</p>
+          <p className="text-base">{userData[0].edu_sub_district_name}</p>
         </div>
       </div>
+      }
     </div>
   );
 }

@@ -52,7 +52,7 @@ const AdminGrid = () => {
 
   const onRowClicked = (event: RowClickedEvent) => {
    
-    const id = event.data.id;
+    const id = event.data.chapter_id;
     router.push(`mmchapter/${id}`);
   };
   const handleExportToExcel = async () => {
@@ -108,6 +108,9 @@ const AdminGrid = () => {
             ...chapter,
             chapter_type_name: chapter.chapter_type_id === 1 ? 'Global' : 'India'
           }));
+
+          console.log(updatedChapterList)
+    localStorage.setItem("mmcData", JSON.stringify(updatedChapterList));
         
           setRowData(updatedChapterList); 
         }

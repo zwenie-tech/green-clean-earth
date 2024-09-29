@@ -4,12 +4,16 @@ import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 import Cookies from 'js-cookie';
-import { Eduform } from "./mmcform";
+import { Eduform } from "./blockform";
+import { imageURL } from "@/app/requestsapi/request";
 
 interface ActivityData {
 
-  chapter_type_name : string;
-  chapter_name: string;
+  location : string;
+  image_link: string;
+  event_heading: string;
+  event_body: string;
+  created_time: string;
 }
 function Page() {
   const router = useRouter();
@@ -28,8 +32,8 @@ function Page() {
   useEffect(() => {
     async function fetchdata() {
       if(token){
-        const retrievedData = JSON.parse(localStorage.getItem("mmcData") || "[]");
-        const itemdata = retrievedData.find((item: { chapter_id  : string; }) => item.chapter_id == coId)
+        const retrievedData = JSON.parse(localStorage.getItem("newsData") || "[]");
+        const itemdata = retrievedData.find((item: { id  : string; }) => item.id == coId)
         console.log([itemdata][0])
           // Get all cookies
           const allCookies = Cookies.get();
@@ -40,8 +44,10 @@ function Page() {
           });
 
          Cookies.set('adtoken', token, { expires: 1 });
-        Cookies.set('chapter_name', [itemdata][0].chapter_name, { expires: 1 });
-        Cookies.set('chapter_name', [itemdata][0].chapter_type_name, { expires: 1 });
+        Cookies.set('event_body', [itemdata][0].event_body, { expires: 1 });
+        Cookies.set('event_heading', [itemdata][0].event_heading, { expires: 1 });
+        Cookies.set('image_link', [itemdata][0].image_link, { expires: 1 });
+        Cookies.set('location', [itemdata][0].location, { expires: 1 });
         
 
       setUserData([itemdata]);
@@ -61,7 +67,7 @@ function Page() {
           }}
         >
           <ChevronLeft />
-          <span className="text-base">Manage Malayalam Mission Chapter</span>
+          <span className="text-base">Manage Icds Block</span>
         </div>
 
         <Eduform />
@@ -69,13 +75,26 @@ function Page() {
       {userData[0] &&
       <div className="grid gap-4 md:gap-6 grid-cols-1 md:grid-cols-2 p-2 md:p-5 md:border md:shadow-md md:rounded-lg">
         <div className="">
-          <p className="text-sm text-gray-500">Chapter</p>
-          <p className="text-base">{userData[0].chapter_name}</p>
+          <p className="text-sm text-gray-500">Image</p>
+          <p className="text-base"><img src={`${userData[0].image_link}`} ></img></p>
         </div>
         <div className="">
-          <p className="text-sm text-gray-500">Type</p>
-          <p className="text-base">{userData[0].chapter_type_name}</p>
+          <p className="text-sm text-gray-500">Head</p>
+          <p className="text-base">{userData[0].event_heading}</p>
         </div>
+        <div className="">
+          <p className="text-sm text-gray-500">News Description</p>
+          <p className="text-base">{userData[0].event_body}</p>
+        </div>
+        <div className="">
+          <p className="text-sm text-gray-500">Location</p>
+          <p className="text-base">{userData[0].location}</p>
+        </div>
+        <div className="">
+          <p className="text-sm text-gray-500">News Description</p>
+          <p className="text-base">{userData[0].created_time.split("T")[0].split('-').reverse().join('-')}</p>
+        </div>
+        
        
       </div>
       }

@@ -55,7 +55,7 @@ const AdminGrid = () => {
   const onRowClicked = (event: RowClickedEvent) => {
    
     const id = event.data.id;
-    router.push(`admin/uploads/${id}`);
+    router.push(`news-and-events/${id}`);
   };
 
   useEffect(() => {
@@ -71,7 +71,9 @@ const AdminGrid = () => {
         
         if (response.data.success && response.status!=203) {
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
-          
+          console.log(response.data.eventList)
+    localStorage.setItem("newsData", JSON.stringify(response.data.eventList));
+
           setRowData(response.data.eventList); 
         }
       }

@@ -53,7 +53,7 @@ const AdminGrid = () => {
 
   const onRowClicked = (event: RowClickedEvent) => {
    
-    const id = event.data.id;
+    const id = event.data.edu_sub_district_id;
     router.push(`edusubdistrict/${id}`);
   };
   const handleExportToExcel = async () => {
@@ -99,7 +99,9 @@ const AdminGrid = () => {
         
         if (response.data.success && response.status!=203) {
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
-        
+    localStorage.setItem("edusubData", JSON.stringify(response.data.eduSubDistrict));
+
+        console.log(response.data.eduSubDistrict)
           setRowData(response.data.eduSubDistrict); 
         }
       }

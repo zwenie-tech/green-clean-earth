@@ -4,12 +4,12 @@ import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 import Cookies from 'js-cookie';
-import { Eduform } from "./mmcform";
+import { Eduform } from "./sahodayaform";
 
 interface ActivityData {
 
-  chapter_type_name : string;
-  chapter_name: string;
+  st_name : string;
+  sahodaya_name : string;
 }
 function Page() {
   const router = useRouter();
@@ -28,8 +28,8 @@ function Page() {
   useEffect(() => {
     async function fetchdata() {
       if(token){
-        const retrievedData = JSON.parse(localStorage.getItem("mmcData") || "[]");
-        const itemdata = retrievedData.find((item: { chapter_id  : string; }) => item.chapter_id == coId)
+        const retrievedData = JSON.parse(localStorage.getItem("sahodayaData") || "[]");
+        const itemdata = retrievedData.find((item: { sahodaya_id  : string; }) => item.sahodaya_id == coId)
         console.log([itemdata][0])
           // Get all cookies
           const allCookies = Cookies.get();
@@ -40,8 +40,8 @@ function Page() {
           });
 
          Cookies.set('adtoken', token, { expires: 1 });
-        Cookies.set('chapter_name', [itemdata][0].chapter_name, { expires: 1 });
-        Cookies.set('chapter_name', [itemdata][0].chapter_type_name, { expires: 1 });
+        Cookies.set('sahodaya_name', [itemdata][0].sahodaya_name, { expires: 1 });
+        Cookies.set('st_name', [itemdata][0].st_name, { expires: 1 });
         
 
       setUserData([itemdata]);
@@ -61,7 +61,7 @@ function Page() {
           }}
         >
           <ChevronLeft />
-          <span className="text-base">Manage Malayalam Mission Chapter</span>
+          <span className="text-base">Manage Education District</span>
         </div>
 
         <Eduform />
@@ -69,12 +69,12 @@ function Page() {
       {userData[0] &&
       <div className="grid gap-4 md:gap-6 grid-cols-1 md:grid-cols-2 p-2 md:p-5 md:border md:shadow-md md:rounded-lg">
         <div className="">
-          <p className="text-sm text-gray-500">Chapter</p>
-          <p className="text-base">{userData[0].chapter_name}</p>
+          <p className="text-sm text-gray-500">State</p>
+          <p className="text-base">{userData[0].st_name}</p>
         </div>
         <div className="">
-          <p className="text-sm text-gray-500">Type</p>
-          <p className="text-base">{userData[0].chapter_type_name}</p>
+          <p className="text-sm text-gray-500">Sahodaya</p>
+          <p className="text-base">{userData[0].sahodaya_name}</p>
         </div>
        
       </div>

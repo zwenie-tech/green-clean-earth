@@ -40,27 +40,77 @@ import {
   } from "@/components/ui/popover";
   import { cn } from "@/lib/utils";
   import { DateTimePicker } from "@/components/ui/dateTimePicker";
+  import Cookies from 'js-cookie';
+import { usePathname, useRouter } from "next/navigation";
+import axios from "axios";
+import { apiURL } from "@/app/requestsapi/request";
+import { useToast } from "@/components/ui/use-toast";
+
+
   const formSchema = z.object({
-    name: z.string().min(2).max(255),
-    email: z.string().email().min(3).max(255),
-    dates: z.date(),
-    subject: z.string().min(2).max(255),
-    messege: z.string().min(2).max(255),
+    contact: z.string(),
+    
   });
 
   export function Contactform() {
+  const router = useRouter();
+
+    const pathname = usePathname();
+  const coId = pathname.split("/")[3];
+  const token = Cookies.get("adtoken");
+  const { toast } = useToast();
+
     const form = useForm<z.infer<typeof formSchema>>({
       resolver: zodResolver(formSchema),
       defaultValues: {
-        name: "",
-        email: "",
-        subject: "",
-        messege: "",
+        contact: "",
       },
     });
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    async function onSubmit(values: z.infer<typeof formSchema>) {
       console.log(values);
+      const formdata = {
+        isChallenged : values.contact === "2" ? false : true,
+        contactId: coId
+      }
+      console.log(formdata);
+
+      if (token) {
+        const response = await axios.post(`${apiURL}/adminEdit/updateContact`, formdata, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+        try {
+  
+          if (response.data.success && response.status != 203) {
+            toast({
+              title: "Data Successfully Updated.",
+              description: "",
+            });
+  
+            setTimeout(function() {
+              window.history.back();
+                      }, 1800);
+                    
+  
+          } else {
+            toast({
+              variant: "destructive",
+              title: "Oops, Something went wrong!",
+              description: "Please try again...",
+            });
+          }
+  
+        } catch (error) {
+          toast({
+            variant: "destructive",
+            title: "Oops, Something went wrong!",
+            description: "Please try again...",
+          });
+        }
+      };
     }
 
     return (
@@ -84,84 +134,38 @@ import {
                 className=""
               >
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="" {...field} />
-                        </FormControl>
-                        <FormDescription></FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                <FormField
+                      control={form.control}
+                      name="contact"
+                      render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Is Contacted?</FormLabel>
 
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Input type="email" placeholder="" {...field} />
-                        </FormControl>
-                        <FormDescription></FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="subject"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Subject</FormLabel>
-                        <FormControl>
-                          <Input placeholder="" {...field} />
-                        </FormControl>
-                        <FormDescription></FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                          <Select onValueChange={(value) => {
+                            field.onChange(value);
 
-                  <FormField
-                    control={form.control}
-                    name="messege"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Messege</FormLabel>
-                        <FormControl>
-                          <Input placeholder="" {...field} />
-                        </FormControl>
-                        <FormDescription></FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                          }} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Choose option" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
 
-                  <FormField
-                    control={form.control}
-                    name="dates"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-col">
-                        <FormLabel className="mb-4">Date </FormLabel>
-                        <FormControl>
-                          <DateTimePicker
-                            value={field.value}
-                            onChange={field.onChange}
-                            granularity="day"
-                            yearRange={30}
-                          />
-                        </FormControl>
-                        <FormDescription></FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                              <SelectItem key='1' value="1">
+                                True
+                              </SelectItem>
+                              <SelectItem key='2' value="2">
+                                False
+                              </SelectItem>
+
+
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
                 </div>
 

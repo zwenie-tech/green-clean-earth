@@ -54,8 +54,8 @@ const AdminGrid = () => {
 
   const onRowClicked = (event: RowClickedEvent) => {
    
-    const id = event.data.id;
-    router.push(`activity/edit-activity/${id}`);
+    const id = event.data.zone_id;
+    router.push(`mmzone/${id}`);
   };
 
   const handleExportToExcel = async () => {
@@ -112,7 +112,9 @@ const AdminGrid = () => {
             ...chapter,
             chapter_type_name: chapter.chapter_type_id === 1 ? 'Global' : 'India'
           }));
-         
+         console.log(updatedChapterList)
+    localStorage.setItem("mmzData", JSON.stringify(updatedChapterList));
+
           setRowData(updatedChapterList); 
         }
       }

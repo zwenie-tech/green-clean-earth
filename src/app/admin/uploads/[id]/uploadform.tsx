@@ -365,7 +365,7 @@ export function Uploadform() {
   }, [districts, selectschoolType, states, selectMissionarea, selectedStateGrp, selectedDistrictGrp]);
 
   const handleEduDistrict = async (e: any) => {
-    try {
+    try { 
       const eduid = eduDistrict.find((item) => item.edu_district === e)?.edu_district_id
       const responseedusubdistrict = await axios.get(`${apiURL}/eduSubDistrict/${eduid}`);
       setEduSubDistrict(responseedusubdistrict.data.eduSubDistrict);

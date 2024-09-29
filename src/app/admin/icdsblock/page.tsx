@@ -52,7 +52,7 @@ const AdminGrid = () => {
 
   const onRowClicked = (event: RowClickedEvent) => {
    
-    const id = event.data.id;
+    const id = event.data.block_id;
     router.push(`icdsblock/${id}`);
   };
 
@@ -69,7 +69,9 @@ const AdminGrid = () => {
         
         if (response.data.success && response.status!=203) {
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
-         
+         console.log(response.data.blockList)
+    localStorage.setItem("blockData", JSON.stringify(response.data.blockList));
+
           setRowData(response.data.blockList); 
         }
       }

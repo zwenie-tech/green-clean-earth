@@ -94,14 +94,16 @@ interface District {
   dis_name: string;
 }
 
-interface Lsgd {
-  lsg_id: number;
-  lsg_name: string;
-}
+
 
 type Corp = {
   cop_id: string;
   cop_name: string;
+}
+
+interface Lsgd {
+  lsg_id: number;
+  lsg_name: string;
 }
 
 export function EditForm({ us_data }: any) {
@@ -117,8 +119,8 @@ export function EditForm({ us_data }: any) {
   const [countries, setCountries] = useState<Country[]>([]);
   const [states, setStates] = useState<State[]>([]);
   const [districts, setDistricts] = useState<District[]>([]);
-  const [lsgd, setLsgd] = useState<Lsgd[]>([]);
   const [corporation, setCorporation] = useState<Corp[]>([]);
+  const [lsgd, setLsgd] = useState<Lsgd[]>([]);
   const [selectedLsgd, setSelectedLsgd] = useState("");
 
 
@@ -150,6 +152,7 @@ export function EditForm({ us_data }: any) {
     fetchData();
   }, [cntry_name, cop_name, dis_name, lsg_name, st_name]);
   useEffect(() => {
+
     if (!token) {
       router.push("/admin/login");
     }

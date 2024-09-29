@@ -10,6 +10,7 @@ interface ActivityData {
 
   chapter_type_name : string;
   chapter_name: string;
+  zone_name:string;
 }
 function Page() {
   const router = useRouter();
@@ -28,8 +29,8 @@ function Page() {
   useEffect(() => {
     async function fetchdata() {
       if(token){
-        const retrievedData = JSON.parse(localStorage.getItem("mmcData") || "[]");
-        const itemdata = retrievedData.find((item: { chapter_id  : string; }) => item.chapter_id == coId)
+        const retrievedData = JSON.parse(localStorage.getItem("mmzData") || "[]");
+        const itemdata = retrievedData.find((item: { zone_id  : string; }) => item.zone_id == coId)
         console.log([itemdata][0])
           // Get all cookies
           const allCookies = Cookies.get();
@@ -42,6 +43,7 @@ function Page() {
          Cookies.set('adtoken', token, { expires: 1 });
         Cookies.set('chapter_name', [itemdata][0].chapter_name, { expires: 1 });
         Cookies.set('chapter_name', [itemdata][0].chapter_type_name, { expires: 1 });
+        Cookies.set('zone_name', [itemdata][0].zone_name, { expires: 1 });
         
 
       setUserData([itemdata]);
@@ -61,7 +63,7 @@ function Page() {
           }}
         >
           <ChevronLeft />
-          <span className="text-base">Manage Malayalam Mission Chapter</span>
+          <span className="text-base">Manage Malayalam Mission Zone</span>
         </div>
 
         <Eduform />
@@ -71,6 +73,10 @@ function Page() {
         <div className="">
           <p className="text-sm text-gray-500">Chapter</p>
           <p className="text-base">{userData[0].chapter_name}</p>
+        </div>
+        <div className="">
+          <p className="text-sm text-gray-500">Chapter</p>
+          <p className="text-base">{userData[0].zone_name}</p>
         </div>
         <div className="">
           <p className="text-sm text-gray-500">Type</p>
