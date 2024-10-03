@@ -44,20 +44,18 @@ import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Cookies from 'js-cookie';
 import { apiURL } from "@/app/requestsapi/request";
+import { useToast } from "@/components/ui/use-toast";
+import axios from "axios";
 
 
 const formSchema = z.object({
-  lsgd: z.string().min(2).max(255),
-  district: z.string().min(2).max(255),
-  corporation: z.string().min(2).max(255),
-  lsgdname: z.string().min(2).max(255),
+ 
 });
 
 interface ActivityData {
   cop_name: string;
   dis_name: string;
   lsg_name: string;
-  st_name: string;
 }
 
 interface State {
@@ -87,9 +85,10 @@ export function Lsgdform() {
   const segments = pathname.split("/").filter(Boolean);
   const lastSegment = segments[segments.length - 1];
   const token = Cookies.get("adtoken");
+  const { toast } = useToast();
 
   const [userData, setUserData] = useState<ActivityData[]>([]);
- const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [selectedDistrict, setSelectedDistrict] = useState("");
   const [selectedCorp, setSelectedCorp] = useState("");
   const [selectedLsgd, setSelectedLsgd] = useState("");
   const [states, setStates] = useState<State[]>([]);
@@ -112,18 +111,18 @@ export function Lsgdform() {
 
     }
     fetchData();
-  }, [cop_name, dis_name]);
+  }, [cop_name, dis_name, lsg_name]);
   useEffect(() => {
     async function fetchData() {
 
-        const stateResponse = await fetch(`${apiURL}/state`);
-        const stateData = await stateResponse.json();
-        setStates(stateData.state);
+      const stateResponse = await fetch(`${apiURL}/state`);
+      const stateData = await stateResponse.json();
+      setStates(stateData.state);
 
-        const districtResponse = await fetch(`${apiURL}/district`);
-        const districtData = await districtResponse.json();
-        setDistricts(districtData.district);
-      
+      const districtResponse = await fetch(`${apiURL}/district`);
+      const districtData = await districtResponse.json();
+      setDistricts(districtData.district);
+
     }
     fetchData();
   }, []);
@@ -157,14 +156,56 @@ export function Lsgdform() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      district: dis_name,
-      corporation: cop_name,
-      lsgdname: lsg_name,
+     
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
+    const formdata = {
+      stateId: states.find((item) => item.st_name === st_name)?.st_id?.toString(),
+      districtId: districts.find((item) => item.dis_name === selectedDistrict)?.dis_id?.toString(),
+      corporationId: corporation.find((item) => item.cop_name === selectedCorp)?.cop_id?.toString(),
+      lsgdName: selectedLsgd
+    }
+    console.log(formdata);
+
+    if (token) {
+      const response = await axios.post(`${apiURL}/adminEdit/modifyLsgd?recordId=${coId}`, formdata, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      try {
+
+        if (response.data.success && response.status != 203) {
+          toast({
+            title: "Data Successfully Updated.",
+            description: "",
+          });
+
+          setTimeout(function () {
+            window.history.back();
+          }, 1800);
+
+
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Oops, Something went wrong!",
+            description: "Please try again...",
+          });
+        }
+
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Oops, Something went wrong!",
+          description: "Please try again...",
+        });
+      }
+    };
   }
 
   return (
@@ -188,92 +229,63 @@ export function Lsgdform() {
               className=""
             >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">District</label>
+                  <Select
+                    onValueChange={(value) => {
+                      // setCountry(value);
+                      setSelectedDistrict(value);
+                    }}
+                    value={selectedDistrict || ""}
+                    defaultValue={selectedDistrict}
+                  >
+                    <SelectTrigger className="block w-full px-3 py-2 border border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 sm:text-sm"
+                    >
+                      <SelectValue placeholder="Choose a district" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {districts.map((district) => (
+                        <SelectItem key={district.dis_id} value={district.dis_name}>
+                          {district.dis_name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
 
-                {/* District Field */}
-                <FormField
-                    control={form.control}
-                    name="district"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>District</FormLabel>
-                        <Select onValueChange={(value) => {
-                          field.onChange(value);
-                          setSelectedDistrict(value);
-                        }} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Choose a district" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {districts.map((district) => (
-                              <SelectItem key={district.dis_id} value={district.dis_name}>
-                                {district.dis_name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Corporation/Municipality/Block Panchayat</label>
+                  <Select
+                    onValueChange={(value) => {
+                      // setCountry(value);
+                      setSelectedCorp(value);
+                    }}
+                    value={selectedCorp || ""}
+                    defaultValue={selectedCorp}
+                  >
+                    <SelectTrigger className="block w-full px-3 py-2 border border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 sm:text-sm"
+                    >
+                      <SelectValue placeholder="Choose a corporation" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {corporation.map((corp) => (
+                        <SelectItem key={corp.cop_id} value={corp.cop_name}>
+                          {corp.cop_name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="mb-4">
+                  <label className="form-label">Lsgd</label>
+                  <input
+                    className="block w-full px-3 py-2 border border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 sm:text-sm"
+
+                    value={selectedLsgd}
+                    onChange={(e) => setSelectedLsgd(e.target.value)}
                   />
-
-                {/* Corporation Field */}
-                <FormField
-                    control={form.control}
-                    name="corporation"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Corporation/Municipality/Block Panchayat</FormLabel>
-                        <Select onValueChange={(value) => {
-                          field.onChange(value);
-                          setSelectedCorp(value);
-                        }} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Choose a Option" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {corporation.map((corp) => (
-                              <SelectItem key={corp.cop_id} value={corp.cop_name}>
-                                {corp.cop_name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                {/* LSGD Name Field */}
-                <FormField
-                    control={form.control}
-                    name="lsgd"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>LSGD</FormLabel>
-                        <Select onValueChange={(value) => {
-                          field.onChange(value);
-                          setSelectedLsgd(value);
-                        }} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Choose a LSGD" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {lsgd && lsgd.map((lsg) => (
-                              <SelectItem key={lsg.lsg_id} value={lsg.lsg_name}>
-                                {lsg.lsg_name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
+                </div>
               </div>
 
               <div className="mt-3">

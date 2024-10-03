@@ -14,6 +14,7 @@ import axios from "axios";
 import { apiURL } from "@/app/requestsapi/request";
 import Cookies from 'js-cookie';
 import * as XLSX from 'xlsx';
+import { AddBlockForm } from "./[id]/addblockform";
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
@@ -111,6 +112,7 @@ const AdminGrid = () => {
   };
   return (
     <div className=" bg-slate-100">
+      <AddBlockForm/>
      <button
           className= "text-white m-3 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
           

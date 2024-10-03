@@ -8,7 +8,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { Edit } from "lucide-react";
+import { Edit, Plus } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
@@ -49,24 +49,23 @@ import { toast } from "@/components/ui/use-toast";
 
 
 const formSchema = z.object({
-  
+
 });
 
-interface ActivityData {
 
+
+
+
+interface District {
+  dis_id: number;
   dis_name: string;
-
 }
 
-interface MissionChapter {
-  chapter_id: string;
-  chapter_name: string;
+interface IcdsBlock {
+  icds_block_id: string;
+  block_name: string;
 }
-interface MissionZone {
-  zone_id: string;
-  zone_name: string;
-}
-export function Eduform() {
+export function AddBlockForm() {
   const router = useRouter();
   const pathname = usePathname();
   const coId = pathname.split("/")[3];
@@ -74,53 +73,43 @@ export function Eduform() {
   const lastSegment = segments[segments.length - 1];
   const token = Cookies.get("adtoken");
 
-  const [missionChapter, setMissionChapter] = useState<MissionChapter[]>([]);
-  const [selectMissionarea, setSelectMissionarea] = useState('');
-  const [selectMission, setSelectedMission] = useState('');
-  const [missionZone, setMissionZone] = useState<MissionZone[]>([]);
-  const [selectZone, setSelectedZone] = useState('');
+  const [selectedDistrict, setSelectedDistrict] = useState("");
 
-  const chapter_type_id = Cookies.get("chapter_type_id");
-  const chapter_name = Cookies.get("chapter_name");
-  const zone_name = Cookies.get("zone_name");
+  const [icdsBlock, setIcdsBlock] = useState<IcdsBlock[]>([]);
+  const [selectIcdsBlock, setSelectIcdsBlock] = useState('');
+  const [districts, setDistricts] = useState<District[]>([]);
+
+
+  const dis_name = Cookies.get("dis_name");
+  const block_name = Cookies.get("block_name");
+
+  
 
   useEffect(() => {
     async function fetchData() {
-      
-      chapter_type_id ? setSelectMissionarea(chapter_type_id) : '';
-      chapter_name ? setSelectedMission(chapter_name) : '';
-      zone_name ? setSelectedZone(zone_name) : '';
+
+      const districtResponse = await fetch(`${apiURL}/district`);
+      const districtData = await districtResponse.json();
+      setDistricts(districtData.district);
     }
     fetchData();
-  }, [chapter_type_id,chapter_name,zone_name]);
-
+  }, []);
 
   useEffect(() => {
-    async function fetchData() {
-
+    const fetchClass = async () => {
       try {
-
-        const response = await axios.get(`${apiURL}/malayalamMissionChapter/${selectMissionarea}`);
-        setMissionChapter(response.data.chapterList);
+        const dis_id = districts.find((item) => item.dis_name === selectedDistrict)?.dis_id;
+        const response = await axios.get(`${apiURL}/icdsBlock/${dis_id}`);
+        setIcdsBlock(response.data.icdsBlockList);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
-    }
-    fetchData();
-  }, [selectMissionarea]);
+    };
+    fetchClass();
+  }, [districts, selectedDistrict]);
 
 
-  const handleChapter = async (e: any) => {
-    try {
-      const chapterid = missionChapter.find((item) => item.chapter_name === e)?.chapter_id
-      const response = await axios.get(`${apiURL}/malayalamMissionZone/${chapterid}`);
-      setMissionZone(response.data.zoneList);
 
-
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  }
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -133,13 +122,13 @@ export function Eduform() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
     const formdata = {
-      chapterId: missionChapter.find((item) => item.chapter_name === selectMission)?.chapter_id?.toString(),
-      zoneName: selectZone
+      districtId: districts.find((item) => item.dis_name === selectedDistrict)?.dis_id?.toString(),
+      blockName: selectIcdsBlock
     }
     console.log(formdata);
 
     if (token) {
-      const response = await axios.post(`${apiURL}/adminEdit/modifyMMZone?recordId=${coId}`, formdata, {
+      const response = await axios.post(`${apiURL}/adminEdit/modifyIcdsBlock`, formdata, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -155,7 +144,7 @@ export function Eduform() {
           });
 
           setTimeout(function () {
-            window.history.back();
+            window.location.reload();
           }, 1800);
 
 
@@ -176,18 +165,17 @@ export function Eduform() {
       }
     };
   }
-
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="flex items-center justify-start gap-2 my-4 cursor-pointer text-primary">
-          <Edit />
-          <span className="text-base">Edit</span>
+        <div className="flex items-center justify-start gap-2 my-4 cursor-pointer text-primary float-right">
+          <Plus />
+          <span className="text-base">Add Icds Block</span>
         </div>
       </DialogTrigger>
       <DialogContent className="max-w-4xl overflow-y-scroll max-h-[98%]">
         <DialogHeader>
-          <DialogTitle>Edit Mission Zone</DialogTitle>
+          <DialogTitle>Add Icds Block</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <div className="">
@@ -199,66 +187,41 @@ export function Eduform() {
             >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
 
-              <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Mission Area</label>
-                  <Select
-                    onValueChange={(value) => {
-                      // setCountry(value);
-                      setSelectMissionarea(value);
-                    }}
-                    value={selectMissionarea || ""}
-                    defaultValue={selectMissionarea}
-                  >
-                    <SelectTrigger className="block w-full px-3 py-2 border border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 sm:text-sm"
-                    >
-                      <SelectValue placeholder="Choose a mission area" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem key='1' value="1">
-                        Global
-                      </SelectItem>
-                      <SelectItem key='2' value="2">
-                        India
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
+                {/* District Field */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Chapter</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">District</label>
                   <Select
                     onValueChange={(value) => {
                       // setCountry(value);
-                      setSelectedMission(value);
+                      setSelectedDistrict(value);
                     }}
-                    value={selectMission || ""}
-                    defaultValue={selectMission}
+                    value={selectedDistrict || ""}
+                    defaultValue={selectedDistrict}
                   >
                     <SelectTrigger className="block w-full px-3 py-2 border border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 sm:text-sm"
                     >
-                      <SelectValue placeholder="Choose a mission" />
+                      <SelectValue placeholder="Choose a district" />
                     </SelectTrigger>
                     <SelectContent>
-                    {missionChapter && missionChapter.map((e) => (
-                            <SelectItem key={e.chapter_id} value={e.chapter_name}>
-                              {e.chapter_name}
-                            </SelectItem>
-                          ))}
+                      {districts.map((d) => (
+                        <SelectItem key={d.dis_id} value={d.dis_name}>
+                          {d.dis_name}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="mb-4">
-                  <label className="form-label">Chapter</label>
+                  <label className="form-label">Block</label>
                   <input
                     className="block w-full px-3 py-2 border border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 sm:text-sm"
 
-                    value={selectZone}
-                    onChange={(e) => setSelectedZone(e.target.value)}
+                    value={selectIcdsBlock}
+                    onChange={(e) => setSelectIcdsBlock(e.target.value)}
                   />
                 </div>
 
-                
               </div>
 
               <div className="mt-3">

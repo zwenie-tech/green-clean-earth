@@ -6,6 +6,15 @@ import { Uploadform } from "./uploadform";
 import axios from "axios";
 import { apiURL, imageURL } from "@/app/requestsapi/request";
 import Cookies from 'js-cookie';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Button } from '@/components/ui/button';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import imageCompression from 'browser-image-compression';
+import { useToast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
+import { useForm } from "react-hook-form";
+import { BsImages, BsPaperclip } from "react-icons/bs";
 
 interface UploadData {
   up_file: string;
@@ -47,7 +56,10 @@ function Page() {
   const lastSegment = segments[segments.length - 1];
   const token = Cookies.get("adtoken");
   const [uploadData, setUploadData] = useState<UploadData[]>([]);
-
+  const [edit1, setEdit1] = useState(0);
+  const [edit2, setEdit2] = useState(0);
+  const [edit3, setEdit3] = useState(0);
+  const [edit4, setEdit4] = useState(0);
   useEffect(() => {
     if (!token) {
       router.push("/admin/login");
@@ -68,48 +80,6 @@ function Page() {
         try {
 
           if (response.data.success && response.status != 203) {
-            const udata = response.data.uploadDetails[0];
-            console.log(udata)
-            // Get all cookies
-            const allCookies = Cookies.get();
-
-            // Remove all cookies
-            Object.keys(allCookies).forEach(cookieName => {
-                Cookies.remove(cookieName);
-            });
-
-           Cookies.set('adtoken', token, { expires: 1 });
-            Cookies.set('up_file', udata.up_file, { expires: 1 });
-            Cookies.set('up_file_2', udata.up_file_2, { expires: 1 });
-            Cookies.set('up_file_3', udata.up_file_3, { expires: 1 });
-            Cookies.set('up_file_4', udata.up_file_4, { expires: 1 });
-            Cookies.set('up_id', udata.up_id, { expires: 1 });
-            Cookies.set('us_id', udata.us_id, { expires: 1 });
-            Cookies.set('us_name', udata.us_name, { expires: 1 });
-            Cookies.set('up_planter', udata.up_planter, { expires: 1 });
-            Cookies.set('cntry_name', udata.cntry_name, { expires: 1 });
-            Cookies.set('st_name', udata.st_name, { expires: 1 });
-            Cookies.set('dis_name', udata.dis_name, { expires: 1 });
-            Cookies.set('cop_name', udata.cop_name, { expires: 1 });
-            Cookies.set('lsg_name', udata.lsg_name, { expires: 1 });
-            Cookies.set('source_name', udata.source_name, { expires: 1 });
-            Cookies.set('up_landmark_details', udata.up_landmark_details, { expires: 1 });
-            Cookies.set('up_tree_name', udata.up_tree_name, { expires: 1 });
-            Cookies.set('co_ord_name', udata.co_ord_name, { expires: 1 });
-            Cookies.set('gp_name', udata.gp_name, { expires: 1 });
-            Cookies.set('group_type', udata.group_type, { expires: 1 });
-            Cookies.set('type_name', udata.type_name, { expires: 1 });
-            Cookies.set('gp_cat_name', udata.gp_cat_name, { expires: 1 });
-            Cookies.set('edu_district', udata.edu_district, { expires: 1 });
-            Cookies.set('edu_sub_district_name', udata.edu_sub_district_name, { expires: 1 });
-            Cookies.set('sahodaya_name', udata.sahodaya_name, { expires: 1 });
-            Cookies.set('block_name', udata.block_name, { expires: 1 });
-            Cookies.set('project_name', udata.project_name, { expires: 1 });
-            Cookies.set('chapter_name', udata.chapter_name, { expires: 1 });
-            Cookies.set('zone_name', udata.zone_name, { expires: 1 });
-            Cookies.set('city', udata.city, { expires: 1 });
-            Cookies.set('up_ward', udata.up_ward, { expires: 1 });
-            
             setUploadData(response.data.uploadDetails);
           } else {
 
@@ -136,35 +106,111 @@ function Page() {
           <ChevronLeft />
           <span className="text-base">Manage Uploads</span>
         </div>
+        <div className="flex justify-between">
 
-        <Uploadform />
+          <Uploadform />
+        </div>
       </div>
       {uploadData[0] ?
         <div className="grid gap-4 md:gap-6 grid-cols-1 md:grid-cols-3 p-2 md:p-5 md:border md:shadow-md md:rounded-lg">
-          {uploadData[0].up_file ?
-            <div className="">
-              <p className="text-sm text-gray-500">Image1</p>
-              <p className="w-20 h-35"><img src={`${imageURL}${uploadData[0].up_file}`} ></img></p>
-            </div>
-            : ''}
-          {uploadData[0].up_file_2 ?
-            <div className="">
-              <p className="text-sm text-gray-500">Image2</p>
-              <p className="w-20 h-35"><img src={`${imageURL}${uploadData[0].up_file_2}`} ></img></p>
-            </div>
-            : ''}
-          {uploadData[0].up_file_3 ?
-            <div className="">
-              <p className="text-sm text-gray-500">Image3</p>
-              <p className="w-20 h-35"><img src={`${imageURL}${uploadData[0].up_file_3}`} ></img></p>
-            </div>
-            : ''}
-          {uploadData[0].up_file_4 ?
-            <div className="">
-              <p className="text-sm text-gray-500">Image4</p>
-              <p className="w-20 h-35"><img src={`${imageURL}${uploadData[0].up_file_4}`} ></img></p>
-            </div>
-            : ''}
+
+          <div className='overflow-hidden'>
+            {uploadData[0].up_file ? (
+              <div>
+                <div className="aspect-square h-40 w-40">
+                  <p>Image 1</p>
+                  <img
+                    src={`${imageURL}${uploadData[0].up_file}`}
+                    alt="Selected"
+                    width={150}
+                    height={150}
+                    className='h-full w-full object-cover'
+                  />
+                </div>
+                {edit1 ?
+                  <UploadButton imageNo={1} treeNo={uploadData[0].up_id} isEdit={true} /> :
+                  <p className='text-primary underline flex items-center justify-center m-5'
+                    onClick={() => { setEdit1(1) }}>Edit</p>
+                }
+              </div>
+            ) : (
+              <><p>Image 1</p><UploadButton imageNo={1} treeNo={uploadData[0].up_id} isEdit={false} /></>
+            )}
+          </div>
+
+          <div className='overflow-hidden'>
+            {uploadData[0].up_file_2 ? (
+              <div>
+                <div className="aspect-square h-40 w-40">
+                  <p>Image 2</p>
+                  <img
+                    src={`${imageURL}${uploadData[0].up_file_2}`}
+                    alt="Selected"
+                    width={150}
+                    height={150}
+                    className='h-full w-full object-cover'
+                  />
+                </div>
+                {edit2 ?
+                  <UploadButton imageNo={2} treeNo={uploadData[0].up_id} isEdit={true} /> :
+                  <p className='text-primary underline flex items-center justify-center m-5'
+                    onClick={() => { setEdit2(1) }}>Edit</p>
+                }
+              </div>
+            ) : (
+              <><p>Image 2</p><UploadButton imageNo={2} treeNo={uploadData[0].up_id} isEdit={false} /></>
+            )}
+          </div>
+
+          <div className='overflow-hidden'>
+            {uploadData[0].up_file_3 ? (
+              <div>
+                <div className="aspect-square h-40 w-40">
+                  <p>Image 3</p>
+                  <img
+                    src={`${imageURL}${uploadData[0].up_file_3}`}
+                    alt="Selected"
+                    width={150}
+                    height={150}
+                    className='h-full w-full object-cover'
+                  />
+                </div>
+                {edit3 ?
+                  <UploadButton imageNo={3} treeNo={uploadData[0].up_id} isEdit={true} /> :
+                  <p className='text-primary underline flex items-center justify-center m-5'
+                    onClick={() => { setEdit3(1) }}>Edit</p>
+                }
+              </div>
+            ) : (
+              <><p>Image 3</p><UploadButton imageNo={3} treeNo={uploadData[0].up_id} isEdit={false} /></>
+            )}
+          </div>
+
+
+          <div className='overflow-hidden'>
+            {uploadData[0].up_file_4 ? (
+              <div>
+                <div className="aspect-square h-40 w-40">
+                  <p>Image 4</p>
+                  <img
+                    src={`${imageURL}${uploadData[0].up_file_4}`}
+                    alt="Selected"
+                    width={150}
+                    height={150}
+                    className='h-full w-full object-cover'
+                  />
+                </div>
+                {edit4 ?
+                  <UploadButton imageNo={4} treeNo={uploadData[0].up_id} isEdit={true} /> :
+                  <p className='text-primary underline flex items-center justify-center'
+                    onClick={() => { setEdit4(1) }}>Edit</p>
+                }
+              </div>
+            ) : (
+              <><p>Image 4</p><UploadButton imageNo={4} treeNo={uploadData[0].up_id} isEdit={false} /></>
+            )}
+          </div>
+
           {uploadData[0].up_id ?
             <div className="">
               <p className="text-sm text-gray-500">Tree Number</p>
@@ -315,3 +361,293 @@ function Page() {
 }
 
 export default Page;
+
+
+
+const MAX_FILE_SIZE = 1024 * 1024 * 100; // 100MB
+const TARGET_FILE_SIZE = 1024 * 1024 * 4; // 4MB
+const ACCEPTED_IMAGE_MIME_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+];
+
+async function resizeImage(file: File) {
+  const options = {
+    maxSizeMB: TARGET_FILE_SIZE / (1024 * 1024),
+    maxWidthOrHeight: 1920,
+    useWebWorker: true,
+  };
+
+  try {
+    const resizedFile = await imageCompression(file, options);
+    return resizedFile;
+  } catch (error) {
+    console.error('Error resizing the image:', error);
+    throw error;
+  }
+}
+
+async function validateAndResizeImage(files: FileList | null) {
+  if (!files || files.length === 0) {
+    return files;
+  }
+
+  const file = files[0];
+  if (file.size > TARGET_FILE_SIZE) {
+    const resizedFile = await resizeImage(file);
+    return [resizedFile] as unknown as FileList;
+  }
+
+  return files;
+}
+
+const formSchema = z.object({
+  image: z
+    .any()
+    .refine(async (files) => {
+      const validFiles = await validateAndResizeImage(files);
+      return validFiles![0]?.size <= MAX_FILE_SIZE;
+    }, "Max image size is 100MB.")
+    .refine(
+      (files) => ACCEPTED_IMAGE_MIME_TYPES.includes(files?.[0]?.type),
+      "Only .jpg, .jpeg, .png and .webp formats are supported."
+    ),
+});
+
+type ImageFormData = z.infer<typeof formSchema>;
+
+const UploadButton = ({ imageNo, treeNo, isEdit }: any) => {
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+
+  const form = useForm<ImageFormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      image: undefined,
+    },
+  });
+  const token = Cookies.get('adtoken');
+  const { toast } = useToast();
+
+
+  const onSubmit = async (data: any) => {
+    const formData = new FormData();
+    formData.append("imageNumber", imageNo);
+    formData.append("treeNumber", treeNo);
+
+    if (selectedImage) {
+      const compressedImage = await resizeImage(selectedImage);
+      formData.append("image", compressedImage);
+    }
+    try {
+      const response = await fetch(`${apiURL}/adminEdit/updateImage`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+        body: formData,
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const result = await response.json();
+      if (result) {
+        toast({
+          title: "Plant Uploaded Successfully.",
+          description: "plant image successfully updated",
+        });
+      }
+      // Reload the page
+      setTimeout(function () {
+        window.location.reload();
+      }, 1800);
+
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Oops, Something went wrong!",
+        description: "Please try again...",
+      });
+      console.error("Error:", error);
+    }
+  };
+
+  return (
+    <div>
+      <div className={cn("flex md:flex-row w-[100%] flex-col")}>
+        <div className="flex w-[100%] gap-2 flex-col">
+          {!isEdit && (<Form {...form}>
+            <form
+              noValidate
+              onSubmit={form.handleSubmit(onSubmit)}
+              className='flex flex-col gap-4 place-items-center'
+            >
+              <div
+                className={`flex w-[100%] gap-4  flex-col items-center md:flex-col md:justify-between md:items-center`}
+              >
+                <div
+                  className={`flex md:flex-[1] h-[fit-content] md:justify-between md:flex-row`}
+                >
+                  {selectedImage ? (
+                    <div className=" max-w-[200px]">
+                      <img
+                        src={URL.createObjectURL(selectedImage)}
+                        alt="Selected"
+                        className='max-h-32'
+                      />
+                    </div>
+                  ) : (
+                    <div className="inline-flex items-center justify-between">
+                      <div className="p-2 justify-center items-center flex">
+                        <BsImages size={28} />
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <FormField
+                  control={form.control}
+                  name="image"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Button
+                          size="sm"
+                          type="button"
+                          className="bg-white hover:bg-primary/10 border border-primary text-primary"
+                        >
+                          <input
+                            type="file"
+                            className="hidden"
+                            id="fileInput"
+                            accept="image/*"
+                            onBlur={field.onBlur}
+                            name={field.name}
+                            onChange={async (e) => {
+                              const files = e.target.files;
+                              if (files && files[0]) {
+                                const validFiles = await validateAndResizeImage(files);
+                                field.onChange(validFiles);
+                                setSelectedImage(validFiles?.[0] || null);
+                              }
+                            }}
+                            ref={field.ref}
+                          />
+                          <label
+                            htmlFor="fileInput"
+                            className="text-neutral-90 flex gap-2 justify-center items-center w-full"
+                          >
+                            <BsPaperclip /> Choose file
+                          </label>
+                        </Button>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <Button size="sm" variant={'default'} type="submit">
+                Upload
+              </Button>
+
+            </form>
+          </Form>)}
+
+        </div>
+      </div>
+
+      {isEdit && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
+          <div className="fixed inset-0 bg-black opacity-50"></div>
+          <div className="bg-white rounded-lg shadow-lg p-6 z-10 w-full max-w-md mx-auto">
+            <h2 className="text-xl font-bold mb-4">Edit Image</h2>
+            <div className="flex justify-center mt-4">
+
+              <Form {...form}>
+                <form
+                  noValidate
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className='flex flex-col gap-4 place-items-center'
+                >
+                  <div
+                    className={`flex w-[100%] gap-4  flex-col items-center md:flex-col md:justify-between md:items-center`}
+                  >
+                    <div
+                      className={`flex md:flex-[1] h-[fit-content] md:justify-between md:flex-row`}
+                    >
+                      {selectedImage ? (
+                        <div className=" max-w-[200px]">
+                          <img
+                            src={URL.createObjectURL(selectedImage)}
+                            alt="Selected"
+                            className='max-h-32'
+                          />
+                        </div>
+                      ) : (
+                        <div className="inline-flex items-center justify-between">
+                          <div className="p-2 justify-center items-center flex">
+                            <BsImages size={28} />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <FormField
+                      control={form.control}
+                      name="image"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Button
+                              size="sm"
+                              type="button"
+                              className="bg-white hover:bg-primary/10 border border-primary text-primary"
+                            >
+                              <input
+                                type="file"
+                                className="hidden"
+                                id="fileInput"
+                                accept="image/*"
+                                onBlur={field.onBlur}
+                                name={field.name}
+                                onChange={async (e) => {
+                                  const files = e.target.files;
+                                  if (files && files[0]) {
+                                    const validFiles = await validateAndResizeImage(files);
+                                    field.onChange(validFiles);
+                                    setSelectedImage(validFiles?.[0] || null);
+                                  }
+                                }}
+                                ref={field.ref}
+                              />
+                              <label
+                                htmlFor="fileInput"
+                                className="text-neutral-90 flex gap-2 justify-center items-center w-full"
+                              >
+                                <BsPaperclip /> Choose file
+                              </label>
+                            </Button>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <Button size="sm" variant={'default'} type="submit">
+                    Upload
+                  </Button>
+                  {isEdit ?
+
+                    <p className='text-primary underline flex items-center justify-center m-1' onClick={() => { window.location.reload() }}>Cancel</p>
+                    : ''
+                  }
+
+                </form>
+              </Form>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}

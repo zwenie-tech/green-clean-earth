@@ -14,6 +14,7 @@ import axios from "axios";
 import { apiURL } from "@/app/requestsapi/request";
 import Cookies from 'js-cookie';
 import * as XLSX from 'xlsx';
+import { AddCorpform } from "./[id]/addcorpform";
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
@@ -106,7 +107,8 @@ const AdminGrid = () => {
   }, [currentPage, token]);
   return (
     <div className=" bg-slate-100">
-      <button
+      <AddCorpform/>
+        <button
           className= "text-white m-3 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
           
           onClick={handleExportToExcel}

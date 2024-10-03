@@ -41,7 +41,7 @@ function Page() {
 
          Cookies.set('adtoken', token, { expires: 1 });
         Cookies.set('chapter_name', [itemdata][0].chapter_name, { expires: 1 });
-        Cookies.set('chapter_name', [itemdata][0].chapter_type_name, { expires: 1 });
+        Cookies.set('chapter_type_id', [itemdata][0].chapter_type_id, { expires: 1 });
         
 
       setUserData([itemdata]);

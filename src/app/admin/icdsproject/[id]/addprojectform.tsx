@@ -8,7 +8,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { Edit } from "lucide-react";
+import { Edit, Plus } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
@@ -73,7 +73,7 @@ interface IcdsProject {
     project_id: string;
     project_name: string;
 }
-export function Eduform() {
+export function AddProjectForm() {
     const router = useRouter();
     const pathname = usePathname();
     const coId = pathname.split("/")[3];
@@ -94,17 +94,7 @@ export function Eduform() {
     const block_name = Cookies.get("block_name");
     const project_name = Cookies.get("project_name");
 
-    useEffect(() => {
-        async function fetchData() {
-            
-            dis_name ? setSelectedDistrict(dis_name) : '';
-            block_name ? setSelectIcdsBlock(block_name) : '';
-            project_name ? setSelectIcdsProject(project_name) : '';
-            
-        }
-        fetchData();
-    }, [block_name, dis_name, districts, project_name, selectedDistrict]);
-
+   
     useEffect(() => {
         async function fetchData() {
 
@@ -160,7 +150,7 @@ export function Eduform() {
         console.log(formdata);
 
         if (token) {
-            const response = await axios.post(`${apiURL}/adminEdit/modifyIcdsProject?recordId=${coId}`, formdata, {
+            const response = await axios.post(`${apiURL}/adminEdit/modifyIcdsProject`, formdata, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -176,7 +166,7 @@ export function Eduform() {
                     });
 
                     setTimeout(function () {
-                        window.history.back();
+                        window.location.reload();
                     }, 1800);
 
 
@@ -201,14 +191,14 @@ export function Eduform() {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <div className="flex items-center justify-start gap-2 my-4 cursor-pointer text-primary">
-                    <Edit />
-                    <span className="text-base">Edit</span>
+                <div className="flex items-center justify-start gap-2 my-4 cursor-pointer text-primary float-right">
+                    <Plus />
+                    <span className="text-base">Add Icds Project</span>
                 </div>
             </DialogTrigger>
             <DialogContent className="max-w-4xl overflow-y-scroll max-h-[98%]">
                 <DialogHeader>
-                    <DialogTitle>Edit Icds Project</DialogTitle>
+                    <DialogTitle>Add Icds Project</DialogTitle>
                     <DialogDescription></DialogDescription>
                 </DialogHeader>
                 <div className="">

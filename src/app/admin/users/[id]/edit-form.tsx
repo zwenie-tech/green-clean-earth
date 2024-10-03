@@ -94,8 +94,6 @@ interface District {
   dis_name: string;
 }
 
-
-
 type Corp = {
   cop_id: string;
   cop_name: string;
@@ -122,7 +120,6 @@ export function EditForm({ us_data }: any) {
   const [corporation, setCorporation] = useState<Corp[]>([]);
   const [lsgd, setLsgd] = useState<Lsgd[]>([]);
   const [selectedLsgd, setSelectedLsgd] = useState("");
-
 
   const token = Cookies.get("adtoken");
 
@@ -151,13 +148,13 @@ export function EditForm({ us_data }: any) {
     }
     fetchData();
   }, [cntry_name, cop_name, dis_name, lsg_name, st_name]);
+
   useEffect(() => {
 
     if (!token) {
       router.push("/admin/login");
     }
   }, [token, router]);
-
 
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -300,7 +297,7 @@ export function EditForm({ us_data }: any) {
       </DialogTrigger>
       <DialogContent className="max-w-4xl overflow-y-scroll max-h-[98%]">
         <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
+          <DialogTitle>Edit user</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <div className="">

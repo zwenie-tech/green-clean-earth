@@ -8,7 +8,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { Edit } from "lucide-react";
+import { Edit, Plus } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
@@ -66,7 +66,7 @@ interface MissionZone {
   zone_id: string;
   zone_name: string;
 }
-export function Eduform() {
+export function AddZoneForm() {
   const router = useRouter();
   const pathname = usePathname();
   const coId = pathname.split("/")[3];
@@ -84,15 +84,7 @@ export function Eduform() {
   const chapter_name = Cookies.get("chapter_name");
   const zone_name = Cookies.get("zone_name");
 
-  useEffect(() => {
-    async function fetchData() {
-      
-      chapter_type_id ? setSelectMissionarea(chapter_type_id) : '';
-      chapter_name ? setSelectedMission(chapter_name) : '';
-      zone_name ? setSelectedZone(zone_name) : '';
-    }
-    fetchData();
-  }, [chapter_type_id,chapter_name,zone_name]);
+ 
 
 
   useEffect(() => {
@@ -139,7 +131,7 @@ export function Eduform() {
     console.log(formdata);
 
     if (token) {
-      const response = await axios.post(`${apiURL}/adminEdit/modifyMMZone?recordId=${coId}`, formdata, {
+      const response = await axios.post(`${apiURL}/adminEdit/modifyMMZone`, formdata, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -155,7 +147,7 @@ export function Eduform() {
           });
 
           setTimeout(function () {
-            window.history.back();
+            window.location.reload();
           }, 1800);
 
 
@@ -180,14 +172,14 @@ export function Eduform() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="flex items-center justify-start gap-2 my-4 cursor-pointer text-primary">
-          <Edit />
-          <span className="text-base">Edit</span>
+        <div className="flex items-center justify-start gap-2 my-4 cursor-pointer text-primary float-right">
+          <Plus />
+          <span className="text-base">Add Mission Zone</span>
         </div>
       </DialogTrigger>
       <DialogContent className="max-w-4xl overflow-y-scroll max-h-[98%]">
         <DialogHeader>
-          <DialogTitle>Edit Mission Zone</DialogTitle>
+          <DialogTitle>Add Mission Zone</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <div className="">

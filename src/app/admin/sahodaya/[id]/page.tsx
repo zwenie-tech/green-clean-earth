@@ -25,6 +25,8 @@ function Page() {
       router.push("/admin/login");
     }
   }, [token, router]);
+
+  
   useEffect(() => {
     async function fetchdata() {
       if(token){
@@ -48,7 +50,7 @@ function Page() {
       }
     }
     fetchdata();
-  }, []);
+  }, [coId, token]);
   
   return (
     <div className="">
@@ -61,7 +63,7 @@ function Page() {
           }}
         >
           <ChevronLeft />
-          <span className="text-base">Manage Education District</span>
+          <span className="text-base">Manage Sahodaya</span>
         </div>
 
         <Eduform />

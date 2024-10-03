@@ -44,6 +44,7 @@ import axios from "axios";
 import { apiURL } from "@/app/requestsapi/request";
 import Cookies from 'js-cookie';
 import { useToast } from "@/components/ui/use-toast";
+import { usePathname } from "next/navigation";
 
 
   const formSchema = z.object({
@@ -53,23 +54,25 @@ import { useToast } from "@/components/ui/use-toast";
   export function Challengesform() {
     const token = Cookies.get("adtoken");
   const { toast } = useToast();
-
+  const pathname = usePathname();
+  const coId = pathname.split("/")[3];
     const form = useForm<z.infer<typeof formSchema>>({
       resolver: zodResolver(formSchema),
       defaultValues: {
-        ischallenge:'',
+        ischallenge:'1',
       },
     });
   
     async function onSubmit(values: z.infer<typeof formSchema>) {
       console.log(values);
       const formdata = {
-        isChallenged : values.ischallenge === "2" ? false : true
+        isChallenged : values.ischallenge === "2" ? false : true,
+        treeNumber: coId
       }
       console.log(formdata);
 
       if (token) {
-        const response = await axios.post(`${apiURL}/adminEdit/updateActivity`, formdata, {
+        const response = await axios.post(`${apiURL}/adminEdit/updateChallenge`, formdata, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -83,9 +86,9 @@ import { useToast } from "@/components/ui/use-toast";
               description: "",
             });
   
-            setTimeout(function() {
-                        window.location.reload();
-                      }, 1800);
+              setTimeout(function() {
+                          window.history.back();
+                        }, 1800);
                     
   
           } else {
