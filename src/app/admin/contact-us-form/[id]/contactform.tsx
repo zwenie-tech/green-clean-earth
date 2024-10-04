@@ -63,14 +63,14 @@ import { useToast } from "@/components/ui/use-toast";
     const form = useForm<z.infer<typeof formSchema>>({
       resolver: zodResolver(formSchema),
       defaultValues: {
-        contact: "",
+        contact: "2",
       },
     });
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
       console.log(values);
       const formdata = {
-        isChallenged : values.contact === "2" ? false : true,
+        contacted : values.contact === "2" ? false : true,
         contactId: coId
       }
       console.log(formdata);

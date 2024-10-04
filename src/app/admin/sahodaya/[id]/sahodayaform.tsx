@@ -45,11 +45,11 @@ import { usePathname, useRouter } from "next/navigation";
 import Cookies from 'js-cookie';
 import { apiURL } from "@/app/requestsapi/request";
 import axios from "axios";
+import { toast } from "@/components/ui/use-toast";
 
 
 const formSchema = z.object({
-  sahodaya_name: z.string().min(2).max(255),
-  st_name: z.string().min(2).max(255),
+
 });
 
 interface ActivityData {
@@ -83,16 +83,14 @@ export function Eduform() {
 
     const st_name = Cookies.get("st_name");
     const sahodaya_name = Cookies.get("sahodaya_name");
+
     useEffect(() => {
         async function fetchData() {
           st_name ? setSelectedStateGrp(st_name) : '';
           sahodaya_name ? setSelectSahodaya(sahodaya_name) : '';
-          const response = await axios.get(`${apiURL}/sahodaya/1`);
-          console.log(response)
-          setSahodaya(response.data.sahodayaList);
         }
         fetchData();
-    }, []);
+    }, [sahodaya_name, st_name]);
 
     useEffect(() => {
       async function fetchData() {
@@ -108,7 +106,7 @@ export function Eduform() {
           }
       }
       fetchData();
-  }, [selectedStateGrp]);
+  }, [selectedStateGrp, states]);
     
    
   useEffect(() => {
@@ -124,13 +122,55 @@ export function Eduform() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-          sahodaya_name: sahodaya_name,
-          st_name: st_name
+          
         },
     });
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values);
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+      console.log(values);
+      const formdata = {
+        stateId : states.find((item) => item.st_name === selectedStateGrp)?.st_id?.toString(),
+        sahodayaName : selectSahodaya
+            }
+      console.log(formdata);
+  
+      if (token) {
+        const response = await axios.post(`${apiURL}/adminEdit/modifySahodaya?recordId=${coId}`, formdata, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+        try {
+  
+          if (response.data.success && response.status != 203) {
+
+            toast({
+              title: "Data Successfully Updated.",
+              description: "",
+            });
+  
+            setTimeout(function() {
+              window.history.back();
+                      }, 1800);
+                    
+  
+          } else {
+            toast({
+              variant: "destructive",
+              title: "Oops, Something went wrong!",
+              description: "Please try again...",
+            });
+          }
+  
+        } catch (error) {
+          toast({
+            variant: "destructive",
+            title: "Oops, Something went wrong!",
+            description: "Please try again...",
+          });
+        }
+      };
     }
 
     return (
@@ -143,7 +183,7 @@ export function Eduform() {
             </DialogTrigger>
             <DialogContent className="max-w-4xl overflow-y-scroll max-h-[98%]">
                 <DialogHeader>
-                    <DialogTitle>Edit EduDistrict</DialogTitle>
+                    <DialogTitle>Edit Sahodaya</DialogTitle>
                     <DialogDescription></DialogDescription>
                 </DialogHeader>
                 <div className="">
@@ -154,65 +194,40 @@ export function Eduform() {
                             className=""
                         >
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                            <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">State</label>
+                    <Select
+                      onValueChange={(value) => {
+                        // setCountry(value);
+                        setSelectedStateGrp(value);
+                      }}
+                      value={selectedStateGrp || ""}
+                      defaultValue={selectedStateGrp}
+                    >
+                      <SelectTrigger className="block w-full px-3 py-2 border border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 sm:text-sm"
+                      >
+                        <SelectValue placeholder="Choose a state" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {states.map((state) => (
+                          <SelectItem key={state.st_id} value={state.st_name}>
+                            {state.st_name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                            
+                  <div className="mb-4">
+                  <label className="form-label">Sahodaya</label>
+                  <input
+                    className="block w-full px-3 py-2 border border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 sm:text-sm"
 
-                            <FormField
-                      control={form.control}
-                      name="st_name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>State</FormLabel>
-
-                          <Select onValueChange={(value) => {
-                            field.onChange(value);
-                            setSelectedStateGrp(value);
-                          }} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Choose a state" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {states.map((state) => (
-                                <SelectItem key={state.st_id} value={state.st_name}>
-                                  {state.st_name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="sahodaya_name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Sahodaya</FormLabel>
-
-                          <Select onValueChange={(value) => {
-                            field.onChange(value);
-                            setSelectSahodaya(value);
-                          }} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Choose a sahodaya" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {sahodaya && sahodaya.map((s) => (
-                                <SelectItem key={s.sahodaya_id} value={s.sahodaya_name}>
-                                  {s.sahodaya_name}
-                                </SelectItem>
-                              ))}
-
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    value={selectSahodaya}
+                    onChange={(e) => setSelectSahodaya(e.target.value)}
+                  />
+                </div>
+                    
                             </div>
 
                             <div className="mt-3">

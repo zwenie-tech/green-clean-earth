@@ -8,7 +8,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { Edit } from "lucide-react";
+import { Edit, Plus } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
@@ -45,61 +45,93 @@ import { usePathname, useRouter } from "next/navigation";
 import Cookies from 'js-cookie';
 import { apiURL } from "@/app/requestsapi/request";
 import axios from "axios";
-import { toast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 
 
 const formSchema = z.object({
-    
+    dis_name: z.string().min(2).max(255),
+    edu_district: z.string().min(2).max(255),
 });
 
-export function Eduform() {
+interface ActivityData {
+
+    dis_name: string;
+    edu_district: string;
+}
+
+
+
+interface District {
+    dis_id: number;
+    dis_name: string;
+}
+
+interface EduDistrict {
+    edu_district_id: string;
+    edu_district: string;
+}
+export function AddEduform() {
     const router = useRouter();
     const pathname = usePathname();
     const coId = pathname.split("/")[3];
     const segments = pathname.split("/").filter(Boolean);
     const lastSegment = segments[segments.length - 1];
     const token = Cookies.get("adtoken");
+    const { toast } = useToast();
 
-    const [heading, setHeading] = useState('');
-    const [desc, setDesc] = useState('');
-    const [loc, setLoc] = useState('');
+    const [selectedDistrict, setSelectedDistrict] = useState("");
+
+    const [districts, setDistricts] = useState<District[]>([]);
+    const [eduDistrict, setEduDistrict] = useState<EduDistrict[]>([]);
+    const [selecteduDistrict, setSelecteduDistrict] = useState('');
+
+    
+   
 
     useEffect(() => {
-        async function fetchdata() {
-          if(token){
-            const retrievedData = JSON.parse(localStorage.getItem("newsData") || "[]");
-            const itemdata = retrievedData.find((item: { id  : string; }) => item.id == coId)
-            console.log([itemdata][0].event_body)
-            const {location, event_heading, event_body} = [itemdata][0];
-            location ? setLoc(location) : '';
-            event_heading ? setHeading(event_heading) : '';
-            event_body ? setDesc(event_body) : '';
-            
-    
-          }
-        }
-        fetchdata();
-      }, []);
+        async function fetchData() {
 
-   
+            const districtResponse = await fetch(`${apiURL}/district`);
+            const districtData = await districtResponse.json();
+            setDistricts(districtData.district);
+
+        }
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        const fetchClass = async () => {
+            try {
+                if (selectedDistrict) {
+                    const dis_id = districts.find((item) => item.dis_name === selectedDistrict)?.dis_id;
+                    const responseedudistrict = dis_id ? await axios.get(`${apiURL}/eduDistrict/${dis_id}`) : null;
+                    responseedudistrict ? setEduDistrict(responseedudistrict.data.eduDistrict) : '';
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+        fetchClass();
+    }, [districts, selectedDistrict]);
+
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-
+           
         },
     });
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values);
+        
         const formdata = {
-            eventHeading: heading,
-            eventBody: desc,
-            location: loc
+            districtId: districts.find((item) => item.dis_name === values.dis_name)?.dis_id?.toString(),
+            eduDistrictName: selecteduDistrict
         }
         console.log(formdata);
 
         if (token) {
-            const response = await axios.post(`${apiURL}/adminEdit/modifyEvents?recordId=${coId}`, formdata, {
+            const response = await axios.post(`${apiURL}/adminEdit/modifyEduDistrict`, formdata, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -115,7 +147,7 @@ export function Eduform() {
                     });
 
                     setTimeout(function () {
-                        window.history.back();
+                        window.location.reload();
                     }, 1800);
 
 
@@ -140,14 +172,14 @@ export function Eduform() {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <div className="flex items-center justify-start gap-2 my-4 cursor-pointer text-primary">
-                    <Edit />
-                    <span className="text-base">Edit</span>
+                <div className="flex items-center justify-start gap-2 my-4 cursor-pointer text-primary float-right">
+                    <Plus />
+                    <span className="text-base">Add EduDistrict</span>
                 </div>
             </DialogTrigger>
             <DialogContent className="max-w-4xl overflow-y-scroll max-h-[98%]">
                 <DialogHeader>
-                    <DialogTitle>Edit EduDistrict</DialogTitle>
+                    <DialogTitle>Add EduDistrict</DialogTitle>
                     <DialogDescription></DialogDescription>
                 </DialogHeader>
                 <div className="">
@@ -159,36 +191,44 @@ export function Eduform() {
                         >
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
 
-                                <div className="md:col-span-3 mb-4">
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Heading</label>
-                                    <textarea
-                                        className="block w-full px-3 py-2 border border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 sm:text-sm h-24"
-                                        value={heading}
-                                        onChange={(e) => setHeading(e.target.value)}
-                                        placeholder="Enter a heading"
-                                    ></textarea>
-                                </div>
+                                {/* District Field */}
+                                <FormField
+                                    control={form.control}
+                                    name="dis_name"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>District</FormLabel>
+                                            <Select onValueChange={(value) => {
+                                                field.onChange(value);
+                                                setSelectedDistrict(value);
+                                            }} defaultValue={field.value}>
+                                                <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Choose a district" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    {districts.map((district) => (
+                                                        <SelectItem key={district.dis_id} value={district.dis_name}>
+                                                            {district.dis_name}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
 
-                                <div className="md:col-span-3 mb-4">
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                                    <textarea
-                                        className="block w-full px-3 py-2 border border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 sm:text-sm h-24"
-                                        value={desc}
-                                        onChange={(e) => setDesc(e.target.value)}
-                                        placeholder="Enter a description"
-                                    ></textarea>
-                                </div>
                                 <div className="mb-4">
-                                    <label className="form-label">Location</label>
+                                    <label className="form-label">Edu District</label>
                                     <input
                                         className="block w-full px-3 py-2 border border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 sm:text-sm"
 
-                                        value={loc}
-                                        onChange={(e) => setLoc(e.target.value)}
+                                        value={selecteduDistrict}
+                                        onChange={(e) => setSelecteduDistrict(e.target.value)}
                                     />
                                 </div>
-
-
                             </div>
 
                             <div className="mt-3">

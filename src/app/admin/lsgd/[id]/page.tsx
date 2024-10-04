@@ -4,6 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Lsgdform } from "./lsgdform";
 import Cookies from 'js-cookie';
+import { apiURL } from "@/app/requestsapi/request";
 
 interface ActivityData {
   cop_name:string;
@@ -50,6 +51,7 @@ function Page() {
     }
     fetchdata();
   }, []);
+  
   return (
     <div className="">
       {/* {lastSegment} */}

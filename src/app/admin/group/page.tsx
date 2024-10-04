@@ -33,17 +33,17 @@ const AdminGrid = () => {
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
     { field: "gp_name", headerName: "Group name" },
     { field: "group_type", headerName: "Group type" },
-    { field: "school_category", headerName: "School category" },
-    { field: "school_type", headerName: "School type" },
+    { field: "type_name", headerName: "School type" },
+    { field: "gp_cat_name", headerName: "School category" },
     { field: "edu_district", headerName: "Edu district" },
-    { field: "edu_sub_district", headerName: "Edu sub district" },
-    { field: "sahodaya", headerName: "Sahodaya" },
-    { field: "block", headerName: "Block" },
-    { field: "project", headerName: "Project" },
-    { field: "chapter", headerName: "Chapter" },
-    { field: "zone", headerName: "Zone" },
-    { field: "st_name", headerName: "State" },
+    { field: "edu_sub_district_name", headerName: "Edu sub district" },
+    { field: "sahodaya_name", headerName: "Sahodaya" },
+    { field: "block_name", headerName: "Block" },
+    { field: "project_name", headerName: "Project" },
+    { field: "chapter_name", headerName: "Chapter" },
+    { field: "zone_name", headerName: "Zone" },
     { field: "cntry_name", headerName: "Country" },
+    { field: "st_name", headerName: "State" },
     { field: "co_ord_name", headerName: "Coordinator name" },
   ]);
 
@@ -55,7 +55,7 @@ const AdminGrid = () => {
   }, []);
   const onRowClicked = (event: RowClickedEvent) => {
 
-    const id = event.data.up_id;
+    const id = event.data.gp_id;
     router.push(`group/${id}`);
   };
   const handlePageChange = (newPage: number) => {

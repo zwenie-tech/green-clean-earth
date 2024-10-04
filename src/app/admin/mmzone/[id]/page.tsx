@@ -42,7 +42,7 @@ function Page() {
 
          Cookies.set('adtoken', token, { expires: 1 });
         Cookies.set('chapter_name', [itemdata][0].chapter_name, { expires: 1 });
-        Cookies.set('chapter_name', [itemdata][0].chapter_type_name, { expires: 1 });
+        Cookies.set('chapter_type_id', [itemdata][0].chapter_type_id, { expires: 1 });
         Cookies.set('zone_name', [itemdata][0].zone_name, { expires: 1 });
         
 

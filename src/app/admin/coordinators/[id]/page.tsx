@@ -78,19 +78,7 @@ function Page() {
             Cookies.set('co_username', udata.co_username, { expires: 1 });
             Cookies.set('co_ord_contact', udata.co_ord_contact, { expires: 1 });
             Cookies.set('co_profession', udata.co_profession, { expires: 1 });
-            Cookies.set('gp_name', udata.gp_name, { expires: 1 });
-            Cookies.set('group_type', udata.group_type, { expires: 1 });
-            Cookies.set('type_name', udata.type_name, { expires: 1 });
-            Cookies.set('gp_cat_name', udata.gp_cat_name, { expires: 1 });
-            Cookies.set('edu_district', udata.edu_district, { expires: 1 });
-            Cookies.set('edu_sub_district_name', udata.edu_sub_district_name, { expires: 1 });
-            Cookies.set('sahodaya_name', udata.sahodaya_name, { expires: 1 });
-            Cookies.set('block_name', udata.block_name, { expires: 1 });
-            Cookies.set('project_name', udata.project_name, { expires: 1 });
-            Cookies.set('chapter_name', udata.chapter_name, { expires: 1 });
-            Cookies.set('zone_name', udata.zone_name, { expires: 1 });
-            Cookies.set('st_name', udata.st_name, { expires: 1 });
-            Cookies.set('dis_name', udata.dis_name, { expires: 1 });
+           
 
 
             setUserData(response.data.cordinatorDetails);

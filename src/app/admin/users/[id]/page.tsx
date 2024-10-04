@@ -45,8 +45,6 @@ function Page() {
     async function fetchdata() {
 
       if (token) {
-        location.reload();
-
         const response = await axios.get(`${apiURL}/adminFrame/userDetails/${userId}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -64,9 +62,8 @@ function Page() {
             Object.keys(allCookies).forEach(cookieName => {
                 Cookies.remove(cookieName);
             });
-           
 
-           Cookies.set('adtoken', token, { expires: 1 });
+            Cookies.set('adtoken', token, { expires: 1 });
             Cookies.set('us_name', udata.us_name, { expires: 1 });
             Cookies.set('us_email', udata.us_email, { expires: 1 });
             Cookies.set('us_mobile', udata.us_mobile, { expires: 1 });
@@ -82,8 +79,7 @@ function Page() {
             Cookies.set('us_province', udata.us_province, { expires: 1 });
             Cookies.set('co_ord_name', udata.co_ord_name, { expires: 1 });
             Cookies.set('gp_name', udata.gp_name, { expires: 1 });
-        location.reload();
-            
+
             setUserData(response.data.userDetails);
           } else {
 

@@ -45,6 +45,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Cookies from 'js-cookie';
 import { apiURL } from "@/app/requestsapi/request";
 import axios from "axios";
+import { useToast } from "@/components/ui/use-toast";
 
 
 const formSchema = z.object({
@@ -76,8 +77,8 @@ export function Eduform() {
     const segments = pathname.split("/").filter(Boolean);
     const lastSegment = segments[segments.length - 1];
     const token = Cookies.get("adtoken");
+    const { toast } = useToast();
 
-    const [userData, setUserData] = useState<ActivityData[]>([]);
     const [selectedDistrict, setSelectedDistrict] = useState("");
 
     const [districts, setDistricts] = useState<District[]>([]);
@@ -107,7 +108,7 @@ export function Eduform() {
         }
         fetchData();
     }, []);
-    
+
     useEffect(() => {
         const fetchClass = async () => {
             try {
@@ -121,7 +122,7 @@ export function Eduform() {
             }
         };
         fetchClass();
-    }, [districts,selectedDistrict]);
+    }, [districts, selectedDistrict]);
 
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -132,8 +133,51 @@ export function Eduform() {
         },
     });
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values);
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        
+        const formdata = {
+            districtId: districts.find((item) => item.dis_name === values.dis_name)?.dis_id?.toString(),
+            eduDistrictName: selecteduDistrict
+        }
+        console.log(formdata);
+
+        if (token) {
+            const response = await axios.post(`${apiURL}/adminEdit/modifyEduDistrict?recordId=${coId}`, formdata, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            try {
+
+                if (response.data.success && response.status != 203) {
+
+                    toast({
+                        title: "Data Successfully Updated.",
+                        description: "",
+                    });
+
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1800);
+
+
+                } else {
+                    toast({
+                        variant: "destructive",
+                        title: "Oops, Something went wrong!",
+                        description: "Please try again...",
+                    });
+                }
+
+            } catch (error) {
+                toast({
+                    variant: "destructive",
+                    title: "Oops, Something went wrong!",
+                    description: "Please try again...",
+                });
+            }
+        };
     }
 
     return (
@@ -187,36 +231,15 @@ export function Eduform() {
                                     )}
                                 />
 
-                                <FormField
-                                    control={form.control}
-                                    name="edu_district"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Education District</FormLabel>
+                                <div className="mb-4">
+                                    <label className="form-label">Edu District</label>
+                                    <input
+                                        className="block w-full px-3 py-2 border border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 sm:text-sm"
 
-                                            <Select onValueChange={(value) => {
-                                                field.onChange(value);
-
-                                                setSelecteduDistrict(value);
-                                            }} defaultValue={field.value}>
-                                                <FormControl>
-                                                    <SelectTrigger>
-                                                        <SelectValue placeholder="Choose a education district" />
-                                                    </SelectTrigger>
-                                                </FormControl>
-                                                <SelectContent>
-                                                    {eduDistrict && eduDistrict.map((e) => (
-                                                        <SelectItem key={e.edu_district_id} value={e.edu_district}>
-                                                            {e.edu_district}
-                                                        </SelectItem>
-                                                    ))}
-
-                                                </SelectContent>
-                                            </Select>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
+                                        value={selecteduDistrict}
+                                        onChange={(e) => setSelecteduDistrict(e.target.value)}
+                                    />
+                                </div>
                             </div>
 
                             <div className="mt-3">

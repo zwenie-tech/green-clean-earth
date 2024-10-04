@@ -43,23 +43,8 @@ function ActivityLabel() {
         try {
 
           if (response.data.success && response.status != 203) {
-            const udata = response.data.corpDetails[0];
-             // Get all cookies
-             const allCookies = Cookies.get();
-
-             // Remove all cookies
-             Object.keys(allCookies).forEach(cookieName => {
-                 Cookies.remove(cookieName);
-             });
-
-            Cookies.set('adtoken', token, { expires: 1 });
-            Cookies.set('cop_name', udata.cop_name, { expires: 1 });
-            Cookies.set('dis_name', udata.dis_name, { expires: 1 });
-            
-          
 
             setUserData(response.data.corpDetails);
-            console.log(udata.cop_name)
           } else {
 
           }

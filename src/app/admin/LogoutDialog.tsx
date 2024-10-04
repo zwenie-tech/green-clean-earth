@@ -10,8 +10,11 @@ import {
 } from "@/components/ui/dialog";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { LogOut } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 function LogoutDialog() {
+  const router = useRouter();
+
   return (
     <Dialog>
       <DialogTrigger
@@ -33,7 +36,7 @@ function LogoutDialog() {
             </Button>
           </DialogClose>
 
-          <Button variant={"destructive"}>
+          <Button variant={"destructive"} onClick={() => {router.push('/admin/logout')}}>
             Logout
           </Button>
         </DialogFooter>

@@ -50,7 +50,7 @@ function Page() {
       }
     }
     fetchdata();
-  }, []);
+  }, [coId, token]);
   
   return (
     <div className="">

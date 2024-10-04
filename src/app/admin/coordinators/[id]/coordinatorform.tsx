@@ -50,12 +50,7 @@ import { apiURL, fetchClubData } from "@/app/requestsapi/request";
 import axios from "axios";
 import imageCompression from "browser-image-compression";
 const formSchema = z.object({
-  
-  name: z.string().min(2).max(255),
-  email: z.string().min(2).max(255),
-  username: z.string().min(2).max(255),
-  contact: z.string().min(2).max(255),
-  profession: z.string().min(2).max(255),
+ 
 });
 
 export function CoordinatorForm() {
@@ -64,24 +59,54 @@ export function CoordinatorForm() {
   const userId = pathname.split("/")[3];
   const { toast } = useToast();
   const token = Cookies.get("adtoken");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [contact, setContact] = useState("");
+  const [profession, setProfession] = useState("");
 
 
+  useEffect(() => {
+    async function fetchdata() {
+      if (token) {
 
+        const response = await axios.get(`${apiURL}/adminFrame/cordinatorDetails/${userId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+        try {
 
-  const co_ord_name = Cookies.get("co_ord_name");
-  const co_email_id = Cookies.get("co_email_id");
-  const co_username = Cookies.get("co_username");
-  const co_ord_contact = Cookies.get("co_ord_contact");
-  const co_profession = Cookies.get("co_profession");
+          if (response.data.success && response.status != 203) {
+            const udata = response.data.cordinatorDetails;
+            const {co_ord_name,co_email_id,co_username,co_ord_contact,co_profession} = udata[0];
+            
+            setName(co_ord_name || "");
+            setEmail(co_email_id || "");
+            setUsername(co_username || "");
+            setContact(co_ord_contact || "");
+            setProfession(co_profession || "");
+            console.log(udata)
+          } else {
+
+          }
+
+        } catch (error) {
+          console.error("Error:", error);
+
+        }
+      };
+    }
+    fetchdata();
+  }, [token, userId]);
+
+ 
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: co_ord_name,
-      email:co_email_id,
-      username:co_username,
-      contact:co_ord_contact,
-      profession:co_profession,
+  
     },
   });
 
@@ -91,11 +116,11 @@ export function CoordinatorForm() {
 
 
     const dtm = {
-      name : values.name,
-      number : values.contact,
-      profession : values.profession,
-      username : values.username,
-      emailId : values.email,
+      name : name,
+      number : contact,
+      profession : profession,
+      username : username,
+      emailId : email,
       cordinatorId : userId,
     }
     if (token) {
@@ -159,74 +184,52 @@ export function CoordinatorForm() {
               className=""
             >
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-                
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem className="mb-4">
-                      <FormLabel>Name</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem className="mb-4">
-                      <FormLabel>Email</FormLabel>
-                      <FormControl >
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="username"
-                  render={({ field }) => (
-                    <FormItem className="mb-4">
-                      <FormLabel>Username</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              <div className="mb-4">
+                  <label className="form-label">Name</label>
+                  <input
+                    className="block w-full px-3 py-2 border border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 sm:text-sm"
 
-                <FormField
-                  control={form.control}
-                  name="contact"
-                  render={({ field }) => (
-                    <FormItem className="mb-4">
-                      <FormLabel>Contact Number</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="profession"
-                  render={({ field }) => (
-                    <FormItem className="mb-4">
-                      <FormLabel>Profession</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label className="form-label">Email</label>
+                  <input
+                    className="block w-full px-3 py-2 border border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 sm:text-sm"
+
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="form-label">Username</label>
+                  <input
+                    className="block w-full px-3 py-2 border border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 sm:text-sm"
+
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="form-label">Contact Number</label>
+                  <input
+                    className="block w-full px-3 py-2 border border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 sm:text-sm"
+
+                    value={contact}
+                    onChange={(e) => setContact(e.target.value)}
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="form-label">Profession</label>
+                  <input
+                    className="block w-full px-3 py-2 border border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 sm:text-sm"
+
+                    value={profession}
+                    onChange={(e) => setProfession(e.target.value)}
+                  />
+                </div>
                
               </div>
 
