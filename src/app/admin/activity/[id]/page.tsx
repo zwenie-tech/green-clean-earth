@@ -6,6 +6,7 @@ import { Activityforms } from "./activityform"
 import Cookies from 'js-cookie';
 import axios from "axios";
 import { apiURL } from "@/app/requestsapi/request";
+import DeleteBtn from "./deletebtn";
 
 
 interface ActivityData {
@@ -127,8 +128,12 @@ function ActivityLabel() {
           <ChevronLeft />
           <span className="text-base">Manage Activity</span>
         </div>
+        <div className="flex justify-between">
 
         <Activityforms />
+          <DeleteBtn />
+        </div>
+
       </div>
       {userData[0] ?
       <div className="grid gap-4 md:gap-6 grid-cols-1 md:grid-cols-3 p-2 md:p-5 md:border md:shadow-md md:rounded-lg">
