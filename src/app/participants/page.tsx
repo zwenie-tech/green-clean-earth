@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input"
 import axios from 'axios';
 import Link from "next/link";
-
+import PaginationComponent from './PageComponent';
 import { Label } from '@radix-ui/react-label';
 
 
@@ -286,28 +286,6 @@ const ParticipateList = () => {
     }
   }
   useEffect(() => {
-    async function fetchfirstData() {
-      const responseall = await fetch(`${apiURL}/uploads/filter?limit=100000000000`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      });
-      const dataall = await responseall.json();
-
-      setTotalPages(Math.ceil(dataall.Uploads.length / itemsPerPage));
-    }
-    fetchfirstData();
-  }, []);
-
-  const handlePageChange = (newPage: number) => {
-    if (newPage > 0 && newPage <= totalPages) {
-
-      setCurrentPage(newPage);
-    }
-  }
-
-  useEffect(() => {
     async function fetchInitialData() {
       const countryResponse = await fetch(`${apiURL}/country`);
       const countryData = await countryResponse.json();
@@ -494,63 +472,86 @@ const ParticipateList = () => {
     }
   }
 
-  const onDataSubmit = async (data: any) => {
+  const onDataSubmit = async (data: any, page = 1) => {
     try {
-      const responseall = await fetch(`${apiURL}/uploads/filter?limit=10000000`, {
+      // Fetch all results to calculate total uploads (for pagination)
+      const responseAll = await fetch(`${apiURL}/uploads/filter?limit=10000000`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       });
-      const response = await fetch(`${apiURL}/uploads/filter?page=${currentPage}&limit=${itemsPerPage}`, {
+  
+      if (!responseAll.ok) {
+        throw new Error("Failed to fetch all uploads.");
+      }
+  
+      const resultAll = await responseAll.json();
+  
+      // Update total pages based on total records
+      setTotalPages(Math.ceil(resultAll.Uploads.length / itemsPerPage));
+  
+      // Fetch paginated data based on current page
+      const response = await fetch(`${apiURL}/uploads/filter?page=${page}&limit=${itemsPerPage}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       });
-
+  
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        throw new Error("Failed to fetch paginated uploads.");
       }
-      try {
-        const resultall = await responseall.json();
-        const result = await response.json();
-        setTotalCount(result.total);
-
-        setTotalPages(Math.ceil(resultall.Uploads.length / itemsPerPage));
-
-        setParticipantList(result.Uploads);
-        // setTreeNo('');
-        // setSelectedGrpType('');
-        // setSelectedGrpName('');
-        // setSelectedSubCategory('');
-        // setSelecteduDistrict('');
-        // setSelecteduSubDistrict('');
-        // setSelectschoolType('');
-        // setSelectSahodaya('');
-        // setSelectIcdsBlock('');
-        // setSelectIcdsProject('');
-        // setSelectedMission('');
-        // setSelectedZone('');
-        // setSelectedCountry('');
-        // setSelectedState('');
-        // setSelectedDistrict('');
-        // setSelectedCorp('');
-        // setSelectedLsgd('');
-        // setWardNo('');
-      } catch {
-
-        setTotalPages(1);
-
-        setParticipantList([]);
-      }
+  
+      const result = await response.json();
+  
+      // Set paginated data and total count for the page
+      setParticipantList(result.Uploads);
+      setTotalCount(result.total);
+  
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error fetching data:", error);
+      // Reset pagination and participant list on error
+      setTotalPages(1);
+      setParticipantList([]);
     }
-  }
-
+  };
+  
+  // Handle page change for pagination
+  const handlePageChange = (newPage: number) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+      // Trigger data fetch with the updated page number
+      onDataSubmit({ /* pass any form/filter data */ }, newPage);
+    }
+  };
+  
+  // Fetch initial data for total pages when the component mounts
+  useEffect(() => {
+    async function fetchInitialData() {
+      try {
+        const responseAll = await fetch(`${apiURL}/uploads/filter?limit=10000000`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+  
+        if (!responseAll.ok) {
+          throw new Error("Failed to fetch total uploads.");
+        }
+  
+        const dataAll = await responseAll.json();
+        setTotalPages(Math.ceil(dataAll.Uploads.length / itemsPerPage));
+      } catch (error) {
+        console.error("Error fetching initial data:", error);
+      }
+    }
+  
+    fetchInitialData();
+  }, [itemsPerPage]);
   useEffect(() => {
     if (filterData) {
       onDataSubmit(filterData);
@@ -1539,32 +1540,7 @@ const ParticipateList = () => {
         </div>
       </div>
       
-      <div className="flex justify-center items-center space-x-2 my-4">
-    <button
-      className={
-        currentPage === 1
-          ? "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
-          : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-      }
-      onClick={() => handlePageChange(currentPage - 1)}
-      disabled={currentPage === 1}
-    >
-      Previous
-    </button>
-    <span className="text-xl">{currentPage}</span>
-    <button
-      className={
-        currentPage === totalPages
-          ? "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
-          : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-      }
-      onClick={() => handlePageChange(currentPage + 1)}
-      disabled={currentPage === totalPages}
-    >
-      Next
-    </button>
-  </div>
-
+      <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
       <Footer />
     </>
   );

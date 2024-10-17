@@ -9,7 +9,7 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input"
 import axios from 'axios';
-
+import PaginationComponent from './PageComponent';
 interface Acivitylist {
   personal_activity_id: number,
   login_id: number,
@@ -289,13 +289,6 @@ const ActivityList = () => {
     fetchfirstData();
   }, []);
 
-  const handlePageChange = (newPage: number) => {
-    if (newPage > 0 && newPage <= totalPages) {
-
-      setCurrentPage(newPage);
-    }
-  }
-
   useEffect(() => {
     async function fetchInitialData() {
       const countryResponse = await fetch(`${apiURL}/country`);
@@ -560,7 +553,65 @@ const ActivityList = () => {
       onDataSubmit(filterData);
     }
   }, [filterData]);
-
+  useEffect(() => {
+    async function fetchFirstData() {
+      try {
+        const responseAll = await fetch(`${apiURL}/activity/all?limit=10000000`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        const dataAll = await responseAll.json();
+        const totalActivities = dataAll.activity ? dataAll.activity.length : 0;
+        
+        setTotalPages(Math.ceil(totalActivities / itemsPerPage));
+      } catch (error) {
+        console.error("Error fetching total activities:", error);
+      }
+    }
+  
+    fetchFirstData();
+  }, [itemsPerPage]);
+  
+  // Fetch data for the current page
+  useEffect(() => {
+    async function fetchDataForCurrentPage() {
+      try {
+        // Fetch countries
+        const countryResponse = await fetch(`${apiURL}/country`);
+        const countryData = await countryResponse.json();
+        setCountries(countryData.country);
+  
+        // Fetch activities for the current page
+        const response = await fetch(`${apiURL}/activity/all?page=${currentPage}&limit=${itemsPerPage}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+  
+        const result = await response.json();
+        setActivityList(result.activity || []); // Ensure it's an array
+      } catch (error) {
+        console.error('Error fetching page data:', error);
+        setActivityList([]); // Reset list on error
+      }
+    }
+  
+    fetchDataForCurrentPage();
+  }, [currentPage, itemsPerPage]);
+  
+  // Handle page change
+  const handlePageChange = (newPage: number) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
   const onSubmit = async (data: any) => {
     const dataWithIds: any = {};
     treeNo !== "" ? dataWithIds.treeNumber = parseInt(treeNo) : '';
@@ -1351,32 +1402,8 @@ const ActivityList = () => {
         </div>
       </div>
 
-
-      <div className="flex justify-center items-center space-x-2 my-4">
-    <button
-      className={
-        currentPage === 1
-          ? "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
-          : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-      }
-      onClick={() => handlePageChange(currentPage - 1)}
-      disabled={currentPage === 1}
-    >
-      Previous
-    </button>
-    <span className="text-xl">{currentPage}</span>
-    <button
-      className={
-        currentPage === totalPages
-          ? "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
-          : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-      }
-      onClick={() => handlePageChange(currentPage + 1)}
-      disabled={currentPage === totalPages}
-    >
-      Next
-    </button>
-  </div>
+      <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+     
       <Footer />
     </>
   );
