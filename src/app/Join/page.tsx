@@ -1,10 +1,13 @@
+"use client";
 import React from 'react';
 import Navigation from "../../components/navigationBar";
 import Footer from "../../components/footer";
 import Image from 'next/image';
 import Earth from '@/components/earth';
+import { useRouter } from 'next/navigation';;
 
 const JoinNow = () => {
+    const router = useRouter();
     return (
         <div>
             <Navigation />
@@ -36,11 +39,11 @@ const JoinNow = () => {
             </div>
             <div className="md:col-span-7 bg-gray-100 p-6 flex flex-col justify-between" style={{ borderRadius: '8px', height: '100%' }}>
                 <div className="flex justify-center items-center mb-4">
-                    <button className="bg-gray-200 text-green-700 shadow-lg rounded-md px-4 py-1" style={{ marginRight: '5px' }}>
+                    <button className="bg-gray-200 text-green-700 shadow-lg rounded-md px-4 py-1" style={{ marginRight: '5px' }} onClick={()=>router.push('/loginform')}>
                         Login
                     </button>
                     <p  className=" text-[#3C6E1F]"style={{ margin: '0 5px' }}>|</p>
-                    <button className="bg-gray-200 text-green-700 shadow-lg rounded-md px-4 py-1" style={{ marginLeft: '5px' }}>
+                    <button className="bg-gray-200 text-green-700 shadow-lg rounded-md px-4 py-1" style={{ marginLeft: '5px' }} onClick={()=>router.push('/register')}>
                         Registration
                     </button>
                 </div>
