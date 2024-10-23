@@ -6,7 +6,7 @@ import { Activityforms } from "./activityform"
 import Cookies from 'js-cookie';
 import axios from "axios";
 import { apiURL } from "@/app/requestsapi/request";
-import DeleteBtn from "./deletebtn";
+import { DeleteBtn } from "./deletebtn";
 
 
 interface ActivityData {
@@ -131,7 +131,7 @@ function ActivityLabel() {
         <div className="flex justify-between">
 
         <Activityforms />
-          <DeleteBtn />
+          <DeleteBtn/>
         </div>
 
       </div>

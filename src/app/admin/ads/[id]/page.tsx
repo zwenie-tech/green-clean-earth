@@ -15,7 +15,7 @@ import { BsImages, BsPaperclip } from "react-icons/bs";
 import Cookies from 'js-cookie';
 import { AdForm } from "./adform";
 import { apiURL, imageURL } from "@/app/requestsapi/request";
-import DeleteBtn from "./deletebtn";
+import { DeleteBtn } from "./deletebtnn";
 
 
 interface ActivityData {

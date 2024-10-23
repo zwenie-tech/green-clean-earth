@@ -17,7 +17,8 @@ import { BsImages, BsPaperclip } from "react-icons/bs";
 import Cookies from 'js-cookie';
 import { Eduform } from "./newsform";
 import { apiURL, imageURL } from "@/app/requestsapi/request";
-import DeleteBtn from "./deletebtn";
+import { DeleteBtn } from "./deletebtn";
+
 
 interface ActivityData {
 

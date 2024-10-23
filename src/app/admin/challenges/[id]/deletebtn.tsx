@@ -28,7 +28,8 @@ const DeleteBtn = () => {
     try {
       const response = await axios.post(`${apiURL}/adminEdit/updateChallenge`, {
         "isdeleted": true,
-        "treeNumber": coId
+        "treeNumber": coId,
+        'isChallenged':true
 
     },{
       headers: {
@@ -47,10 +48,18 @@ const DeleteBtn = () => {
             window.history.back();
           }, 1800);
       } else {
-        console.error("Failed to export data");
+        toast({
+          variant: "destructive",
+          title: "Oops, Something went wrong!",
+          description: "Please try again...",
+      });
       }
     } catch (error) {
-      console.error("Error during exporting:", error);
+      toast({
+        variant: "destructive",
+        title: "Oops, Something went wrong!",
+        description: "Please try again...",
+    });
     }
   };
   return (
