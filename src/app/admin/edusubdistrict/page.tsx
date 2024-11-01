@@ -17,7 +17,18 @@ import * as XLSX from 'xlsx';
 import { AddEduSubform } from "./[id]/addeduform";
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
-
+interface EduDistrict {
+  edu_district_id: string;
+  edu_district: string;
+}
+interface District {
+  dis_id: number;
+  dis_name: string;
+}
+interface EduSubDistrict {
+  edu_sub_district_id: string;
+  edu_sub_district_name: string;
+}
 const AdminGrid = () => {
   const router = useRouter();
   const [rowData, setRowData] = useState([]);
@@ -25,6 +36,13 @@ const AdminGrid = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 10;
+  const [selectedDistrictGrp, setSelectedDistrictGrp] = useState("");
+  const [eduDistrict, setEduDistrict] = useState<EduDistrict[]>([]);
+  const [selecteduDistrict, setSelecteduDistrict] = useState('');
+  const [districts, setDistricts] = useState<District[]>([]);
+  const [totalcount, setTotalcount] = useState("");
+  const [selecteduSubDistrict, setSelecteduSubDistrict] = useState('');
+  const [eduSubDistrict, setEduSubDistrict] = useState<EduSubDistrict[]>([]);
 
   const handlePageChange = (newPage: number) => {
     if (newPage > 0 && newPage <= totalPages) {
@@ -48,7 +66,7 @@ const AdminGrid = () => {
   const defaultColDef = useMemo(() => {
     return {
       filter: "agTextColumnFilter",
-      floatingFilter: true,
+      floatingFilter: false,
     };
   }, []);
 
@@ -100,6 +118,8 @@ const AdminGrid = () => {
         
         if (response.data.success && response.status!=203) {
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
+          
+          setTotalcount(response.data.totalCount);
     localStorage.setItem("edusubData", JSON.stringify(response.data.eduSubDistrict));
 
         console.log(response.data.eduSubDistrict)
@@ -109,6 +129,171 @@ const AdminGrid = () => {
     };
     fetchdata();
   }, [currentPage, token]);
+
+
+  useEffect(() => {
+    async function fetchData() {
+
+       
+        const districtResponse = await fetch(`${apiURL}/district`);
+        const districtData = await districtResponse.json();
+        setDistricts(districtData.district);
+
+    }
+    fetchData();
+}, []);
+
+useEffect(() => {
+  const fetchClass = async () => {
+      try {
+          
+          const dis_id = districts.find((item) => item.dis_name === selectedDistrictGrp)?.dis_id;
+          const responseedudistrict = dis_id ? await axios.get(`${apiURL}/eduDistrict/${dis_id}`) : null;
+          responseedudistrict ? setEduDistrict(responseedudistrict.data.eduDistrict) : '';
+      } catch (error) {
+          console.error("Error fetching data:", error);
+      }
+  };
+  fetchClass();
+}, [districts, selectedDistrictGrp]);
+
+  const handleFilterEDistrict = (e: any) => {
+    console.log(e.target.value)
+    if (e.target.value != "") {
+        setSelectedDistrictGrp(e.target.value);
+        fetchFilteredDistrict(e.target.value);
+        setCurrentPage(1); // Reset to first page
+    }
+};
+
+const handleFilterEduDistrict = (e: any) => {
+    console.log(e.target.value)
+    if (e.target.value != "") {
+        setSelecteduDistrict(e.target.value);
+        fetchFilteredEduDistrict(e.target.value);
+        handleEduDistrict(e.target.value);
+        setCurrentPage(1); // Reset to first page
+    }
+};
+
+const handleEduDistrict = async (e: any) => {
+  try {
+      const eduid = eduDistrict.find((item) => item.edu_district === e)?.edu_district_id
+      const responseedusubdistrict = await axios.get(`${apiURL}/eduSubDistrict/${eduid}`);
+      setEduSubDistrict(responseedusubdistrict.data.eduSubDistrict);
+  } catch (error) {
+      console.error("Error fetching data:", error);
+  }
+}
+
+const fetchFilteredDistrict = async (value: string) => {
+  if (token) {
+      const response = await axios.post(
+          `${apiURL}/admin/adminEduSubDistrict?limit=${totalcount}`,
+          {},
+          {
+              headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+              },
+          }
+      );
+      try {
+          if (response.data.success && response.status !== 203) {
+              console.log('filter')
+              console.log(response.data)
+              const filteredData = response.data.eduSubDistrict.filter(
+                  (item: { dis_name: string; }) => item.dis_name === value
+              );
+              console.log(filteredData)
+
+              setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
+              setRowData(filteredData);
+          } else {
+              setRowData([]);
+          }
+      } catch (error) {
+          console.error("Error:", error);
+      }
+  }
+};
+
+const fetchFilteredEduDistrict = async (value: string) => {
+  if (token) {
+      const response = await axios.post(
+          `${apiURL}/admin/adminEduSubDistrict?limit=${totalcount}`,
+          {},
+          {
+              headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+              },
+          }
+      );
+      try {
+          if (response.data.success && response.status !== 203) {
+              console.log('filter')
+              console.log(response.data)
+              const filteredData = response.data.eduSubDistrict.filter(
+                  (item: { edu_district: string; }) => item.edu_district === value
+              );
+              console.log(filteredData)
+
+              setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
+              setRowData(filteredData);
+          } else {
+              setRowData([]);
+          }
+      } catch (error) {
+          console.error("Error:", error);
+      }
+  }
+};
+
+
+const handleFilterEduSubDistrict = (e: any) => {
+  console.log(e.target.value)
+  if (e.target.value != "") {
+      setSelecteduSubDistrict(e.target.value);
+      fetchFilteredEduSubDistrict(e.target.value);
+      setCurrentPage(1); // Reset to first page
+  }
+};
+
+const fetchFilteredEduSubDistrict = async (value: string) => {
+  if (token) {
+      const response = await axios.post(
+          `${apiURL}/admin/adminEduSubDistrict?limit=${totalcount}`,
+          {},
+          {
+              headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+              },
+          }
+      );
+      try {
+          if (response.data.success && response.status !== 203) {
+              console.log('filter')
+              console.log(response.data)
+              const filteredData = response.data.eduSubDistrict.filter(
+                  (item: { edu_sub_district_name: string; }) => item.edu_sub_district_name === value
+              );
+              console.log(filteredData)
+
+              setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
+              setRowData(filteredData);
+          } else {
+              setRowData([]);
+          }
+      } catch (error) {
+          console.error("Error:", error);
+      }
+  }
+};
+
+
+
   return (
     <div className=" bg-slate-100">
       <AddEduSubform/>
@@ -119,6 +304,69 @@ const AdminGrid = () => {
         >
           Export To Excel
         </button>
+
+        <div className="flex items-center mb-3 space-x-2">
+        <label htmlFor="groupFilter" className="text-sm font-medium">
+          District:
+        </label>
+        <select
+          id="groupFilter"
+          value={selectedDistrictGrp}
+          onChange={handleFilterEDistrict}
+          className="border border-gray-300 rounded p-1"
+        >
+          <option value="">Choose District</option>
+
+          {districts.map((district) => (
+            <option key={district.dis_id} value={district.dis_name}>
+              {district.dis_name}
+            </option>
+          ))}
+
+        </select>
+      </div>
+
+      <div className="flex items-center mb-3 space-x-2">
+        <label htmlFor="groupFilter" className="text-sm font-medium">
+          Education District:
+        </label>
+        <select
+          id="groupFilter"
+          value={selecteduDistrict}
+          onChange={handleFilterEduDistrict}
+          className="border border-gray-300 rounded p-1"
+        >
+          <option value="">Choose Education District</option>
+
+          {eduDistrict && eduDistrict.map((e) => (
+            <option key={e.edu_district_id} value={e.edu_district}>
+              {e.edu_district}
+            </option>
+          ))}
+
+        </select>
+      </div>
+      <div className="flex items-center mb-3 space-x-2">
+                        <label htmlFor="groupFilter" className="text-sm font-medium">
+                            Education Sub District:
+                        </label>
+                        <select
+                            id="groupFilter"
+                            value={selecteduSubDistrict}
+                            onChange={handleFilterEduSubDistrict}
+                            className="border border-gray-300 rounded p-1"
+                        >
+                            <option value="">Choose Education Sub District</option>
+
+                            {eduSubDistrict && eduSubDistrict.map((e) => (
+                                <option key={e.edu_sub_district_id} value={e.edu_sub_district_name}>
+                                    {e.edu_sub_district_name}
+                                </option>
+                            ))}
+
+                        </select>
+                    </div>
+      
       <div className={"ag-theme-quartz"} style={{ height: 600 }}>
         <AgGridReact
           rowData={rowData}

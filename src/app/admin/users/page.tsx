@@ -15,13 +15,51 @@ import Cookies from 'js-cookie';
 import * as XLSX from 'xlsx';
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
+interface Country {
+  cntry_id: number;
+  cntry_name: string;
+}
+interface State {
+  st_id: number;
+  st_name: string;
+}
 
+interface District {
+  dis_id: number;
+  dis_name: string;
+}
+type Corp = {
+  cop_id: string;
+  cop_name: string;
+}
+interface Lsgd {
+  lsg_id: number;
+  lsg_name: string;
+}
 const AdminGrid = () => {
   const router = useRouter();
   const [rowData, setRowData] = useState([]);
   const token = Cookies.get("adtoken");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [filterValue, setFilterValue] = useState("");
+  const [totalcount, setTotalcount] = useState("");
+  const [countries, setCountries] = useState<Country[]>([]);
+  const [states, setStates] = useState<State[]>([]);
+  const [districts, setDistricts] = useState<District[]>([]);
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [selectedState, setSelectedState] = useState("");
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [selectedCntry, setSelectedCntry] = useState("");
+  const [selectedCorp, setSelectedCorp] = useState("");
+  const [selectedLsgd, setSelectedLsgd] = useState("");
+  const [selectedWard, setSelectedWard] = useState("");
+  const [lsgd, setLsgd] = useState<Lsgd[]>([]);
+  const [corporation, setCorporation] = useState<Corp[]>([]);
+  const [coordinator, setCoordinator] = useState("");
+  const [email, setEmail] = useState("");
+  const [userid, setUserid] = useState("");
+  const [mobile, setMobile] = useState("");
   const itemsPerPage = 10;
   useEffect(() => {
     if (!token) {
@@ -30,12 +68,13 @@ const AdminGrid = () => {
   }, [token, router]);
 
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
+    { field: "us_id", headerName: "User Id" },
     { field: "us_name", headerName: "Name" },
     { field: "us_email", headerName: "Email" },
     { field: "us_mobile", headerName: "Mobile" },
-    { field: "dis_name", headerName: "District" },
-    { field: "st_name", headerName: "State" },
     { field: "cntry_name", headerName: "Country" },
+    { field: "st_name", headerName: "State" },
+    { field: "dis_name", headerName: "District" },
     { field: "us_address", headerName: "Address" },
     { field: "created_on", headerName: "Registered date" },
     { field: "gp_name", headerName: "Group name" },
@@ -45,7 +84,7 @@ const AdminGrid = () => {
   const defaultColDef = useMemo(() => {
     return {
       filter: "agTextColumnFilter",
-      floatingFilter: true,
+      floatingFilter: false,
     };
   }, []);
   const onRowClicked = (event: RowClickedEvent) => {
@@ -58,7 +97,7 @@ const AdminGrid = () => {
 
       setCurrentPage(newPage);
     }
-  } 
+  }
 
   useEffect(() => {
     async function fetchdata() {
@@ -74,6 +113,7 @@ const AdminGrid = () => {
 
           if (response.data.success && response.status != 203) {
             setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
+            setTotalcount(response.data.totalCount);
             setRowData(response.data.userList);
           } else {
             setRowData([]);
@@ -119,6 +159,466 @@ const AdminGrid = () => {
       console.error("Error during exporting:", error);
     }
   };
+
+  useEffect(() => {
+    async function fetchData() {
+
+      const countryResponse = await fetch(`${apiURL}/country`);
+      const countryData = await countryResponse.json();
+      setCountries(countryData.country);
+
+
+      const stateResponse = await fetch(`${apiURL}/state`);
+      const stateData = await stateResponse.json();
+      setStates(stateData.state);
+
+      const districtResponse = await fetch(`${apiURL}/district`);
+      const districtData = await districtResponse.json();
+      setDistricts(districtData.district);
+
+    }
+    fetchData();
+  }, [selectedCountry]);
+
+  useEffect(() => {
+    async function fetchCorpData() {
+      if (selectedCntry === "India" && selectedState === "Kerala" && selectedDistrict) {
+        const dist_id = districts.find((item) => item.dis_name === selectedDistrict)?.dis_id;
+        const corpResponse = await fetch(`${apiURL}/corporation/${dist_id}`);
+        const corpData = await corpResponse.json();
+        setCorporation(corpData.corporation);
+      } else {
+        setCorporation([]);
+      }
+    }
+    fetchCorpData();
+  }, [selectedCntry, selectedState, selectedDistrict, districts]);
+
+  useEffect(() => {
+    async function fetchLsgdData() {
+      if (selectedCntry === "India" && selectedState === "Kerala" && selectedCorp) {
+        const corp_id = corporation.find((item) => item.cop_name === selectedCorp)?.cop_id;
+        const lsgResponse = await fetch(`${apiURL}/lsg/${corp_id}`);
+        const lsgData = await lsgResponse.json();
+        setLsgd(lsgData.lsg);
+      } else {
+        setLsgd([]);
+      }
+      // setSelectedLsgd("");
+      // setWardNo("");
+    }
+    fetchLsgdData();
+  }, [selectedCntry, selectedState, selectedCorp, corporation]);
+
+
+  const handleFilterCoordName = (e: any) => {
+    console.log(e)
+    if(e != ""){
+      setFilterValue(e); // Update dropdown value
+      fetchFilteredCoordName(e);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+  const handleFilterEmail = (e: any) => {
+    console.log(e)
+    if(e != ""){
+      setFilterValue(e); // Update dropdown value
+      fetchFilteredEmail(e);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+  const handleFilterId = (e: any) => {
+    console.log(e)
+    if(e != ""){
+      setFilterValue(e); // Update dropdown value
+      fetchFilteredId(e);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+  const handleFilterMobile = (e: any) => {
+    console.log(e)
+    if(e != ""){
+      setFilterValue(e); // Update dropdown value
+      fetchFilteredMobile(e);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+  
+  const handleFilterChangeCntry = (e: any) => {
+    console.log(e.target.value)
+    
+    setSelectedCntry(e.target.value); // Update dropdown value
+    fetchFilteredCntry(e.target.value);
+    setCurrentPage(1); // Reset to first page
+  };
+
+  const handleFilterChangeState = (e: any) => {
+    console.log(e.target.value)
+    
+    setSelectedState(e.target.value); // Update dropdown value
+    fetchFilteredState(e.target.value);
+    setCurrentPage(1); // Reset to first page
+  };
+
+  const handleFilterChangeDistrict = (e: any) => {
+    console.log(e.target.value)
+    
+    setSelectedDistrict(e.target.value); // Update dropdown value
+    fetchFilteredDistrict(e.target.value);
+    setCurrentPage(1); // Reset to first page
+  };
+  const handleFilterChangeCorp = (e: any) => {
+    console.log(e.target.value)
+    
+    setSelectedCorp(e.target.value); // Update dropdown value
+    fetchFilteredCorp(e.target.value);
+    setCurrentPage(1); // Reset to first page
+  };
+
+  const handleFilterChangeLsgd = (e: any) => {
+    console.log(e.target.value)
+    
+    setSelectedLsgd(e.target.value); // Update dropdown value
+    fetchFilteredLsgd(e.target.value);
+    setCurrentPage(1); // Reset to first page
+  };
+
+  // const handleFilterChangeWard = (e: any) => {
+  //   console.log(e)
+  //   setSelectedWard(e); // Update dropdown value
+  //   fetchFilteredWard(e);
+  //   setCurrentPage(1); // Reset to first page
+  // };
+
+  const fetchFilteredCoordName = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminUserList?limit=${totalcount}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+          console.log(response.data.userList)
+          console.log(value)
+
+          const filteredData = response.data.userList.filter(
+            (item: { co_ord_name: string; }) => item.co_ord_name === value
+          );
+          console.log(filteredData)
+
+          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
+          setRowData(filteredData);
+        } else {
+          setRowData([]);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+  const fetchFilteredEmail = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminUserList?limit=${totalcount}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+          console.log(response.data.userList)
+          console.log(value)
+
+          const filteredData = response.data.userList.filter(
+            (item: { us_email: string; }) => item.us_email === value
+          );
+          console.log(filteredData)
+
+          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
+          setRowData(filteredData);
+        } else {
+          setRowData([]);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+  const fetchFilteredId = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminUserList?limit=${totalcount}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+          console.log(response.data.userList)
+          console.log(value)
+
+          const filteredData = response.data.userList.filter(
+            (item: { us_id: string; }) => item.us_id === value
+          );
+          console.log(filteredData)
+
+          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
+          setRowData(filteredData);
+        } else {
+          setRowData([]);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+  const fetchFilteredMobile = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminUserList?limit=${totalcount}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+          console.log(response.data.userList)
+          console.log(value)
+
+          const filteredData = response.data.userList.filter(
+            (item: { us_mobile: string; }) => item.us_mobile === value
+          );
+          console.log(filteredData)
+
+          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
+          setRowData(filteredData);
+        } else {
+          setRowData([]);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+  const fetchFilteredCntry = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminUserList?limit=${totalcount}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+          console.log('filter')
+          console.log(response.data)
+          console.log(response.data.userList)
+          const filteredData = response.data.userList.filter(
+            (item: { cntry_name: string; }) => item.cntry_name === value
+          );
+          console.log(filteredData)
+
+          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
+          setRowData(filteredData);
+        } else {
+          setRowData([]);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+  const fetchFilteredState = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminUserList?limit=${totalcount}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+          console.log('filter')
+          console.log(response.data)
+          console.log(response.data.userList)
+          const filteredData = response.data.userList.filter(
+            (item: { st_name: string; }) => item.st_name === value
+          );
+          console.log(filteredData)
+
+          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
+          setRowData(filteredData);
+        } else {
+          setRowData([]);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+  const fetchFilteredDistrict = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminUserList?limit=${totalcount}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+          console.log('filter')
+          console.log(response.data)
+          console.log(response.data.userList)
+          const filteredData = response.data.userList.filter(
+            (item: { dis_name: string; }) => item.dis_name === value
+          );
+          console.log(filteredData)
+
+          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
+          setRowData(filteredData);
+        } else {
+          setRowData([]);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+  const fetchFilteredCorp = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminUserList?limit=${totalcount}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+          console.log('filter')
+          console.log(response.data)
+          console.log(response.data.userList)
+          const filteredData = response.data.userList.filter(
+            (item: { cop_name: string; }) => item.cop_name === value
+          );
+          console.log(filteredData)
+
+          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
+          setRowData(filteredData);
+        } else {
+          setRowData([]);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+  const fetchFilteredLsgd = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminUserList?limit=${totalcount}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+          console.log('filter')
+          console.log(response.data)
+          console.log(response.data.userList)
+          const filteredData = response.data.userList.filter(
+            (item: { lsg_name: string; }) => item.lsg_name === value
+          );
+          console.log(filteredData)
+
+          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
+          setRowData(filteredData);
+        } else {
+          setRowData([]);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+//  const fetchFilteredWard = async (value: string) => {
+//     if (token) {
+//       const response = await axios.post(
+//         `${apiURL}/admin/adminUserList?limit=${totalcount}`,
+//         {},
+//         {
+//           headers: {
+//             Authorization: `Bearer ${token}`,
+//             "Content-Type": "application/json",
+//           },
+//         }
+//       );
+//       try {
+//         if (response.data.success && response.status !== 203) {
+//           console.log('filter')
+//           console.log('hi',response.data)
+//           console.log(response.data.userList)
+//           const filteredData = response.data.userList.filter(
+//             (item: { us_ward: string; }) => item.us_ward === value
+//           );
+//           console.log(filteredData)
+
+//           setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
+//           setRowData(filteredData);
+//         } else {
+//           setRowData([]);
+//         }
+//       } catch (error) {
+//         console.error("Error:", error);
+//       }
+//     }
+//   };
+
   return (
     <div className=" bg-slate-100">
       <button
@@ -128,6 +628,195 @@ const AdminGrid = () => {
       >
         Export To Excel
       </button>
+      <div>
+        <label>User Id</label>
+        <div className="flex mb-3">
+          <input
+            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+            value={userid}
+            onChange={(e) => setUserid(e.target.value)} // Update the state directly
+          />
+          <button
+            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+            onClick={() => handleFilterId(userid)}
+          >
+            Search
+          </button>
+        </div>
+      </div>
+      <div>
+        <label>Coordinator Name</label>
+        <div className="flex mb-3">
+          <input
+            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+            value={coordinator}
+            onChange={(e) => setCoordinator(e.target.value)} // Update the state directly
+          />
+          <button
+            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+            onClick={() => handleFilterCoordName(coordinator)}
+          >
+            Search
+          </button>
+        </div>
+      </div>
+      <div>
+        <label>Email</label>
+        <div className="flex mb-3">
+          <input
+            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+            value={email}
+            onChange={(e) => setEmail(e.target.value)} // Update the state directly
+          />
+          <button
+            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+            onClick={() => handleFilterEmail(email)}
+          >
+            Search
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <label>Mobile</label>
+        <div className="flex mb-3">
+          <input
+            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+            value={mobile}
+            onChange={(e) => setMobile(e.target.value)} // Update the state directly
+          />
+          <button
+            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+            onClick={() => handleFilterMobile(mobile)}
+          >
+            Search
+          </button>
+        </div>
+      </div>
+
+      {/* country section  */}
+      <div className="flex items-center mb-3 space-x-2">
+        <label htmlFor="groupFilter" className="text-sm font-medium">
+          Country:
+        </label>
+        <select
+          id="groupFilter"
+          value={selectedCntry}
+          onChange={handleFilterChangeCntry}
+          className="border border-gray-300 rounded p-1"
+        >
+          <option value="">Choose Country</option>
+          {countries.map((country) => (
+            <option key={country.cntry_id} value={country.cntry_name}>
+              {country.cntry_name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {selectedCntry == "India" ?
+      <>
+      <div className="flex items-center mb-3 space-x-2">
+        <label htmlFor="groupFilter" className="text-sm font-medium">
+          State:
+        </label>
+        <select
+          id="groupFilter"
+          value={selectedState}
+          onChange={handleFilterChangeState}
+          className="border border-gray-300 rounded p-1"
+        >
+          <option value="">Choose State</option>
+          {states.map((state) => (
+            <option key={state.st_id} value={state.st_name}>
+              {state.st_name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {selectedState == "Kerala" ? 
+      <>
+      <div className="flex items-center mb-3 space-x-2">
+        <label htmlFor="groupFilter" className="text-sm font-medium">
+          District:
+        </label>
+        <select
+          id="groupFilter"
+          value={selectedDistrict}
+          onChange={handleFilterChangeDistrict}
+          className="border border-gray-300 rounded p-1"
+        >
+          <option value="">Choose District</option>
+          {districts.map((district) => (
+            <option key={district.dis_id} value={district.dis_name}>
+              {district.dis_name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {selectedDistrict != "" ? 
+      <>
+      <div className="flex items-center mb-3 space-x-2">
+        <label htmlFor="groupFilter" className="text-sm font-medium">
+          Corporation:
+        </label>
+        <select
+          id="groupFilter"
+          value={selectedCorp}
+          onChange={handleFilterChangeCorp}
+          className="border border-gray-300 rounded p-1"
+        >
+          <option value="">Choose Corporation</option>
+          {corporation.map((corp) => (
+            <option key={corp.cop_id} value={corp.cop_name}>
+              {corp.cop_name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {selectedDistrict != "" ? 
+      
+      <div className="flex items-center mb-3 space-x-2">
+        <label htmlFor="groupFilter" className="text-sm font-medium">
+          Lsgd:
+        </label>
+        <select
+          id="groupFilter"
+          value={selectedLsgd}
+          onChange={handleFilterChangeLsgd}
+          className="border border-gray-300 rounded p-1"
+        >
+          <option value="">Choose Lsgd</option>
+          {lsgd && lsgd.map((lsg) => (
+            <option key={lsg.lsg_id} value={lsg.lsg_name}>
+              {lsg.lsg_name}
+            </option>
+          ))}
+        </select>
+      </div>
+      //  <div>
+      //   <label>Ward No</label>
+      //   <div className="flex mb-3">
+      //     <input
+      //       className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+      //       value={selectedWard}
+      //       onChange={(e) => setSelectedWard(e.target.value)} // Update the state directly
+      //     />
+      //     <button
+      //       className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+      //       onClick={() => handleFilterChangeWard(selectedWard)}
+      //     >
+      //       Search
+      //     </button>
+      //   </div> 
+      // </div>
+      :''}
+      </>:''}
+      </>:''}
+      </>:''}
       <div className={"ag-theme-quartz"} style={{ height: 600 }}>
         <AgGridReact
           rowData={rowData}
@@ -161,7 +850,7 @@ const AdminGrid = () => {
             className={`text-xl cursor-pointer text-gray-600 ${page === currentPage ? 'font-bold' : 'underline'}`}
             onClick={() => handlePageChange(page)}
           >
-            {page > 0 ? page : ''} 
+            {page > 0 ? page : ''}
           </span>
         ))}
 

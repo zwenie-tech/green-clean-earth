@@ -17,7 +17,14 @@ import * as XLSX from 'xlsx';
 import { AddSahodayaForm } from "./[id]/addsahodayaform";
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
-
+interface Sahodaya {
+  sahodaya_id: string;
+  sahodaya_name: string;
+}
+interface State {
+  st_id: number;
+  st_name: string;
+}
 const AdminGrid = () => {
   const router = useRouter();
   const [rowData, setRowData] = useState([]);
@@ -25,6 +32,11 @@ const AdminGrid = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 10;
+  const [sahodaya, setSahodaya] = useState<Sahodaya[]>([]);
+  const [totalcount, setTotalcount] = useState("");
+  const [selectSahodaya, setSelectSahodaya] = useState('');
+  const [selectedStateGrp, setSelectedStateGrp] = useState("");
+  const [states, setStates] = useState<State[]>([]);
 
   const handlePageChange = (newPage: number) => {
     if (newPage > 0 && newPage <= totalPages) {
@@ -47,7 +59,7 @@ const AdminGrid = () => {
   const defaultColDef = useMemo(() => {
     return {
       filter: "agTextColumnFilter",
-      floatingFilter: true,
+      floatingFilter: false,
     };
   }, []);
 
@@ -109,6 +121,118 @@ const AdminGrid = () => {
       console.error("Error during exporting:", error);
     }
   };
+
+  const handleFilterSahodayaState = (e: any) => {
+    console.log(e.target.value)
+    if (e.target.value != "") {
+        setSelectedStateGrp(e.target.value);
+        fetchFilteredSahodayaState(e.target.value);
+        setCurrentPage(1); // Reset to first page
+    }
+};
+
+const handleFilterSahodaya = (e: any) => {
+    console.log(e.target.value)
+    if (e.target.value != "") {
+        setSelectSahodaya(e.target.value);
+        fetchFilteredSahodaya(e.target.value);
+        setCurrentPage(1); // Reset to first page
+    }
+};
+
+const fetchFilteredSahodayaState = async (value: string) => {
+  if (token) {
+      const response = await axios.post(
+          `${apiURL}/admin/adminSahodaya?limit=${totalcount}`,
+          {},
+          {
+              headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+              },
+          }
+      );
+      try {
+          if (response.data.success && response.status !== 203) {
+              console.log('filter')
+              console.log(response.data)
+              const filteredData = response.data.sahodayaList.filter(
+                  (item: { st_name: string; }) => item.st_name === value
+              );
+              console.log(filteredData)
+
+              setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
+              setRowData(filteredData);
+          } else {
+              setRowData([]);
+          }
+      } catch (error) {
+          console.error("Error:", error);
+      }
+  }
+};
+const fetchFilteredSahodaya = async (value: string) => {
+  if (token) {
+      const response = await axios.post(
+          `${apiURL}/admin/adminSahodaya?limit=${totalcount}`,
+          {},
+          {
+              headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+              },
+          }
+      );
+      try {
+          if (response.data.success && response.status !== 203) {
+              console.log('filter')
+              console.log(response.data)
+              const filteredData = response.data.sahodayaList.filter(
+                  (item: { sahodaya_name: string; }) => item.sahodaya_name === value
+              );
+              console.log(filteredData)
+
+              setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
+              setRowData(filteredData);
+          } else {
+              setRowData([]);
+          }
+      } catch (error) {
+          console.error("Error:", error);
+      }
+  }
+};
+
+useEffect(() => {
+  async function fetchData() {
+
+     
+      const stateResponse = await fetch(`${apiURL}/state`);
+      const stateData = await stateResponse.json();
+      setStates(stateData.state);
+
+  
+
+  }
+  fetchData();
+}, []);
+
+useEffect(() => {
+  const handleCbse = async () => {
+      if (selectedStateGrp) {
+          try {
+              const st_id = states.find((item) => item.st_name === selectedStateGrp)?.st_id;
+              const response = await axios.get(`${apiURL}/sahodaya/${st_id}`);
+              setSahodaya(response.data.sahodayaList);
+          } catch (error) {
+              console.error("Error fetching data:", error);
+          }
+      }
+      
+  };
+  handleCbse();
+}, [states, selectedStateGrp]);
+
   return (
     <div className=" bg-slate-100">
       <AddSahodayaForm/>
@@ -119,6 +243,49 @@ const AdminGrid = () => {
         >
           Export To Excel
         </button>
+
+        <div className="flex items-center mb-3 space-x-2">
+                        <label htmlFor="groupFilter" className="text-sm font-medium">
+                            Sahodaya State:
+                        </label>
+                        <select
+                            id="groupFilter"
+                            value={selectedStateGrp}
+                            onChange={handleFilterSahodayaState}
+                            className="border border-gray-300 rounded p-1"
+                        >
+                            <option value="">Choose Sahodaya State</option>
+
+                            {states.map((state) => (
+                                <option key={state.st_id} value={state.st_name}>
+                                    {state.st_name}
+                                </option>
+                            ))}
+
+                        </select>
+                    </div>
+                    <div className="flex items-center mb-3 space-x-2">
+                        <label htmlFor="groupFilter" className="text-sm font-medium">
+                            Sahodaya:
+                        </label>
+                        <select
+                            id="groupFilter"
+                            value={selectSahodaya}
+                            onChange={handleFilterSahodaya}
+                            className="border border-gray-300 rounded p-1"
+                        >
+                            <option value="">Choose Sahodaya</option>
+
+                            {sahodaya && sahodaya.map((s) => (
+                                <option key={s.sahodaya_id} value={s.sahodaya_name}>
+                                    {s.sahodaya_name}
+                                </option>
+                            ))}
+
+                        </select>
+                    </div>
+
+
       <div className={"ag-theme-quartz"} style={{ height: 600 }}>
         <AgGridReact
           rowData={rowData}

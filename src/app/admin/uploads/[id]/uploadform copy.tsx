@@ -531,7 +531,6 @@ export function Uploadform() {
       const groupId = category.find((item) => item.group_type === selectedGrpType)?.id;
       const Response = await axios.get(`${apiURL}/common/groupName/${groupId}`);
       setGrpName(Response.data.stateMapData);
-
     }
   }
   useEffect(() => {

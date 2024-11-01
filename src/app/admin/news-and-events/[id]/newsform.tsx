@@ -23,22 +23,8 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
 import { DateTimePicker } from "@/components/ui/dateTimePicker";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
@@ -47,9 +33,9 @@ import { apiURL } from "@/app/requestsapi/request";
 import axios from "axios";
 import { toast } from "@/components/ui/use-toast";
 
-
+// Define your form schema here, if needed
 const formSchema = z.object({
-    
+   
 });
 
 export function Eduform() {
@@ -63,62 +49,59 @@ export function Eduform() {
     const [heading, setHeading] = useState('');
     const [desc, setDesc] = useState('');
     const [loc, setLoc] = useState('');
-
+    const [dateTime, setDateTime] = useState('');
     useEffect(() => {
         async function fetchdata() {
-          if(token){
-            const retrievedData = JSON.parse(localStorage.getItem("newsData") || "[]");
-            const itemdata = retrievedData.find((item: { id  : string; }) => item.id == coId)
-            console.log([itemdata][0].event_body)
-            const {location, event_heading, event_body} = [itemdata][0];
-            location ? setLoc(location) : '';
-            event_heading ? setHeading(event_heading) : '';
-            event_body ? setDesc(event_body) : '';
-            
-    
-          }
+            if (token) {
+                const retrievedData = JSON.parse(localStorage.getItem("newsData") || "[]");
+                const itemdata = retrievedData.find((item: { id: string; }) => item.id == coId);
+                console.log([itemdata][0].event_body);
+                const { location, event_heading, event_body } = [itemdata][0];
+                location ? setLoc(location) : '';
+                event_heading ? setHeading(event_heading) : '';
+                event_body ? setDesc(event_body) : '';
+            }
         }
         fetchdata();
-      }, []);
+    }, [coId, token]);
 
-   
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-
+           
         },
     });
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values);
+
+        
+
         const formdata = {
             eventHeading: heading,
             eventBody: desc,
-            location: loc
-        }
+            location: loc,
+            createdTime: dateTime,  // Include the formatted datetime
+        };
+        console.log(dateTime);
         console.log(formdata);
 
         if (token) {
-            const response = await axios.post(`${apiURL}/adminEdit/modifyEvents?recordId=${coId}`, formdata, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            })
             try {
+                const response = await axios.post(`${apiURL}/adminEdit/modifyEvents?recordId=${coId}`, formdata, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
 
                 if (response.data.success && response.status != 203) {
-
                     toast({
                         title: "Data Successfully Updated.",
                         description: "",
                     });
-
                     setTimeout(function () {
                         window.history.back();
                     }, 1800);
-
-
                 } else {
                     toast({
                         variant: "destructive",
@@ -126,7 +109,6 @@ export function Eduform() {
                         description: "Please try again...",
                     });
                 }
-
             } catch (error) {
                 toast({
                     variant: "destructive",
@@ -134,7 +116,7 @@ export function Eduform() {
                     description: "Please try again...",
                 });
             }
-        };
+        }
     }
 
     return (
@@ -182,12 +164,24 @@ export function Eduform() {
                                     <label className="form-label">Location</label>
                                     <input
                                         className="block w-full px-3 py-2 border border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 sm:text-sm"
-
                                         value={loc}
                                         onChange={(e) => setLoc(e.target.value)}
                                     />
                                 </div>
 
+                                <div className="mb-6">
+                                    <label htmlFor="dateTime" className="block text-gray-700 text-sm font-bold mb-2">
+                                        Date and Time:
+                                    </label>
+                                    <input
+                                        type="datetime-local"
+                                        id="dateTime"
+                                        value={dateTime}
+                                        onChange={(e) => setDateTime(e.target.value)}
+                                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        required
+                                    />
+                                </div>
 
                             </div>
 

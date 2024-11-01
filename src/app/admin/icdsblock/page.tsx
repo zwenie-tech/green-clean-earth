@@ -17,7 +17,14 @@ import * as XLSX from 'xlsx';
 import { AddBlockForm } from "./[id]/addblockform";
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
-
+interface IcdsBlock {
+  icds_block_id: string;
+  block_name: string;
+}
+interface District {
+  dis_id: number;
+  dis_name: string;
+}
 const AdminGrid = () => {
   const router = useRouter();
   const [rowData, setRowData] = useState([]);
@@ -25,6 +32,11 @@ const AdminGrid = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 10;
+  const [selectedDistrictGrp, setSelectedDistrictGrp] = useState("");
+  const [icdsBlock, setIcdsBlock] = useState<IcdsBlock[]>([]);
+  const [districts, setDistricts] = useState<District[]>([]);
+  const [selectIcdsBlock, setSelectIcdsBlock] = useState('');
+  const [totalcount, setTotalcount] = useState("");
 
   const handlePageChange = (newPage: number) => {
     if (newPage > 0 && newPage <= totalPages) {
@@ -47,7 +59,7 @@ const AdminGrid = () => {
   const defaultColDef = useMemo(() => {
     return {
       filter: "agTextColumnFilter",
-      floatingFilter: true,
+      floatingFilter: false,
     };
   }, []);
 
@@ -70,6 +82,7 @@ const AdminGrid = () => {
         
         if (response.data.success && response.status!=203) {
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
+          setTotalcount(response.data.totalCount);
          console.log(response.data.blockList)
     localStorage.setItem("blockData", JSON.stringify(response.data.blockList));
 
@@ -110,6 +123,126 @@ const AdminGrid = () => {
       console.error("Error during exporting:", error);
     }
   };
+
+  const handleFilterEDistrict = (e: any) => {
+    console.log(e.target.value)
+    if (e.target.value != "") {
+        setSelectedDistrictGrp(e.target.value);
+        fetchFilteredIcdsBlockDistrict(e.target.value);
+        setCurrentPage(1); // Reset to first page
+    }
+};
+
+useEffect(() => {
+  async function fetchData() {
+
+  
+
+      const districtResponse = await fetch(`${apiURL}/district`);
+      const districtData = await districtResponse.json();
+      setDistricts(districtData.district);
+
+  }
+  fetchData();
+}, []);
+
+const handleFilterIcdsBlock = (e: any) => {
+  console.log(e.target.value)
+  if (e.target.value != "") {
+      setSelectIcdsBlock(e.target.value);
+      fetchFilteredIcdsBlock(e.target.value);
+      setCurrentPage(1); // Reset to first page
+  }
+};
+
+const fetchFilteredIcdsBlockDistrict = async (value: string) => {
+  if (token) {
+      const response = await axios.post(
+          `${apiURL}/admin/adminIcdsBlock?limit=${totalcount}`,
+          {},
+          {
+              headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+              },
+          }
+      );
+      try {
+          if (response.data.success && response.status !== 203) {
+              console.log(response.data.blockList)
+              console.log(value)
+
+              const filteredData = response.data.blockList.filter(
+                  (item: { dis_name: string; }) => item.dis_name === value
+              );
+              console.log(filteredData)
+
+              setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
+              setRowData(filteredData);
+          } else {
+              setRowData([]);
+          }
+      } catch (error) {
+          console.error("Error:", error);
+      }
+  }
+};
+const fetchFilteredIcdsBlock = async (value: string) => {
+  if (token) {
+      const response = await axios.post(
+          `${apiURL}/admin/adminIcdsBlock?limit=${totalcount}`,
+          {},
+          {
+              headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+              },
+          }
+      );
+      try {
+          if (response.data.success && response.status !== 203) {
+              console.log(response.data.blockList)
+              console.log(value)
+
+              const filteredData = response.data.blockList.filter(
+                  (item: { block_name: string; }) => item.block_name === value
+              );
+              console.log(filteredData)
+
+              setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
+              setRowData(filteredData);
+          } else {
+              setRowData([]);
+          }
+      } catch (error) {
+          console.error("Error:", error);
+      }
+  }
+};
+
+useEffect(() => {
+  const handleCbse = async () => {
+     
+      if ( selectedDistrictGrp) {
+
+          try {
+              const dis_id = districts.find((item) => item.dis_name === selectedDistrictGrp)?.dis_id;
+
+
+              const response = await axios.get(`${apiURL}/icdsBlock/${dis_id}`);
+
+              setIcdsBlock(response.data.icdsBlockList);
+          } catch (error) {
+              console.error("Error fetching data:", error);
+          }
+
+      }
+      
+  };
+  handleCbse();
+}, [districts, selectedDistrictGrp]);
+
+
   return (
     <div className=" bg-slate-100">
       <AddBlockForm/>
@@ -120,6 +253,48 @@ const AdminGrid = () => {
         >
           Export To Excel
         </button>
+        <div className="flex items-center mb-3 space-x-2">
+                        <label htmlFor="groupFilter" className="text-sm font-medium">
+                            District:
+                        </label>
+                        <select
+                            id="groupFilter"
+                            value={selectedDistrictGrp}
+                            onChange={handleFilterEDistrict}
+                            className="border border-gray-300 rounded p-1"
+                        >
+                            <option value="">Choose District</option>
+
+                            {districts.map((district) => (
+                                <option key={district.dis_id} value={district.dis_name}>
+                                    {district.dis_name}
+                                </option>
+                            ))}
+
+                        </select>
+                    </div>
+
+                    <div className="flex items-center mb-3 space-x-2">
+                        <label htmlFor="groupFilter" className="text-sm font-medium">
+                            Icds Block :
+                        </label>
+                        <select
+                            id="groupFilter"
+                            value={selectIcdsBlock}
+                            onChange={handleFilterIcdsBlock}
+                            className="border border-gray-300 rounded p-1"
+                        >
+                            <option value="">Choose Icds Block</option>
+
+                            {icdsBlock && icdsBlock.map((e) => (
+                                <option key={e.icds_block_id} value={e.block_name}>
+                                    {e.block_name}
+                                </option>
+                            ))}
+
+
+                        </select>
+                    </div>
       <div className={"ag-theme-quartz"} style={{ height: 600 }}>
         <AgGridReact
           rowData={rowData}

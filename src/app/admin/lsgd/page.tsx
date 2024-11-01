@@ -17,7 +17,18 @@ import * as XLSX from 'xlsx';
 import { AddLsgdform } from "./[id]/addlsgdform";
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
-
+interface District {
+  dis_id: number;
+  dis_name: string;
+}
+type Corp = {
+  cop_id: string;
+  cop_name: string;
+}
+interface Lsgd {
+  lsg_id: number;
+  lsg_name: string;
+}
 const AdminGrid = () => {
   const router = useRouter();
   const [rowData, setRowData] = useState([]);
@@ -25,6 +36,14 @@ const AdminGrid = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 10;
+
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [districts, setDistricts] = useState<District[]>([]);
+  const [corporation, setCorporation] = useState<Corp[]>([]);
+  const [totalcount, setTotalcount] = useState("");
+  const [selectedCorp, setSelectedCorp] = useState("");
+  const [selectedLsgd, setSelectedLsgd] = useState("");
+  const [lsgd, setLsgd] = useState<Lsgd[]>([]);
 
   const handlePageChange = (newPage: number) => {
     if (newPage > 0 && newPage <= totalPages) {
@@ -47,7 +66,7 @@ const AdminGrid = () => {
   const defaultColDef = useMemo(() => {
     return {
       filter: "agTextColumnFilter",
-      floatingFilter: true,
+      floatingFilter: false,
     };
   }, []);
   const onRowClicked = (event: RowClickedEvent) => {
@@ -81,6 +100,7 @@ const AdminGrid = () => {
     };
     fetchdata();
   }, [currentPage, token]);
+
   const handleExportToExcel = async () => {
     try {
       const response = await axios.post(`${apiURL}/admin/adminLsgdList`, {
@@ -111,6 +131,170 @@ const AdminGrid = () => {
       console.error("Error during exporting:", error);
     }
   };
+
+
+  useEffect(() => {
+    async function fetchData() {
+
+    
+      const districtResponse = await fetch(`${apiURL}/district`);
+      const districtData = await districtResponse.json();
+      setDistricts(districtData.district);
+
+    }
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    async function fetchCorpData() {
+      if ( selectedDistrict) {
+        const dist_id = districts.find((item) => item.dis_name === selectedDistrict)?.dis_id;
+        const corpResponse = await fetch(`${apiURL}/corporation/${dist_id}`);
+        const corpData = await corpResponse.json();
+        setCorporation(corpData.corporation);
+      } else {
+        setCorporation([]);
+      }
+    }
+    fetchCorpData();
+  }, [selectedDistrict, districts]);
+
+  useEffect(() => {
+    async function fetchLsgdData() {
+      if (selectedCorp) {
+        const corp_id = corporation.find((item) => item.cop_name === selectedCorp)?.cop_id;
+        const lsgResponse = await fetch(`${apiURL}/lsg/${corp_id}`);
+        const lsgData = await lsgResponse.json();
+        setLsgd(lsgData.lsg);
+      } else {
+        setLsgd([]);
+      }
+      // setSelectedLsgd("");
+      // setWardNo("");
+    }
+    fetchLsgdData();
+  }, [ selectedCorp, corporation]);
+
+
+  const handleFilterChangeDistrict = (e: any) => {
+    console.log(e.target.value)
+
+    setSelectedDistrict(e.target.value); // Update dropdown value
+    fetchFilteredDistrict(e.target.value);
+    setCurrentPage(1); // Reset to first page
+  };
+  const handleFilterChangeCorp = (e: any) => {
+    console.log(e.target.value)
+
+    setSelectedCorp(e.target.value); // Update dropdown value
+    fetchFilteredCorp(e.target.value);
+    setCurrentPage(1); // Reset to first page
+  };
+
+  const handleFilterChangeLsgd = (e: any) => {
+    console.log(e.target.value)
+
+    setSelectedLsgd(e.target.value); // Update dropdown value
+    fetchFilteredLsgd(e.target.value);
+    setCurrentPage(1); // Reset to first page
+  };
+
+  const fetchFilteredDistrict = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminLsgdList?limit=${totalcount}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+          console.log('filter')
+          console.log(response.data)
+          console.log(response.data.lsgdList)
+          const filteredData = response.data.lsgdList.filter(
+            (item: { dis_name: string; }) => item.dis_name === value
+          );
+          console.log(filteredData)
+
+          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
+          setRowData(filteredData);
+        } else {
+          setRowData([]);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+  const fetchFilteredCorp = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminLsgdList?limit=${totalcount}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+          console.log('filter')
+          console.log(response.data)
+          console.log(response.data.lsgdList)
+          const filteredData = response.data.lsgdList.filter(
+            (item: { cop_name: string; }) => item.cop_name === value
+          );
+          console.log(filteredData)
+
+          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
+          setRowData(filteredData);
+        } else {
+          setRowData([]);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+  const fetchFilteredLsgd = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminLsgdList?limit=${totalcount}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+          console.log('filter')
+          console.log(response.data)
+          console.log(response.data.lsgdList)
+          const filteredData = response.data.lsgdList.filter(
+            (item: { lsg_name: string; }) => item.lsg_name === value
+          );
+          console.log(filteredData)
+
+          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
+          setRowData(filteredData);
+        } else {
+          setRowData([]);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
   return (
     <div className=" bg-slate-100">
       <AddLsgdform/>
@@ -121,6 +305,70 @@ const AdminGrid = () => {
         >
           Export To Excel
         </button>
+
+        <div className="flex items-center mb-3 space-x-2">
+                <label htmlFor="groupFilter" className="text-sm font-medium">
+                  District:
+                </label>
+                <select
+                  id="groupFilter"
+                  value={selectedDistrict}
+                  onChange={handleFilterChangeDistrict}
+                  className="border border-gray-300 rounded p-1"
+                >
+                  <option value="">Choose District</option>
+                  {districts.map((district) => (
+                    <option key={district.dis_id} value={district.dis_name}>
+                      {district.dis_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {selectedDistrict != "" ?
+                
+                  <div className="flex items-center mb-3 space-x-2">
+                    <label htmlFor="groupFilter" className="text-sm font-medium">
+                      Corporation:
+                    </label>
+                    <select
+                      id="groupFilter"
+                      value={selectedCorp}
+                      onChange={handleFilterChangeCorp}
+                      className="border border-gray-300 rounded p-1"
+                    >
+                      <option value="">Choose Corporation</option>
+                      {corporation.map((corp) => (
+                        <option key={corp.cop_id} value={corp.cop_name}>
+                          {corp.cop_name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>:""}
+
+                  {selectedDistrict != "" ?
+
+                    <div className="flex items-center mb-3 space-x-2">
+                      <label htmlFor="groupFilter" className="text-sm font-medium">
+                        Lsgd:
+                      </label>
+                      <select
+                        id="groupFilter"
+                        value={selectedLsgd}
+                        onChange={handleFilterChangeLsgd}
+                        className="border border-gray-300 rounded p-1"
+                      >
+                        <option value="">Choose Lsgd</option>
+                        {lsgd && lsgd.map((lsg) => (
+                          <option key={lsg.lsg_id} value={lsg.lsg_name}>
+                            {lsg.lsg_name}
+                          </option>
+                        ))}
+                      </select>
+                    </div> 
+                    : ""}
+
+
       <div className={"ag-theme-quartz"} style={{ height: 600 }}>
         <AgGridReact
           rowData={rowData}

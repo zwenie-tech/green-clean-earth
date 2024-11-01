@@ -2,10 +2,7 @@
 import { ChevronLeft } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { Uploadform } from "./uploadform";
 import axios from "axios";
-import { apiURL, imageURL } from "@/app/requestsapi/request";
-import Cookies from 'js-cookie';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -15,86 +12,59 @@ import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import { BsImages, BsPaperclip } from "react-icons/bs";
-import DeleteBtn from "./deletebtn";
+import Cookies from 'js-cookie';
+import { AdForm } from "./adform";
+import { apiURL, imageURL } from "@/app/requestsapi/request";
 
-interface UploadData {
-  up_file: string;
-  up_file_2: string;
-  up_file_3: string;
-  up_file_4: string;
-  up_id: string;
-  us_id: string;
-  us_name: string;
-  up_planter: string;
-  cntry_name: string;
-  st_name: string;
-  dis_name: string;
-  cop_name: string;
-  lsg_name: string;
-  source_name: string;
-  up_landmark_details: string;
-  up_tree_name: string;
-  co_ord_name: string;
-  gp_name: string;
-  group_type: string;
-  type_name: string;
-  gp_cat_name: string;
-  edu_district: string;
-  edu_sub_district_name: string;
-  sahodaya_name: string;
-  block_name: string;
-  project_name: string;
-  chapter_name: string;
-  zone_name: string;
-  city: string;
+
+interface ActivityData {
+
+  ad_image: string;
+  display_order: string;
+  title: string;
+  ad_link: string;
 }
-
 function Page() {
   const router = useRouter();
   const pathname = usePathname();
-  const Id = pathname.split("/")[3];
+  const coId = pathname.split("/")[3];
   const segments = pathname.split("/").filter(Boolean);
   const lastSegment = segments[segments.length - 1];
   const token = Cookies.get("adtoken");
-  const [uploadData, setUploadData] = useState<UploadData[]>([]);
+  const [userData, setUserData] = useState<ActivityData[]>([]);
   const [edit1, setEdit1] = useState(0);
-  const [edit2, setEdit2] = useState(0);
-  const [edit3, setEdit3] = useState(0);
-  const [edit4, setEdit4] = useState(0);
-  useEffect(() => {
+
+  useEffect(() => { 
     if (!token) {
       router.push("/admin/login");
     }
   }, [token, router]);
-
-
   useEffect(() => {
     async function fetchdata() {
-      if (token) {
+      if(token){
+        const retrievedData = JSON.parse(localStorage.getItem("adData") || "[]");
+        const itemdata = retrievedData.find((item: { id  : string; }) => item.id == coId)
+        console.log([itemdata][0])
+          // Get all cookies
+          const allCookies = Cookies.get();
 
-        const response = await axios.get(`${apiURL}/adminFrame/uploadDetails/${Id}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        })
-        try {
+          // Remove all cookies
+          Object.keys(allCookies).forEach(cookieName => {
+              Cookies.remove(cookieName);
+          });
 
-          if (response.data.success && response.status != 203) {
-            console.log(response.data.uploadDetails)
-            setUploadData(response.data.uploadDetails);
-          } else {
+         Cookies.set('adtoken', token, { expires: 1 });
+        Cookies.set('title', [itemdata][0].title, { expires: 1 });
+        Cookies.set('ad_link', [itemdata][0].ad_link, { expires: 1 });
+        Cookies.set('display_order', [itemdata][0].display_order, { expires: 1 });
+        
 
-          }
-
-        } catch (error) {
-          console.error("Error:", error);
-
-        }
-      };
+      setUserData([itemdata]);
+      }
     }
     fetchdata();
-  }, [token, Id]);
+  }, [coId, token]);
+  
   return (
     <div className="">
       {/* {lastSegment} */}
@@ -106,24 +76,20 @@ function Page() {
           }}
         >
           <ChevronLeft />
-          <span className="text-base">Manage Uploads</span>
+          <span className="text-base">Manage Ads</span>
         </div>
-        <div className="flex justify-between">
 
-          <Uploadform />
-          <DeleteBtn />
-        </div>
+        <AdForm />
       </div>
-      {uploadData[0] ?
-        <div className="grid gap-4 md:gap-6 grid-cols-1 md:grid-cols-3 p-2 md:p-5 md:border md:shadow-md md:rounded-lg">
-
-          <div className='overflow-hidden'>
-            {uploadData[0].up_file ? (
+      {userData[0] &&
+      <div className="grid gap-4 md:gap-6 grid-cols-1 md:grid-cols-2 p-2 md:p-5 md:border md:shadow-md md:rounded-lg">
+         <div className='overflow-hidden'>
+            {userData[0].ad_image ? (
               <div>
                 <div className="aspect-square h-40 w-40">
-                  <p>Image 1</p>
+                  <p>Image</p>
                   <img
-                    src={`${imageURL}${uploadData[0].up_file}`}
+                    src={`${imageURL}${userData[0].ad_image}`}
                     alt="Selected"
                     width={150}
                     height={150}
@@ -131,239 +97,38 @@ function Page() {
                   />
                 </div>
                 {edit1 ?
-                  <UploadButton imageNo={1} treeNo={uploadData[0].up_id} isEdit={true} /> :
+                  <UploadButton id={coId} isEdit={true} /> :
                   <p className='text-primary underline flex items-center justify-center m-5'
                     onClick={() => { setEdit1(1) }}>Edit</p>
                 }
               </div>
             ) : (
-              <><p>Image 1</p><UploadButton imageNo={1} treeNo={uploadData[0].up_id} isEdit={false} /></>
+              <><p>Image</p><UploadButton id={coId} isEdit={false} /></>
             )}
           </div>
-
-          <div className='overflow-hidden'>
-            {uploadData[0].up_file_2 ? (
-              <div>
-                <div className="aspect-square h-40 w-40">
-                  <p>Image 2</p>
-                  <img
-                    src={`${imageURL}${uploadData[0].up_file_2}`}
-                    alt="Selected"
-                    width={150}
-                    height={150}
-                    className='h-full w-full object-cover'
-                  />
-                </div>
-                {edit2 ?
-                  <UploadButton imageNo={2} treeNo={uploadData[0].up_id} isEdit={true} /> :
-                  <p className='text-primary underline flex items-center justify-center m-5'
-                    onClick={() => { setEdit2(1) }}>Edit</p>
-                }
-              </div>
-            ) : (
-              <><p>Image 2</p><UploadButton imageNo={2} treeNo={uploadData[0].up_id} isEdit={false} /></>
-            )}
-          </div>
-
-          <div className='overflow-hidden'>
-            {uploadData[0].up_file_3 ? (
-              <div>
-                <div className="aspect-square h-40 w-40">
-                  <p>Image 3</p>
-                  <img
-                    src={`${imageURL}${uploadData[0].up_file_3}`}
-                    alt="Selected"
-                    width={150}
-                    height={150}
-                    className='h-full w-full object-cover'
-                  />
-                </div>
-                {edit3 ?
-                  <UploadButton imageNo={3} treeNo={uploadData[0].up_id} isEdit={true} /> :
-                  <p className='text-primary underline flex items-center justify-center m-5'
-                    onClick={() => { setEdit3(1) }}>Edit</p>
-                }
-              </div>
-            ) : (
-              <><p>Image 3</p><UploadButton imageNo={3} treeNo={uploadData[0].up_id} isEdit={false} /></>
-            )}
-          </div>
-
-
-          <div className='overflow-hidden'>
-            {uploadData[0].up_file_4 ? (
-              <div>
-                <div className="aspect-square h-40 w-40">
-                  <p>Image 4</p>
-                  <img
-                    src={`${imageURL}${uploadData[0].up_file_4}`}
-                    alt="Selected"
-                    width={150}
-                    height={150}
-                    className='h-full w-full object-cover'
-                  />
-                </div>
-                {edit4 ?
-                  <UploadButton imageNo={4} treeNo={uploadData[0].up_id} isEdit={true} /> :
-                  <p className='text-primary underline flex items-center justify-center'
-                    onClick={() => { setEdit4(1) }}>Edit</p>
-                }
-              </div>
-            ) : (
-              <><p>Image 4</p><UploadButton imageNo={4} treeNo={uploadData[0].up_id} isEdit={false} /></>
-            )}
-          </div>
-
-          {uploadData[0].up_id ?
-            <div className="">
-              <p className="text-sm text-gray-500">Tree Number</p>
-              <p className="text-base">{uploadData[0].up_id}</p>
-            </div>
-            : ''}
-          {uploadData[0].us_id ?
-            <div className="">
-              <p className="text-sm text-gray-500">Uploader ID</p>
-              <p className="text-base">{uploadData[0].us_id}</p>
-            </div>
-            : ''}
-          {uploadData[0].us_name ?
-            <div className="">
-              <p className="text-sm text-gray-500">Uploader Name</p>
-              <p className="text-base">{uploadData[0].us_name}</p>
-            </div>
-            : ''}
-          {uploadData[0].up_planter ?
-            <div className="">
-              <p className="text-sm text-gray-500">Planter Name</p>
-              <p className="text-base">{uploadData[0].up_planter}</p>
-            </div>
-            : ''}
-          {uploadData[0].cntry_name ?
-            <div className="">
-              <p className="text-sm text-gray-500">Country</p>
-              <p className="text-base">{uploadData[0].cntry_name}</p>
-            </div>
-            : ''}
-          {uploadData[0].st_name ?
-            <div className="">
-              <p className="text-sm text-gray-500">State</p>
-              <p className="text-base">{uploadData[0].st_name}</p>
-            </div>
-            : ''}
-          {uploadData[0].dis_name ?
-            <div className="">
-              <p className="text-sm text-gray-500">District</p>
-              <p className="text-base">{uploadData[0].dis_name}</p>
-            </div>
-            : ''}
-          {uploadData[0].cop_name ?
-            <div className="">
-              <p className="text-sm text-gray-500">Corporation </p>
-              <p className="text-base">{uploadData[0].cop_name}</p>
-            </div>
-            : ''}
-          {uploadData[0].lsg_name ?
-            <div className="">
-              <p className="text-sm text-gray-500">LSGD</p>
-              <p className="text-base">{uploadData[0].lsg_name}</p>
-            </div>
-            : ''}
-          {uploadData[0].source_name ?
-            <div className="">
-              <p className="text-sm text-gray-500">Source</p>
-              <p className="text-base">{uploadData[0].source_name}</p>
-            </div>
-            : ''}
-          {uploadData[0].up_landmark_details ?
-            <div className="">
-              <p className="text-sm text-gray-500">Landmark</p>
-              <p className="text-base">{uploadData[0].up_landmark_details}</p>
-            </div>
-            : ''}
-          {uploadData[0].up_tree_name ?
-            <div className="">
-              <p className="text-sm text-gray-500">Tree Name</p>
-              <p className="text-base">{uploadData[0].up_tree_name}</p>
-            </div>
-            : ''}
-          {uploadData[0].co_ord_name ?
-            <div className="">
-              <p className="text-sm text-gray-500">Coordinator Name</p>
-              <p className="text-base">{uploadData[0].co_ord_name}</p>
-            </div>
-            : ''}
-          {uploadData[0].gp_name ?
-            <div className="">
-              <p className="text-sm text-gray-500">Group Name</p>
-              <p className="text-base">{uploadData[0].gp_name}</p>
-            </div>
-            : ''}
-          {uploadData[0].group_type ?
-            <div className="">
-              <p className="text-sm text-gray-500">Group Type</p>
-              <p className="text-base">{uploadData[0].group_type}</p>
-            </div>
-            : ''}
-          {uploadData[0].type_name ?
-            <div className="">
-              <p className="text-sm text-gray-500">School Type</p>
-              <p className="text-base">{uploadData[0].type_name}</p>
-            </div>
-            : ''}
-          {uploadData[0].gp_cat_name ?
-            <div className="">
-              <p className="text-sm text-gray-500">School Category</p>
-              <p className="text-base">{uploadData[0].gp_cat_name}</p>
-            </div>
-            : ''}
-          {uploadData[0].edu_district ?
-            <div className="">
-              <p className="text-sm text-gray-500">Educational DIstrict</p>
-              <p className="text-base">{uploadData[0].edu_district}</p>
-            </div>
-            : ''}
-          {uploadData[0].edu_sub_district_name ?
-            <div className="">
-              <p className="text-sm text-gray-500">Educational Subdistrict</p>
-              <p className="text-base">{uploadData[0].edu_sub_district_name}</p>
-            </div>
-            : ''}
-          {uploadData[0].sahodaya_name ?
-            <div className="">
-              <p className="text-sm text-gray-500">Sahodaya</p>
-              <p className="text-base">{uploadData[0].sahodaya_name}</p>
-            </div>
-            : ''}
-          {uploadData[0].block_name ?
-            <div className="">
-              <p className="text-sm text-gray-500">Block</p>
-              <p className="text-base">{uploadData[0].block_name}</p>
-            </div>
-            : ''}
-          {uploadData[0].project_name ?
-            <div className="">
-              <p className="text-sm text-gray-500">Project</p>
-              <p className="text-base">{uploadData[0].project_name}</p>
-            </div>
-            : ''}
-          {uploadData[0].chapter_name ?
-            <div className="">
-              <p className="text-sm text-gray-500">Chapter</p>
-              <p className="text-base">{uploadData[0].chapter_name}</p>
-            </div>
-            : ''}
-          {uploadData[0].zone_name ?
-            <div className="">
-              <p className="text-sm text-gray-500">Zone</p>
-              <p className="text-base">{uploadData[0].zone_name}</p>
-            </div>
-            : ''}
-        </div> : ''}
+       
+        <div className="">
+          <p className="text-sm text-gray-500">Title</p>
+          <p className="text-base">{userData[0].title}</p>
+        </div>
+        <div className="">
+          <p className="text-sm text-gray-500">Ad Link</p>
+          <p className="text-base">{userData[0].ad_link}</p>
+        </div>
+        <div className="">
+          <p className="text-sm text-gray-500">Display Order</p>
+          <p className="text-base">{userData[0].display_order}</p>
+        </div>
+       
+      </div>
+      }
     </div>
   );
 }
 
 export default Page;
+
+
 
 
 
@@ -421,7 +186,7 @@ const formSchema = z.object({
 
 type ImageFormData = z.infer<typeof formSchema>;
 
-const UploadButton = ({ imageNo, treeNo, isEdit }: any) => {
+const UploadButton = ({id, isEdit }: any) => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
   const form = useForm<ImageFormData>({
@@ -436,15 +201,13 @@ const UploadButton = ({ imageNo, treeNo, isEdit }: any) => {
 
   const onSubmit = async (data: any) => {
     const formData = new FormData();
-    formData.append("imageNumber", imageNo);
-    formData.append("treeNumber", treeNo);
 
     if (selectedImage) {
       const compressedImage = await resizeImage(selectedImage);
       formData.append("image", compressedImage);
     }
     try {
-      const response = await fetch(`${apiURL}/adminEdit/updateImage`, {
+      const response = await fetch(`${apiURL}/adminEdit/updateAddImage?recordId=${id}`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -458,13 +221,13 @@ const UploadButton = ({ imageNo, treeNo, isEdit }: any) => {
       const result = await response.json();
       if (result) {
         toast({
-          title: "Plant Uploaded Successfully.",
-          description: "plant image successfully updated",
+          title: "Add Uploaded Successfully.",
+          description: "Add image successfully updated",
         });
       }
       // Reload the page
       setTimeout(function () {
-        window.location.reload();
+        window.history.back();
       }, 1800);
 
     } catch (error) {

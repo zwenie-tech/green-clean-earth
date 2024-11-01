@@ -108,6 +108,7 @@ function Page() {
         </div>
         {userData[0] ? 
         <EditForm data={userData[0]}/>
+        
         :''}
       </div>
       {userData[0] ? 

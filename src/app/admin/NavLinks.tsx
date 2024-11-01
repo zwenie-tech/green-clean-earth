@@ -28,6 +28,8 @@ const links = [
   { name: "Manage Malayalam Mission Chapter", href: "/admin/mmchapter" },
   { name: "Manage Malayalam Mission Zone", href: "/admin/mmzone" },
   { name: "Manage News and Events", href: "/admin/news-and-events" },
+  { name: "Manage Ads", href: "/admin/ads" },
+  { name: "Manage Mainpage Events", href: "/admin/mainevents" },
 ];
 
 
