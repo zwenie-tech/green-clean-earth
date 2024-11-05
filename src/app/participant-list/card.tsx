@@ -10,6 +10,7 @@ type Participant = {
   up_date: string;
   up_planter: string;
   up_name: string;
+  gp_name: string;
 }
 
 type ParticipantCardProps = {
@@ -67,6 +68,10 @@ const ParticipantCard: React.FC<ParticipantCardProps> = ({ participant }) => {
       <div>
         <div className="text-sm text-gray-500">Uploader name: </div>
         <div className="text-xl">{ participant.up_name }</div>
+      </div>
+      <div>
+        <div className="text-sm text-gray-500">Group name: </div>
+        <div className="text-xl">{ participant.gp_name }</div>
       </div>
       <div className="text-sm text-gray-500">{ formattedDate }</div>
       <div className="text-sm text-gray-500">{ formattedTime }</div>

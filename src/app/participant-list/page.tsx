@@ -19,13 +19,14 @@ type Participant = {
   up_planter: string;
   up_name: string;
   is_challenged:number;
+  gp_name: string;
 }
 
 const ParticipantList: React.FC = () => {
   const [participants, setParticipants] = useState<Participant[]>();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 12;
   const [challenge,setchallenge]=useState(false)
   const token = Cookies.get("token");
   
@@ -158,6 +159,10 @@ const ParticipantList: React.FC = () => {
               <div className="flex gap-3">
                 <div className="text-sm text-left pl-8" style={{width:'45%'}}>Uploader name:</div>                 
                 <div className="text-sm">{participant.up_name}</div>
+              </div>
+              <div className="flex gap-3">
+                <div className="text-sm text-left pl-8" style={{width:'45%'}}>Group name:</div>                 
+                <div className="text-sm">{participant.gp_name}</div>
               </div>
               {participant.is_challenged == 1 ? (
                 <div className="flex m-auto">

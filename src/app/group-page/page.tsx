@@ -239,21 +239,21 @@ const ButtonDisplayFn: React.FC = () => {
                 <thead>
                   <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                     <th className="py-3 px-6 text-left w-16 bd-2 rounded-tl-lg">Sl. No</th>
-                    <th className="py-3 px-6 text-left">View/ Like/ Comment/ Share</th>
-                    <th className="py-3 px-6 text-left">Category</th>
                     <th className="py-3 px-6 text-left">Name & address of participant</th>
-                    <th className="py-3 px-6 text-left">Thumbnail</th>
-                    <th className="py-3 px-6 text-left rounded-tr-lg">Value</th>
+                    <th className="py-3 px-6 text-left">Activity Link</th>
+                    <th className="py-3 px-6 text-left">Category</th>
+                    <th className="py-3 px-6 text-left">View/ Like/ Comment/ Share</th>
+                    <th className="py-3 px-6 text-left rounded-tr-lg">Earnings</th>
                   </tr>
                 </thead>
                 <tbody>
                   {groupActivities.length ? (groupActivities.map((activity, index) => (
                     <tr key={index} className="border border-gray-200 hover:bg-gray-100">
                       <td className="py-3 px-6 text-left">{index + 1}</td>
-                      <td className="py-3 px-6 text-left">{activity.activity_likes} Likes & {activity.activity_views} Views</td>
-                      <td className="py-3 px-6 text-left">{activity.activity_category}</td>
                       <td className="py-3 px-6 text-left">{activity.participant_name}</td>
-                      <td className="py-3 px-6 text-left"><img src={`${imageURL}${activity.activity_thumbnail}`} alt="Thumbnail" style={{ height: '100px' }} /></td>
+                      <td className="py-3 px-6 text-left"><a href={activity.activity_social_media_link}>{activity.activity_social_media_link}</a></td>
+                      <td className="py-3 px-6 text-left">{activity.activity_category}</td>
+                      <td className="py-3 px-6 text-left">{activity.activity_likes} Likes & {activity.activity_views} Views</td>
                       <td className="py-3 px-6 text-left">{activity.earnings || "N/A"} </td>
                     </tr>
                   ))): <div>No data found</div>}

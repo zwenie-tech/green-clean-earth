@@ -30,7 +30,8 @@ interface Participant {
   st_name: string, 
   dis_name: string,
   cop_name: string,
-  lsg_name: string
+  lsg_name: string,
+  gp_id: number
 }
 
 type Country = {
@@ -798,7 +799,7 @@ const ParticipateList = () => {
                   >
                     <FormControl>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Choose a corporation" />
+                        <SelectValue placeholder="Choose a block" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -1496,7 +1497,7 @@ const ParticipateList = () => {
                     <td className="py-3 px-6 text-left">{p.up_id}</td>
                     <td className="py-3 px-6 text-left">{p.up_planter}</td>
                     <td className="py-3 px-6 text-left"><a href={`/user-page?u=${p.up_name}&id=${p.up_reg_id}`}>{p.up_name}/{p.up_reg_id}</a></td>
-                    <td className="py-3 px-6 text-left">{p.gp_name}/{p.total_upload}</td>
+                    <td className="py-3 px-6 text-left"><a href={`/group-page?gname=${p.gp_name}&gid=${p.gp_id}&uc=${p.total_upload}`}>{p.gp_name}/{p.total_upload}</a></td>
                     <td className="py-3 px-6 text-left">{p.up_tree_name}</td>
                     <td className="py-3 px-6 text-left">
                       {p.up_file ? (

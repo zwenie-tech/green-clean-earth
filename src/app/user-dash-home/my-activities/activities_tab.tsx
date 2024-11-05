@@ -10,10 +10,10 @@ import Loading from "@/components/loading";
 
 const headings = [
   "Sl No",
-  "Thumbnail",
+  "Activity Link",
   "Name",
   "Name of Art - Brief Description",
-  "Category",
+  "Item Name",
   "Views, Likes, Comments, and Shares",
   "Value",
 ];
@@ -28,22 +28,22 @@ export default function ActivitiesTab({ token }: any) {
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 10;
 
-  useEffect(() => {
-    async function fetchfirstData() {
-      const responseall = await fetch(
-        `${apiURL}/activity/${id}?limit=100000000000`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const dataall = await responseall.json();
+  // useEffect(() => {
+  //   async function fetchfirstData() {
+  //     const responseall = await fetch(
+  //       `${apiURL}/activity/${id}?limit=100000000000`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     const dataall = await responseall.json();
 
-      setTotalPages(Math.ceil(dataall.activity.length / itemsPerPage));
-    }
-    fetchfirstData();
-  }, [token, id]);
+  //     setTotalPages(Math.ceil(dataall.activity.length / itemsPerPage));
+  //   }
+  //   fetchfirstData();
+  // }, [token, id]);
 
   const handlePageChange = (newPage: number) => {
     if (newPage > 0 && newPage <= totalPages) {

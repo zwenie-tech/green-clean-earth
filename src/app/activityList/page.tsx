@@ -819,7 +819,7 @@ const ActivityList = () => {
                         }} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Choose a corporation" />
+                              <SelectValue placeholder="Choose a block" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>

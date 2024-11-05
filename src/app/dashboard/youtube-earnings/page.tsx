@@ -18,6 +18,8 @@ interface Activity {
   activity_thumbnail: string;
   gp_name: string;
   earnings: number;
+  us_id: number;
+  activity_social_media_link: string;
 }
 
 const DashboardActivity = () => {
@@ -94,7 +96,7 @@ const DashboardActivity = () => {
     <>
       <NavigationBar />
       <div className='relative flex p-4mt-6 mb-3'>
-        <div className='absolute left-1/2 transform -translate-x-1/2 w-full md:w-auto'>
+        <div className='absolute left-1/2 transform -translate-x-1/2 w-full md:w-auto m-5'>
           <h1 className='text-xl text-left md:text-center md:text-xl font-bold'>Dashboard</h1>
         </div>
         <div className='ml-auto'>
@@ -104,8 +106,11 @@ const DashboardActivity = () => {
           </button>
         </div>
       </div>
-      <div className='text-center'>
+      <div className='text-center m-10'>
         <h1 className='text-3xl mt-2 font-bold'>Youtube earnings</h1>
+      </div>
+      <div className='border border-black m-5 p-7 rounded-lg'>
+        <p>നിങ്ങളുടെ  സ്ഥാപനത്തിൽ  നിന്നും  Green Clean Kerala  എന്ന  യു ട്യൂബ്  ചാനലിലേക്ക്   അപ്‌ലോഡ് ചെയ്യുന്ന  വീഡിയോകളിൽ  നിന്നും  വരുമാനം  ലഭിക്കുകയാണെങ്കിൽ  അതിന്റെ  പകുതി  സ്ഥാപനത്തിന്  നൽകുന്നതാണ് . സ്ഥാപനത്തിന്  ലഭിക്കുന്ന  തുകയുടെ  പകുതി  സ്ഥാപനത്തിന്റെ  ഹരിത  പ്രവർത്തനങ്ങൾക്കായി  ഉപയോഗിക്കാവുന്നതും  പകുതി  പരിപാടി  അവതരിപ്പിച്ച  വ്യക്തികൾക്ക്  നൽകേണ്ടതുമാണ് .</p>
       </div>
       {/* Table */}
       <div className="container mx-auto p-6">
@@ -114,12 +119,10 @@ const DashboardActivity = () => {
             <thead>
               <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                 <th className="py-3 px-6 text-left w-16 bd-2 rounded-tl-lg">Sl. No</th>
-                <th className="py-3 px-6 text-left">View/ Like/ Comment/ Share</th>
-                <th className="py-3 px-6 text-left">Category</th>
-                <th className="py-3 px-6 text-left">Name & address of participant</th>
-                <th className="py-3 px-6 text-left">Thumbnail</th>
-                <th className="py-3 px-6 text-left">Value</th>
-                <th className="py-3 px-6 text-left rounded-tr-lg">Earnings</th>
+                <th className="py-3 px-6 text-left">Activist Id</th>
+                <th className="py-3 px-6 text-left">Name of participant</th>
+                <th className="py-3 px-6 text-left">Activity Link</th>
+                <th className="py-3 px-6 text-left rounded-tr-lg">Value</th>
               </tr>
             </thead>
             <tbody>
@@ -139,12 +142,10 @@ const DashboardActivity = () => {
                 activities.map((activity, index) => (
                   <tr key={activity.personal_activity_id} className="border border-gray-200 hover:bg-gray-100">
                     <td className="py-3 px-6 text-left">{index + 1}</td>
-                    <td className="py-3 px-6 text-left">{activity.activity_likes} Likes & {activity.activity_views} Views</td>
-                    <td className="py-3 px-6 text-left">{activity.activity_category}</td>
+                    <td className="py-3 px-6 text-left"><a href={`/user-page?u=${activity.participant_name}&id=${activity.us_id}`}>{activity.us_id}</a></td>
                     <td className="py-3 px-6 text-left">{activity.participant_name}</td>
-                    <td className="py-3 px-6 text-left"><img src={`${imageURL}${activity.activity_thumbnail}`} alt="Thumbnail" style={{ height: '100px' }} /></td>
+                    <td className="py-3 px-6 text-left"><a href={activity.activity_social_media_link}>{activity.activity_social_media_link}</a></td>
                     <td className="py-3 px-6 text-left">{activity.activity_value}</td>
-                    <td className="py-3 px-6 text-left">{activity.earnings}</td>
                   </tr>
                 ))
               )}

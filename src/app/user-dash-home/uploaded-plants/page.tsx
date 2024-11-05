@@ -52,6 +52,31 @@ type ApiResponse = {
   success: boolean;
 };
 
+function formatDate(isoString: string) {
+  const date = new Date(isoString);
+
+  const day = String(date.getUTCDate()).padStart(2, '0');
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Months are 0-based
+  const year = date.getUTCFullYear();
+  
+
+  const formattedDate = `${day}/${month}/${year}`;
+
+  return `${formattedDate}`;
+}
+
+function formatTime(isoString: string) {
+  const date = new Date(isoString);
+  let hours = String(date.getUTCHours()).padStart(2, '0');
+  const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+  const seconds = String(date.getUTCSeconds()).padStart(2, '0');
+  let hour = parseInt(hours) % 12;
+
+  const formattedTime = `${hour}:${minutes} ${parseInt(hours) >= 12 ? 'PM' : 'AM'}`;
+
+  return `${formattedTime}`;
+}
+
 const MyUploadedPlants = () => {
   const [data, setData] = useState<PlantData[]>([]);
   const token = Cookies.get('token');
@@ -148,6 +173,7 @@ const MyUploadedPlants = () => {
                             className='h-full w-full object-cover'
                           />
                         </div>
+                        <h1 className='m-5'> Uploaded on <br/>{formatDate(plant.up_date)} {formatTime(plant.up_date)}</h1>
                         {edit1 ?
                           <UploadButton imageNo={1} treeNo={plant.up_id} isEdit={true}/>:
                           <p className='text-primary underline flex items-center justify-center m-5' 
@@ -173,6 +199,10 @@ const MyUploadedPlants = () => {
                             className='h-full w-full object-cover'
                           />
                         </div>
+                        <h1 className='m-5'>
+                          Uploaded on <br />
+                          {plant.up_file_2_time ? `${formatDate(plant.up_file_2_time)} ${formatTime(plant.up_file_2_time)}` : "No upload date available"}
+                        </h1>
                         {edit2 ?
                           <UploadButton imageNo={2} treeNo={plant.up_id} isEdit={true}/>:
                           <p className='text-primary underline flex items-center justify-center m-5' 
@@ -197,6 +227,10 @@ const MyUploadedPlants = () => {
                               className='h-full w-full object-cover'
                             />
                           </div>
+                          <h1 className='m-5'>
+                            Uploaded on <br />
+                            {plant.up_file_3_time ? `${formatDate(plant.up_file_3_time)} ${formatTime(plant.up_file_3_time)}` : "No upload date available"}
+                          </h1>
                           {edit3 ?
                           <UploadButton imageNo={3} treeNo={plant.up_id} isEdit={true}/>:
                           <p className='text-primary underline flex items-center justify-center m-5' 
@@ -212,7 +246,7 @@ const MyUploadedPlants = () => {
                   <td className='border border-black p-4'>
                     <div className='w-56 h-56  md:max-w-[200px]'>
                     {plant.up_file_2 && plant.up_file_3 ? (plant.up_file_4 ? (
-                        <div className='flex items-center justify-center'>
+                        <div className=''>
                           <div className="aspect-square h-40 w-40">
                             <img 
                               src={`${imageURL}${plant.up_file_4}`} 
@@ -222,6 +256,10 @@ const MyUploadedPlants = () => {
                               className='h-full w-full object-cover'
                             />
                             </div>
+                            <h1 className='m-5'>
+                              Uploaded on <br />
+                              {plant.up_file_4_time ? `${formatDate(plant.up_file_4_time)} ${formatTime(plant.up_file_4_time)}` : "No upload date available"}
+                            </h1>
                             {edit4 ?
                           <UploadButton imageNo={4} treeNo={plant.up_id} isEdit={true}/>:
                           <p className='text-primary underline flex items-center justify-center m-5' 

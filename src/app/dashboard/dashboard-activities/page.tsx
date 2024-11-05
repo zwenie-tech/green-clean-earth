@@ -17,6 +17,8 @@ interface Activity {
   activity_title: string;
   activity_thumbnail: string;
   gp_name: string;
+  us_id: number;
+  activity_social_media_link: string;
 }
 
 const DashboardActivity = () => {
@@ -112,10 +114,11 @@ const DashboardActivity = () => {
             <thead>
               <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                 <th className="py-3 px-6 text-left w-16 bd-2 rounded-tl-lg">Sl. No</th>
+                <th className="py-3 px-6 text-left">Activist Id</th>
+                <th className="py-3 px-6 text-left">Name of participant</th>
+                <th className="py-3 px-6 text-left">Activity Link</th>
                 <th className="py-3 px-6 text-left">View/ Like/ Comment/ Share</th>
                 <th className="py-3 px-6 text-left">Category</th>
-                <th className="py-3 px-6 text-left">Name & address of participant</th>
-                <th className="py-3 px-6 text-left">Thumbnail</th>
                 <th className="py-3 px-6 text-left rounded-tr-lg">Value</th>
               </tr>
             </thead>
@@ -136,10 +139,11 @@ const DashboardActivity = () => {
                 activities.map((activity, index) => (
                   <tr key={activity.personal_activity_id} className="border border-gray-200 hover:bg-gray-100">
                     <td className="py-3 px-6 text-left">{index + 1}</td>
+                    <td className="py-3 px-6 text-left"><a href={`/user-page?u=${activity.participant_name}&id=${activity.us_id}`}>{activity.us_id}</a></td>
+                    <td className="py-3 px-6 text-left">{activity.participant_name}</td>
+                    <td className="py-3 px-6 text-left"><a href={activity.activity_social_media_link}>{activity.activity_social_media_link}</a></td>
                     <td className="py-3 px-6 text-left">{activity.activity_likes} Likes & {activity.activity_views} Views</td>
                     <td className="py-3 px-6 text-left">{activity.activity_category}</td>
-                    <td className="py-3 px-6 text-left">{activity.participant_name}</td>
-                    <td className="py-3 px-6 text-left"><img src={`${imageURL}${activity.activity_thumbnail}`} alt="Thumbnail" style={{ height: '100px' }} /></td>
                     <td className="py-3 px-6 text-left">{activity.activity_value}</td>
                   </tr>
                 ))

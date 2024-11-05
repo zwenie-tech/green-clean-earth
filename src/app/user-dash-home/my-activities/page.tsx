@@ -24,6 +24,9 @@ function MyActivities() {
       <Navigationbar />
       <div className="container mx-auto md:max-w-5xl mt-4 min-h-screen">
         <PageTitle title="My Activities" />
+        <div className='border border-black m-5 p-7 rounded-lg'>
+          <p>നിങ്ങളുടെ  സ്ഥാപനത്തിൽ  നിന്നും  Green Clean Kerala  എന്ന  യു ട്യൂബ്  ചാനലിലേക്ക്   അപ്‌ലോഡ് ചെയ്യുന്ന  വീഡിയോകളിൽ  നിന്നും  വരുമാനം  ലഭിക്കുകയാണെങ്കിൽ  അതിന്റെ  പകുതി  സ്ഥാപനത്തിന്  നൽകുന്നതാണ് . സ്ഥാപനത്തിന്  ലഭിക്കുന്ന  തുകയുടെ  പകുതി  സ്ഥാപനത്തിന്റെ  ഹരിത  പ്രവർത്തനങ്ങൾക്കായി  ഉപയോഗിക്കാവുന്നതും  പകുതി  പരിപാടി  അവതരിപ്പിച്ച  വ്യക്തികൾക്ക്  നൽകേണ്ടതുമാണ് .</p>
+        </div>
         <ActivitiesTab token={token} />
       </div>
       <GceBadge />

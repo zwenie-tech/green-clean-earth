@@ -54,6 +54,8 @@ const DashboardUserList = () => {
       return;
     }
 
+
+
     const fetchUsers = async () => {
       try {
         const response = await fetch(`${apiURL}/coordinator/members?page=${currentPage}&limit=${itemsPerPage}`, {
@@ -78,6 +80,10 @@ const DashboardUserList = () => {
 
     fetchUsers();
   }, [token, router,currentPage]);
+
+  const UserMyPage = (name:string, userId: number) => {
+    router.push(`/user-page?u=${name}&id=${userId}`);
+  };
 
   return (
     <>
@@ -108,7 +114,8 @@ const DashboardUserList = () => {
             <p>No users found</p>
           ) : (
             users.map((user) => (
-              <div key={user.us_id} className="flex flex-col md:flex-row items-center p-4 border border-gray-200 rounded-lg" style={{ boxShadow: '0px 4px 10px 3px #00000040' }}>
+              <div key={user.us_id} className="flex flex-col md:flex-row items-center p-4 border border-gray-200 rounded-lg cursor-pointer" style={{ boxShadow: '0px 4px 10px 3px #00000040' }}
+                onClick={() => UserMyPage(user.us_name, user.us_id)}>
 {/*                 <div className="w-full md:w-1/4">
                   <img src='/images/participants_list.jpeg' alt={`User ${user.us_id}`} className="w-full h-auto object-cover rounded-lg" />
                 </div> */}

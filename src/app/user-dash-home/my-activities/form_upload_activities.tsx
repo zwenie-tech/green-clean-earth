@@ -304,7 +304,7 @@ export function FormUploadActivities({ token }: ActivitiesTabProps) {
             name="short_desc"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Short Description</FormLabel>
+                <FormLabel>Chest Number</FormLabel>
                 <FormControl>
                   <Input placeholder="" {...field} />
                 </FormControl>
