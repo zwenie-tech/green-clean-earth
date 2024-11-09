@@ -87,7 +87,7 @@ export function CoordinatorForm() {
             setUsername(co_username || "");
             setContact(co_ord_contact || "");
             setProfession(co_profession || "");
-            console.log(udata)
+            
           } else {
 
           }
@@ -112,7 +112,7 @@ export function CoordinatorForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
 
-    console.log(values)
+    
 
 
     const dtm = {

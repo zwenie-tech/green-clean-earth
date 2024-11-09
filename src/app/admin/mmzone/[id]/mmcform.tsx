@@ -131,12 +131,12 @@ export function Eduform() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    
     const formdata = {
       chapterId: missionChapter.find((item) => item.chapter_name === selectMission)?.chapter_id?.toString(),
       zoneName: selectZone
     }
-    console.log(formdata);
+    
 
     if (token) {
       const response = await axios.post(`${apiURL}/adminEdit/modifyMMZone?recordId=${coId}`, formdata, {

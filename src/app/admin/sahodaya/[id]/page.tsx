@@ -32,7 +32,7 @@ function Page() {
       if(token){
         const retrievedData = JSON.parse(localStorage.getItem("sahodayaData") || "[]");
         const itemdata = retrievedData.find((item: { sahodaya_id  : string; }) => item.sahodaya_id == coId)
-        console.log([itemdata][0])
+        
           // Get all cookies
           const allCookies = Cookies.get();
 

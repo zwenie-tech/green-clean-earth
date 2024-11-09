@@ -122,7 +122,6 @@ const AdminGrid = () => {
           setTotalcount(response.data.totalCount);
     localStorage.setItem("edusubData", JSON.stringify(response.data.eduSubDistrict));
 
-        console.log(response.data.eduSubDistrict)
           setRowData(response.data.eduSubDistrict); 
         }
       }
@@ -158,7 +157,7 @@ useEffect(() => {
 }, [districts, selectedDistrictGrp]);
 
   const handleFilterEDistrict = (e: any) => {
-    console.log(e.target.value)
+    
     if (e.target.value != "") {
         setSelectedDistrictGrp(e.target.value);
         fetchFilteredDistrict(e.target.value);
@@ -167,7 +166,7 @@ useEffect(() => {
 };
 
 const handleFilterEduDistrict = (e: any) => {
-    console.log(e.target.value)
+    
     if (e.target.value != "") {
         setSelecteduDistrict(e.target.value);
         fetchFilteredEduDistrict(e.target.value);
@@ -200,12 +199,12 @@ const fetchFilteredDistrict = async (value: string) => {
       );
       try {
           if (response.data.success && response.status !== 203) {
-              console.log('filter')
-              console.log(response.data)
+              
+              
               const filteredData = response.data.eduSubDistrict.filter(
                   (item: { dis_name: string; }) => item.dis_name === value
               );
-              console.log(filteredData)
+              
 
               setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
               setRowData(filteredData);
@@ -232,12 +231,12 @@ const fetchFilteredEduDistrict = async (value: string) => {
       );
       try {
           if (response.data.success && response.status !== 203) {
-              console.log('filter')
-              console.log(response.data)
+              
+              
               const filteredData = response.data.eduSubDistrict.filter(
                   (item: { edu_district: string; }) => item.edu_district === value
               );
-              console.log(filteredData)
+              
 
               setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
               setRowData(filteredData);
@@ -252,7 +251,7 @@ const fetchFilteredEduDistrict = async (value: string) => {
 
 
 const handleFilterEduSubDistrict = (e: any) => {
-  console.log(e.target.value)
+  
   if (e.target.value != "") {
       setSelecteduSubDistrict(e.target.value);
       fetchFilteredEduSubDistrict(e.target.value);
@@ -274,12 +273,12 @@ const fetchFilteredEduSubDistrict = async (value: string) => {
       );
       try {
           if (response.data.success && response.status !== 203) {
-              console.log('filter')
-              console.log(response.data)
+              
+              
               const filteredData = response.data.eduSubDistrict.filter(
                   (item: { edu_sub_district_name: string; }) => item.edu_sub_district_name === value
               );
-              console.log(filteredData)
+              
 
               setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
               setRowData(filteredData);

@@ -155,7 +155,7 @@ export function AddAdForm() {
       formData.append("displayOrder", disporder);
     }
 
-    console.log(values);
+    
 
     if (token) {
       const response = await axios.post(`${apiURL}/adminEdit/addAds`, formData, {

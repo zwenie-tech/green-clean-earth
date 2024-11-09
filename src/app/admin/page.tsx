@@ -169,14 +169,14 @@ const GridExample = () => {
     async function fetchData() {
       const categoryResponse = await fetch(`${apiURL}/category`);
       const categoryData = await categoryResponse.json();
-      console.log(categoryData.category)
+      
       setCategory(categoryData.category);
     }
     fetchData();
   }, []);
 
   const handleFilterGrpType = (e: any) => {
-    console.log(e.target.value)
+    
     
     setFilterValue(e.target.value); // Update dropdown value
     fetchFilteredGrpType(e.target.value);
@@ -186,8 +186,8 @@ const GridExample = () => {
   const fetchFilteredGrpType = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminUploads?limit=${totalcount}`,
-        {},
+        `${apiURL}/admin/adminUploads`,
+        {groupTypeId:category.find((item) => item.group_type === value)?.id},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -197,13 +197,11 @@ const GridExample = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          console.log('filter')
-          console.log(response.data)
-          console.log(filterValue)
+          
           const filteredData = response.data.Uploads.filter(
             (item: { group_type: string; }) => item.group_type === value
           );
-          console.log(filteredData)
+         
 
           setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
           setRowData(filteredData);
@@ -217,7 +215,7 @@ const GridExample = () => {
   };
 
   const handleFilterUpName = (e: any) => {
-    console.log(e)
+    
     if(e != "")
       {
         setFilterValue(e); // Update dropdown value
@@ -228,8 +226,8 @@ const GridExample = () => {
   const fetchFilteredUpName = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminUploads?limit=${totalcount}`,
-        {},
+        `${apiURL}/admin/adminUploads`,
+        {uploaderName:value},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -239,13 +237,12 @@ const GridExample = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          console.log(response.data.Uploads)
-          console.log(value)
+         
 
           const filteredData = response.data.Uploads.filter(
             (item: { up_name: string; }) => item.up_name === value
           );
-          console.log(filteredData)
+         
 
           setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
           setRowData(filteredData);
@@ -258,19 +255,22 @@ const GridExample = () => {
     }
   };
   const handleFilterUpId = (e: any) => {
-    console.log(e)
+   
     if(e != "")
       {
-        console.log(e)
+       
         fetchFilteredUpId(e);
         setCurrentPage(1); // Reset to first page
       }
   };
   const fetchFilteredUpId = async (value: string) => {
+    const filterdata = {
+      treeNumber: parseInt(value)
+    }
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminUploads?limit=${totalcount}`,
-        {},
+        `${apiURL}/admin/adminUploads`,
+        filterdata,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -279,14 +279,14 @@ const GridExample = () => {
         }
       );
       try {
+        
         if (response.data.success && response.status !== 203) {
-          console.log(response.data.Uploads)
-          console.log(value)
+        
 
           const filteredData = response.data.Uploads.filter(
             (item: { up_id: string; }) => item.up_id == value
           );
-          console.log(filteredData)
+          
 
           setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
           setRowData(filteredData);
@@ -299,7 +299,7 @@ const GridExample = () => {
     }
   };
   const handleFilterPlanterName = (e: any) => {
-    console.log(e)
+    
     if(e != "")
       {
         setFilterValue(e); // Update dropdown value
@@ -310,8 +310,8 @@ const GridExample = () => {
   const fetchFilteredPlanterName = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminUploads?limit=${totalcount}`,
-        {},
+        `${apiURL}/admin/adminUploads`,
+        {planterName:value},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -321,13 +321,12 @@ const GridExample = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          console.log(response.data.Uploads)
-          console.log(value)
+         
 
           const filteredData = response.data.Uploads.filter(
             (item: { up_planter: string; }) => item.up_planter === value
           );
-          console.log(filteredData)
+         
 
           setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
           setRowData(filteredData);
@@ -344,7 +343,7 @@ const GridExample = () => {
   
 
   const handleFilterCoordName = (e: any) => {
-    console.log(e)
+   
     if(e != ""){
       setFilterValue(e); // Update dropdown value
       fetchFilteredCoordName(e);
@@ -354,8 +353,8 @@ const GridExample = () => {
   const fetchFilteredCoordName = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminUploads?limit=${totalcount}`,
-        {},
+        `${apiURL}/admin/adminUploads`,
+        {cordinatorName:value},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -365,13 +364,12 @@ const GridExample = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          console.log(response.data.Uploads)
-          console.log(value)
+          
 
           const filteredData = response.data.Uploads.filter(
             (item: { co_ord_name: string; }) => item.co_ord_name === value
           );
-          console.log(filteredData)
+        
 
           setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
           setRowData(filteredData);
@@ -435,7 +433,7 @@ const GridExample = () => {
   }, [selectedCntry, selectedState, selectedCorp, corporation]);
 
   const handleFilterChangeCntry = (e: any) => {
-    console.log(e.target.value)
+    
     
     setSelectedCntry(e.target.value); // Update dropdown value
     fetchFilteredCntry(e.target.value);
@@ -443,7 +441,7 @@ const GridExample = () => {
   };
 
   const handleFilterChangeState = (e: any) => {
-    console.log(e.target.value)
+    
     
     setSelectedState(e.target.value); // Update dropdown value
     fetchFilteredState(e.target.value);
@@ -451,7 +449,7 @@ const GridExample = () => {
   };
 
   const handleFilterChangeDistrict = (e: any) => {
-    console.log(e.target.value)
+    
     
     setSelectedDistrict(e.target.value); // Update dropdown value
     fetchFilteredDistrict(e.target.value);
@@ -459,7 +457,7 @@ const GridExample = () => {
   };
 
   const handleFilterChangeCorp = (e: any) => {
-    console.log(e.target.value)
+    
     
     setSelectedCorp(e.target.value); // Update dropdown value
     fetchFilteredCorp(e.target.value);
@@ -467,27 +465,27 @@ const GridExample = () => {
   };
 
   const handleFilterChangeLsgd = (e: any) => {
-    console.log(e.target.value)
+    
     
     setSelectedLsgd(e.target.value); // Update dropdown value
     fetchFilteredLsgd(e.target.value);
     setCurrentPage(1); // Reset to first page
   };
-  // const handleFilterChangeWard = (e: any) => {
-  //   console.log(e.target.value)
-  //   
-  //   setSelectedWard(e.target.value); // Update dropdown value
-  //   fetchFilteredWard(e.target.value);
-  //   setCurrentPage(1); // Reset to first page
-  // };
+  const handleFilterChangeWard = (e: any) => {
+    
+    
+    setSelectedWard(e); // Update dropdown value
+    fetchFilteredWard(e);
+    setCurrentPage(1); // Reset to first page
+  };
 
 
 
   const fetchFilteredCntry = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminUploads?limit=${totalcount}`,
-        {},
+        `${apiURL}/admin/adminUploads`,
+        {countryId:countries.find((item) => item.cntry_name === value)?.cntry_id},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -497,13 +495,11 @@ const GridExample = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          console.log('filter')
-          console.log(response.data)
-          console.log(response.data.Uploads)
+        
           const filteredData = response.data.Uploads.filter(
             (item: { cntry_name: string; }) => item.cntry_name === value
           );
-          console.log(filteredData)
+        
 
           setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
           setRowData(filteredData);
@@ -519,8 +515,8 @@ const GridExample = () => {
   const fetchFilteredState = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminUploads?limit=${totalcount}`,
-        {},
+        `${apiURL}/admin/adminUploads`,
+        {stateId:states.find((item) => item.st_name === value)?.st_id},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -530,13 +526,11 @@ const GridExample = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          console.log('filter')
-          console.log(response.data)
-          console.log(response.data.Uploads)
+         
           const filteredData = response.data.Uploads.filter(
             (item: { st_name: string; }) => item.st_name === value
           );
-          console.log(filteredData)
+        
 
           setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
           setRowData(filteredData);
@@ -552,8 +546,8 @@ const GridExample = () => {
   const fetchFilteredDistrict = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminUploads?limit=${totalcount}`,
-        {},
+        `${apiURL}/admin/adminUploads`,
+        {districtId:districts.find((item) => item.dis_name === value)?.dis_id},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -563,13 +557,11 @@ const GridExample = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          console.log('filter')
-          console.log(response.data)
-          console.log(response.data.Uploads)
+          
           const filteredData = response.data.Uploads.filter(
             (item: { dis_name: string; }) => item.dis_name === value
           );
-          console.log(filteredData)
+         
 
           setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
           setRowData(filteredData);
@@ -584,8 +576,8 @@ const GridExample = () => {
   const fetchFilteredCorp = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminUploads?limit=${totalcount}`,
-        {},
+        `${apiURL}/admin/adminUploads`,
+        {corporationId:corporation.find((item) => item.cop_name === value)?.cop_id},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -595,13 +587,11 @@ const GridExample = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          console.log('filter')
-          console.log(response.data)
-          console.log(response.data.Uploads)
+          
           const filteredData = response.data.Uploads.filter(
             (item: { cop_name: string; }) => item.cop_name === value
           );
-          console.log(filteredData)
+        
 
           setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
           setRowData(filteredData);
@@ -616,8 +606,8 @@ const GridExample = () => {
   const fetchFilteredLsgd = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminUploads?limit=${totalcount}`,
-        {},
+        `${apiURL}/admin/adminUploads`,
+        {lsgdId:lsgd.find((item) => item.lsg_name === value)?.lsg_id},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -627,13 +617,11 @@ const GridExample = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          console.log('filter')
-          console.log(response.data)
-          console.log(response.data.Uploads)
+        
           const filteredData = response.data.Uploads.filter(
             (item: { lsg_name: string; }) => item.lsg_name === value
           );
-          console.log(filteredData)
+       
 
           setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
           setRowData(filteredData);
@@ -645,38 +633,33 @@ const GridExample = () => {
       }
     }
   };
-  // const fetchFilteredWard = async (value: string) => {
-  //   if (token) {
-  //     const response = await axios.post(
-  //       `${apiURL}/admin/adminUploads?limit=${totalcount}`,
-  //       {},
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-  //     try {
-  //       if (response.data.success && response.status !== 203) {
-  //         console.log('filter')
-  //         console.log(response.data)
-  //         console.log(response.data.Uploads)
-  //         const filteredData = response.data.Uploads.filter(
-  //           (item: { dis_name: string; }) => item.dis_name === value
-  //         );
-  //         console.log(filteredData)
+  const fetchFilteredWard = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminUploads`,
+        {wardNo:parseInt(value)},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+         
+          
 
-  //         setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-  //         setRowData(filteredData);
-  //       } else {
-  //         setRowData([]);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error:", error);
-  //     }
-  //   }
-  // };
+          setTotalPages(Math.ceil(response.data.Uploads.length / itemsPerPage));
+          setRowData(response.data.Uploads);
+        } else {
+          setRowData([]);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
 
 
   return (
@@ -839,45 +822,45 @@ const GridExample = () => {
       </div>
 
       {selectedDistrict != "" ? 
-      <div className="flex items-center mb-3 space-x-2">
-        <label htmlFor="groupFilter" className="text-sm font-medium">
-          Lsgd:
-        </label>
-        <select
-          id="groupFilter"
-          value={selectedLsgd}
-          onChange={handleFilterChangeLsgd}
-          className="border border-gray-300 rounded p-1"
-        >
-          <option value="">Choose Lsgd</option>
-          {lsgd && lsgd.map((lsg) => (
-            <option key={lsg.lsg_id} value={lsg.lsg_name}>
-              {lsg.lsg_name}
-            </option>
-          ))}
-        </select>
-      </div>
+      <><div className="flex items-center mb-3 space-x-2">
+                      <label htmlFor="groupFilter" className="text-sm font-medium">
+                        Lsgd:
+                      </label>
+                      <select
+                        id="groupFilter"
+                        value={selectedLsgd}
+                        onChange={handleFilterChangeLsgd}
+                        className="border border-gray-300 rounded p-1"
+                      >
+                        <option value="">Choose Lsgd</option>
+                        {lsgd && lsgd.map((lsg) => (
+                          <option key={lsg.lsg_id} value={lsg.lsg_name}>
+                            {lsg.lsg_name}
+                          </option>
+                        ))}
+                      </select>
+                    </div><div>
+                        <label>Ward No</label>
+                        <div className="flex mb-3">
+                          <input
+                            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+                            value={selectedWard}
+                            onChange={(e) => setSelectedWard(e.target.value)} // Update the state directly
+                          />
+                          <button
+                            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+                            onClick={() => handleFilterChangeWard(selectedWard)}
+                          >
+                            Search
+                          </button>
+                        </div>
+                      </div></>
       :''}
       </>:''}
       </>:''}
       </>:''
 }
-      {/* <div>
-        <label>Ward No</label>
-        <div className="flex mb-3">
-          <input
-            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
-            value={selectedWard}
-            onChange={(e) => setSelectedWard(e.target.value)} // Update the state directly
-          />
-          <button
-            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-            onClick={() => handleFilterChangeWard(selectedWard)}
-          >
-            Search
-          </button>
-        </div>
-      </div> */}
+      
       <div className="flex items-center mb-3 space-x-2">
         <label htmlFor="groupFilter" className="text-sm font-medium">
           Group Type:

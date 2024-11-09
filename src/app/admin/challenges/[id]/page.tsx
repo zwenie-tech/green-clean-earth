@@ -84,7 +84,7 @@ function Page() {
             // Cookies.set('gp_name', udata.gp_name, { expires: 1 });
 
             setUserData(response.data.challengeDetails);
-            console.log(udata)
+            
           } else {
 
           }

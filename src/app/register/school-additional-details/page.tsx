@@ -36,7 +36,7 @@ const formSchema = z.object({
   value: z.array(z.string()).nonempty("Please select at least one club"),
   no_of_students: z.coerce.number(),
   total_classes: z.coerce.number().gte(1).lte(999),
-  list_of_classes:z.string(),
+  // list_of_classes: z.string(),
   category: z.string().nonempty("Please select a category"),
   schooltype: z.string().nonempty("Please select a type"),
   class: z.string().nonempty("Please select a class"),
@@ -130,6 +130,9 @@ const MultiSelectZodForm = () => {
   const [selectCategory, setSelectCategory] = useState('');
   const [selectschoolType, setSelectschoolType] = useState('');
   const [selecteduDistrict, setSelecteduDistrict] = useState('');
+  const [selectMissionarea, setSelectMissionarea] = useState('');
+  const [selectMission, setSelectedMission] = useState('');
+
   const [rows, setRows] = useState<Row[]>([{
     schooltype: '',
     edudistrict: '',
@@ -175,7 +178,7 @@ const MultiSelectZodForm = () => {
     }
     setRows(newRows);
   };
-  
+
   const multiForm = useForm({
     defaultValues: {
       value: [],
@@ -191,10 +194,10 @@ const MultiSelectZodForm = () => {
       missionzone: '',
       category: '',
       class: '',
-      list_of_classes: [],
+      // list_of_classes: [],
     },
   });
-  
+
   const alphabet = Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i)); // Generates ["A", "B", "C", ..., "Z"]
 
   // Wrap useSearchParams in Suspense
@@ -214,7 +217,7 @@ const MultiSelectZodForm = () => {
 
   useEffect(() => {
     const handleCbse = async () => {
-      if(selectschoolType === 'CBSE'){
+      if (selectschoolType === 'CBSE') {
         try {
           const st_id = Cookies.get('st_id');
           // const eduid = eduDistrict.find((item) => item.edu_district === e)?.edu_district_id
@@ -225,7 +228,7 @@ const MultiSelectZodForm = () => {
         }
 
       }
-      if(selectschoolType === 'ICDS'){
+      if (selectschoolType === 'ICDS') {
         try {
           const dis_id = Cookies.get('dis_id');
           const response = await axios.get(`${apiURL}/icdsBlock/${dis_id}`);
@@ -235,15 +238,15 @@ const MultiSelectZodForm = () => {
         }
 
       }
-      if(selectschoolType === 'Malayalam Mission'){
-        try {
-          const response = await axios.get(`${apiURL}/malayalamMissionChapter`);
-          setMissionChapter(response.data.chapterList);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
+      // if (selectschoolType === 'Malayalam Mission') {
+      //   try {
+      //     const response = await axios.get(`${apiURL}/malayalamMissionChapter`);
+      //     setMissionChapter(response.data.chapterList);
+      //   } catch (error) {
+      //     console.error("Error fetching data:", error);
+      //   }
 
-      }
+      // }
     }
     handleCbse();
   }, [selectschoolType]);
@@ -280,7 +283,7 @@ const MultiSelectZodForm = () => {
       console.error("Error fetching data:", error);
     }
   }
-  
+
   useEffect(() => {
     const fetchClass = async () => {
       try {
@@ -289,11 +292,11 @@ const MultiSelectZodForm = () => {
         const response = await axios.get(`${apiURL}/class/1`);
         const responseclg = await axios.get(`${apiURL}/class/2`);
         const responsetype = await axios.get(`${apiURL}/schoolType`);
-        const responseedudistrict = dis_id ? await axios.get(`${apiURL}/eduDistrict/${dis_id}`):null;
+        const responseedudistrict = dis_id ? await axios.get(`${apiURL}/eduDistrict/${dis_id}`) : null;
         setClassOptions(response.data.classList);
         setClgOptions(responseclg.data.classList);
         setSchoolType(responsetype.data.schoolType);
-        responseedudistrict ? setEduDistrict(responseedudistrict.data.eduDistrict): '';
+        responseedudistrict ? setEduDistrict(responseedudistrict.data.eduDistrict) : '';
 
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -302,11 +305,36 @@ const MultiSelectZodForm = () => {
     fetchClass();
   }, []);
 
+  const handleFilterMissionArea = (e: any) => {
+    
+    if (e.target.value != "") {
+      setSelectMissionarea(e.target.value);
+
+    }
+  };
+
+  useEffect(() => {
+    const handleCbse = async () => {
+
+      if (selectMissionarea) {
+
+        try {
+          const response = await axios.get(`${apiURL}/malayalamMissionChapter/${selectMissionarea}`);
+          setMissionChapter(response.data.chapterList);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+
+      }
+    };
+    handleCbse();
+  }, [selectMissionarea]);
+
   useEffect(() => {
     const fetchCategory = async () => {
       try {
         const response = await axios.get(`${apiURL}/schoolCategory`);
-        
+
         setCategoryOptions(response.data.subCategory);
       } catch (error) {
         console.error("Error fetching category:", error);
@@ -315,7 +343,7 @@ const MultiSelectZodForm = () => {
     fetchCategory();
   }, []);
 
-  const onSubmit = async (data:any) => {
+  const onSubmit = async (data: any) => {
     // Extracting values from searchParams
     const groupId = searchParams.get("group_id");
     const pno = searchParams.get("pno");
@@ -324,21 +352,21 @@ const MultiSelectZodForm = () => {
       .filter((club) => data.value.includes(club.name))
       .map((club) => club.id);
 
-     const apidata= { 
-        groupId          :parseInt(groupId!),
-        clubs            :selectedClubIds.toString(),
-        list_of_classes  : data.list_of_classes.toString(),
-        no_of_students   : parseInt(data.no_of_students),
-        phoneNUmber      : parseInt(pno!),
-        subCategoryId    : categoryOptions.find((item) => item.gp_cat_name === data.category)?.gp_cat_id,
-        schoolTypeId     : schoolType.find((item) => item.type_name === data.schooltype)?.id,
-        eduDistrictId    : eduDistrict.find((item) => item.edu_district === data.edudistrict)?.edu_district_id,
-        eduSubDistrictId : eduSubDistrict.find((item) => item.edu_sub_district_name === data.edusubdistrict)?.edu_sub_district_id,
-        sahodayaId       : sahodaya.find((item) => item.sahodaya_name === data.sahodaya)?.sahodaya_id,
-        blockId          : icdsBlock.find((item) => item.block_name === data.icdsblock)?.icds_block_id,
-        projectId        : icdsProject.find((item) => item.project_name === data.icdsproject)?.project_id,
-        chapterId        : missionChapter.find((item) => item.chapter_name === data.missionchapter)?.chapter_id,
-        zoneId           : missionZone.find((item) => item.zone_name === data.missionzone)?.zone_id
+    const apidata = {
+      groupId: parseInt(groupId!),
+      clubs: selectedClubIds.toString(),
+      list_of_classes: data.list_of_classes.toString(),
+      no_of_students: parseInt(data.no_of_students),
+      phoneNUmber: parseInt(pno!),
+      subCategoryId: categoryOptions.find((item) => item.gp_cat_name === data.category)?.gp_cat_id,
+      schoolTypeId: schoolType.find((item) => item.type_name === data.schooltype)?.id,
+      eduDistrictId: eduDistrict.find((item) => item.edu_district === data.edudistrict)?.edu_district_id,
+      eduSubDistrictId: eduSubDistrict.find((item) => item.edu_sub_district_name === data.edusubdistrict)?.edu_sub_district_id,
+      sahodayaId: sahodaya.find((item) => item.sahodaya_name === data.sahodaya)?.sahodaya_id,
+      blockId: icdsBlock.find((item) => item.block_name === data.icdsblock)?.icds_block_id,
+      projectId: icdsProject.find((item) => item.project_name === data.icdsproject)?.project_id,
+      chapterId: missionChapter.find((item) => item.chapter_name === data.missionchapter)?.chapter_id,
+      zoneId: missionZone.find((item) => item.zone_name === data.missionzone)?.zone_id
     }
 
     try {
@@ -376,7 +404,7 @@ const MultiSelectZodForm = () => {
     <section className="bg-green-50">
       <NavigationBar />
       <h1 className="mt-6 mb-3 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white text-center">
-        School - Additional details   
+        School - Additional details
       </h1>
       <div className="mt-7 container mx-auto p-4 flex flex-col lg:flex-row  items-stretch">
         <div className="w-full lg:w-1/3 flex items-center justify-center">
@@ -388,354 +416,374 @@ const MultiSelectZodForm = () => {
         </div>
         {/* form */}
         <div className="w-full lg:w-1/3 bg-white rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700 flex items-center justify-center border-2">
-      <div className="p-6 w-full">
-        <Form {...multiForm}>
-          <form
-            onSubmit={multiForm.handleSubmit(onSubmit)}
-            className="space-y-3 grid gap-3 w-full"
-          >
-            <FormField
-              control={multiForm.control}
-              name="value"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>List of clubs in your school</FormLabel>
-                  <MultiSelector
-                    onValuesChange={field.onChange}
-                    values={field.value}
-                  >
-                    <MultiSelectorTrigger className="border border-primary">
-                      <MultiSelectorInput placeholder="Select clubs" />
-                    </MultiSelectorTrigger>
-                    <MultiSelectorContent>
-                      <MultiSelectorList>
-                        {clubOptions.map((club) => (
-                          <MultiSelectorItem
-                            key={club.id}
-                            value={club.name}
-                          >
-                            {club.name}
-                          </MultiSelectorItem>
-                        ))}
-                      </MultiSelectorList>
-                    </MultiSelectorContent>
-                  </MultiSelector>
-                  <FormDescription></FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-                      <FormField
-                        control={multiForm.control}
-                        name="category"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Select Category</FormLabel>
-                            <FormControl>
-                              <select
-                                {...field}
-                                onChange={(e) => {
-                                  
-                                  field.onChange(e.target.value);  // Update the form state
-                                  setSelectCategory(e.target.value);
-                                }}
-                                className="w-full px-4 py-2 border rounded-md"
-                                required
+          <div className="p-6 w-full">
+            <Form {...multiForm}>
+              <form
+                onSubmit={multiForm.handleSubmit(onSubmit)}
+                className="space-y-3 grid gap-3 w-full"
+              >
+                <FormField
+                  control={multiForm.control}
+                  name="value"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>List of clubs in your school</FormLabel>
+                      <MultiSelector
+                        onValuesChange={field.onChange}
+                        values={field.value}
+                      >
+                        <MultiSelectorTrigger className="border border-primary">
+                          <MultiSelectorInput placeholder="Select clubs" />
+                        </MultiSelectorTrigger>
+                        <MultiSelectorContent>
+                          <MultiSelectorList>
+                            {clubOptions.map((club) => (
+                              <MultiSelectorItem
+                                key={club.id}
+                                value={club.name}
                               >
-                                <option value="">Select a category</option>
-                                {categoryOptions.map((category) => (
-                                  <option key={category.gp_cat_id} value={category.gp_cat_name}>
-                                    {category.gp_cat_name}
-                                  </option>
-                                ))}
-                              </select>
-                            </FormControl>
-                            <FormDescription> </FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    {selectCategory!== 'College' && (<FormField
-                        control={multiForm.control}
-                        name="schooltype"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Select School Type</FormLabel>
-                            <FormControl>
-                              <select
-                                {...field}
-                                onChange={(e) => {
-                                  
-                                  field.onChange(e.target.value);  // Update the form state
-                                  setSelectschoolType(e.target.value);
+                                {club.name}
+                              </MultiSelectorItem>
+                            ))}
+                          </MultiSelectorList>
+                        </MultiSelectorContent>
+                      </MultiSelector>
+                      <FormDescription></FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={multiForm.control}
+                  name="category"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Select Category</FormLabel>
+                      <FormControl>
+                        <select
+                          {...field}
+                          onChange={(e) => {
 
-                                }}
-                                className="w-full px-4 py-2 border rounded-md"
-                                required
-                              >
-                                <option value="">Select a type</option>
-                                {schoolType.map((s) => (
-                                  <option key={s.id} value={s.type_name}>
-                                    {s.type_name}
-                                  </option>
-                                ))}
-                              </select>
-                            </FormControl>
-                            <FormDescription> </FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />)}
-                    
+                            field.onChange(e.target.value);  // Update the form state
+                            setSelectCategory(e.target.value);
+                          }}
+                          className="w-full px-4 py-2 border rounded-md"
+                          required
+                        >
+                          <option value="">Select a category</option>
+                          {categoryOptions.map((category) => (
+                            <option key={category.gp_cat_id} value={category.gp_cat_name}>
+                              {category.gp_cat_name}
+                            </option>
+                          ))}
+                        </select>
+                      </FormControl>
+                      <FormDescription> </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {selectCategory !== 'College' && (<FormField
+                  control={multiForm.control}
+                  name="schooltype"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Select School Type</FormLabel>
+                      <FormControl>
+                        <select
+                          {...field}
+                          onChange={(e) => {
 
-                       {/* if select schooltype is general education */}
-                       {(selectschoolType==='General Education' && selectCategory!== 'College') &&
-                      (<>
-                          <FormField
-                            control={multiForm.control}
-                            name="edudistrict"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Select Education District</FormLabel>
-                                <FormControl>
-                                  <select
-                                    {...field}
-                                    onChange={(e) => {
-                                      field.onChange(e.target.value); // Update the form state
-                                      setSelecteduDistrict(e.target.value);
-                                      handleEduDistrict(e.target.value);
-                                    } }
-                                    className="w-full px-4 py-2 border rounded-md"
-                                    required
-                                  >
-                                    <option value="">Select a edudistrict</option>
-                                    {eduDistrict && eduDistrict.map((e) => (
-                                      <option key={e.edu_district_id} value={e.edu_district}>
-                                        {e.edu_district}
-                                      </option>
-                                    ))}
-                                  </select>
-                                </FormControl>
-                                <FormDescription> </FormDescription>
-                                <FormMessage />
-                              </FormItem>
-                            )} />
-                      
-                            <FormField
-                              control={multiForm.control}
-                              name="edusubdistrict"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>Select Education Subdistrict</FormLabel>
-                                  <FormControl>
-                                    <select
-                                      {...field}
-                                      onChange={(e) => {
+                            field.onChange(e.target.value);  // Update the form state
+                            setSelectschoolType(e.target.value);
 
-                                        field.onChange(e.target.value); // Update the form state
-                                        // setSelecteduDistrict(e.target.value);
-                                      } }
-                                      className="w-full px-4 py-2 border rounded-md"
-                                      required
-                                    >
-                                      <option value="">Select a edudistrict</option>
-                                      {eduSubDistrict && eduSubDistrict.map((e) => (
-                                        <option key={e.edu_sub_district_id} value={e.edu_sub_district_name}>
-                                          {e.edu_sub_district_name}
-                                        </option>
-                                      ))}
-                                    </select>
-                                  </FormControl>
-                                  <FormDescription> </FormDescription>
-                                  <FormMessage />
-                                </FormItem>
-                              )} />
-                          </>)
-                      }
-                      {/* general education fields end here */}
-                       {/* if select schooltype is cbse */}
-                    {selectschoolType==='CBSE' && selectCategory!== 'College' &&
-                      (<>
-                          <FormField
-                            control={multiForm.control}
-                            name="sahodaya"
-                            render={({ field }) => (
-                              <FormItem>
-                                  <FormLabel>Select Sahodaya</FormLabel>
+                          }}
+                          className="w-full px-4 py-2 border rounded-md"
+                          required
+                        >
+                          <option value="">Select a type</option>
+                          {schoolType.map((s) => (
+                            <option key={s.id} value={s.type_name}>
+                              {s.type_name}
+                            </option>
+                          ))}
+                        </select>
+                      </FormControl>
+                      <FormDescription> </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />)}
 
-                                <FormControl>
-                                  <select
-                                    {...field}
-                                    onChange={(e) => {
 
-                                      field.onChange(e.target.value); 
-                                      // setSelecteduDistrict(e.target.value);
-                                    } }
-                                    className="w-full px-4 py-2 border rounded-md"
-                                    required
-                                  >
-                                    <option value="">Select a sahodaya</option>
-                                    {sahodaya && sahodaya.map((s) => (
-                                      <option key={s.sahodaya_id} value={s.sahodaya_name}>
-                                        {s.sahodaya_name}
-                                      </option>
-                                    ))}
-                                  </select>
-                                </FormControl>
-                                <FormDescription> </FormDescription>
-                                <FormMessage />
-                              </FormItem>
-                            )} />
-                        
-                        </>)
-                      }
-                      {/* cbse fields end here */}
-                       {/* if select schooltype is ICDS */}
-                       {selectschoolType==='ICDS' && selectCategory!== 'College' &&
-                      (<>
-                          <FormField
-                            control={multiForm.control}
-                            name="icdsblock"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Select ICDS Block</FormLabel>
-                                <FormControl>
-                                  <select
-                                    {...field}
-                                    onChange={(e) => {
-                                      field.onChange(e.target.value); // Update the form state
-                                      // setSelecteduDistrict(e.target.value);
-                                      handleIcds(e.target.value);
-                                    } }
-                                    className="w-full px-4 py-2 border rounded-md"
-                                    required
-                                  >
-                                    <option value="">Select a icds block</option>
-                                    {icdsBlock && icdsBlock.map((e) => (
-                                      <option key={e.icds_block_id} value={e.block_name}>
-                                        {e.block_name}
-                                      </option>
-                                    ))}
-                                  </select>
-                                </FormControl>
-                                <FormDescription> </FormDescription>
-                                <FormMessage />
-                              </FormItem>
-                            )} />
-                        
-                            <FormField
-                              control={multiForm.control}
-                              name="icdsproject"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>Select ICDS Project</FormLabel>
-                                  <FormControl>
-                                    <select
-                                      {...field}
-                                      onChange={(e) => {
+                {/* if select schooltype is general education */}
+                {(selectschoolType === 'General Education' && selectCategory !== 'College') &&
+                  (<>
+                    <FormField
+                      control={multiForm.control}
+                      name="edudistrict"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Select Education District</FormLabel>
+                          <FormControl>
+                            <select
+                              {...field}
+                              onChange={(e) => {
+                                field.onChange(e.target.value); // Update the form state
+                                setSelecteduDistrict(e.target.value);
+                                handleEduDistrict(e.target.value);
+                              }}
+                              className="w-full px-4 py-2 border rounded-md"
+                              required
+                            >
+                              <option value="">Select a edudistrict</option>
+                              {eduDistrict && eduDistrict.map((e) => (
+                                <option key={e.edu_district_id} value={e.edu_district}>
+                                  {e.edu_district}
+                                </option>
+                              ))}
+                            </select>
+                          </FormControl>
+                          <FormDescription> </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
 
-                                        field.onChange(e.target.value); // Update the form state
-                                        // setSelecteduDistrict(e.target.value);
-                                      } }
-                                      className="w-full px-4 py-2 border rounded-md"
-                                      required
-                                    >
-                                      <option value="">Select a icds project</option>
-                                      {icdsProject && icdsProject.map((e) => (
-                                        <option key={e.project_id} value={e.project_name}>
-                                          {e.project_name}
-                                        </option>
-                                      ))}
-                                    </select>
-                                  </FormControl>
-                                  <FormDescription> </FormDescription>
-                                  <FormMessage />
-                                </FormItem>
-                              )} />
-                          </>)
-                      }
-                      {/* icds fields end here */}
-                       {/* if select schooltype is malayalam mission */}
-                       {selectschoolType==='Malayalam Mission' && selectCategory!== 'College' &&
-                      (<>
-                          <FormField
-                            control={multiForm.control}
-                            name="missionchapter"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Select Mission Chapter</FormLabel>
-                                <FormControl>
-                                  <select
-                                    {...field}
-                                    onChange={(e) => {
-                                      field.onChange(e.target.value); // Update the form state
-                                      // setSelecteduDistrict(e.target.value);
-                                      handleChapter(e.target.value);
-                                    } }
-                                    className="w-full px-4 py-2 border rounded-md"
-                                    required
-                                  >
-                                    <option value="">Select a chapter</option>
-                                    {missionChapter && missionChapter.map((e) => (
-                                      <option key={e.chapter_id} value={e.chapter_name}>
-                                        {e.chapter_name}
-                                      </option>
-                                    ))}
-                                  </select>
-                                </FormControl>
-                                <FormDescription> </FormDescription>
-                                <FormMessage />
-                              </FormItem>
-                            )} />
-                        
-                            <FormField
-                              control={multiForm.control}
-                              name="missionzone"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>Select Mission Zone</FormLabel>
-                                  <FormControl>
-                                    <select
-                                      {...field}
-                                      onChange={(e) => {
+                    <FormField
+                      control={multiForm.control}
+                      name="edusubdistrict"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Select Education Subdistrict</FormLabel>
+                          <FormControl>
+                            <select
+                              {...field}
+                              onChange={(e) => {
 
-                                        field.onChange(e.target.value); // Update the form state
-                                        // setSelecteduDistrict(e.target.value);
-                                      } }
-                                      className="w-full px-4 py-2 border rounded-md"
-                                      required
-                                    >
-                                      <option value="">Select a zone</option>
-                                      {missionZone && missionZone.map((e) => (
-                                        <option key={e.zone_id} value={e.zone_name}>
-                                          {e.zone_name}
-                                        </option>
-                                      ))}
-                                    </select>
-                                  </FormControl>
-                                  <FormDescription> </FormDescription>
-                                  <FormMessage />
-                                </FormItem>
-                              )} />
-                          </>)
-                      }
-                      {/* malayalam mission fields end here */}
+                                field.onChange(e.target.value); // Update the form state
+                                // setSelecteduDistrict(e.target.value);
+                              }}
+                              className="w-full px-4 py-2 border rounded-md"
+                              required
+                            >
+                              <option value="">Select a edudistrict</option>
+                              {eduSubDistrict && eduSubDistrict.map((e) => (
+                                <option key={e.edu_sub_district_id} value={e.edu_sub_district_name}>
+                                  {e.edu_sub_district_name}
+                                </option>
+                              ))}
+                            </select>
+                          </FormControl>
+                          <FormDescription> </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+                  </>)
+                }
+                {/* general education fields end here */}
+                {/* if select schooltype is cbse */}
+                {selectschoolType === 'CBSE' && selectCategory !== 'College' &&
+                  (<>
+                    <FormField
+                      control={multiForm.control}
+                      name="sahodaya"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Select Sahodaya</FormLabel>
 
-                      
-                      <FormField
-              control={multiForm.control}
-              name="no_of_students"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Number of students this year</FormLabel>
-                  <FormControl>
-                    <Input type="number" placeholder="" {...field} required/>
-                  </FormControl>
-                  <FormDescription> </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                          <FormControl>
+                            <select
+                              {...field}
+                              onChange={(e) => {
+
+                                field.onChange(e.target.value);
+                                // setSelecteduDistrict(e.target.value);
+                              }}
+                              className="w-full px-4 py-2 border rounded-md"
+                              required
+                            >
+                              <option value="">Select a sahodaya</option>
+                              {sahodaya && sahodaya.map((s) => (
+                                <option key={s.sahodaya_id} value={s.sahodaya_name}>
+                                  {s.sahodaya_name}
+                                </option>
+                              ))}
+                            </select>
+                          </FormControl>
+                          <FormDescription> </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+
+                  </>)
+                }
+                {/* cbse fields end here */}
+                {/* if select schooltype is ICDS */}
+                {selectschoolType === 'ICDS' && selectCategory !== 'College' &&
+                  (<>
+                    <FormField
+                      control={multiForm.control}
+                      name="icdsblock"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Select ICDS Block</FormLabel>
+                          <FormControl>
+                            <select
+                              {...field}
+                              onChange={(e) => {
+                                field.onChange(e.target.value); // Update the form state
+                                // setSelecteduDistrict(e.target.value);
+                                handleIcds(e.target.value);
+                              }}
+                              className="w-full px-4 py-2 border rounded-md"
+                              required
+                            >
+                              <option value="">Select a icds block</option>
+                              {icdsBlock && icdsBlock.map((e) => (
+                                <option key={e.icds_block_id} value={e.block_name}>
+                                  {e.block_name}
+                                </option>
+                              ))}
+                            </select>
+                          </FormControl>
+                          <FormDescription> </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+
+                    <FormField
+                      control={multiForm.control}
+                      name="icdsproject"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Select ICDS Project</FormLabel>
+                          <FormControl>
+                            <select
+                              {...field}
+                              onChange={(e) => {
+
+                                field.onChange(e.target.value); // Update the form state
+                                // setSelecteduDistrict(e.target.value);
+                              }}
+                              className="w-full px-4 py-2 border rounded-md"
+                              required
+                            >
+                              <option value="">Select a icds project</option>
+                              {icdsProject && icdsProject.map((e) => (
+                                <option key={e.project_id} value={e.project_name}>
+                                  {e.project_name}
+                                </option>
+                              ))}
+                            </select>
+                          </FormControl>
+                          <FormDescription> </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+                  </>)
+                }
+                {/* icds fields end here */}
+                {/* if select schooltype is malayalam mission */}
+                {selectschoolType === 'Malayalam Mission' && selectCategory !== 'College' &&
+                  (<>
+                    <div className="block items-center mb-3 space-x-2">
+                      <label htmlFor="groupFilter" className="text-sm font-medium mb-2">
+                        Mission Area
+                      </label>
+                      <select
+                        id="groupFilter"
+                        value={selectMissionarea}
+                        onChange={handleFilterMissionArea}
+                        className="w-full px-4 py-2 border rounded-md"
+                      >
+                        <option value="">Choose Mission Area</option>
+
+                        <option key='1' value="1">
+                          Global
+                        </option>
+                        <option key='2' value="2">
+                          India
+                        </option>
+                      </select>
+                    </div>
+                    <FormField
+                      control={multiForm.control}
+                      name="missionchapter"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Select Mission Chapter</FormLabel>
+                          <FormControl>
+                            <select
+                              {...field}
+                              onChange={(e) => {
+                                field.onChange(e.target.value); // Update the form state
+                                // setSelecteduDistrict(e.target.value);
+                                handleChapter(e.target.value);
+                              }}
+                              className="w-full px-4 py-2 border rounded-md"
+                              required
+                            >
+                              <option value="">Select a chapter</option>
+                              {missionChapter && missionChapter.map((e) => (
+                                <option key={e.chapter_id} value={e.chapter_name}>
+                                  {e.chapter_name}
+                                </option>
+                              ))}
+                            </select>
+                          </FormControl>
+                          <FormDescription> </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+
+                    <FormField
+                      control={multiForm.control}
+                      name="missionzone"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Select Mission Zone</FormLabel>
+                          <FormControl>
+                            <select
+                              {...field}
+                              onChange={(e) => {
+
+                                field.onChange(e.target.value); // Update the form state
+                                // setSelecteduDistrict(e.target.value);
+                              }}
+                              className="w-full px-4 py-2 border rounded-md"
+                              required
+                            >
+                              <option value="">Select a zone</option>
+                              {missionZone && missionZone.map((e) => (
+                                <option key={e.zone_id} value={e.zone_name}>
+                                  {e.zone_name}
+                                </option>
+                              ))}
+                            </select>
+                          </FormControl>
+                          <FormDescription> </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+                  </>)
+                }
+                {/* malayalam mission fields end here */}
+
+
+                <FormField
+                  control={multiForm.control}
+                  name="no_of_students"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Number of students this year</FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="" {...field} required />
+                      </FormControl>
+                      <FormDescription> </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
             {/* <FormField
               control={multiForm.control}

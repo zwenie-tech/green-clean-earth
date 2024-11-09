@@ -160,7 +160,7 @@ export function Activityforms() {
 
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    
     const formdata = {
       participantName: partname,
       participantAddress: address,
@@ -175,7 +175,7 @@ export function Activityforms() {
       total: parseInt(like) + parseInt(view),
       activityId: ActId,
     }
-    console.log(formdata);
+    
     if (token) {
       const response = await axios.post(`${apiURL}/adminEdit/updateActivity`, formdata, {
         headers: {

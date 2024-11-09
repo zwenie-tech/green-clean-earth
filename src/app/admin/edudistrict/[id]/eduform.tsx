@@ -139,7 +139,7 @@ export function Eduform() {
             districtId: districts.find((item) => item.dis_name === values.dis_name)?.dis_id?.toString(),
             eduDistrictName: selecteduDistrict
         }
-        console.log(formdata);
+        
 
         if (token) {
             const response = await axios.post(`${apiURL}/adminEdit/modifyEduDistrict?recordId=${coId}`, formdata, {

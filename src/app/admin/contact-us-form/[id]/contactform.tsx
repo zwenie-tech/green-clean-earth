@@ -68,12 +68,12 @@ import { useToast } from "@/components/ui/use-toast";
     });
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-      console.log(values);
+      
       const formdata = {
         contacted : values.contact === "2" ? false : true,
         contactId: coId
       }
-      console.log(formdata);
+      
 
       if (token) {
         const response = await axios.post(`${apiURL}/adminEdit/updateContact`, formdata, {

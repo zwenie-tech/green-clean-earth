@@ -30,7 +30,7 @@ function Page() {
       if(token){
         const retrievedData = JSON.parse(localStorage.getItem("blockData") || "[]");
         const itemdata = retrievedData.find((item: { block_id  : string; }) => item.block_id == coId)
-        console.log([itemdata][0])
+        
           // Get all cookies
           const allCookies = Cookies.get();
 

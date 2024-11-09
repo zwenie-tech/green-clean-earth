@@ -73,7 +73,7 @@ const AdminGrid = () => {
 
         if (response.data.success && response.status != 203) {
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
-          console.log(response.data.eventList)
+          
           localStorage.setItem("newsData", JSON.stringify(response.data.eventList));
 
           setRowData(response.data.eventList);

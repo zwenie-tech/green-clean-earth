@@ -83,7 +83,7 @@ const AdminGrid = () => {
         if (response.data.success && response.status!=203) {
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
           setTotalcount(response.data.totalCount);
-         console.log(response.data.blockList)
+         
     localStorage.setItem("blockData", JSON.stringify(response.data.blockList));
 
           setRowData(response.data.blockList); 
@@ -125,7 +125,7 @@ const AdminGrid = () => {
   };
 
   const handleFilterEDistrict = (e: any) => {
-    console.log(e.target.value)
+    
     if (e.target.value != "") {
         setSelectedDistrictGrp(e.target.value);
         fetchFilteredIcdsBlockDistrict(e.target.value);
@@ -147,7 +147,7 @@ useEffect(() => {
 }, []);
 
 const handleFilterIcdsBlock = (e: any) => {
-  console.log(e.target.value)
+  
   if (e.target.value != "") {
       setSelectIcdsBlock(e.target.value);
       fetchFilteredIcdsBlock(e.target.value);
@@ -169,13 +169,12 @@ const fetchFilteredIcdsBlockDistrict = async (value: string) => {
       );
       try {
           if (response.data.success && response.status !== 203) {
-              console.log(response.data.blockList)
-              console.log(value)
+             
 
               const filteredData = response.data.blockList.filter(
                   (item: { dis_name: string; }) => item.dis_name === value
               );
-              console.log(filteredData)
+              
 
               setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
               setRowData(filteredData);
@@ -201,13 +200,12 @@ const fetchFilteredIcdsBlock = async (value: string) => {
       );
       try {
           if (response.data.success && response.status !== 203) {
-              console.log(response.data.blockList)
-              console.log(value)
+              
 
               const filteredData = response.data.blockList.filter(
                   (item: { block_name: string; }) => item.block_name === value
               );
-              console.log(filteredData)
+              
 
               setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
               setRowData(filteredData);

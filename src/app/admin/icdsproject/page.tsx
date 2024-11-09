@@ -141,7 +141,7 @@ const AdminGrid = () => {
     }
 }
   const handleFilterEDistrict = (e: any) => {
-    console.log(e.target.value)
+    
     if (e.target.value != "") {
         setSelectedDistrictGrp(e.target.value);
         fetchFilteredIcdsBlockDistrict(e.target.value);
@@ -163,7 +163,7 @@ useEffect(() => {
 }, []);
 
 const handleFilterIcdsBlock = (e: any) => {
-  console.log(e.target.value)
+  
   if (e.target.value != "") {
       setSelectIcdsBlock(e.target.value);
       handleIcds(e.target.value);
@@ -173,7 +173,7 @@ const handleFilterIcdsBlock = (e: any) => {
 };
 
 const handleFilterIcdsProject = (e: any) => {
-  console.log(e.target.value)
+  
   if (e.target.value != "") {
       setSelectIcdsProject(e.target.value);
       fetchFilteredIcdsProject(e.target.value);
@@ -194,12 +194,12 @@ const fetchFilteredIcdsProject = async (value: string) => {
       );
       try {
           if (response.data.success && response.status !== 203) {
-              console.log('filter')
-              console.log(response.data)
+              
+              
               const filteredData = response.data.projectList.filter(
                   (item: { project_name: string; }) => item.project_name === value
               );
-              console.log(filteredData)
+              
 
               setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
               setRowData(filteredData);
@@ -225,13 +225,12 @@ const fetchFilteredIcdsBlockDistrict = async (value: string) => {
       );
       try {
           if (response.data.success && response.status !== 203) {
-              console.log(response.data.blockList)
-              console.log(value)
+             
 
               const filteredData = response.data.projectList.filter(
                   (item: { dis_name: string; }) => item.dis_name === value
               );
-              console.log(filteredData)
+              
 
               setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
               setRowData(filteredData);
@@ -257,13 +256,11 @@ const fetchFilteredIcdsBlock = async (value: string) => {
       );
       try {
           if (response.data.success && response.status !== 203) {
-              console.log(response.data.blockList)
-              console.log(value)
-
+              
               const filteredData = response.data.projectList.filter(
                   (item: { block_name: string; }) => item.block_name === value
               );
-              console.log(filteredData)
+              
 
               setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
               setRowData(filteredData);

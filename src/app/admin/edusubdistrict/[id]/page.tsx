@@ -31,7 +31,7 @@ function Page() {
       if(token){
         const retrievedData = JSON.parse(localStorage.getItem("edusubData") || "[]");
         const itemdata = retrievedData.find((item: { edu_sub_district_id  : string; }) => item.edu_sub_district_id == coId)
-        console.log([itemdata][0])
+        
           // Get all cookies
           const allCookies = Cookies.get();
 

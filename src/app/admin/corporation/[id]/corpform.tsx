@@ -150,13 +150,13 @@ export function Corpform() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    
     const formdata = {
       stateId: states.find((item) => item.st_name === "Kerala")?.st_id?.toString(),
       districtId: districts.find((item) => item.dis_name === selectedDistrict)?.dis_id?.toString(),
       corporationName: selectedCorp
     }
-    console.log(formdata);
+    
 
     if (token) {
       const response = await axios.post(`${apiURL}/adminEdit/modifyCorporation?recordId=${coId}`, formdata, {

@@ -223,7 +223,7 @@ export function EditForm({ us_data }: any) {
   }, [selectedCorp, corporation]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    
 
     const formdata = {
       countryId: countries.find((item) => item.cntry_name === values.country)?.cntry_id,
@@ -245,7 +245,7 @@ export function EditForm({ us_data }: any) {
 
       userId: parseInt(userId)
     }
-    console.log(formdata);
+    
 
 
     if (token) {
@@ -258,7 +258,7 @@ export function EditForm({ us_data }: any) {
       try {
 
         if (response.data.success && response.status != 203) {
-          console.log(response)
+          
           toast({
             title: "Profile Successfully Updated.",
             description: "",

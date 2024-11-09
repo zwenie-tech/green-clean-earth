@@ -93,7 +93,7 @@ const AdminGrid = () => {
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
     localStorage.setItem("lsgdData", JSON.stringify(response.data.lsgdList));
 
-          console.log(response.data.lsgdList)
+         
           setRowData(response.data.lsgdList);
         }
       }
@@ -177,14 +177,14 @@ const AdminGrid = () => {
 
 
   const handleFilterChangeDistrict = (e: any) => {
-    console.log(e.target.value)
+    
 
     setSelectedDistrict(e.target.value); // Update dropdown value
     fetchFilteredDistrict(e.target.value);
     setCurrentPage(1); // Reset to first page
   };
   const handleFilterChangeCorp = (e: any) => {
-    console.log(e.target.value)
+    
 
     setSelectedCorp(e.target.value); // Update dropdown value
     fetchFilteredCorp(e.target.value);
@@ -192,7 +192,7 @@ const AdminGrid = () => {
   };
 
   const handleFilterChangeLsgd = (e: any) => {
-    console.log(e.target.value)
+    
 
     setSelectedLsgd(e.target.value); // Update dropdown value
     fetchFilteredLsgd(e.target.value);
@@ -202,8 +202,8 @@ const AdminGrid = () => {
   const fetchFilteredDistrict = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminLsgdList?limit=${totalcount}`,
-        {},
+        `${apiURL}/admin/adminLsgdList`,
+        {districtId:districts.find((item) => item.dis_name === value)?.dis_id},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -213,13 +213,13 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          console.log('filter')
-          console.log(response.data)
-          console.log(response.data.lsgdList)
+          
+          
+         
           const filteredData = response.data.lsgdList.filter(
             (item: { dis_name: string; }) => item.dis_name === value
           );
-          console.log(filteredData)
+          
 
           setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
           setRowData(filteredData);
@@ -234,8 +234,8 @@ const AdminGrid = () => {
   const fetchFilteredCorp = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminLsgdList?limit=${totalcount}`,
-        {},
+        `${apiURL}/admin/adminLsgdList`,
+        {corporationId:corporation.find((item) => item.cop_name === value)?.cop_id},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -245,13 +245,13 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          console.log('filter')
-          console.log(response.data)
-          console.log(response.data.lsgdList)
+          
+          
+         
           const filteredData = response.data.lsgdList.filter(
             (item: { cop_name: string; }) => item.cop_name === value
           );
-          console.log(filteredData)
+          
 
           setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
           setRowData(filteredData);
@@ -266,8 +266,8 @@ const AdminGrid = () => {
   const fetchFilteredLsgd = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminLsgdList?limit=${totalcount}`,
-        {},
+        `${apiURL}/admin/adminLsgdList`,
+        {lsgdId:lsgd.find((item) => item.lsg_name === value)?.lsg_id},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -277,13 +277,13 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          console.log('filter')
-          console.log(response.data)
-          console.log(response.data.lsgdList)
+          
+          
+         
           const filteredData = response.data.lsgdList.filter(
             (item: { lsg_name: string; }) => item.lsg_name === value
           );
-          console.log(filteredData)
+          
 
           setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
           setRowData(filteredData);

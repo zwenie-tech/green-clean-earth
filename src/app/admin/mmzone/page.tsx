@@ -128,7 +128,7 @@ const AdminGrid = () => {
             ...chapter,
             chapter_type_name: chapter.chapter_type_id === 1 ? 'Global' : 'India'
           }));
-          console.log(updatedChapterList)
+         
           localStorage.setItem("mmzData", JSON.stringify(updatedChapterList));
 
           setRowData(updatedChapterList);
@@ -140,7 +140,7 @@ const AdminGrid = () => {
 
 
   const handleFilterMissionArea = (e: any) => {
-    console.log(e.target.value)
+    
     if (e.target.value != "") {
       setSelectMissionarea(e.target.value);
       fetchFilteredMissionArea(e.target.value);
@@ -149,7 +149,7 @@ const AdminGrid = () => {
   };
 
   const handleFilterMissionChapter = (e: any) => {
-    console.log(e.target.value)
+    
     if (e.target.value != "") {
       setSelectedMission(e.target.value);
       handleChapter(e.target.value);
@@ -172,9 +172,9 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          console.log('filter')
-          console.log(value)
-          console.log(response.data)
+          
+          
+          
 
           const updatedChapterList = response.data.zoneList.map((chapter: { chapter_type_id: number; }) => ({
             ...chapter,
@@ -183,7 +183,7 @@ const AdminGrid = () => {
           const filteredData = updatedChapterList.filter(
             (item: { chapter_type_id: string; }) => item.chapter_type_id == value
           );
-          console.log(updatedChapterList)
+         
 
           setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
           setRowData(filteredData);
@@ -210,9 +210,9 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          console.log('filter')
-          console.log(value)
-          console.log(response.data)
+          
+          
+          
 
           const updatedChapterList = response.data.zoneList .map((chapter: { chapter_type_id: number; }) => ({
             ...chapter,
@@ -221,7 +221,7 @@ const AdminGrid = () => {
           const filteredData = updatedChapterList.filter(
             (item: { chapter_name: string; }) => item.chapter_name == value
           );
-          console.log(updatedChapterList)
+         
 
           setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
           setRowData(filteredData);
@@ -264,7 +264,7 @@ const AdminGrid = () => {
 }
 
 const handleFilterMissionZone = (e: any) => {
-  console.log(e.target.value)
+  
   if (e.target.value != "") {
       setSelectedZone(e.target.value);
       fetchFilteredMissionZone(e.target.value);
@@ -286,9 +286,9 @@ const fetchFilteredMissionZone = async (value: string) => {
     );
     try {
       if (response.data.success && response.status !== 203) {
-        console.log('filter')
-        console.log(value)
-        console.log(response.data)
+        
+        
+        
 
         const updatedChapterList = response.data.zoneList .map((chapter: { chapter_type_id: number; }) => ({
           ...chapter,
@@ -297,7 +297,7 @@ const fetchFilteredMissionZone = async (value: string) => {
         const filteredData = updatedChapterList.filter(
           (item: { zone_name: string; }) => item.zone_name == value
         );
-        console.log(updatedChapterList)
+       
 
         setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
         setRowData(filteredData);

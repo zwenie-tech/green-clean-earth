@@ -11,12 +11,15 @@ import "@/app/admin/ag-grid-theme-builder.css"
 import { useRouter } from "next/navigation";
 import React, { StrictMode, useEffect, useMemo, useState } from "react";
 import axios from "axios";
-import { apiURL } from "@/app/requestsapi/request";
+import { apiURL, fetchClubData } from "@/app/requestsapi/request";
 import Cookies from 'js-cookie';
 import * as XLSX from 'xlsx';
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
-
+interface Club {
+    id: string;
+    name: string;
+  }
 interface Country {
     cntry_id: number;
     cntry_name: string;
@@ -78,7 +81,7 @@ interface MissionZone {
     zone_id: string;
     zone_name: string;
 }
-const AdminGrid = () => {
+const EditType = () => {
     const router = useRouter();
     const [rowData, setRowData] = useState([]);
     const token = Cookies.get("adtoken");
@@ -99,11 +102,12 @@ const AdminGrid = () => {
     const [selectedWard, setSelectedWard] = useState("");
     const [lsgd, setLsgd] = useState<Lsgd[]>([]);
     const [corporation, setCorporation] = useState<Corp[]>([]);
-    const [grpname, setGrpname] = useState("");
+    const [numberStudent, setNumberStudent] = useState("");
     const [email, setEmail] = useState("");
-    const [grpid, setGrpid] = useState("");
+    const [listClasses, setListClasses] = useState("");
     const [mobile, setMobile] = useState("");
     const [grouptype, setGroupType] = useState("");
+    const [selectclub, setSelectClub] = useState("");
     const [selectedschoolType, setSelectedSchoolType] = useState("");
     const [category, setCategory] = useState<Category[]>([]);
     const [schoolType, setSchoolType] = useState<SchoolType[]>([]);
@@ -127,6 +131,7 @@ const AdminGrid = () => {
     const [icdsProject, setIcdsProject] = useState<IcdsProject[]>([]);
     const [selectMission, setSelectedMission] = useState('');
     const [selectZone, setSelectedZone] = useState('');
+    const [clubOptions, setClubOptions] = useState<Club[]>([]);
 
     
     
@@ -185,7 +190,7 @@ const AdminGrid = () => {
         async function fetchData() {
             const categoryResponse = await fetch(`${apiURL}/category`);
             const categoryData = await categoryResponse.json();
-            console.log(categoryData.category)
+            
             setCategory(categoryData.category);
         }
         fetchData();
@@ -219,6 +224,21 @@ const AdminGrid = () => {
         };
         fetchCategory();
     }, []);
+
+    useEffect(() => {
+        const fetchClubs = async () => {
+          try {
+    
+            const data = await fetchClubData();
+            setClubOptions(data.clubs);
+          } catch (error) {
+            console.error("Error fetching clubs:", error);
+          }
+        };
+        fetchClubs();
+      }, []);
+
+      
     useEffect(() => {
         const handleCbse = async () => {
             if (selectedschoolType === 'CBSE' && selectedStateGrp) {
@@ -290,968 +310,180 @@ const AdminGrid = () => {
         }
     }
 
-    const handleFilterGrpName = (e: any) => {
-        console.log(e)
+    
+    const handleFilterClub = (e: any) => {
+        
         if (e != "") {
-            fetchFilteredGrpName(e);
-            setCurrentPage(1); // Reset to first page
+            setSelectClub(e.target.value);
         }
     };
 
-    const handleFilterEmail = (e: any) => {
-        console.log(e)
-        if (e != "") {
-
-            fetchFilteredEmail(e);
-            setCurrentPage(1); // Reset to first page
-        }
-    };
-    const handleFilterId = (e: any) => {
-        console.log(e)
-        if (e != "") {
-
-            fetchFilteredId(e);
-            setCurrentPage(1); // Reset to first page
-        }
-    };
-    const handleFilterMobile = (e: any) => {
-        console.log(e)
-        if (e != "") {
-
-            fetchFilteredMobile(e);
-            setCurrentPage(1); // Reset to first page
-        }
-    };
-
-    const handleFilterChangeCntry = (e: any) => {
-        console.log(e.target.value)
-
-        setSelectedCntry(e.target.value); // Update dropdown value
-        fetchFilteredCntry(e.target.value);
-        setCurrentPage(1); // Reset to first page
-    };
-
-    const handleFilterChangeState = (e: any) => {
-        console.log(e.target.value)
-
-        setSelectedState(e.target.value); // Update dropdown value
-        fetchFilteredState(e.target.value);
-        setCurrentPage(1); // Reset to first page
-    };
-
-    const handleFilterChangeDistrict = (e: any) => {
-        console.log(e.target.value)
-
-        setSelectedDistrict(e.target.value); // Update dropdown value
-        fetchFilteredDistrict(e.target.value);
-        setCurrentPage(1); // Reset to first page
-    };
-    const handleFilterChangeCorp = (e: any) => {
-        console.log(e.target.value)
-
-        setSelectedCorp(e.target.value); // Update dropdown value
-        fetchFilteredCorp(e.target.value);
-        setCurrentPage(1); // Reset to first page
-    };
-
-    const handleFilterChangeLsgd = (e: any) => {
-        console.log(e.target.value)
-
-        setSelectedLsgd(e.target.value); // Update dropdown value
-        fetchFilteredLsgd(e.target.value);
-        setCurrentPage(1); // Reset to first page
-    };
-
-    // const handleFilterChangeWard = (e: any) => {
-    //   console.log(e)
-    //   setSelectedWard(e); // Update dropdown value
-    //   fetchFilteredWard(e);
-    //   setCurrentPage(1); // Reset to first page
-    // };
-
-    const fetchFilteredGrpName = async (value: string) => {
-        if (token) {
-            const response = await axios.post(
-                `${apiURL}/admin/adminGroupList?limit=${totalcount}`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-            try {
-                if (response.data.success && response.status !== 203) {
-                    console.log(response.data.groupList)
-                    console.log(value)
-
-                    const filteredData = response.data.groupList.filter(
-                        (item: { gp_name: string; }) => item.gp_name === value
-                    );
-                    console.log(filteredData)
-
-                    setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-                    setRowData(filteredData);
-                } else {
-                    setRowData([]);
-                }
-            } catch (error) {
-                console.error("Error:", error);
-            }
-        }
-    };
-
-    const fetchFilteredEmail = async (value: string) => {
-        if (token) {
-            const response = await axios.post(
-                `${apiURL}/admin/adminGroupList?limit=${totalcount}`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-            try {
-                if (response.data.success && response.status !== 203) {
-                    console.log(response.data.groupList)
-                    console.log(value)
-
-                    const filteredData = response.data.groupList.filter(
-                        (item: { co_email_id: string; }) => item.co_email_id === value
-                    );
-                    console.log(filteredData)
-
-                    setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-                    setRowData(filteredData);
-                } else {
-                    setRowData([]);
-                }
-            } catch (error) {
-                console.error("Error:", error);
-            }
-        }
-    };
-
-    const fetchFilteredId = async (value: string) => {
-        if (token) {
-            const response = await axios.post(
-                `${apiURL}/admin/adminGroupList?limit=${totalcount}`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-            try {
-                if (response.data.success && response.status !== 203) {
-                    console.log(response.data.groupList)
-                    console.log(value)
-
-                    const filteredData = response.data.groupList.filter(
-                        (item: { gp_id: string; }) => item.gp_id == value
-                    );
-                    console.log(filteredData)
-
-                    setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-                    setRowData(filteredData);
-                } else {
-                    setRowData([]);
-                }
-            } catch (error) {
-                console.error("Error:", error);
-            }
-        }
-    };
-
-    const fetchFilteredMobile = async (value: string) => {
-        if (token) {
-            const response = await axios.post(
-                `${apiURL}/admin/adminGroupList?limit=${totalcount}`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-            try {
-                if (response.data.success && response.status !== 203) {
-                    console.log(response.data.groupList)
-                    console.log(value)
-
-                    const filteredData = response.data.groupList.filter(
-                        (item: { co_ord_contact: string; }) => item.co_ord_contact == value
-                    );
-                    console.log(filteredData)
-
-                    setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-                    setRowData(filteredData);
-                } else {
-                    setRowData([]);
-                }
-            } catch (error) {
-                console.error("Error:", error);
-            }
-        }
-    };
-
-    const fetchFilteredCntry = async (value: string) => {
-        if (token) {
-            const response = await axios.post(
-                `${apiURL}/admin/adminGroupList?limit=${totalcount}`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-            try {
-                if (response.data.success && response.status !== 203) {
-                    console.log('filter')
-                    console.log(response.data)
-                    console.log(response.data.groupList)
-                    const filteredData = response.data.groupList.filter(
-                        (item: { cntry_name: string; }) => item.cntry_name === value
-                    );
-                    console.log(filteredData)
-
-                    setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-                    setRowData(filteredData);
-                } else {
-                    setRowData([]);
-                }
-            } catch (error) {
-                console.error("Error:", error);
-            }
-        }
-    };
-
-    const fetchFilteredState = async (value: string) => {
-        if (token) {
-            const response = await axios.post(
-                `${apiURL}/admin/adminGroupList?limit=${totalcount}`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-            try {
-                if (response.data.success && response.status !== 203) {
-                    console.log('filter')
-                    console.log(response.data)
-                    console.log(response.data.groupList)
-                    const filteredData = response.data.groupList.filter(
-                        (item: { st_name: string; }) => item.st_name === value
-                    );
-                    console.log(filteredData)
-
-                    setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-                    setRowData(filteredData);
-                } else {
-                    setRowData([]);
-                }
-            } catch (error) {
-                console.error("Error:", error);
-            }
-        }
-    };
-
-    const fetchFilteredDistrict = async (value: string) => {
-        if (token) {
-            const response = await axios.post(
-                `${apiURL}/admin/adminGroupList?limit=${totalcount}`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-            try {
-                if (response.data.success && response.status !== 203) {
-                    console.log('filter')
-                    console.log(response.data)
-                    console.log(response.data.groupList)
-                    const filteredData = response.data.groupList.filter(
-                        (item: { dis_name: string; }) => item.dis_name === value
-                    );
-                    console.log(filteredData)
-
-                    setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-                    setRowData(filteredData);
-                } else {
-                    setRowData([]);
-                }
-            } catch (error) {
-                console.error("Error:", error);
-            }
-        }
-    };
-    const fetchFilteredCorp = async (value: string) => {
-        if (token) {
-            const response = await axios.post(
-                `${apiURL}/admin/adminGroupList?limit=${totalcount}`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-            try {
-                if (response.data.success && response.status !== 203) {
-                    console.log('filter')
-                    console.log(response.data)
-                    console.log(response.data.groupList)
-                    const filteredData = response.data.groupList.filter(
-                        (item: { cop_name: string; }) => item.cop_name === value
-                    );
-                    console.log(filteredData)
-
-                    setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-                    setRowData(filteredData);
-                } else {
-                    setRowData([]);
-                }
-            } catch (error) {
-                console.error("Error:", error);
-            }
-        }
-    };
-    const fetchFilteredLsgd = async (value: string) => {
-        if (token) {
-            const response = await axios.post(
-                `${apiURL}/admin/adminGroupList?limit=${totalcount}`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-            try {
-                if (response.data.success && response.status !== 203) {
-                    console.log('filter')
-                    console.log(response.data)
-                    console.log(response.data.groupList)
-                    const filteredData = response.data.groupList.filter(
-                        (item: { lsg_name: string; }) => item.lsg_name === value
-                    );
-                    console.log(filteredData)
-
-                    setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-                    setRowData(filteredData);
-                } else {
-                    setRowData([]);
-                }
-            } catch (error) {
-                console.error("Error:", error);
-            }
-        }
-    };
-
-    //  const fetchFilteredWard = async (value: string) => {
-    //     if (token) {
-    //       const response = await axios.post(
-    //         `${apiURL}/admin/adminGroupList?limit=${totalcount}`,
-    //         {},
-    //         {
-    //           headers: {
-    //             Authorization: `Bearer ${token}`,
-    //             "Content-Type": "application/json",
-    //           },
-    //         }
-    //       );
-    //       try {
-    //         if (response.data.success && response.status !== 203) {
-    //           console.log('filter')
-    //           console.log('hi',response.data)
-    //           console.log(response.data.groupList)
-    //           const filteredData = response.data.groupList.filter(
-    //             (item: { us_ward: string; }) => item.us_ward === value
-    //           );
-    //           console.log(filteredData)
-
-    //           setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-    //           setRowData(filteredData);
-    //         } else {
-    //           setRowData([]);
-    //         }
-    //       } catch (error) {
-    //         console.error("Error:", error);
-    //       }
-    //     }
-    //   };
-
-    const handleFilterGrpType = (e: any) => {
-        console.log(e.target.value)
-        if (e != "") {
-            setGroupType(e.target.value);
-            fetchFilteredGrpType(e.target.value);
-            setCurrentPage(1); // Reset to first page
-        }
-    };
-
-    const fetchFilteredGrpType = async (value: string) => {
-        if (token) {
-            const response = await axios.post(
-                `${apiURL}/admin/adminGroupList?limit=${totalcount}`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-            try {
-                if (response.data.success && response.status !== 203) {
-                    console.log('filter')
-                    console.log(response.data)
-                    const filteredData = response.data.groupList.filter(
-                        (item: { group_type: string; }) => item.group_type === value
-                    );
-                    console.log(filteredData)
-
-                    setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-                    setRowData(filteredData);
-                } else {
-                    setRowData([]);
-                }
-            } catch (error) {
-                console.error("Error:", error);
-            }
-        }
-    };
+   
 
     const handleFilterSchoolType = (e: any) => {
-        console.log(e.target.value)
+        
         if (e.target.value != "") {
             setSelectedSchoolType(e.target.value);
             e.target.value === 'CBSE' ? setSelectedCountryGrp('India') : ''
             e.target.value === 'General Education' || 'ICDS' ? setSelectedCountryGrp('India') : ''
             e.target.value === 'General Education' || 'ICDS' ? setSelectedStateGrp('Kerala') : ''
-            fetchFilteredSchoolType(e.target.value);
-            setCurrentPage(1); // Reset to first page
+            
         }
     };
 
-    const fetchFilteredSchoolType = async (value: string) => {
-        if (token) {
-            const response = await axios.post(
-                `${apiURL}/admin/adminGroupList?limit=${totalcount}`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-            try {
-                if (response.data.success && response.status !== 203) {
-                    console.log('filter')
-                    console.log(response.data)
-                    const filteredData = response.data.groupList.filter(
-                        (item: { type_name: string; }) => item.type_name === value
-                    );
-                    console.log(filteredData)
-
-                    setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-                    setRowData(filteredData);
-                } else {
-                    setRowData([]);
-                }
-            } catch (error) {
-                console.error("Error:", error);
-            }
-        }
-    };
+   
 
     const handleFilterSchoolCategory = (e: any) => {
-        console.log(e.target.value)
+        
         if (e.target.value != "") {
             setSelectedSubCategory(e.target.value);
-            fetchFilteredSchoolCategory(e.target.value);
-            setCurrentPage(1); // Reset to first page
+           
         }
     };
 
-    const fetchFilteredSchoolCategory = async (value: string) => {
-        if (token) {
-            const response = await axios.post(
-                `${apiURL}/admin/adminGroupList?limit=${totalcount}`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-            try {
-                if (response.data.success && response.status !== 203) {
-                    console.log('filter')
-                    console.log(response.data)
-                    const filteredData = response.data.groupList.filter(
-                        (item: { gp_cat_name: string; }) => item.gp_cat_name === value
-                    );
-                    console.log(filteredData)
-
-                    setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-                    setRowData(filteredData);
-                } else {
-                    setRowData([]);
-                }
-            } catch (error) {
-                console.error("Error:", error);
-            }
-        }
-    };
+    
 
     const handleFilterSahodayaState = (e: any) => {
-        console.log(e.target.value)
+        
         if (e.target.value != "") {
             setSelectedStateGrp(e.target.value);
-            setCurrentPage(1); // Reset to first page
+          
         }
     };
 
     const handleFilterSahodaya = (e: any) => {
-        console.log(e.target.value)
+        
         if (e.target.value != "") {
             setSelectSahodaya(e.target.value);
-            fetchFilteredSahodaya(e.target.value);
-            setCurrentPage(1); // Reset to first page
+            
         }
     };
 
-    const fetchFilteredSahodaya = async (value: string) => {
-        if (token) {
-            const response = await axios.post(
-                `${apiURL}/admin/adminGroupList?limit=${totalcount}`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-            try {
-                if (response.data.success && response.status !== 203) {
-                    console.log('filter')
-                    console.log(response.data)
-                    const filteredData = response.data.groupList.filter(
-                        (item: { sahodaya_name: string; }) => item.sahodaya_name === value
-                    );
-                    console.log(filteredData)
-
-                    setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-                    setRowData(filteredData);
-                } else {
-                    setRowData([]);
-                }
-            } catch (error) {
-                console.error("Error:", error);
-            }
-        }
-    };
+   
 
 
     const handleFilterEDistrict = (e: any) => {
-        console.log(e.target.value)
+        
         if (e.target.value != "") {
             setSelectedDistrictGrp(e.target.value);
-            // fetchFilteredSahodaya(e.target.value);
-            setCurrentPage(1); // Reset to first page
+           
         }
     };
 
     const handleFilterEduDistrict = (e: any) => {
-        console.log(e.target.value)
+        
         if (e.target.value != "") {
             setSelecteduDistrict(e.target.value);
             handleEduDistrict(e.target.value);
-            setCurrentPage(1); // Reset to first page
+            
         }
     };
 
     const handleFilterEduSubDistrict = (e: any) => {
-        console.log(e.target.value)
+        
         if (e.target.value != "") {
             setSelecteduSubDistrict(e.target.value);
-            fetchFilteredEduSubDistrict(e.target.value);
-            setCurrentPage(1); // Reset to first page
+            
         }
     };
 
-    const fetchFilteredEduSubDistrict = async (value: string) => {
-        if (token) {
-            const response = await axios.post(
-                `${apiURL}/admin/adminGroupList?limit=${totalcount}`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-            try {
-                if (response.data.success && response.status !== 203) {
-                    console.log('filter')
-                    console.log(response.data)
-                    const filteredData = response.data.groupList.filter(
-                        (item: { edu_sub_district_name: string; }) => item.edu_sub_district_name === value
-                    );
-                    console.log(filteredData)
-
-                    setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-                    setRowData(filteredData);
-                } else {
-                    setRowData([]);
-                }
-            } catch (error) {
-                console.error("Error:", error);
-            }
-        }
-    };
+    
 
 
     const handleFilterIcdsBlock = (e: any) => {
-        console.log(e.target.value)
+        
         if (e.target.value != "") {
             setSelectIcdsBlock(e.target.value);
             handleIcds(e.target.value);
-            setCurrentPage(1); // Reset to first page
+            
         }
     };
 
     const handleFilterIcdsProject = (e: any) => {
-        console.log(e.target.value)
+        
         if (e.target.value != "") {
             setSelectIcdsProject(e.target.value);
-            fetchFilteredIcdsProject(e.target.value); 
-            setCurrentPage(1); // Reset to first page
+            
         }
     };
 
-    const fetchFilteredIcdsProject = async (value: string) => {
-        if (token) {
-            const response = await axios.post(
-                `${apiURL}/admin/adminGroupList?limit=${totalcount}`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-            try {
-                if (response.data.success && response.status !== 203) {
-                    console.log('filter')
-                    console.log(response.data)
-                    const filteredData = response.data.groupList.filter(
-                        (item: { project_name: string; }) => item.project_name === value
-                    );
-                    console.log(filteredData)
-
-                    setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-                    setRowData(filteredData);
-                } else {
-                    setRowData([]);
-                }
-            } catch (error) {
-                console.error("Error:", error);
-            }
-        }
-    };
+   
 
     const handleFilterMissionArea = (e: any) => {
-        console.log(e.target.value)
+        
         if (e.target.value != "") {
             setSelectMissionarea(e.target.value);
-            setCurrentPage(1); // Reset to first page
+           
         }
     };
 
     const handleFilterMissionChapter = (e: any) => {
-        console.log(e.target.value)
+        
         if (e.target.value != "") {
             setSelectedMission(e.target.value);
             handleChapter(e.target.value);
-            setCurrentPage(1); // Reset to first page
+            
         }
     };
 
     const handleFilterMissionZone = (e: any) => {
-        console.log(e.target.value)
+        
         if (e.target.value != "") {
             setSelectedZone(e.target.value);
-            fetchFilteredMissionZone(e.target.value);
-            setCurrentPage(1); // Reset to first page
+            
         }
     };
 
-    const fetchFilteredMissionZone = async (value: string) => {
-        if (token) {
-            const response = await axios.post(
-                `${apiURL}/admin/adminGroupList?limit=${totalcount}`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-            try {
-                if (response.data.success && response.status !== 203) {
-                    console.log('filter')
-                    console.log(response.data)
-                    const filteredData = response.data.groupList.filter(
-                        (item: { zone_name: string; }) => item.zone_name === value
-                    );
-                    console.log(filteredData)
-
-                    setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-                    setRowData(filteredData);
-                } else {
-                    setRowData([]);
-                }
-            } catch (error) {
-                console.error("Error:", error);
-            }
-        }
-    };
+   
 
 
     return (
         <div className=" bg-slate-100">
             
             <div>
-                <label>Group Id</label>
+                <label>List of Classes</label>
                 <div className="flex mb-3">
                     <input
                         className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
-                        value={grpid}
-                        onChange={(e) => setGrpid(e.target.value)} // Update the state directly
+                        value={listClasses}
+                        onChange={(e) => setListClasses(e.target.value)} // Update the state directly
                     />
-                    <button
-                        className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-                        onClick={() => handleFilterId(grpid)}
-                    >
-                        Search
-                    </button>
+                    
                 </div>
             </div>
             <div>
-                <label>Group Name</label>
+                <label>Number of students</label>
                 <div className="flex mb-3">
                     <input
                         className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
-                        value={grpname}
-                        onChange={(e) => setGrpname(e.target.value)} // Update the state directly
+                        value={numberStudent}
+                        onChange={(e) => setNumberStudent(e.target.value)} // Update the state directly
                     />
-                    <button
-                        className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-                        onClick={() => handleFilterGrpName(grpname)}
-                    >
-                        Search
-                    </button>
+                    
                 </div>
             </div>
-            {/* <div>
-        <label>Email</label>
-        <div className="flex mb-3">
-          <input
-            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
-            value={email}
-            onChange={(e) => setEmail(e.target.value)} // Update the state directly
-          />
-          <button
-            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-            onClick={() => handleFilterEmail(email)}
-          >
-            Search
-          </button>
-        </div>
-      </div>
+            
 
-      <div>
-        <label>Mobile</label>
-        <div className="flex mb-3">
-          <input
-            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
-            value={mobile}
-            onChange={(e) => setMobile(e.target.value)} // Update the state directly
-          />
-          <button
-            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-            onClick={() => handleFilterMobile(mobile)}
-          >
-            Search
-          </button>
-        </div>
-      </div> */}
-
-            {/* country section  */}
-            <div className="flex items-center mb-3 space-x-2">
-                <label htmlFor="groupFilter" className="text-sm font-medium">
-                    Country:
-                </label>
-                <select
-                    id="groupFilter"
-                    value={selectedCntry}
-                    onChange={handleFilterChangeCntry}
-                    className="border border-gray-300 rounded p-1"
-                >
-                    <option value="">Choose Country</option>
-                    {countries.map((country) => (
-                        <option key={country.cntry_id} value={country.cntry_name}>
-                            {country.cntry_name}
-                        </option>
-                    ))}
-                </select>
-            </div>
-
-            {selectedCntry == "India" ?
-                <>
-                    <div className="flex items-center mb-3 space-x-2">
-                        <label htmlFor="groupFilter" className="text-sm font-medium">
-                            State:
-                        </label>
-                        <select
-                            id="groupFilter"
-                            value={selectedState}
-                            onChange={handleFilterChangeState}
-                            className="border border-gray-300 rounded p-1"
-                        >
-                            <option value="">Choose State</option>
-                            {states.map((state) => (
-                                <option key={state.st_id} value={state.st_name}>
-                                    {state.st_name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    {selectedState == "Kerala" ?
-                        <>
-                            <div className="flex items-center mb-3 space-x-2">
-                                <label htmlFor="groupFilter" className="text-sm font-medium">
-                                    District:
-                                </label>
-                                <select
-                                    id="groupFilter"
-                                    value={selectedDistrict}
-                                    onChange={handleFilterChangeDistrict}
-                                    className="border border-gray-300 rounded p-1"
-                                >
-                                    <option value="">Choose District</option>
-                                    {districts.map((district) => (
-                                        <option key={district.dis_id} value={district.dis_name}>
-                                            {district.dis_name}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-
-                            {selectedDistrict != "" ?
-                                <>
-                                    <div className="flex items-center mb-3 space-x-2">
-                                        <label htmlFor="groupFilter" className="text-sm font-medium">
-                                            Corporation:
-                                        </label>
-                                        <select
-                                            id="groupFilter"
-                                            value={selectedCorp}
-                                            onChange={handleFilterChangeCorp}
-                                            className="border border-gray-300 rounded p-1"
-                                        >
-                                            <option value="">Choose Corporation</option>
-                                            {corporation.map((corp) => (
-                                                <option key={corp.cop_id} value={corp.cop_name}>
-                                                    {corp.cop_name}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-
-                                    {selectedDistrict != "" ?
-
-                                        <div className="flex items-center mb-3 space-x-2">
-                                            <label htmlFor="groupFilter" className="text-sm font-medium">
-                                                Lsgd:
-                                            </label>
-                                            <select
-                                                id="groupFilter"
-                                                value={selectedLsgd}
-                                                onChange={handleFilterChangeLsgd}
-                                                className="border border-gray-300 rounded p-1"
-                                            >
-                                                <option value="">Choose Lsgd</option>
-                                                {lsgd && lsgd.map((lsg) => (
-                                                    <option key={lsg.lsg_id} value={lsg.lsg_name}>
-                                                        {lsg.lsg_name}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                        //  <div>
-                                        //   <label>Ward No</label>
-                                        //   <div className="flex mb-3">
-                                        //     <input
-                                        //       className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
-                                        //       value={selectedWard}
-                                        //       onChange={(e) => setSelectedWard(e.target.value)} // Update the state directly
-                                        //     />
-                                        //     <button
-                                        //       className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-                                        //       onClick={() => handleFilterChangeWard(selectedWard)}
-                                        //     >
-                                        //       Search
-                                        //     </button>
-                                        //   </div> 
-                                        // </div>
-                                        : ''}
-                                </> : ''}
-                        </> : ''}
-                </> : ''}
+            
             {/* group type  */}
             <div className="flex items-center mb-3 space-x-2">
                 <label htmlFor="groupFilter" className="text-sm font-medium">
-                    Group Type:
+                    Clubs:
                 </label>
                 <select
                     id="groupFilter"
-                    value={grouptype}
-                    onChange={handleFilterGrpType}
+                    value={selectclub}
+                    onChange={handleFilterClub}
                     className="border border-gray-300 rounded p-1"
                 >
-                    <option value="">Choose Group Type</option>
+                    <option value="">Choose Club</option>
 
-                    {category.map((c, i) => (
-                        <option key={c.id} value={c.group_type}>
-                            {c.group_type}
-                        </option>
-                    ))}
+                    {clubOptions.map((club) => (
+                            <option key={club.id}
+                              value={club.name}>
+                              {club.name}
+                            </option>
+                          ))}
 
                 </select>
             </div>
@@ -1546,4 +778,4 @@ const AdminGrid = () => {
         </div>
     );
 };
-export default AdminGrid;
+export default EditType;

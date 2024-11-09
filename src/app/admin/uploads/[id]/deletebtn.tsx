@@ -233,7 +233,6 @@ const DeleteBtn = () => {
             const udata = response.data.uploadDetails;
             const {source_name,lsg_name,up_ward,cop_name,city,dis_name,st_name,cntry_name,up_planter,us_name,up_landmark_details,up_tree_name} = udata[0];
             
-            console.log("test",lsg_name)
             setSource(source_name || "");
             setWardNo(up_ward || "");
             setSelectedCorp(cop_name || "");

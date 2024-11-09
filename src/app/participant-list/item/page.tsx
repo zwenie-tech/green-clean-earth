@@ -24,6 +24,15 @@ interface TreeDetails {
   dis_name: string | null;
   cop_name: string | null;
   lsg_name: string | null;
+  type_name: string;
+  gp_cat_name: string;
+  edu_district: string;
+  edu_sub_district_name: string;
+  sahodaya_name: string;
+  block_name: string;
+  project_name: string;
+  chapter_name: string;
+  zone_name: string;
 }
 interface Participant {
   id : number;
@@ -139,6 +148,74 @@ const Item: React.FC = () => {
               <div className="text-sm pl-5 mb-2">Plant Source: </div>
               <div className="text-sm">{treeDetails.source_name || 'N/A'}</div>
             </div>
+            {treeDetails.type_name ?
+            <div className="flex ml-2 mt-2 gap-2">
+            <div className="text-sm pl-5 mb-2">School Type: </div>
+            <div className="text-sm">{treeDetails.type_name}</div>
+          </div>
+            
+            : ''}
+          {treeDetails.gp_cat_name ?
+           <div className="flex ml-2 mt-2 gap-2">
+           <div className="text-sm pl-5 mb-2">School Category:</div>
+           <div className="text-sm">{treeDetails.gp_cat_name}</div>
+         </div>
+           
+            : ''}
+          {treeDetails.edu_district ?
+          <div className="flex ml-2 mt-2 gap-2">
+          <div className="text-sm pl-5 mb-2">Educational District:</div>
+          <div className="text-sm">{treeDetails.edu_district}</div>
+        </div>
+          
+            
+            : ''}
+          {treeDetails.edu_sub_district_name ?
+           <div className="flex ml-2 mt-2 gap-2">
+           <div className="text-sm pl-5 mb-2">Educational Subdistrict:</div>
+           <div className="text-sm">{treeDetails.edu_sub_district_name}</div>
+         </div>
+            
+            : ''}
+          {treeDetails.sahodaya_name ?
+          <div className="flex ml-2 mt-2 gap-2">
+          <div className="text-sm pl-5 mb-2">Sahodaya:</div>
+          <div className="text-sm">{treeDetails.sahodaya_name}</div>
+        </div>
+           
+            
+            : ''}
+          {treeDetails.block_name ?
+           <div className="flex ml-2 mt-2 gap-2">
+           <div className="text-sm pl-5 mb-2">Block:</div>
+           <div className="text-sm">{treeDetails.block_name}</div>
+         </div>
+            
+            : ''}
+          {treeDetails.project_name ?
+          <div className="flex ml-2 mt-2 gap-2">
+          <div className="text-sm pl-5 mb-2">Project:</div>
+          <div className="text-sm">{treeDetails.project_name}</div>
+        </div>
+           
+            : ''}
+          {treeDetails.chapter_name ?
+            <div className="flex ml-2 mt-2 gap-2">
+            <div className="text-sm pl-5 mb-2">Chapter:</div>
+            <div className="text-sm">{treeDetails.chapter_name}</div>
+          </div>
+             
+           
+            : ''}
+          {treeDetails.zone_name ?
+           <div className="flex ml-2 mt-2 gap-2">
+           <div className="text-sm pl-5 mb-2">Zone:</div>
+           <div className="text-sm">{treeDetails.zone_name}</div>
+         </div>
+            
+          
+           
+            : ''}
           </div>
         </div>
       </div>

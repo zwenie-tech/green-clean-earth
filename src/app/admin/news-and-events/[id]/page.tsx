@@ -48,7 +48,7 @@ function Page() {
       if (token) {
         const retrievedData = JSON.parse(localStorage.getItem("newsData") || "[]");
         const itemdata = retrievedData.find((item: { id: string; }) => item.id == coId)
-        console.log([itemdata][0].event_body)
+        
         // Get all cookies
         const allCookies = Cookies.get();
 

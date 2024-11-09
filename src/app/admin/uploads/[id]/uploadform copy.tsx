@@ -299,7 +299,7 @@ export function Uploadform() {
       st_name ? setSelectedState(st_name) : '';
       dis_name ? setSelectedDistrict(dis_name) : '';
       const copname = corporation.find((item) => item.cop_name === cop_names)?.cop_id;
-      console.log(copname)
+     
       cop_name ? setSelectedCorp(cop_name) : '';
       lsg_name ? setSelectedLsgd(lsg_name) : '';
       
@@ -627,7 +627,7 @@ export function Uploadform() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
 
-    console.log(values)
+    
     // if (values.missionarea !== 'null') {
     //   const dtm = {
     //     chapterName: values.chapter,
@@ -642,7 +642,7 @@ export function Uploadform() {
     //     })
     //     try {
 
-    //       console.log(response)
+    //       
     //       if (response.data.success && response.status != 203) {
     //         toast({
     //           title: "Data Successfully Updated.",
@@ -681,7 +681,7 @@ export function Uploadform() {
     //       })
     //       try {
 
-    //         console.log(response)
+    //         
     //         if (response.data.success && response.status != 203) {
     //           toast({
     //             title: "Data Successfully Updated.",
@@ -724,7 +724,7 @@ export function Uploadform() {
     //     })
     //     try {
 
-    //       console.log(response)
+    //       
     //       if (response.data.success && response.status != 203) {
     //         toast({
     //           title: "Data Successfully Updated.",
@@ -765,7 +765,7 @@ export function Uploadform() {
     //                   try {
 
     //                     if (response.data.success && response.status != 203) {
-    //                       console.log(response.data)
+    //                       
     //                       toast({
     //                         title: "Data Successfully Updated.",
     //                         description: "",
@@ -807,7 +807,7 @@ export function Uploadform() {
     //             try {
 
     //               if (response.data.success && response.status != 203) {
-    //                 console.log(response)
+    //                 
     //                 toast({
     //                   title: "Data Successfully Updated.",
     //                   description: "",
@@ -848,7 +848,7 @@ export function Uploadform() {
     //         try {
 
     //           if (response.data.success && response.status != 203) {
-    //             console.log(response)
+    //             
     //             toast({
     //               title: "Data Successfully Updated.",
     //               description: "",
@@ -888,7 +888,7 @@ export function Uploadform() {
     //               try {
 
     //                 if (response.data.success && response.status != 203) {
-    //                   console.log(response.data)
+    //                   
     //                   toast({
     //                     title: "Data Successfully Updated.",
     //                     description: "",
@@ -938,7 +938,7 @@ export function Uploadform() {
       try {
 
         if (response.data.success && response.status != 203) {
-          console.log(response)
+          
           toast({
             title: "Data Successfully Updated.",
             description: "",

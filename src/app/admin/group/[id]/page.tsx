@@ -6,6 +6,7 @@ import { EditForm } from "./edit-form";
 import Cookies from 'js-cookie';
 import axios from "axios";
 import { apiURL } from "@/app/requestsapi/request";
+import { EditGrpTypeForm } from "./edit-grp-form";
 
 interface UploadData {
   up_id: string;
@@ -67,7 +68,7 @@ function Page() {
         try {
 
           if (response.data.success && response.status != 203) {
-            console.log(response.data.groupDetails[0])
+         
             setUploadData(response.data.groupDetails);
           } else {
 
@@ -96,8 +97,11 @@ function Page() {
           <ChevronLeft />
           <span className="text-base">Manage Group</span>
         </div>
+<div className="flex">
 
         <EditForm />
+        <EditGrpTypeForm/>
+</div>
       </div>
       {uploadData[0] ?
       <div className="grid gap-4 md:gap-6 grid-cols-1 md:grid-cols-3 p-2 md:p-5 md:border md:shadow-md md:rounded-lg">
