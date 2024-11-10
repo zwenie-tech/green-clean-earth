@@ -1467,7 +1467,7 @@ const ParticipateList = () => {
       <div className="flex justify-center font-bold my-4">
         <p>Total Count: {totalCount}</p>
       </div>
-
+      <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
       <div className="container mx-auto p-6">
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white border-gray-200 rounded-t-lg">
@@ -1541,7 +1541,7 @@ const ParticipateList = () => {
         </div>
       </div>
       
-      <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+      
       <Footer />
     </>
   );
