@@ -121,7 +121,8 @@ export function AdForm() {
     const formdata = {
       title: selecttitle,
        adLink:adlink, 
-       displayOrder:disporder
+       displayOrder:disporder,
+       isDeleted:false
     
     }
     

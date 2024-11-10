@@ -148,21 +148,20 @@ const Item: React.FC = () => {
               <div className="text-sm pl-5 mb-2">Plant Source: </div>
               <div className="text-sm">{treeDetails.source_name || 'N/A'}</div>
             </div>
-            {treeDetails.type_name ?
+            
             <div className="flex ml-2 mt-2 gap-2">
             <div className="text-sm pl-5 mb-2">School Type: </div>
-            <div className="text-sm">{treeDetails.type_name}</div>
+            <div className="text-sm">{treeDetails.type_name || 'N/A'}</div>
           </div>
             
-            : ''}
-          {treeDetails.gp_cat_name ?
+          {treeDetails.gp_cat_name && treeDetails.type_name ?
            <div className="flex ml-2 mt-2 gap-2">
            <div className="text-sm pl-5 mb-2">School Category:</div>
-           <div className="text-sm">{treeDetails.gp_cat_name}</div>
+           <div className="text-sm">{treeDetails.gp_cat_name || 'N/A'}</div>
          </div>
            
             : ''}
-          {treeDetails.edu_district ?
+          {treeDetails.edu_district && treeDetails.type_name ?
           <div className="flex ml-2 mt-2 gap-2">
           <div className="text-sm pl-5 mb-2">Educational District:</div>
           <div className="text-sm">{treeDetails.edu_district}</div>
@@ -170,14 +169,14 @@ const Item: React.FC = () => {
           
             
             : ''}
-          {treeDetails.edu_sub_district_name ?
+          {treeDetails.edu_sub_district_name && treeDetails.type_name  ?
            <div className="flex ml-2 mt-2 gap-2">
            <div className="text-sm pl-5 mb-2">Educational Subdistrict:</div>
            <div className="text-sm">{treeDetails.edu_sub_district_name}</div>
          </div>
             
             : ''}
-          {treeDetails.sahodaya_name ?
+          {treeDetails.sahodaya_name && treeDetails.type_name ?
           <div className="flex ml-2 mt-2 gap-2">
           <div className="text-sm pl-5 mb-2">Sahodaya:</div>
           <div className="text-sm">{treeDetails.sahodaya_name}</div>
@@ -185,21 +184,21 @@ const Item: React.FC = () => {
            
             
             : ''}
-          {treeDetails.block_name ?
+          {treeDetails.block_name && treeDetails.type_name ?
            <div className="flex ml-2 mt-2 gap-2">
            <div className="text-sm pl-5 mb-2">Block:</div>
            <div className="text-sm">{treeDetails.block_name}</div>
          </div>
             
             : ''}
-          {treeDetails.project_name ?
+          {treeDetails.project_name && treeDetails.type_name ?
           <div className="flex ml-2 mt-2 gap-2">
           <div className="text-sm pl-5 mb-2">Project:</div>
           <div className="text-sm">{treeDetails.project_name}</div>
         </div>
            
             : ''}
-          {treeDetails.chapter_name ?
+          {treeDetails.chapter_name && treeDetails.type_name ?
             <div className="flex ml-2 mt-2 gap-2">
             <div className="text-sm pl-5 mb-2">Chapter:</div>
             <div className="text-sm">{treeDetails.chapter_name}</div>
@@ -207,7 +206,7 @@ const Item: React.FC = () => {
              
            
             : ''}
-          {treeDetails.zone_name ?
+          {treeDetails.zone_name && treeDetails.type_name ?
            <div className="flex ml-2 mt-2 gap-2">
            <div className="text-sm pl-5 mb-2">Zone:</div>
            <div className="text-sm">{treeDetails.zone_name}</div>

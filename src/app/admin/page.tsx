@@ -77,7 +77,7 @@ const GridExample = () => {
   }, [token, router]);
 
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
-    { field: "up_id", headerName: "Uploader Id" },
+    { field: "up_id", headerName: "Tree No" },
     { field: "up_name", headerName: "Uploader name" },
     { field: "up_planter", headerName: "Planter name" },
     { field: "up_tree_name", headerName: "Tree name" },
@@ -239,13 +239,11 @@ const GridExample = () => {
         if (response.data.success && response.status !== 203) {
          
 
-          const filteredData = response.data.Uploads.filter(
-            (item: { up_name: string; }) => item.up_name === value
-          );
+          
          
 
-          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-          setRowData(filteredData);
+          setTotalPages(Math.ceil(response.data.Uploads.length / itemsPerPage));
+          setRowData(response.data.Uploads);
         } else {
           setRowData([]);
         }
@@ -265,7 +263,7 @@ const GridExample = () => {
   };
   const fetchFilteredUpId = async (value: string) => {
     const filterdata = {
-      treeNumber: parseInt(value)
+      userId: parseInt(value)
     }
     if (token) {
       const response = await axios.post(
@@ -283,13 +281,11 @@ const GridExample = () => {
         if (response.data.success && response.status !== 203) {
         
 
-          const filteredData = response.data.Uploads.filter(
-            (item: { up_id: string; }) => item.up_id == value
-          );
+          
           
 
-          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-          setRowData(filteredData);
+          setTotalPages(Math.ceil(response.data.Uploads.length / itemsPerPage));
+          setRowData(response.data.Uploads);
         } else {
           setRowData([]);
         }
@@ -323,13 +319,11 @@ const GridExample = () => {
         if (response.data.success && response.status !== 203) {
          
 
-          const filteredData = response.data.Uploads.filter(
-            (item: { up_planter: string; }) => item.up_planter === value
-          );
+         
          
 
-          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-          setRowData(filteredData);
+          setTotalPages(Math.ceil(response.data.Uploads.length / itemsPerPage));
+          setRowData(response.data.Uploads);
         } else {
           setRowData([]);
         }
@@ -366,13 +360,10 @@ const GridExample = () => {
         if (response.data.success && response.status !== 203) {
           
 
-          const filteredData = response.data.Uploads.filter(
-            (item: { co_ord_name: string; }) => item.co_ord_name === value
-          );
-        
+       
 
-          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-          setRowData(filteredData);
+          setTotalPages(Math.ceil(response.data.Uploads.length / itemsPerPage));
+          setRowData(response.data.Uploads);
         } else {
           setRowData([]);
         }
@@ -672,7 +663,7 @@ const GridExample = () => {
         Export To Excel
       </button>
       <div>
-        <label>Uploader Id</label>
+        <label>User Id</label>
         <div className="flex mb-3">
           <input
             className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "

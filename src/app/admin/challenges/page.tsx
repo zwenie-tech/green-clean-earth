@@ -487,16 +487,9 @@ const fetchFilteredId = async (value: string) => {
         );
         try {
             if (response.data.success && response.status !== 203) {
-                
-                
 
-                const filteredData = response.data.Uploads.filter(
-                    (item: { up_id: string; }) => item.up_id == value
-                );
-                
-
-                setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-                setRowData(filteredData);
+                setTotalPages(Math.ceil(response.data.Uploads.length / itemsPerPage));
+                setRowData(response.data.Uploads);
             } else {
                 setRowData([]);
             }

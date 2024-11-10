@@ -102,6 +102,8 @@ const AdminGrid = () => {
           // setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
           
           localStorage.setItem("adData", JSON.stringify(response.data.count));
+
+          console.log(response.data.count);
           setRowData(response.data.count);
         }
       }

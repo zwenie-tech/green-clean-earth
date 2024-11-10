@@ -429,13 +429,9 @@ const AdminGrid = () => {
          
           
 
-          const filteredData = response.data.groupList.filter(
-            (item: { gp_name: string; }) => item.gp_name === value
-          );
-          
 
-          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-          setRowData(filteredData);
+          setTotalPages(Math.ceil(response.data.groupList.length / itemsPerPage));
+          setRowData(response.data.groupList);
         } else {
           setRowData([]);
         }
@@ -493,15 +489,8 @@ const AdminGrid = () => {
       try {
         if (response.data.success && response.status !== 203) {
          
-          
-
-          const filteredData = response.data.groupList.filter(
-            (item: { gp_id: string; }) => item.gp_id == value
-          );
-          
-
-          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-          setRowData(filteredData);
+          setTotalPages(Math.ceil(response.data.groupList.length / itemsPerPage));
+          setRowData(response.data.groupList);
         } else {
           setRowData([]);
         }

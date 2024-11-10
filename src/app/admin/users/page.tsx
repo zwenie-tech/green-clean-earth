@@ -490,13 +490,10 @@ const AdminGrid = () => {
         if (response.data.success && response.status !== 203) {
           
 
-          const filteredData = response.data.userList.filter(
-            (item: { co_ord_name: string; }) => item.co_ord_name === value
-          );
           
 
-          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-          setRowData(filteredData);
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setRowData(response.data.userList);
         } else {
           setRowData([]);
         }
@@ -522,13 +519,9 @@ const AdminGrid = () => {
         if (response.data.success && response.status !== 203) {
          
 
-          const filteredData = response.data.userList.filter(
-            (item: { us_email: string; }) => item.us_email === value
-          );
-          
 
-          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-          setRowData(filteredData);
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setRowData(response.data.userList);
         } else {
           setRowData([]);
         }
@@ -581,13 +574,8 @@ const AdminGrid = () => {
       try {
         if (response.data.success && response.status !== 203) {
          
-          const filteredData = response.data.userList.filter(
-            (item: { us_mobile: string; }) => item.us_mobile === value
-          );
-          
-
-          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-          setRowData(filteredData);
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setRowData(response.data.userList);
         } else {
           setRowData([]);
         }

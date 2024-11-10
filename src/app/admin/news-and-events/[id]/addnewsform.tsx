@@ -137,6 +137,7 @@ export function AddEvents() {
                         title: "Data Successfully Updated.",
                         description: "",
                     });
+                    
                     setTimeout(function () {
                         window.location.reload();
                     }, 1800);
@@ -154,6 +155,8 @@ export function AddEvents() {
                     description: "Please try again...",
                 });
             }
+
+            
         }
     }
 

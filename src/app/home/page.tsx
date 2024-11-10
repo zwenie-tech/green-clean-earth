@@ -13,7 +13,20 @@ import React from 'react';
 import { FaCalendarAlt, FaMapMarkerAlt } from 'react-icons/fa';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';import { ChevronRight } from "lucide-react";
-;
+import { apiURL } from "../requestsapi/request";
+
+interface Events {
+  event_heading: string;
+  event_body: string;
+  image_link: string;
+  location: string;
+  created_time: string;
+  is_deleted: string;
+  show_in_main: string;
+  
+}
+
+
 const HomePage = () => {
   const router = useRouter();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -21,6 +34,24 @@ const HomePage = () => {
   //const [currentIndex, setCurrentIndex] = useState(0);
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [events, setEvents] = useState<Events[]>([]);
+
+  useEffect(() => {
+    const fetchEventDetails = async () => {
+      const response = await fetch(`${apiURL}/common/getMainPageEvents`);
+      const data = await response.json();
+      if (data.success) {
+        console.log(data.count[0]['created_time'].split("T")[0].split('-').reverse().join('-'))
+        setEvents(data.count);
+      }
+    };
+
+    fetchEventDetails();
+  }, []);
+
+  
+
+
   const images = [
     '/images/slide01.jpg',
     '/images/slide03.jpg',
@@ -428,21 +459,21 @@ const cards = [
     {/* Card with image */}
     <div className="container mx-auto p-4" style={{ boxSizing: 'border-box' }}>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4" style={{ justifyItems: 'center' }}>
-        {cards.map((card, index) => (
+        {events.map((card, index) => (
           <div key={index} className="bg-light-gray p-4 shadow-md" style={{ borderRadius: '9px', maxWidth: '400px' }}>
-            <Image src={card.imageSrc} alt={`Card Image ${index + 1}`} width={500} height={300} className="rounded-lg" />
+            <Image src={card.image_link} alt={`Card Image ${index + 1}`} width={500} height={300} className="rounded-lg" />
             <div className="flex justify-between items-center mt-4">
               <div className="flex items-center">
                 <FaCalendarAlt className="text-gray-500" />
-                <span className="ml-2 text-gray-600">{card.date}</span>
+                <span className="ml-2 text-gray-600">{card.created_time.split("T")[0].split('-').reverse().join('-')}</span>
               </div>
               <div className="flex items-center">
                 <FaMapMarkerAlt className="text-gray-500" />
-                <span className="ml-2 text-gray-600">{card.place}</span>
+                <span className="ml-2 text-gray-600">{card.location}</span>
               </div>
             </div>
-            <h2 className="mt-4 text-2xl font-bold">{card.heading}</h2>
-            <p className="mt-2 text-gray-700">{card.paragraph}</p>
+            <h2 className="mt-4 text-2xl font-bold">{card.event_heading}</h2>
+            <p className="mt-2 text-gray-700">{card.event_body}</p>
           </div>
         ))}
       </div>

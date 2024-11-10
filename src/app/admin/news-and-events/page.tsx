@@ -45,6 +45,7 @@ const AdminGrid = () => {
     { field: "created_time", headerName: "Date" },
     { field: "location", headerName: "Place" },
     { field: "image_link", headerName: "Image" },
+    { field: "show_in_main", headerName: "Show in Mainpage" },
   ]);
 
   const defaultColDef = useMemo(() => {
@@ -75,7 +76,7 @@ const AdminGrid = () => {
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
           
           localStorage.setItem("newsData", JSON.stringify(response.data.eventList));
-
+console.log(response.data.eventList)
           setRowData(response.data.eventList);
         }
       }

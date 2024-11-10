@@ -434,16 +434,9 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-       
-          
 
-          const filteredData = response.data.userList.filter(
-            (item: { participant_name: string; }) => item.participant_name === value
-          );
-        
-
-          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-          setRowData(filteredData);
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setRowData(response.data.userList);
         } else {
           setRowData([]);
         }
@@ -499,16 +492,9 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-         
-          
 
-          const filteredData = response.data.userList.filter(
-            (item: { personal_activity_id: string; }) => item.personal_activity_id == value
-          );
-         
-
-          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-          setRowData(filteredData);
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setRowData(response.data.userList);
         } else {
           setRowData([]);
         }
