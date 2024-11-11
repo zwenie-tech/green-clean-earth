@@ -100,6 +100,7 @@ const AdminGrid = () => {
   const [lsgd, setLsgd] = useState<Lsgd[]>([]);
   const [corporation, setCorporation] = useState<Corp[]>([]);
   const [partname, setPartname] = useState("");
+  const [hasEarning, setHasEarning] = useState(false);
   const [email, setEmail] = useState("");
   const [actid, setActid] = useState("");
   const [userid, setUserId] = useState("");
@@ -226,6 +227,33 @@ const AdminGrid = () => {
     fetchdata();
   }, [currentPage, token]);
 
+  useEffect(() => {
+    const fetchCategory = async () => {
+      if (token && hasEarning) {
+        const response = await axios.post(
+          `${apiURL}/admin/adminActivityList`,
+          { hasEarnings: hasEarning },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        try {
+          if (response.data.success && response.status !== 203) {
+            setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+            setRowData(response.data.userList);
+          } else {
+            setRowData([]);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+    };
+    fetchCategory();
+  }, [hasEarning, token]);
 
   useEffect(() => {
     async function fetchData() {
@@ -1162,6 +1190,18 @@ const AdminGrid = () => {
             Search
           </button>
         </div>
+      </div>
+      <div className="mb-4 flex items-center">
+        <input
+          type="checkbox"
+          id="hasEarning"
+          checked={hasEarning}
+          onChange={(e) => setHasEarning(e.target.checked)}
+          className="mr-2"
+        />
+        <label htmlFor="hasEarning" className="text-sm font-medium text-gray-700">
+          Has Earning
+        </label>
       </div>
       {/* <div>
         <label>Email</label>
