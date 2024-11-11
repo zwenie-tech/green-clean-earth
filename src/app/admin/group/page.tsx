@@ -138,6 +138,7 @@ const AdminGrid = () => {
     { field: "gp_id", headerName: "Group Id" },
     { field: "gp_name", headerName: "Group name" },
     { field: "group_type", headerName: "Group type" },
+    { field: "earnings", headerName: "Earnings"},
     { field: "type_name", headerName: "School type" },
     { field: "gp_cat_name", headerName: "School category" },
     { field: "edu_district", headerName: "Edu district" },
