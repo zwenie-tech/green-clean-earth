@@ -243,6 +243,7 @@ const AdminGrid = () => {
       >
         Export To Excel
       </button>
+      <div className="flex flex-col md:flex-row gap-4">
       <div className="flex items-center mb-3 space-x-2">
         <label htmlFor="groupFilter" className="text-sm font-medium">
           District:
@@ -284,7 +285,7 @@ const AdminGrid = () => {
 
         </select>
       </div>
-
+     </div>
 
       <div className={"ag-theme-quartz"} style={{ height: 600 }}>
         <AgGridReact

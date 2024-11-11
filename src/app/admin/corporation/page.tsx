@@ -237,45 +237,48 @@ const fetchFilteredCorp = async (value: string) => {
           Export To Excel
         </button>
 
-        <div className="flex items-center mb-3 space-x-2">
-                                <label htmlFor="groupFilter" className="text-sm font-medium">
-                                    District:
-                                </label>
-                                <select
-                                    id="groupFilter"
-                                    value={selectedDistrict}
-                                    onChange={handleFilterChangeDistrict}
-                                    className="border border-gray-300 rounded p-1"
-                                >
-                                    <option value="">Choose District</option>
-                                    {districts.map((district) => (
-                                        <option key={district.dis_id} value={district.dis_name}>
-                                            {district.dis_name}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-3">
+  <div className="flex items-center space-x-2">
+    <label htmlFor="districtFilter" className="text-sm font-medium">
+      District:
+    </label>
+    <select
+      id="districtFilter"
+      value={selectedDistrict}
+      onChange={handleFilterChangeDistrict}
+      className="flex-1 border border-gray-300 rounded p-1"
+    >
+      <option value="">Choose District</option>
+      {districts.map((district) => (
+        <option key={district.dis_id} value={district.dis_name}>
+          {district.dis_name}
+        </option>
+      ))}
+    </select>
+  </div>
 
-                            {selectedDistrict != "" ?
-                                
-                                    <div className="flex items-center mb-3 space-x-2">
-                                        <label htmlFor="groupFilter" className="text-sm font-medium">
-                                            Corporation:
-                                        </label>
-                                        <select
-                                            id="groupFilter"
-                                            value={selectedCorp}
-                                            onChange={handleFilterChangeCorp}
-                                            className="border border-gray-300 rounded p-1"
-                                        >
-                                            <option value="">Choose Corporation</option>
-                                            {corporation.map((corp) => (
-                                                <option key={corp.cop_id} value={corp.cop_name}>
-                                                    {corp.cop_name}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>:""}
+  {selectedDistrict !== "" && (
+    <div className="flex items-center space-x-2">
+      <label htmlFor="corpFilter" className="text-sm font-medium">
+        Corporation:
+      </label>
+      <select
+        id="corpFilter"
+        value={selectedCorp}
+        onChange={handleFilterChangeCorp}
+        className="flex-1 border border-gray-300 rounded p-1"
+      >
+        <option value="">Choose Corporation</option>
+        {corporation.map((corp) => (
+          <option key={corp.cop_id} value={corp.cop_name}>
+            {corp.cop_name}
+          </option>
+        ))}
+      </select>
+    </div>
+  )}
+</div>
+
 
       <div className={"ag-theme-quartz"} style={{ height: 600 }}>
         <AgGridReact
