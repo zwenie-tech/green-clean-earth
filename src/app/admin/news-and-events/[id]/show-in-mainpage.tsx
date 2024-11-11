@@ -8,7 +8,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, Eye, Trash2 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
@@ -38,7 +38,7 @@ const formSchema = z.object({
    
 });
 
-export function DeleteBtn() {
+export function ShowMainPage() {
     const router = useRouter();
     const pathname = usePathname();
     const coId = pathname.split("/")[3];
@@ -50,17 +50,19 @@ export function DeleteBtn() {
     const [desc, setDesc] = useState('');
     const [loc, setLoc] = useState('');
     const [dateTime, setDateTime] = useState('');
+    const [showmain, setShowMain] = useState(0);
     useEffect(() => {
         async function fetchdata() {
             if (token) {
                 const retrievedData = JSON.parse(localStorage.getItem("newsData") || "[]");
                 const itemdata = retrievedData.find((item: { id: string; }) => item.id == coId);
                 
-                const { location, event_heading, event_body,created_time } = [itemdata][0];
+                const { location, event_heading, event_body,created_time, show_in_main } = [itemdata][0];
                 setLoc(location);
                 setHeading(event_heading);
                 setDesc(event_body);
                 setDateTime(created_time)
+                setShowMain(show_in_main)
             }
         }
         fetchdata();
@@ -73,13 +75,10 @@ export function DeleteBtn() {
         },
     });
 
-    async function handleDelete(values: z.infer<typeof formSchema>) {
-
-        
+    async function handleshowmain(values: z.infer<typeof formSchema>) {
 
         const formdata = {
-           
-            isDeleted:true
+            isMainPageEvent:1
         };
 
         if (token) {
@@ -92,8 +91,10 @@ export function DeleteBtn() {
                 });
 
                 if (response.data.success && response.status!=203) {
+                    const msg = response.data.message;
+                    console.log(msg)
                     toast({
-                        title: "Delete Successfully.",
+                        title: "Event Update Successfully.",
                         description: "",
                       });
             
@@ -102,6 +103,58 @@ export function DeleteBtn() {
                         window.history.back();
                       }, 1800);
                   } else {
+                    const msg = response.data.message;
+                    console.log(msg)
+
+                    toast({
+                        variant: "destructive",
+                        title: "Oops, Something went wrong!1",
+                        description: "Please try again...",
+                    });
+                  }
+            } catch (error:any) {
+                console.log()
+                
+                toast({
+                    variant: "destructive",
+                    title: "Oops",
+                    description: error.response.data['message'],
+                });
+            }
+        }
+    }
+
+    async function handlehidemain(values: z.infer<typeof formSchema>) {
+
+        const formdata = {
+            isMainPageEvent:0
+        };
+
+        if (token) {
+            try {
+                const response = await axios.post(`${apiURL}/adminEdit//updateMainPageEvent?recordId=${coId}`, formdata, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.data.success && response.status!=203) {
+                    const msg = response.data.message;
+                    console.log(msg)
+                    toast({
+                        title: "Event Update Successfully.",
+                        description: "",
+                      });
+            
+            
+                      setTimeout(function() {
+                        window.history.back();
+                      }, 1800);
+                  } else {
+                    const msg = response.data.message;
+                    console.log(msg)
+
                     toast({
                         variant: "destructive",
                         title: "Oops, Something went wrong!",
@@ -119,9 +172,18 @@ export function DeleteBtn() {
     }
 
     return (
-        <div className="flex items-center justify-start gap-2 my-4 cursor-pointer text-primary ml-3" onClick={handleDelete}>
-              <Trash2 />
-              <span className="text-base">Delete</span>
+        showmain === 1 ? (
+            <div className="flex items-center justify-start gap-2 my-4 cursor-pointer text-primary mr-3" onClick={handlehidemain}>
+                <Eye />
+                <span className="text-base">Hide from MainPage</span>
             </div>
-      );
+        ):
+        (
+            <div className="flex items-center justify-start gap-2 my-4 cursor-pointer text-primary mr-3" onClick={handleshowmain}>
+                <Eye />
+                <span className="text-base">Show in MainPage</span>
+            </div>
+        )
+        
+    );
 }

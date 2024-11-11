@@ -35,7 +35,7 @@ import { toast } from "@/components/ui/use-toast";
 
 // Define your form schema here, if needed
 const formSchema = z.object({
-   
+
 });
 
 export function DeleteBtn() {
@@ -45,69 +45,49 @@ export function DeleteBtn() {
     const segments = pathname.split("/").filter(Boolean);
     const lastSegment = segments[segments.length - 1];
     const token = Cookies.get("adtoken");
-
-    const [heading, setHeading] = useState('');
-    const [desc, setDesc] = useState('');
-    const [loc, setLoc] = useState('');
-    const [dateTime, setDateTime] = useState('');
+    const [category, setCategory] = useState('');
     useEffect(() => {
         async function fetchdata() {
             if (token) {
-                const retrievedData = JSON.parse(localStorage.getItem("newsData") || "[]");
-                const itemdata = retrievedData.find((item: { id: string; }) => item.id == coId);
-                
-                const { location, event_heading, event_body,created_time } = [itemdata][0];
-                setLoc(location);
-                setHeading(event_heading);
-                setDesc(event_body);
-                setDateTime(created_time)
+                const retrievedData = JSON.parse(localStorage.getItem("clubs") || "[]");
+                const itemdata = retrievedData.find((item: { id: string; }) => item.id == coId)
+
+                setCategory([itemdata][0].name);
             }
         }
         fetchdata();
     }, [coId, token]);
-
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-           
-        },
-    });
-
     async function handleDelete(values: z.infer<typeof formSchema>) {
-
-        
-
         const formdata = {
-           
-            isDeleted:true
+            clubName: category,
+            isDeleted: true
         };
 
         if (token) {
             try {
-                const response = await axios.post(`${apiURL}/adminEdit/updateMainPageEvent?recordId=${coId}`, formdata, {
+                const response = await axios.post(`${apiURL}/adminEdit/modifyClubs?recordId=${coId}`, formdata, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
                     }
                 });
 
-                if (response.data.success && response.status!=203) {
+                if (response.data.success && response.status !== 203) {
                     toast({
-                        title: "Delete Successfully.",
+                        title: "Data Deleted Successfully.",
                         description: "",
-                      });
-            
-            
-                      setTimeout(function() {
+                    });
+
+                    setTimeout(() => {
                         window.history.back();
-                      }, 1800);
-                  } else {
+                    }, 1800);
+                } else {
                     toast({
                         variant: "destructive",
                         title: "Oops, Something went wrong!",
                         description: "Please try again...",
                     });
-                  }
+                }
             } catch (error) {
                 toast({
                     variant: "destructive",
@@ -120,8 +100,8 @@ export function DeleteBtn() {
 
     return (
         <div className="flex items-center justify-start gap-2 my-4 cursor-pointer text-primary ml-3" onClick={handleDelete}>
-              <Trash2 />
-              <span className="text-base">Delete</span>
-            </div>
-      );
+            <Trash2 />
+            <span className="text-base">Delete</span>
+        </div>
+    );
 }

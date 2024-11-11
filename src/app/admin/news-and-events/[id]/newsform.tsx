@@ -83,9 +83,9 @@ export function Eduform() {
             createdTime: dateTime,  // Include the formatted datetime
         };
         
-        
+        console.log(dateTime)
 
-        if (token) {
+        if (token && dateTime!='') {
             try {
                 const response = await axios.post(`${apiURL}/adminEdit/modifyEvents?recordId=${coId}`, formdata, {
                     headers: {
@@ -116,6 +116,14 @@ export function Eduform() {
                     description: "Please try again...",
                 });
             }
+        }else{
+            if(dateTime==''){
+                toast({
+                    variant: "destructive",
+                    title: "Oops",
+                    description: "Please fill the date and time field",
+                });
+            }
         }
     }
 
@@ -129,7 +137,7 @@ export function Eduform() {
             </DialogTrigger>
             <DialogContent className="max-w-4xl overflow-y-scroll max-h-[98%]">
                 <DialogHeader>
-                    <DialogTitle>Edit EduDistrict</DialogTitle>
+                    <DialogTitle>Edit Event</DialogTitle>
                     <DialogDescription></DialogDescription>
                 </DialogHeader>
                 <div className="">
@@ -148,6 +156,7 @@ export function Eduform() {
                                         value={heading}
                                         onChange={(e) => setHeading(e.target.value)}
                                         placeholder="Enter a heading"
+                                        required
                                     ></textarea>
                                 </div>
 
@@ -158,6 +167,7 @@ export function Eduform() {
                                         value={desc}
                                         onChange={(e) => setDesc(e.target.value)}
                                         placeholder="Enter a description"
+                                        required
                                     ></textarea>
                                 </div>
                                 <div className="mb-4">
@@ -166,6 +176,7 @@ export function Eduform() {
                                         className="block w-full px-3 py-2 border border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 sm:text-sm"
                                         value={loc}
                                         onChange={(e) => setLoc(e.target.value)}
+                                        required
                                     />
                                 </div>
 
@@ -192,7 +203,7 @@ export function Eduform() {
                     </Form>
                 </div>
                 <DialogFooter>
-                    {/* <Button type="submit">Save changes</Button> */}
+                
                 </DialogFooter>
             </DialogContent>
         </Dialog>

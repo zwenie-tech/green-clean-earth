@@ -18,6 +18,7 @@ import Cookies from 'js-cookie';
 import { Eduform } from "./newsform";
 import { apiURL, imageURL } from "@/app/requestsapi/request";
 import { DeleteBtn } from "./deletebtn";
+import { ShowMainPage } from "./show-in-mainpage";
 
 
 interface ActivityData {
@@ -85,6 +86,7 @@ function Page() {
         </div>
         <div className="flex justify-between">
 
+          <ShowMainPage/>
           <Eduform />
           <DeleteBtn />
         </div>
@@ -131,7 +133,7 @@ function Page() {
             <p className="text-base">{userData[0].location}</p>
           </div>
           <div className="">
-            <p className="text-sm text-gray-500">News Description</p>
+            <p className="text-sm text-gray-500">Date</p>
             <p className="text-base">{userData[0].created_time.split("T")[0].split('-').reverse().join('-')}</p>
           </div>
 

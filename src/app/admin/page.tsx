@@ -56,6 +56,7 @@ const GridExample = () => {
   const [planter, setPlanter] = useState("");
   const [uploader, setUploader] = useState("");
   const [uploaderid, setUploaderId] = useState("");
+  const [treeno, setTreeNo] = useState("");
   const [coordinator, setCoordinator] = useState("");
   const [countries, setCountries] = useState<Country[]>([]);
   const [states, setStates] = useState<State[]>([]);
@@ -264,6 +265,48 @@ const GridExample = () => {
   const fetchFilteredUpId = async (value: string) => {
     const filterdata = {
       userId: parseInt(value)
+    }
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminUploads`,
+        filterdata,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        
+        if (response.data.success && response.status !== 203) {
+        
+
+          
+          
+
+          setTotalPages(Math.ceil(response.data.Uploads.length / itemsPerPage));
+          setRowData(response.data.Uploads);
+        } else {
+          setRowData([]);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+  const handleFilterTreeNo = (e: any) => {
+   
+    if(e != "")
+      {
+       
+        fetchFilteredTreeNo(e);
+        setCurrentPage(1); // Reset to first page
+      }
+  };
+  const fetchFilteredTreeNo = async (value: string) => {
+    const filterdata = {
+      treeNumber: parseInt(value)
     }
     if (token) {
       const response = await axios.post(
@@ -674,6 +717,23 @@ const GridExample = () => {
           <button
             className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
             onClick={() => handleFilterUpId(uploaderid)}
+          >
+            Search
+          </button>
+        </div>
+      </div>
+      <div>
+        <label>Tree No</label>
+        <div className="flex mb-3">
+          <input
+            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+            value={treeno}
+            onChange={(e) => setTreeNo(e.target.value)}
+            type="number"
+          />
+          <button
+            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+            onClick={() => handleFilterTreeNo(treeno)}
           >
             Search
           </button>
