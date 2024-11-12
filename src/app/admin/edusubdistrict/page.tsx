@@ -303,69 +303,65 @@ const fetchFilteredEduSubDistrict = async (value: string) => {
         >
           Export To Excel
         </button>
+        <div className="flex flex-col md:flex-row gap-4">
+  <div className="flex flex-1 items-center mb-3 space-x-2">
+    <label htmlFor="districtFilter" className="text-sm font-medium">
+      District:
+    </label>
+    <select
+      id="districtFilter"
+      value={selectedDistrictGrp}
+      onChange={handleFilterEDistrict}
+      className="flex-1 border border-gray-300 rounded p-1"
+    >
+      <option value="">Choose District</option>
+      {districts.map((district) => (
+        <option key={district.dis_id} value={district.dis_name}>
+          {district.dis_name}
+        </option>
+      ))}
+    </select>
+  </div>
 
-        <div className="flex items-center mb-3 space-x-2">
-        <label htmlFor="groupFilter" className="text-sm font-medium">
-          District:
-        </label>
-        <select
-          id="groupFilter"
-          value={selectedDistrictGrp}
-          onChange={handleFilterEDistrict}
-          className="border border-gray-300 rounded p-1"
-        >
-          <option value="">Choose District</option>
+  <div className="flex flex-1 items-center mb-3 space-x-2">
+    <label htmlFor="eduDistrictFilter" className="text-sm font-medium">
+      Education District:
+    </label>
+    <select
+      id="eduDistrictFilter"
+      value={selecteduDistrict}
+      onChange={handleFilterEduDistrict}
+      className="flex-1 border border-gray-300 rounded p-1"
+    >
+      <option value="">Choose Education District</option>
+      {eduDistrict && eduDistrict.map((e) => (
+        <option key={e.edu_district_id} value={e.edu_district}>
+          {e.edu_district}
+        </option>
+      ))}
+    </select>
+  </div>
 
-          {districts.map((district) => (
-            <option key={district.dis_id} value={district.dis_name}>
-              {district.dis_name}
-            </option>
-          ))}
+  <div className="flex flex-1 items-center mb-3 space-x-2">
+    <label htmlFor="eduSubDistrictFilter" className="text-sm font-medium">
+      Education Sub District:
+    </label>
+    <select
+      id="eduSubDistrictFilter"
+      value={selecteduSubDistrict}
+      onChange={handleFilterEduSubDistrict}
+      className="flex-1 border border-gray-300 rounded p-1"
+    >
+      <option value="">Choose Education Sub District</option>
+      {eduSubDistrict && eduSubDistrict.map((e) => (
+        <option key={e.edu_sub_district_id} value={e.edu_sub_district_name}>
+          {e.edu_sub_district_name}
+        </option>
+      ))}
+    </select>
+  </div>
+</div>
 
-        </select>
-      </div>
-
-      <div className="flex items-center mb-3 space-x-2">
-        <label htmlFor="groupFilter" className="text-sm font-medium">
-          Education District:
-        </label>
-        <select
-          id="groupFilter"
-          value={selecteduDistrict}
-          onChange={handleFilterEduDistrict}
-          className="border border-gray-300 rounded p-1"
-        >
-          <option value="">Choose Education District</option>
-
-          {eduDistrict && eduDistrict.map((e) => (
-            <option key={e.edu_district_id} value={e.edu_district}>
-              {e.edu_district}
-            </option>
-          ))}
-
-        </select>
-      </div>
-      <div className="flex items-center mb-3 space-x-2">
-                        <label htmlFor="groupFilter" className="text-sm font-medium">
-                            Education Sub District:
-                        </label>
-                        <select
-                            id="groupFilter"
-                            value={selecteduSubDistrict}
-                            onChange={handleFilterEduSubDistrict}
-                            className="border border-gray-300 rounded p-1"
-                        >
-                            <option value="">Choose Education Sub District</option>
-
-                            {eduSubDistrict && eduSubDistrict.map((e) => (
-                                <option key={e.edu_sub_district_id} value={e.edu_sub_district_name}>
-                                    {e.edu_sub_district_name}
-                                </option>
-                            ))}
-
-                        </select>
-                    </div>
-      
       <div className={"ag-theme-quartz"} style={{ height: 600 }}>
         <AgGridReact
           rowData={rowData}
