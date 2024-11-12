@@ -705,91 +705,90 @@ const GridExample = () => {
       >
         Export To Excel
       </button>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 justify-center">
-      <div className="flex flex-col w-full">
-        <label>User Id</label>
-        <div className="flex mb-3">
-          <input
-            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
-            value={uploaderid}
-            onChange={(e) => setUploaderId(e.target.value)}
-            type="number"
-          />
-          <button
-            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-            onClick={() => handleFilterUpId(uploaderid)}
-          >
-            Search
-          </button>
+      <div className="flex flex-wrap gap-4 justify-center">
+        <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
+          <label>User Id</label>
+          <div className="flex mb-3">
+            <input
+              className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+              value={uploaderid}
+              onChange={(e) => setUploaderId(e.target.value)}
+              type="number"
+            />
+            <button
+              className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+              onClick={() => handleFilterUpId(uploaderid)}
+            >
+              Search
+            </button>
+          </div>
+        </div>
+        <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
+          <label>Tree No</label>
+          <div className="flex mb-3">
+            <input
+              className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+              value={treeno}
+              onChange={(e) => setTreeNo(e.target.value)}
+              type="number"
+            />
+            <button
+              className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+              onClick={() => handleFilterTreeNo(treeno)}
+            >
+              Search
+            </button>
+          </div>
+        </div>
+        <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
+          <label>Uploader Name</label>
+          <div className="flex mb-3">
+            <input
+              className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+              value={uploader}
+              onChange={(e) => setUploader(e.target.value)} // Update the state directly
+            />
+            <button
+              className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+              onClick={() => handleFilterUpName(uploader)}
+            >
+              Search
+            </button>
+          </div>
+        </div>
+        <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
+          <label>Planter Name</label>
+          <div className="flex mb-3">
+            <input
+              className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+              value={planter}
+              onChange={(e) => setPlanter(e.target.value)} // Update the state directly
+            />
+            <button
+              className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+              onClick={() => handleFilterPlanterName(planter)}
+            >
+              Search
+            </button>
+          </div>
+        </div>
+        <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
+          <label>Coordinator Name</label>
+          <div className="flex mb-3">
+            <input
+              className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+              value={coordinator}
+              onChange={(e) => setCoordinator(e.target.value)} // Update the state directly
+            />
+            <button
+              className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+              onClick={() => handleFilterCoordName(coordinator)}
+            >
+              Search
+            </button>
+          </div>
         </div>
       </div>
-      <div className="flex flex-col w-full">
-        <label>Tree No</label>
-        <div className="flex mb-3">
-          <input
-            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
-            value={treeno}
-            onChange={(e) => setTreeNo(e.target.value)}
-            type="number"
-          />
-          <button
-            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-            onClick={() => handleFilterTreeNo(treeno)}
-          >
-            Search
-          </button>
-        </div>
-      </div>
-      <div className="flex flex-col w-full">
-        <label>Uploader Name</label>
-        <div className="flex mb-3">
-          <input
-            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
-            value={uploader}
-            onChange={(e) => setUploader(e.target.value)} // Update the state directly
-          />
-          <button
-            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-            onClick={() => handleFilterUpName(uploader)}
-          >
-            Search
-          </button>
-        </div>
-      </div>
-      <div className="flex flex-col w-full">
-        <label>Planter Name</label>
-        <div className="flex mb-3">
-          <input
-            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
-            value={planter}
-            onChange={(e) => setPlanter(e.target.value)} // Update the state directly
-          />
-          <button
-            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-            onClick={() => handleFilterPlanterName(planter)}
-          >
-            Search
-          </button>
-        </div>
-      </div>
-      
-      <div className="flex flex-col w-full md:col-span-2  justify-start md:justify-center md:items-center">
-        <label>Coordinator Name</label>
-        <div className="flex mb-3">
-          <input
-            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
-            value={coordinator}
-            onChange={(e) => setCoordinator(e.target.value)} // Update the state directly
-          />
-          <button
-            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-            onClick={() => handleFilterCoordName(coordinator)}
-          >
-            Search
-          </button>
-        </div>
-      </div>
-    </div>
       {/* country section  */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
   {/* Country Field */}

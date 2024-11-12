@@ -16,6 +16,7 @@ const links = [
   { name: "Manage Coordinators", href: "/admin/coordinators" },
   { name: "Manage Group", href: "/admin/group" },
   { name: "Manage Activity", href: "/admin/activity" },
+  { name: "Manage Activity Category", href: "/admin/activity-category" },
   { name: "Manage Challenges", href: "/admin/challenges" },
   { name: "Manage Contact us form", href: "/admin/contact-us-form" },
   { name: "Manage Corporations", href: "/admin/corporation" },
@@ -28,6 +29,8 @@ const links = [
   { name: "Manage Malayalam Mission Chapter", href: "/admin/mmchapter" },
   { name: "Manage Malayalam Mission Zone", href: "/admin/mmzone" },
   { name: "Manage News and Events", href: "/admin/news-and-events" },
+  { name: "Manage Ads", href: "/admin/ads" },
+  { name: "Manage Clubs", href: "/admin/clubs" }
 ];
 
 function NavLinks() {

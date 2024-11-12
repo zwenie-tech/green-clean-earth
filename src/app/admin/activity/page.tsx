@@ -1144,58 +1144,58 @@ const AdminGrid = () => {
       >
         Export To Excel
       </button>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 justify-center">
-  <div className="flex flex-col w-full">
-    <label className="mb-2 text-sm font-semibold">Activity Id</label>
-    <div className="flex mb-3 items-center">
-      <input
-        className="flex-1 border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700"
-        value={actid}
-        onChange={(e) => setActid(e.target.value)}
-      />
-      <button
-        className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-        onClick={() => handleFilterId(actid)}
-      >
-        Search
-      </button>
-    </div>
-  </div>
+      <div className="flex flex-wrap gap-4 justify-start">
+        <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
+          <label className="mb-2 text-sm font-semibold">Activity Id</label>
+          <div className="flex mb-3 items-center">
+            <input
+              className="flex-1 border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700"
+              value={actid}
+              onChange={(e) => setActid(e.target.value)}
+            />
+            <button
+              className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+              onClick={() => handleFilterId(actid)}
+            >
+              Search
+            </button>
+          </div>
+        </div>
 
-  <div className="flex flex-col w-full">
-    <label className="mb-2 text-sm font-semibold">User Id</label>
-    <div className="flex mb-3 items-center">
-      <input
-        className="flex-1 border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700"
-        value={userid}
-        onChange={(e) => setUserId(e.target.value)}
-      />
-      <button
-        className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-        onClick={() => handleFilterUpId(userid)}
-      >
-        Search
-      </button>
-    </div>
-  </div>
+        <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
+          <label className="mb-2 text-sm font-semibold">User Id</label>
+          <div className="flex mb-3 items-center">
+            <input
+              className="flex-1 border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700"
+              value={userid}
+              onChange={(e) => setUserId(e.target.value)}
+            />
+            <button
+              className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+              onClick={() => handleFilterUpId(userid)}
+            >
+              Search
+            </button>
+          </div>
+        </div>
 
-  <div className="flex flex-col w-full md:col-span-2  justify-start md:justify-center md:items-center">
-    <label className="mb-2 text-sm font-semibold">Participant Name</label>
-    <div className="flex mb-3 items-center">
-      <input
-        className="flex-1 border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700"
-        value={partname}
-        onChange={(e) => setPartname(e.target.value)}
-      />
-      <button
-        className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-        onClick={() => handleFilterGrpName(partname)}
-      >
-        Search
-      </button>
-    </div>
-  </div>
-</div>
+        <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
+          <label className="mb-2 text-sm font-semibold">Participant Name</label>
+          <div className="flex mb-3 items-center">
+            <input
+              className="flex-1 border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700"
+              value={partname}
+              onChange={(e) => setPartname(e.target.value)}
+            />
+            <button
+              className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+              onClick={() => handleFilterGrpName(partname)}
+            >
+              Search
+            </button>
+          </div>
+        </div>
+      </div>
 
 
       {/* <div>

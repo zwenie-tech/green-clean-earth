@@ -1060,8 +1060,8 @@ const AdminGrid = () => {
       >
         Export To Excel
       </button>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 justify-center">
-        <div className="flex flex-col w-full">
+      <div className="flex flex-wrap gap-4 justify-center">
+        <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
         <label>Coordinator Id</label>
         <div className="flex mb-3">
           <input
@@ -1077,7 +1077,7 @@ const AdminGrid = () => {
           </button>
         </div>
       </div>
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
         <label>Coordinator Name</label>
         <div className="flex mb-3">
           <input
@@ -1093,7 +1093,7 @@ const AdminGrid = () => {
           </button>
         </div>
       </div>
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
         <label>Email</label>
         <div className="flex mb-3">
           <input
@@ -1109,8 +1109,7 @@ const AdminGrid = () => {
           </button>
         </div>
       </div>
-
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
         <label>Mobile</label>
         <div className="flex mb-3">
           <input
