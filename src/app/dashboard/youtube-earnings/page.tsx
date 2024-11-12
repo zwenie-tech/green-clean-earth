@@ -122,6 +122,7 @@ const DashboardActivity = () => {
                 <th className="py-3 px-6 text-left">Activist Id</th>
                 <th className="py-3 px-6 text-left">Name of participant</th>
                 <th className="py-3 px-6 text-left">Activity Link</th>
+                <th className="py-3 px-6 text-left">Earnings</th>
                 <th className="py-3 px-6 text-left rounded-tr-lg">Value</th>
               </tr>
             </thead>
@@ -145,6 +146,7 @@ const DashboardActivity = () => {
                     <td className="py-3 px-6 text-left"><a href={`/user-page?u=${activity.participant_name}&id=${activity.us_id}`}>{activity.us_id}</a></td>
                     <td className="py-3 px-6 text-left">{activity.participant_name}</td>
                     <td className="py-3 px-6 text-left"><a href={activity.activity_social_media_link}>{activity.activity_social_media_link}</a></td>
+                    <td className="py-3 px-6 text-left">{activity.earnings}</td>
                     <td className="py-3 px-6 text-left">{activity.activity_value}</td>
                   </tr>
                 ))

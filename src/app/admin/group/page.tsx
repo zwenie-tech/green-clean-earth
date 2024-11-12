@@ -100,6 +100,7 @@ const AdminGrid = () => {
   const [lsgd, setLsgd] = useState<Lsgd[]>([]);
   const [corporation, setCorporation] = useState<Corp[]>([]);
   const [grpname, setGrpname] = useState("");
+  const [hasEarning, setHasEarning] = useState(false);
   const [email, setEmail] = useState("");
   const [grpid, setGrpid] = useState("");
   const [mobile, setMobile] = useState("");
@@ -137,6 +138,7 @@ const AdminGrid = () => {
     { field: "gp_id", headerName: "Group Id" },
     { field: "gp_name", headerName: "Group name" },
     { field: "group_type", headerName: "Group type" },
+    { field: "earnings", headerName: "Earnings"},
     { field: "type_name", headerName: "School type" },
     { field: "gp_cat_name", headerName: "School category" },
     { field: "edu_district", headerName: "Edu district" },
@@ -172,23 +174,23 @@ const AdminGrid = () => {
     try {
       const response = await axios.post(`${apiURL}/admin/adminGroupList`, {
         "isExcel": true
-    },{
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    });
-      if (response.data.success && response.status!=203) {
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      if (response.data.success && response.status != 203) {
         // Convert response zoneList into Excel
         const datalist = response.data.groupList
-  
+
         // Create a worksheet from the zoneList data
         const worksheet = XLSX.utils.json_to_sheet(datalist);
-  
+
         // Create a new workbook and append the worksheet
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
-  
+
         // Export the workbook to Excel
         XLSX.writeFile(workbook, 'data.xlsx');
       } else {
@@ -202,17 +204,17 @@ const AdminGrid = () => {
     async function fetchdata() {
       if (token) {
 
-        
+
         const response = await axios.post(`${apiURL}/admin/adminGroupList?page=${currentPage}&limit=${itemsPerPage}`, {}, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         })
-        
-        if (response.data.success && response.status!=203) {
+
+        if (response.data.success && response.status != 203) {
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
-         
+
           setRowData(response.data.groupList);
         }
       }
@@ -274,7 +276,7 @@ const AdminGrid = () => {
     async function fetchData() {
       const categoryResponse = await fetch(`${apiURL}/category`);
       const categoryData = await categoryResponse.json();
-      
+
       setCategory(categoryData.category);
     }
     fetchData();
@@ -308,6 +310,33 @@ const AdminGrid = () => {
     };
     fetchCategory();
   }, []);
+  useEffect(() => {
+    const fetchCategory = async () => {
+      if (token && hasEarning) {
+        const response = await axios.post(
+          `${apiURL}/admin/adminGroupList`,
+          { hasEarnings: hasEarning },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        try {
+          if (response.data.success && response.status !== 203) {
+            setTotalPages(Math.ceil(response.data.groupList.length / itemsPerPage));
+            setRowData(response.data.groupList);
+          } else {
+            setRowData([]);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+    };
+    fetchCategory();
+  }, [hasEarning, token]);
   useEffect(() => {
     const handleCbse = async () => {
       if (selectedschoolType === 'CBSE' && selectedStateGrp) {
@@ -380,7 +409,7 @@ const AdminGrid = () => {
   }
 
   const handleFilterGrpName = (e: any) => {
-    
+
     if (e != "") {
       fetchFilteredGrpName(e);
       setCurrentPage(1); // Reset to first page
@@ -388,7 +417,7 @@ const AdminGrid = () => {
   };
 
   const handleFilterEmail = (e: any) => {
-    
+
     if (e != "") {
 
       fetchFilteredEmail(e);
@@ -396,7 +425,7 @@ const AdminGrid = () => {
     }
   };
   const handleFilterId = (e: any) => {
-    
+
     if (e != "") {
 
       fetchFilteredId(e);
@@ -404,7 +433,7 @@ const AdminGrid = () => {
     }
   };
   const handleFilterMobile = (e: any) => {
-    
+
     if (e != "") {
 
       fetchFilteredMobile(e);
@@ -416,7 +445,7 @@ const AdminGrid = () => {
     if (token) {
       const response = await axios.post(
         `${apiURL}/admin/adminGroupList`,
-        {groupName:value},
+        { groupName: value },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -426,8 +455,8 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-         
-          
+
+
 
 
           setTotalPages(Math.ceil(response.data.groupList.length / itemsPerPage));
@@ -455,13 +484,13 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-         
-          
+
+
 
           const filteredData = response.data.groupList.filter(
             (item: { co_email_id: string; }) => item.co_email_id === value
           );
-          
+
 
           setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
           setRowData(filteredData);
@@ -478,7 +507,7 @@ const AdminGrid = () => {
     if (token) {
       const response = await axios.post(
         `${apiURL}/admin/adminGroupList`,
-        {groupId:parseInt(value)},
+        { groupId: parseInt(value) },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -488,7 +517,7 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-         
+
           setTotalPages(Math.ceil(response.data.groupList.length / itemsPerPage));
           setRowData(response.data.groupList);
         } else {
@@ -514,13 +543,13 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-         
-          
+
+
 
           const filteredData = response.data.groupList.filter(
             (item: { co_ord_contact: string; }) => item.co_ord_contact == value
           );
-          
+
 
           setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
           setRowData(filteredData);
@@ -534,47 +563,47 @@ const AdminGrid = () => {
   };
 
   const handleFilterChangeCntry = (e: any) => {
-    
-    
+
+
     setSelectedCntry(e.target.value); // Update dropdown value
     fetchFilteredCntry(e.target.value);
     setCurrentPage(1); // Reset to first page
   };
 
   const handleFilterChangeState = (e: any) => {
-    
-    
+
+
     setSelectedState(e.target.value); // Update dropdown value
     fetchFilteredState(e.target.value);
     setCurrentPage(1); // Reset to first page
   };
 
   const handleFilterChangeDistrict = (e: any) => {
-    
-    
+
+
     setSelectedDistrict(e.target.value); // Update dropdown value
     fetchFilteredDistrict(e.target.value);
     setCurrentPage(1); // Reset to first page
   };
 
   const handleFilterChangeCorp = (e: any) => {
-    
-    
+
+
     setSelectedCorp(e.target.value); // Update dropdown value
     fetchFilteredCorp(e.target.value);
     setCurrentPage(1); // Reset to first page
   };
 
   const handleFilterChangeLsgd = (e: any) => {
-    
-    
+
+
     setSelectedLsgd(e.target.value); // Update dropdown value
     fetchFilteredLsgd(e.target.value);
     setCurrentPage(1); // Reset to first page
   };
   const handleFilterChangeWard = (e: any) => {
-    
-    
+
+
     setSelectedWard(e); // Update dropdown value
     fetchFilteredWard(e);
     setCurrentPage(1); // Reset to first page
@@ -586,7 +615,7 @@ const AdminGrid = () => {
     if (token) {
       const response = await axios.post(
         `${apiURL}/admin/adminGroupList`,
-        {countryId:countries.find((item) => item.cntry_name === value)?.cntry_id},
+        { countryId: countries.find((item) => item.cntry_name === value)?.cntry_id },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -596,9 +625,9 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-        
-          
-        
+
+
+
 
           setTotalPages(Math.ceil(response.data.groupList.length / itemsPerPage));
           setRowData(response.data.groupList);
@@ -615,7 +644,7 @@ const AdminGrid = () => {
     if (token) {
       const response = await axios.post(
         `${apiURL}/admin/adminGroupList`,
-        {stateId:states.find((item) => item.st_name === value)?.st_id},
+        { stateId: states.find((item) => item.st_name === value)?.st_id },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -625,9 +654,9 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-         
-          
-        
+
+
+
 
           setTotalPages(Math.ceil(response.data.groupList.length / itemsPerPage));
           setRowData(response.data.groupList);
@@ -644,7 +673,7 @@ const AdminGrid = () => {
     if (token) {
       const response = await axios.post(
         `${apiURL}/admin/adminGroupList`,
-        {districtId:districts.find((item) => item.dis_name === value)?.dis_id},
+        { districtId: districts.find((item) => item.dis_name === value)?.dis_id },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -654,8 +683,8 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          
-         
+
+
 
           setTotalPages(Math.ceil(response.data.groupList.length / itemsPerPage));
           setRowData(response.data.groupList);
@@ -671,7 +700,7 @@ const AdminGrid = () => {
     if (token) {
       const response = await axios.post(
         `${apiURL}/admin/adminGroupList`,
-        {corporationId:corporation.find((item) => item.cop_name === value)?.cop_id},
+        { corporationId: corporation.find((item) => item.cop_name === value)?.cop_id },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -681,9 +710,9 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          
-          
-        
+
+
+
 
           setTotalPages(Math.ceil(response.data.groupList.length / itemsPerPage));
           setRowData(response.data.groupList);
@@ -699,7 +728,7 @@ const AdminGrid = () => {
     if (token) {
       const response = await axios.post(
         `${apiURL}/admin/adminGroupList`,
-        {lsgdId:lsgd.find((item) => item.lsg_name === value)?.lsg_id},
+        { lsgdId: lsgd.find((item) => item.lsg_name === value)?.lsg_id },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -709,9 +738,9 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-        
-         
-       
+
+
+
 
           setTotalPages(Math.ceil(response.data.groupList.length / itemsPerPage));
           setRowData(response.data.groupList);
@@ -727,7 +756,7 @@ const AdminGrid = () => {
     if (token) {
       const response = await axios.post(
         `${apiURL}/admin/adminGroupList`,
-        {wardNo:parseInt(value)},
+        { wardNo: parseInt(value) },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -737,8 +766,8 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-         
-          
+
+
 
           setTotalPages(Math.ceil(response.data.groupList.length / itemsPerPage));
           setRowData(response.data.groupList);
@@ -751,12 +780,12 @@ const AdminGrid = () => {
     }
   };
 
-  
 
-  
+
+
 
   const handleFilterGrpType = (e: any) => {
-    
+
     if (e != "") {
       setGroupType(e.target.value);
       fetchFilteredGrpType(e.target.value);
@@ -768,7 +797,7 @@ const AdminGrid = () => {
     if (token) {
       const response = await axios.post(
         `${apiURL}/admin/adminGroupList`,
-        {groupTypeId:category.find((item) => item.group_type === value)?.id},
+        { groupTypeId: category.find((item) => item.group_type === value)?.id },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -778,7 +807,7 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          
+
 
           setTotalPages(Math.ceil(response.data.groupList.length / itemsPerPage));
           setRowData(response.data.groupList);
@@ -792,7 +821,7 @@ const AdminGrid = () => {
   };
 
   const handleFilterSchoolType = (e: any) => {
-    
+
     if (e.target.value != "") {
       setSelectedSchoolType(e.target.value);
       e.target.value === 'CBSE' ? setSelectedCountryGrp('India') : ''
@@ -807,7 +836,7 @@ const AdminGrid = () => {
     if (token) {
       const response = await axios.post(
         `${apiURL}/admin/adminGroupList`,
-        {schoolTypeId:schoolType.find((item) => item.type_name === value)?.id},
+        { schoolTypeId: schoolType.find((item) => item.type_name === value)?.id },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -817,7 +846,7 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          
+
 
           setTotalPages(Math.ceil(response.data.groupList.length / itemsPerPage));
           setRowData(response.data.groupList);
@@ -831,7 +860,7 @@ const AdminGrid = () => {
   };
 
   const handleFilterSchoolCategory = (e: any) => {
-    
+
     if (e.target.value != "") {
       setSelectedSubCategory(e.target.value);
       fetchFilteredSchoolCategory(e.target.value);
@@ -843,7 +872,7 @@ const AdminGrid = () => {
     if (token) {
       const response = await axios.post(
         `${apiURL}/admin/adminGroupList`,
-        {subCategoryId:subcategoryOptions.find((item) => item.gp_cat_name === value)?.gp_cat_id},
+        { subCategoryId: subcategoryOptions.find((item) => item.gp_cat_name === value)?.gp_cat_id },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -853,7 +882,7 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          
+
 
           setTotalPages(Math.ceil(response.data.groupList.length / itemsPerPage));
           setRowData(response.data.groupList);
@@ -867,7 +896,7 @@ const AdminGrid = () => {
   };
 
   const handleFilterSahodayaState = (e: any) => {
-    
+
     if (e.target.value != "") {
       setSelectedStateGrp(e.target.value);
       setCurrentPage(1); // Reset to first page
@@ -875,7 +904,7 @@ const AdminGrid = () => {
   };
 
   const handleFilterSahodaya = (e: any) => {
-    
+
     if (e.target.value != "") {
       setSelectSahodaya(e.target.value);
       fetchFilteredSahodaya(e.target.value);
@@ -887,7 +916,7 @@ const AdminGrid = () => {
     if (token) {
       const response = await axios.post(
         `${apiURL}/admin/adminGroupList`,
-        {sahodayaId:sahodaya.find((item) => item.sahodaya_name === value)?.sahodaya_id},
+        { sahodayaId: sahodaya.find((item) => item.sahodaya_name === value)?.sahodaya_id },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -897,7 +926,7 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          
+
 
           setTotalPages(Math.ceil(response.data.groupList.length / itemsPerPage));
           setRowData(response.data.groupList);
@@ -912,7 +941,7 @@ const AdminGrid = () => {
 
 
   const handleFilterEDistrict = (e: any) => {
-    
+
     if (e.target.value != "") {
       setSelectedDistrictGrp(e.target.value);
       // fetchFilteredSahodaya(e.target.value);
@@ -921,7 +950,7 @@ const AdminGrid = () => {
   };
 
   const handleFilterEduDistrict = (e: any) => {
-    
+
     if (e.target.value != "") {
       setSelecteduDistrict(e.target.value);
       handleEduDistrict(e.target.value);
@@ -930,7 +959,7 @@ const AdminGrid = () => {
   };
 
   const handleFilterEduSubDistrict = (e: any) => {
-    
+
     if (e.target.value != "") {
       setSelecteduSubDistrict(e.target.value);
       fetchFilteredEduSubDistrict(e.target.value);
@@ -942,7 +971,7 @@ const AdminGrid = () => {
     if (token) {
       const response = await axios.post(
         `${apiURL}/admin/adminGroupList`,
-        {eduSubDistrictId:eduSubDistrict.find((item) => item.edu_sub_district_name === value)?.edu_sub_district_id},
+        { eduSubDistrictId: eduSubDistrict.find((item) => item.edu_sub_district_name === value)?.edu_sub_district_id },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -952,7 +981,7 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          
+
 
           setTotalPages(Math.ceil(response.data.groupList.length / itemsPerPage));
           setRowData(response.data.groupList);
@@ -967,7 +996,7 @@ const AdminGrid = () => {
 
 
   const handleFilterIcdsBlock = (e: any) => {
-    
+
     if (e.target.value != "") {
       setSelectIcdsBlock(e.target.value);
       handleIcds(e.target.value);
@@ -976,7 +1005,7 @@ const AdminGrid = () => {
   };
 
   const handleFilterIcdsProject = (e: any) => {
-    
+
     if (e.target.value != "") {
       setSelectIcdsProject(e.target.value);
       fetchFilteredIcdsProject(e.target.value);
@@ -988,7 +1017,7 @@ const AdminGrid = () => {
     if (token) {
       const response = await axios.post(
         `${apiURL}/admin/adminGroupList`,
-        {projectId:icdsProject.find((item) => item.project_name === value)?.project_id},
+        { projectId: icdsProject.find((item) => item.project_name === value)?.project_id },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -998,7 +1027,7 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-        
+
 
           setTotalPages(Math.ceil(response.data.groupList.length / itemsPerPage));
           setRowData(response.data.groupList);
@@ -1012,7 +1041,7 @@ const AdminGrid = () => {
   };
 
   const handleFilterMissionArea = (e: any) => {
-    
+
     if (e.target.value != "") {
       setSelectMissionarea(e.target.value);
       setCurrentPage(1); // Reset to first page
@@ -1020,7 +1049,7 @@ const AdminGrid = () => {
   };
 
   const handleFilterMissionChapter = (e: any) => {
-    
+
     if (e.target.value != "") {
       setSelectedMission(e.target.value);
       handleChapter(e.target.value);
@@ -1029,7 +1058,7 @@ const AdminGrid = () => {
   };
 
   const handleFilterMissionZone = (e: any) => {
-    
+
     if (e.target.value != "") {
       setSelectedZone(e.target.value);
       fetchFilteredMissionZone(e.target.value);
@@ -1041,7 +1070,7 @@ const AdminGrid = () => {
     if (token) {
       const response = await axios.post(
         `${apiURL}/admin/adminGroupList`,
-        {zoneId:missionZone.find((item) => item.zone_name === value)?.zone_id},
+        { zoneId: missionZone.find((item) => item.zone_name === value)?.zone_id },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -1051,7 +1080,7 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          
+
 
           setTotalPages(Math.ceil(response.data.groupList.length / itemsPerPage));
           setRowData(response.data.groupList);
@@ -1273,50 +1302,50 @@ const AdminGrid = () => {
 
         </select>
       </div>
-      { grouptype === 'School' && (
+      {grouptype === 'School' && (
         <>
-      <div className="flex items-center mb-3 space-x-2">
-        <label htmlFor="groupFilter" className="text-sm font-medium">
-          School Type:
-        </label>
-        <select
-          id="groupFilter"
-          value={selectedschoolType}
-          onChange={handleFilterSchoolType}
-          className="border border-gray-300 rounded p-1"
-        >
-          <option value="">Choose School Type</option>
+          <div className="flex items-center mb-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              School Type:
+            </label>
+            <select
+              id="groupFilter"
+              value={selectedschoolType}
+              onChange={handleFilterSchoolType}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose School Type</option>
 
-          {schoolType.map((s) => (
-            <option key={s.id} value={s.type_name}>
-              {s.type_name}
-            </option>
-          ))}
+              {schoolType.map((s) => (
+                <option key={s.id} value={s.type_name}>
+                  {s.type_name}
+                </option>
+              ))}
 
-        </select>
-      </div>
+            </select>
+          </div>
 
-      <div className="flex items-center mb-3 space-x-2">
-        <label htmlFor="groupFilter" className="text-sm font-medium">
-          School Category:
-        </label>
-        <select
-          id="groupFilter"
-          value={selectedSubCategory}
-          onChange={handleFilterSchoolCategory}
-          className="border border-gray-300 rounded p-1"
-        >
-          <option value="">Choose School Category</option>
+          <div className="flex items-center mb-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              School Category:
+            </label>
+            <select
+              id="groupFilter"
+              value={selectedSubCategory}
+              onChange={handleFilterSchoolCategory}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose School Category</option>
 
-          {subcategoryOptions.map((category) => (
-            <option key={category.gp_cat_id} value={category.gp_cat_name}>
-              {category.gp_cat_name}
-            </option>
-          ))}
+              {subcategoryOptions.map((category) => (
+                <option key={category.gp_cat_id} value={category.gp_cat_name}>
+                  {category.gp_cat_name}
+                </option>
+              ))}
 
-        </select>
-      </div>
-      </>)}
+            </select>
+          </div>
+        </>)}
       {/* CBSE  */}
       {selectedschoolType === 'CBSE' && selectedSubCategory !== 'College' && grouptype === 'School' && (
         <>
@@ -1498,67 +1527,67 @@ const AdminGrid = () => {
       {/* MALAYALAM MISSION  */}
       {selectedSubCategory !== 'College' && selectedschoolType === 'Malayalam Mission' && grouptype === 'School' && (
         <>
-      <div className="flex items-center mb-3 space-x-2">
-        <label htmlFor="groupFilter" className="text-sm font-medium">
-          Mission Area :
-        </label>
-        <select
-          id="groupFilter"
-          value={selectMissionarea}
-          onChange={handleFilterMissionArea}
-          className="border border-gray-300 rounded p-1"
-        >
-          <option value="">Choose Mission Area</option>
+          <div className="flex items-center mb-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              Mission Area :
+            </label>
+            <select
+              id="groupFilter"
+              value={selectMissionarea}
+              onChange={handleFilterMissionArea}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose Mission Area</option>
 
-          <option key='1' value="1">
-            Global
-          </option>
-          <option key='2' value="2">
-            India
-          </option>
-        </select>
-      </div>
+              <option key='1' value="1">
+                Global
+              </option>
+              <option key='2' value="2">
+                India
+              </option>
+            </select>
+          </div>
 
-      <div className="flex items-center mb-3 space-x-2">
-        <label htmlFor="groupFilter" className="text-sm font-medium">
-          Mission Chapter :
-        </label>
-        <select
-          id="groupFilter"
-          value={selectMission}
-          onChange={handleFilterMissionChapter}
-          className="border border-gray-300 rounded p-1"
-        >
-          <option value="">Choose Mission Chapter</option>
+          <div className="flex items-center mb-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              Mission Chapter :
+            </label>
+            <select
+              id="groupFilter"
+              value={selectMission}
+              onChange={handleFilterMissionChapter}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose Mission Chapter</option>
 
-          {missionChapter && missionChapter.map((e) => (
-            <option key={e.chapter_id} value={e.chapter_name}>
-              {e.chapter_name}
-            </option>
-          ))}
-        </select>
-      </div>
+              {missionChapter && missionChapter.map((e) => (
+                <option key={e.chapter_id} value={e.chapter_name}>
+                  {e.chapter_name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-      <div className="flex items-center mb-3 space-x-2">
-        <label htmlFor="groupFilter" className="text-sm font-medium">
-          Mission Zone :
-        </label>
-        <select
-          id="groupFilter"
-          value={selectZone}
-          onChange={handleFilterMissionZone}
-          className="border border-gray-300 rounded p-1"
-        >
-          <option value="">Choose Mission Zone</option>
+          <div className="flex items-center mb-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              Mission Zone :
+            </label>
+            <select
+              id="groupFilter"
+              value={selectZone}
+              onChange={handleFilterMissionZone}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose Mission Zone</option>
 
-          {missionZone && missionZone.map((e) => (
-            <option key={e.zone_id} value={e.zone_name}>
-              {e.zone_name}
-            </option>
-          ))}
-        </select>
-      </div>
-      </>)}
+              {missionZone && missionZone.map((e) => (
+                <option key={e.zone_id} value={e.zone_name}>
+                  {e.zone_name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </>)}
       <div className={"ag-theme-quartz"} style={{ height: 600 }}>
         <AgGridReact
           rowData={rowData}
@@ -1568,8 +1597,8 @@ const AdminGrid = () => {
           rowSelection="multiple"
           suppressRowClickSelection={true}
           pagination={false}
-          // paginationPageSize={10}
-          // paginationPageSizeSelector={[10, 25, 50]}
+        // paginationPageSize={10}
+        // paginationPageSizeSelector={[10, 25, 50]}
         />
       </div>
       <div className="flex justify-center items-center space-x-2 my-4">
@@ -1585,7 +1614,7 @@ const AdminGrid = () => {
         </button>
         {currentPage >= 4 && totalPages > 3 && <span className="text-xl text-gray-600">...</span>}
 
-        {Array.from({ length: totalPages >= 3 ? 3 : totalPages }, (_, index) => currentPage < 4 ? index+1:currentPage+index-2).map((page) => (
+        {Array.from({ length: totalPages >= 3 ? 3 : totalPages }, (_, index) => currentPage < 4 ? index + 1 : currentPage + index - 2).map((page) => (
           <span
             key={page}
             className={`text-xl cursor-pointer text-gray-600 ${page === currentPage ? 'font-bold' : 'underline'}`}
@@ -1595,8 +1624,8 @@ const AdminGrid = () => {
           </span>
         ))}
 
-        {currentPage > 1 && totalPages > 3 && currentPage!=totalPages && <span className="text-xl text-gray-600">...</span>}
-        {currentPage === 1 && totalPages > 3 && currentPage!=totalPages && <span className="text-xl text-gray-600">...</span>}
+        {currentPage > 1 && totalPages > 3 && currentPage != totalPages && <span className="text-xl text-gray-600">...</span>}
+        {currentPage === 1 && totalPages > 3 && currentPage != totalPages && <span className="text-xl text-gray-600">...</span>}
 
 
         <button

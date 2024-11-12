@@ -20,6 +20,7 @@ interface TableProps {
     login_id: number;
     participant_name: string;
     personal_activity_id: number;
+    earnings: number;
   }>;
 }
 
@@ -136,6 +137,7 @@ const handleEdit = async ()=>{
                     {d.activity_views} Views, {d.activity_likes} Likes <p className="text-green-600 underline">Edit</p>
                   </td>
                   <td className="border border-black">{d.activity_value}</td>
+                  <td className="border border-black">{d.earnings}</td>
                 </tr>
               ))}
             </tbody>

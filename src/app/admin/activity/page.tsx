@@ -100,6 +100,7 @@ const AdminGrid = () => {
   const [lsgd, setLsgd] = useState<Lsgd[]>([]);
   const [corporation, setCorporation] = useState<Corp[]>([]);
   const [partname, setPartname] = useState("");
+  const [hasEarning, setHasEarning] = useState(false);
   const [email, setEmail] = useState("");
   const [actid, setActid] = useState("");
   const [userid, setUserId] = useState("");
@@ -150,6 +151,7 @@ const AdminGrid = () => {
     { field: "activity_views", headerName: "View" },
     { field: "activity_likes", headerName: "Like" },
     { field: "activity_value", headerName: "Value" },
+    { field: "earnings", headerName: "Earnings"},
     { field: "gp_name", headerName: "Group Name" },
     { field: "group_type", headerName: "Category" },
     { field: "activity_sub_category", headerName: "School Type" },
@@ -226,6 +228,33 @@ const AdminGrid = () => {
     fetchdata();
   }, [currentPage, token]);
 
+  useEffect(() => {
+    const fetchCategory = async () => {
+      if (token && hasEarning) {
+        const response = await axios.post(
+          `${apiURL}/admin/adminActivityList`,
+          { hasEarnings: hasEarning },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        try {
+          if (response.data.success && response.status !== 203) {
+            setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+            setRowData(response.data.userList);
+          } else {
+            setRowData([]);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+    };
+    fetchCategory();
+  }, [hasEarning, token]);
 
   useEffect(() => {
     async function fetchData() {

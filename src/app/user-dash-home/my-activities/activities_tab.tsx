@@ -16,6 +16,7 @@ const headings = [
   "Item Name",
   "Views, Likes, Comments, and Shares",
   "Value",
+  "Earnings"
 ];
 
 export default function ActivitiesTab({ token }: any) {
