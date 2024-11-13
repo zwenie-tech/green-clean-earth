@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import NavigationBar from '@/components/navigationBar';
 import Footer from '@/components/footer';
-import Image from 'next/image';
 import { apiURL } from '../requestsapi/request';
 
 interface District {
