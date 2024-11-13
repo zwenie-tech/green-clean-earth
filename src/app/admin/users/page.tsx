@@ -1276,8 +1276,7 @@ const AdminGrid = () => {
       >
         Export To Excel
       </button>
-      <div className="flex flex-wrap gap-4 justify-center">
-      <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
+      <div>
         <label>User Id</label>
         <div className="flex mb-3">
           <input
@@ -1293,7 +1292,7 @@ const AdminGrid = () => {
           </button>
         </div>
       </div>
-      <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
+      <div>
         <label>Coordinator Name</label>
         <div className="flex mb-3">
           <input
@@ -1309,7 +1308,7 @@ const AdminGrid = () => {
           </button>
         </div>
       </div>
-      <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
+      <div>
         <label>Email</label>
         <div className="flex mb-3">
           <input
@@ -1326,7 +1325,7 @@ const AdminGrid = () => {
         </div>
       </div>
 
-      <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
+      <div>
         <label>Mobile</label>
         <div className="flex mb-3">
           <input
@@ -1342,137 +1341,457 @@ const AdminGrid = () => {
           </button>
         </div>
       </div>
-    </div>
+
       {/* country section  */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-  {/* Country Field */}
-  <div className="flex flex-col mb-3">
-    <label htmlFor="countryFilter" className="text-sm font-medium">
-      Country:
-    </label>
-    <select
-      id="countryFilter"
-      value={selectedCntry}
-      onChange={handleFilterChangeCntry}
-      className="border border-gray-300 rounded p-1 w-full"
-    >
-      <option value="">Choose Country</option>
-      {countries.map((country) => (
-        <option key={country.cntry_id} value={country.cntry_name}>
-          {country.cntry_name}
-        </option>
-      ))}
-    </select>
-  </div>
-
-  {/* State Field (Visible if selected country is India) */}
-  {selectedCntry === "India" && (
-    <div className="flex flex-col mb-3">
-      <label htmlFor="stateFilter" className="text-sm font-medium">
-        State:
-      </label>
-      <select
-        id="stateFilter"
-        value={selectedState}
-        onChange={handleFilterChangeState}
-        className="border border-gray-300 rounded p-1 w-full"
-      >
-        <option value="">Choose State</option>
-        {states.map((state) => (
-          <option key={state.st_id} value={state.st_name}>
-            {state.st_name}
-          </option>
-        ))}
-      </select>
-    </div>
-  )}
-
-  {/* District Field (Visible if selected state is Kerala) */}
-  {selectedState === "Kerala" && (
-    <div className="flex flex-col mb-3">
-      <label htmlFor="districtFilter" className="text-sm font-medium">
-        District:
-      </label>
-      <select
-        id="districtFilter"
-        value={selectedDistrict}
-        onChange={handleFilterChangeDistrict}
-        className="border border-gray-300 rounded p-1 w-full"
-      >
-        <option value="">Choose District</option>
-        {districts.map((district) => (
-          <option key={district.dis_id} value={district.dis_name}>
-            {district.dis_name}
-          </option>
-        ))}
-      </select>
-    </div>
-  )}
-
-  {/* Corporation Field (Visible if a district is selected) */}
-  {selectedDistrict && (
-    <div className="flex flex-col mb-3">
-      <label htmlFor="corpFilter" className="text-sm font-medium">
-        Corporation:
-      </label>
-      <select
-        id="corpFilter"
-        value={selectedCorp}
-        onChange={handleFilterChangeCorp}
-        className="border border-gray-300 rounded p-1 w-full"
-      >
-        <option value="">Choose Corporation</option>
-        {corporation.map((corp) => (
-          <option key={corp.cop_id} value={corp.cop_name}>
-            {corp.cop_name}
-          </option>
-        ))}
-      </select>
-    </div>
-  )}
-
-  {/* Lsgd Field (Visible if a corporation is selected) */}
-  {selectedDistrict && (
-    <div className="flex flex-col mb-3">
-      <label htmlFor="lsgdFilter" className="text-sm font-medium">
-        Lsgd:
-      </label>
-      <select
-        id="lsgdFilter"
-        value={selectedLsgd}
-        onChange={handleFilterChangeLsgd}
-        className="border border-gray-300 rounded p-1 w-full"
-      >
-        <option value="">Choose Lsgd</option>
-        {lsgd && lsgd.map((lsg) => (
-          <option key={lsg.lsg_id} value={lsg.lsg_name}>
-            {lsg.lsg_name}
-          </option>
-        ))}
-      </select>
-    </div>
-  )}
-
-  {/* Ward Field (Visible if an Lsgd is selected) */}
-  {selectedDistrict && (
-    <div className="flex flex-col mb-3">
-      <label className="text-sm font-medium">Ward No</label>
-      <div className="flex space-x-2">
-        <input
-          className="border px-2 h-10 text-sm border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 w-full"
-          value={selectedWard}
-          onChange={(e) => setSelectedWard(e.target.value)}
-        />
-        <button
-          className="text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-          onClick={() => handleFilterChangeWard(selectedWard)}
+      <div className="flex items-center mb-3 space-x-2">
+        <label htmlFor="groupFilter" className="text-sm font-medium">
+          Country:
+        </label>
+        <select
+          id="groupFilter"
+          value={selectedCntry}
+          onChange={handleFilterChangeCntry}
+          className="border border-gray-300 rounded p-1"
         >
-          Search
-        </button>
+          <option value="">Choose Country</option>
+          {countries.map((country) => (
+            <option key={country.cntry_id} value={country.cntry_name}>
+              {country.cntry_name}
+            </option>
+          ))}
+        </select>
       </div>
-    </div>
-  )}
-</div>
+
+      {selectedCntry == "India" ?
+        <>
+          <div className="flex items-center mb-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              State:
+            </label>
+            <select
+              id="groupFilter"
+              value={selectedState}
+              onChange={handleFilterChangeState}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose State</option>
+              {states.map((state) => (
+                <option key={state.st_id} value={state.st_name}>
+                  {state.st_name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {selectedState == "Kerala" ?
+            <>
+              <div className="flex items-center mb-3 space-x-2">
+                <label htmlFor="groupFilter" className="text-sm font-medium">
+                  District:
+                </label>
+                <select
+                  id="groupFilter"
+                  value={selectedDistrict}
+                  onChange={handleFilterChangeDistrict}
+                  className="border border-gray-300 rounded p-1"
+                >
+                  <option value="">Choose District</option>
+                  {districts.map((district) => (
+                    <option key={district.dis_id} value={district.dis_name}>
+                      {district.dis_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {selectedDistrict != "" ?
+                <>
+                  <div className="flex items-center mb-3 space-x-2">
+                    <label htmlFor="groupFilter" className="text-sm font-medium">
+                      Corporation:
+                    </label>
+                    <select
+                      id="groupFilter"
+                      value={selectedCorp}
+                      onChange={handleFilterChangeCorp}
+                      className="border border-gray-300 rounded p-1"
+                    >
+                      <option value="">Choose Corporation</option>
+                      {corporation.map((corp) => (
+                        <option key={corp.cop_id} value={corp.cop_name}>
+                          {corp.cop_name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {selectedDistrict != "" ?
+
+                    <><div className="flex items-center mb-3 space-x-2">
+                      <label htmlFor="groupFilter" className="text-sm font-medium">
+                        Lsgd:
+                      </label>
+                      <select
+                        id="groupFilter"
+                        value={selectedLsgd}
+                        onChange={handleFilterChangeLsgd}
+                        className="border border-gray-300 rounded p-1"
+                      >
+                        <option value="">Choose Lsgd</option>
+                        {lsgd && lsgd.map((lsg) => (
+                          <option key={lsg.lsg_id} value={lsg.lsg_name}>
+                            {lsg.lsg_name}
+                          </option>
+                        ))}
+                      </select>
+                    </div><div>
+                        <label>Ward No</label>
+                        <div className="flex mb-3">
+                          <input
+                            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+                            value={selectedWard}
+                            onChange={(e) => setSelectedWard(e.target.value)} // Update the state directly
+                          />
+                          <button
+                            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+                            onClick={() => handleFilterChangeWard(selectedWard)}
+                          >
+                            Search
+                          </button>
+                        </div>
+                      </div></>
+                    : ''}
+                </> : ''}
+            </> : ''}
+        </> : ''}
+
+      <div className="flex items-center mb-3 space-x-2">
+        <label htmlFor="groupFilter" className="text-sm font-medium">
+          Group Type:
+        </label>
+        <select
+          id="groupFilter"
+          value={grouptype}
+          onChange={handleFilterGrpType}
+          className="border border-gray-300 rounded p-1"
+        >
+          <option value="">Choose Group Type</option>
+
+          {category.map((c, i) => (
+            <option key={c.id} value={c.group_type}>
+              {c.group_type}
+            </option>
+          ))}
+
+        </select>
+      </div>
+      {grouptype === 'School' && (
+        <>
+          <div className="flex items-center mb-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              School Type:
+            </label>
+            <select
+              id="groupFilter"
+              value={selectedschoolType}
+              onChange={handleFilterSchoolType}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose School Type</option>
+
+              {schoolType.map((s) => (
+                <option key={s.id} value={s.type_name}>
+                  {s.type_name}
+                </option>
+              ))}
+
+            </select>
+          </div>
+
+          <div className="flex items-center mb-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              School Category:
+            </label>
+            <select
+              id="groupFilter"
+              value={selectedSubCategory}
+              onChange={handleFilterSchoolCategory}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose School Category</option>
+
+              {subcategoryOptions.map((category) => (
+                <option key={category.gp_cat_id} value={category.gp_cat_name}>
+                  {category.gp_cat_name}
+                </option>
+              ))}
+
+            </select>
+          </div>
+        </>)}
+      {/* CBSE  */}
+      {selectedschoolType === 'CBSE' && selectedSubCategory !== 'College' && grouptype === 'School' && (
+        <>
+          <div className="flex items-center mb-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              Sahodaya State:
+            </label>
+            <select
+              id="groupFilter"
+              value={selectedStateGrp}
+              onChange={handleFilterSahodayaState}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose Sahodaya State</option>
+
+              {states.map((state) => (
+                <option key={state.st_id} value={state.st_name}>
+                  {state.st_name}
+                </option>
+              ))}
+
+            </select>
+          </div>
+          <div className="flex items-center mb-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              Sahodaya:
+            </label>
+            <select
+              id="groupFilter"
+              value={selectSahodaya}
+              onChange={handleFilterSahodaya}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose Sahodaya</option>
+
+              {sahodaya && sahodaya.map((s) => (
+                <option key={s.sahodaya_id} value={s.sahodaya_name}>
+                  {s.sahodaya_name}
+                </option>
+              ))}
+
+            </select>
+          </div>
+        </>)}
+      {/* GENERAL EDUCATION  */}
+      {(selectedschoolType === 'General Education' && selectedSubCategory !== 'College') && grouptype === 'School' && (
+        <>
+          <div className="flex items-center mb-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              District:
+            </label>
+            <select
+              id="groupFilter"
+              value={selectedDistrictGrp}
+              onChange={handleFilterEDistrict}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose District</option>
+
+              {districts.map((district) => (
+                <option key={district.dis_id} value={district.dis_name}>
+                  {district.dis_name}
+                </option>
+              ))}
+
+            </select>
+          </div>
+
+          <div className="flex items-center mb-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              Education District:
+            </label>
+            <select
+              id="groupFilter"
+              value={selecteduDistrict}
+              onChange={handleFilterEduDistrict}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose Education District</option>
+
+              {eduDistrict && eduDistrict.map((e) => (
+                <option key={e.edu_district_id} value={e.edu_district}>
+                  {e.edu_district}
+                </option>
+              ))}
+
+            </select>
+          </div>
+
+          <div className="flex items-center mb-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              Education Sub District:
+            </label>
+            <select
+              id="groupFilter"
+              value={selecteduSubDistrict}
+              onChange={handleFilterEduSubDistrict}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose Education Sub District</option>
+
+              {eduSubDistrict && eduSubDistrict.map((e) => (
+                <option key={e.edu_sub_district_id} value={e.edu_sub_district_name}>
+                  {e.edu_sub_district_name}
+                </option>
+              ))}
+
+            </select>
+          </div>
+        </>)}
+
+      {/* ICDS  */}
+      {selectedschoolType === 'ICDS' && selectedSubCategory !== 'College' && grouptype === 'School' && (
+        <>
+          <div className="flex items-center mb-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              District:
+            </label>
+            <select
+              id="groupFilter"
+              value={selectedDistrictGrp}
+              onChange={handleFilterEDistrict}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose District</option>
+
+              {districts.map((district) => (
+                <option key={district.dis_id} value={district.dis_name}>
+                  {district.dis_name}
+                </option>
+              ))}
+
+            </select>
+          </div>
+
+          <div className="flex items-center mb-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              Icds Block :
+            </label>
+            <select
+              id="groupFilter"
+              value={selectIcdsBlock}
+              onChange={handleFilterIcdsBlock}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose Icds Block</option>
+
+              {icdsBlock && icdsBlock.map((e) => (
+                <option key={e.icds_block_id} value={e.block_name}>
+                  {e.block_name}
+                </option>
+              ))}
+
+
+            </select>
+          </div>
+
+          <div className="flex items-center mb-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              Icds Project :
+            </label>
+            <select
+              id="groupFilter"
+              value={selectIcdsProject}
+              onChange={handleFilterIcdsProject}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose Icds Project</option>
+
+              {icdsProject && icdsProject.map((e) => (
+                <option key={e.project_id} value={e.project_name}>
+                  {e.project_name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </>)}
+
+      {/* MALAYALAM MISSION  */}
+      {selectedSubCategory !== 'College' && selectedschoolType === 'Malayalam Mission' && grouptype === 'School' && (
+        <>
+          <div className="flex items-center mb-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              Mission Area :
+            </label>
+            <select
+              id="groupFilter"
+              value={selectMissionarea}
+              onChange={handleFilterMissionArea}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose Mission Area</option>
+
+              <option key='1' value="1">
+                Global
+              </option>
+              <option key='2' value="2">
+                India
+              </option>
+            </select>
+          </div>
+
+          <div className="flex items-center mb-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              Mission Chapter :
+            </label>
+            <select
+              id="groupFilter"
+              value={selectMission}
+              onChange={handleFilterMissionChapter}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose Mission Chapter</option>
+
+              {missionChapter && missionChapter.map((e) => (
+                <option key={e.chapter_id} value={e.chapter_name}>
+                  {e.chapter_name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex items-center mb-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              Mission Zone :
+            </label>
+            <select
+              id="groupFilter"
+              value={selectZone}
+              onChange={handleFilterMissionZone}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose Mission Zone</option>
+
+              {missionZone && missionZone.map((e) => (
+                <option key={e.zone_id} value={e.zone_name}>
+                  {e.zone_name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </>)}
+
+      <div className="flex items-center mb-3 space-x-2">
+        <label htmlFor="groupFilter" className="text-sm font-medium">
+          Group Name :
+        </label>
+        <select
+          id="groupFilter"
+          value={selectedgrpName}
+          onChange={handleFilterGrpName}
+          className="border border-gray-300 rounded p-1"
+        >
+          <option value="">Select Group Name</option>
+
+          {grpName.map((c) => (
+            <option key={c.gp_id} value={c.gp_name}>
+              {c.gp_name}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="flex items-center justify-center font-bold">Total Count : {totalcount}</div>
 
       <div className={"ag-theme-quartz"} style={{ height: 600 }}>
         <AgGridReact
