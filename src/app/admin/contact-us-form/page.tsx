@@ -126,7 +126,7 @@ const AdminGrid = () => {
           onRowClicked={onRowClicked}
           rowSelection="multiple"
           suppressRowClickSelection={true}
-          pagination={true}
+          pagination={false}
           paginationPageSize={10}
           paginationPageSizeSelector={[10, 25, 50]}
         />

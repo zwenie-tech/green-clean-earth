@@ -219,7 +219,7 @@ const AdminGrid = () => {
 
         if (response.data.success && response.status != 203) {
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
-          setTotalcount(response.data.cordinatorList.length);
+          setTotalcount(response.data.totalCount);
           setRowData(response.data.cordinatorList);
 
         }

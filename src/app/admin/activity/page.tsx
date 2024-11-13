@@ -16,6 +16,7 @@ import Cookies from 'js-cookie';
 import * as XLSX from 'xlsx';
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
+
 interface Country {
   cntry_id: number;
   cntry_name: string;
@@ -87,6 +88,7 @@ const AdminGrid = () => {
   const token = Cookies.get("adtoken");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 10;
 
   const [totalcount, setTotalcount] = useState("");
   const [countries, setCountries] = useState<Country[]>([]);
@@ -101,9 +103,11 @@ const AdminGrid = () => {
   const [selectedWard, setSelectedWard] = useState("");
   const [lsgd, setLsgd] = useState<Lsgd[]>([]);
   const [corporation, setCorporation] = useState<Corp[]>([]);
-  const [coordinator, setCoordinator] = useState("");
+  const [partname, setPartname] = useState("");
+  const [hasEarning, setHasEarning] = useState(false);
   const [email, setEmail] = useState("");
-  const [coordid, setCoordid] = useState("");
+  const [actid, setActid] = useState("");
+  const [userid, setUserId] = useState("");
   const [mobile, setMobile] = useState("");
   const [grouptype, setGroupType] = useState("");
   const [selectedschoolType, setSelectedSchoolType] = useState("");
@@ -131,7 +135,6 @@ const AdminGrid = () => {
   const [selectZone, setSelectedZone] = useState('');
   const [selectedgrpName, setSelectedGrpName] = useState("");
   const [grpName, setGrpName] = useState<GrpName[]>([]);
-  const itemsPerPage = 10;
 
   const handlePageChange = (newPage: number) => {
     if (newPage > 0 && newPage <= totalPages) {
@@ -146,20 +149,24 @@ const AdminGrid = () => {
   }, [token, router]);
 
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
-    { field: "co_ord_id", headerName: "Coordinator Id" },
-    { field: "co_ord_name", headerName: "Name" },
-    { field: "co_email_id", headerName: "Email" },
-    { field: "co_username", headerName: "Username" },
-    { field: "group_type", headerName: "Group" },
+    { field: "personal_activity_id", headerName: "Activity Id" },
+    { field: "participant_name", headerName: "Name" },
+    { field: "activity_social_media_link", headerName: "Activity Link" },
+    { field: "activity_description", headerName: "Description" },
+    { field: "activity_views", headerName: "View" },
+    { field: "activity_likes", headerName: "Like" },
+    { field: "activity_value", headerName: "Value" },
+    { field: "gp_name", headerName: "Group Name" },
+    { field: "group_type", headerName: "Category" },
+    { field: "activity_sub_category", headerName: "School Type" },
+    { field: "edu_district", headerName: "Education District" },
+    { field: "edu_sub_district_name", headerName: "Education Sub District" },
+    { field: "sahodaya_name", headerName: "Sahodaya" },
+    { field: "block_name", headerName: "Block" },
+    { field: "project_name", headerName: "Project" },
+    { field: "chapter_name", headerName: "Chapter" },
     { field: "cntry_name", headerName: "Country" },
     { field: "st_name", headerName: "State" },
-    { field: "dis_name", headerName: "District" },
-    { field: "cop_name", headerName: "Cooperation" },
-    { field: "lsg_name", headerName: "LSGD" },
-    { field: "gp_ward_no", headerName: "Ward" },
-    { field: "gp_name", headerName: "Group Name" },
-    { field: "gp_refferal_name", headerName: "Referral Name" },
-
   ]);
 
   const defaultColDef = useMemo(() => {
@@ -171,13 +178,12 @@ const AdminGrid = () => {
 
   const onRowClicked = (event: RowClickedEvent) => {
 
-    const id = event.data.co_ord_id;
-    router.push(`coordinators/${id}`);
+    const id = event.data.personal_activity_id;
+    router.push(`activity/${id}`);
   };
-
   const handleExportToExcel = async () => {
     try {
-      const response = await axios.post(`${apiURL}/admin/adminCordinatorsList`, {
+      const response = await axios.post(`${apiURL}/admin/adminActivityList`, {
         "isExcel": true
       }, {
         headers: {
@@ -187,7 +193,7 @@ const AdminGrid = () => {
       });
       if (response.data.success && response.status != 203) {
         // Convert response zoneList into Excel
-        const datalist = response.data.cordinatorList
+        const datalist = response.data.userList
 
         // Create a worksheet from the zoneList data
         const worksheet = XLSX.utils.json_to_sheet(datalist);
@@ -209,24 +215,54 @@ const AdminGrid = () => {
     async function fetchdata() {
       if (token) {
 
-        const response = await axios.post(`${apiURL}/admin/adminCordinatorsList?page=${currentPage}&limit=${itemsPerPage}`, {}, {
+        const response = await axios.post(`${apiURL}/admin/adminActivityList?page=${currentPage}&limit=${itemsPerPage}`, {}, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         })
 
-
         if (response.data.success && response.status != 203) {
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
-          setTotalcount(response.data.cordinatorList.length);
-          setRowData(response.data.cordinatorList);
-
+          setTotalcount(response.data.totalCount);
+          setRowData(response.data.userList);
         }
       }
     };
     fetchdata();
   }, [currentPage, token]);
+
+  useEffect(() => {
+    const fetchCategory = async () => {
+      if (token && hasEarning) {
+        const response = await axios.post(
+          `${apiURL}/admin/adminActivityList`,
+          { hasEarnings: hasEarning },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        try {
+          if (response.data.success && response.status !== 203) {
+            setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+            setTotalcount(response.data.userList.length);
+
+            setRowData(response.data.userList);
+          } else {
+            setRowData([]);
+            setTotalcount("0");
+
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+    };
+    fetchCategory();
+  }, [hasEarning, token]);
 
   useEffect(() => {
     async function fetchData() {
@@ -387,10 +423,10 @@ const AdminGrid = () => {
     }
   }
 
-  const handleFilterCoordName = (e: any) => {
+  const handleFilterPartName = (e: any) => {
 
     if (e != "") {
-      fetchFilteredCoordName(e);
+      fetchFilteredPartName(e);
       setCurrentPage(1); // Reset to first page
     }
   };
@@ -417,6 +453,178 @@ const AdminGrid = () => {
 
       fetchFilteredMobile(e);
       setCurrentPage(1); // Reset to first page
+    }
+  };
+  const handleFilterUpId = (e: any) => {
+
+    if (e != "") {
+
+      fetchFilteredUpId(e);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+  const fetchFilteredUpId = async (value: string) => {
+    const filterdata = {
+      userId: parseInt(value)
+    }
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminActivityList`,
+        filterdata,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+
+        if (response.data.success && response.status !== 203) {
+
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+
+
+          setRowData(response.data.Uploads);
+        } else {
+          setRowData([]);
+          setTotalcount("0");
+
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+
+  const fetchFilteredPartName = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminActivityList`,
+        { participantName: value },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+          setRowData(response.data.userList);
+        } else {
+          setRowData([]);
+          setTotalcount("0");
+
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+  const fetchFilteredEmail = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminActivityList`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+
+
+          const filteredData = response.data.userList.filter(
+            (item: { co_email_id: string; }) => item.co_email_id === value
+          );
+          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+
+          setRowData(filteredData);
+        } else {
+          setRowData([]);
+          setTotalcount("0");
+
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+  const fetchFilteredId = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminActivityList`,
+        { activityId: parseInt(value) },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+          setRowData(response.data.userList);
+        } else {
+          setRowData([]);
+          setTotalcount("0");
+
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+  const fetchFilteredMobile = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminActivityList`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+
+
+
+          const filteredData = response.data.userList.filter(
+            (item: { co_ord_contact: string; }) => item.co_ord_contact == value
+          );
+
+
+          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+
+          setRowData(filteredData);
+        } else {
+          setRowData([]);
+          setTotalcount("0");
+
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
     }
   };
 
@@ -472,7 +680,7 @@ const AdminGrid = () => {
   const fetchFilteredCntry = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminCordinatorsList`,
+        `${apiURL}/admin/adminActivityList`,
         { countryId: countries.find((item) => item.cntry_name === value)?.cntry_id },
         {
           headers: {
@@ -487,14 +695,13 @@ const AdminGrid = () => {
 
 
 
-          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
-          setTotalcount(response.data.cordinatorList.length);
-
-
-          setRowData(response.data.cordinatorList);
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+          setRowData(response.data.userList);
         } else {
           setRowData([]);
-setTotalcount("0");
+          setTotalcount("0");
+
         }
       } catch (error) {
         console.error("Error:", error);
@@ -505,7 +712,7 @@ setTotalcount("0");
   const fetchFilteredState = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminCordinatorsList`,
+        `${apiURL}/admin/adminActivityList`,
         { stateId: states.find((item) => item.st_name === value)?.st_id },
         {
           headers: {
@@ -520,13 +727,13 @@ setTotalcount("0");
 
 
 
-          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
-          setTotalcount(response.data.cordinatorList.length);
-
-          setRowData(response.data.cordinatorList);
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+          setRowData(response.data.userList);
         } else {
           setRowData([]);
-setTotalcount("0");
+          setTotalcount("0");
+
         }
       } catch (error) {
         console.error("Error:", error);
@@ -537,7 +744,7 @@ setTotalcount("0");
   const fetchFilteredDistrict = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminCordinatorsList`,
+        `${apiURL}/admin/adminActivityList`,
         { districtId: districts.find((item) => item.dis_name === value)?.dis_id },
         {
           headers: {
@@ -551,13 +758,13 @@ setTotalcount("0");
 
 
 
-          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
-          setTotalcount(response.data.cordinatorList.length);
-
-          setRowData(response.data.cordinatorList);
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+          setRowData(response.data.userList);
         } else {
           setRowData([]);
-setTotalcount("0");
+          setTotalcount("0");
+
         }
       } catch (error) {
         console.error("Error:", error);
@@ -567,7 +774,7 @@ setTotalcount("0");
   const fetchFilteredCorp = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminCordinatorsList`,
+        `${apiURL}/admin/adminActivityList`,
         { corporationId: corporation.find((item) => item.cop_name === value)?.cop_id },
         {
           headers: {
@@ -582,13 +789,13 @@ setTotalcount("0");
 
 
 
-          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
-          setTotalcount(response.data.cordinatorList.length);
-
-          setRowData(response.data.cordinatorList);
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+          setRowData(response.data.userList);
         } else {
           setRowData([]);
-setTotalcount("0");
+          setTotalcount("0");
+
         }
       } catch (error) {
         console.error("Error:", error);
@@ -598,7 +805,7 @@ setTotalcount("0");
   const fetchFilteredLsgd = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminCordinatorsList`,
+        `${apiURL}/admin/adminActivityList`,
         { lsgdId: lsgd.find((item) => item.lsg_name === value)?.lsg_id },
         {
           headers: {
@@ -613,13 +820,13 @@ setTotalcount("0");
 
 
 
-          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
-          setTotalcount(response.data.cordinatorList.length);
-
-          setRowData(response.data.cordinatorList);
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+          setRowData(response.data.userList);
         } else {
           setRowData([]);
-setTotalcount("0");
+          setTotalcount("0");
+
         }
       } catch (error) {
         console.error("Error:", error);
@@ -629,7 +836,7 @@ setTotalcount("0");
   const fetchFilteredWard = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminCordinatorsList`,
+        `${apiURL}/admin/adminActivityList`,
         { wardNo: parseInt(value) },
         {
           headers: {
@@ -643,13 +850,13 @@ setTotalcount("0");
 
 
 
-          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
-          setTotalcount(response.data.cordinatorList.length);
-
-          setRowData(response.data.cordinatorList);
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+          setRowData(response.data.userList);
         } else {
           setRowData([]);
-setTotalcount("0");
+          setTotalcount("0");
+
         }
       } catch (error) {
         console.error("Error:", error);
@@ -657,126 +864,8 @@ setTotalcount("0");
     }
   };
 
-  const fetchFilteredCoordName = async (value: string) => {
-    if (token) {
-      const response = await axios.post(
-        `${apiURL}/admin/adminCordinatorsList`,
-        { cordinatorName: value },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      try {
-        if (response.data.success && response.status !== 203) {
-
-          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
-          setTotalcount(response.data.cordinatorList.length);
-
-          setRowData(response.data.cordinatorList);
-        } else {
-          setRowData([]);
-setTotalcount("0");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-  };
-
-  const fetchFilteredEmail = async (value: string) => {
-    if (token) {
-      const response = await axios.post(
-        `${apiURL}/admin/adminCordinatorsList`,
-        { emailId: value },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      try {
-        if (response.data.success && response.status !== 203) {
 
 
-
-
-          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
-          setTotalcount(response.data.cordinatorList.length);
-
-          setRowData(response.data.cordinatorList);
-        } else {
-          setRowData([]);
-setTotalcount("0");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-  };
-
-  const fetchFilteredId = async (value: string) => {
-    if (token) {
-      const response = await axios.post(
-        `${apiURL}/admin/adminCordinatorsList`,
-        { cordinatorId: parseInt(value) },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      try {
-        if (response.data.success && response.status !== 203) {
-
-
-          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
-          setTotalcount(response.data.cordinatorList.length);
-
-          setRowData(response.data.cordinatorList);
-        } else {
-          setRowData([]);
-setTotalcount("0");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-  };
-
-  const fetchFilteredMobile = async (value: string) => {
-    if (token) {
-      const response = await axios.post(
-        `${apiURL}/admin/adminCordinatorsList`,
-        { mobile: value },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      try {
-        if (response.data.success && response.status !== 203) {
-
-
-          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
-          setTotalcount(response.data.cordinatorList.length);
-
-          setRowData(response.data.cordinatorList);
-        } else {
-          setRowData([]);
-setTotalcount("0");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-  };
 
 
   const handleFilterGrpType = (e: any) => {
@@ -791,7 +880,7 @@ setTotalcount("0");
   const fetchFilteredGrpType = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminCordinatorsList`,
+        `${apiURL}/admin/adminActivityList`,
         { groupTypeId: category.find((item) => item.group_type === value)?.id },
         {
           headers: {
@@ -804,13 +893,13 @@ setTotalcount("0");
         if (response.data.success && response.status !== 203) {
 
 
-          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
-          setTotalcount(response.data.cordinatorList.length);
-
-          setRowData(response.data.cordinatorList);
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+          setRowData(response.data.userList);
         } else {
           setRowData([]);
-setTotalcount("0");
+          setTotalcount("0");
+
         }
       } catch (error) {
         console.error("Error:", error);
@@ -833,7 +922,7 @@ setTotalcount("0");
   const fetchFilteredSchoolType = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminCordinatorsList`,
+        `${apiURL}/admin/adminActivityList`,
         { schoolTypeId: schoolType.find((item) => item.type_name === value)?.id },
         {
           headers: {
@@ -846,13 +935,13 @@ setTotalcount("0");
         if (response.data.success && response.status !== 203) {
 
 
-          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
-          setTotalcount(response.data.cordinatorList.length);
-
-          setRowData(response.data.cordinatorList);
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+          setRowData(response.data.userList);
         } else {
           setRowData([]);
-setTotalcount("0");
+          setTotalcount("0");
+
         }
       } catch (error) {
         console.error("Error:", error);
@@ -872,7 +961,7 @@ setTotalcount("0");
   const fetchFilteredSchoolCategory = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminCordinatorsList`,
+        `${apiURL}/admin/adminActivityList`,
         { subCategoryId: subcategoryOptions.find((item) => item.gp_cat_name === value)?.gp_cat_id },
         {
           headers: {
@@ -885,13 +974,13 @@ setTotalcount("0");
         if (response.data.success && response.status !== 203) {
 
 
-          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
-          setTotalcount(response.data.cordinatorList.length);
-
-          setRowData(response.data.cordinatorList);
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+          setRowData(response.data.userList);
         } else {
           setRowData([]);
-setTotalcount("0");
+          setTotalcount("0");
+
         }
       } catch (error) {
         console.error("Error:", error);
@@ -919,7 +1008,7 @@ setTotalcount("0");
   const fetchFilteredSahodaya = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminCordinatorsList`,
+        `${apiURL}/admin/adminActivityList`,
         { sahodayaId: sahodaya.find((item) => item.sahodaya_name === value)?.sahodaya_id },
         {
           headers: {
@@ -932,13 +1021,13 @@ setTotalcount("0");
         if (response.data.success && response.status !== 203) {
 
 
-          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
-          setTotalcount(response.data.cordinatorList.length);
-
-          setRowData(response.data.cordinatorList);
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+          setRowData(response.data.userList);
         } else {
           setRowData([]);
-setTotalcount("0");
+          setTotalcount("0");
+
         }
       } catch (error) {
         console.error("Error:", error);
@@ -977,7 +1066,7 @@ setTotalcount("0");
   const fetchFilteredEduSubDistrict = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminCordinatorsList`,
+        `${apiURL}/admin/adminActivityList`,
         { eduSubDistrictId: eduSubDistrict.find((item) => item.edu_sub_district_name === value)?.edu_sub_district_id },
         {
           headers: {
@@ -990,13 +1079,13 @@ setTotalcount("0");
         if (response.data.success && response.status !== 203) {
 
 
-          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
-          setTotalcount(response.data.cordinatorList.length);
-
-          setRowData(response.data.cordinatorList);
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+          setRowData(response.data.userList);
         } else {
           setRowData([]);
-setTotalcount("0");
+          setTotalcount("0");
+
         }
       } catch (error) {
         console.error("Error:", error);
@@ -1026,7 +1115,7 @@ setTotalcount("0");
   const fetchFilteredIcdsProject = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminCordinatorsList`,
+        `${apiURL}/admin/adminActivityList`,
         { projectId: icdsProject.find((item) => item.project_name === value)?.project_id },
         {
           headers: {
@@ -1039,13 +1128,13 @@ setTotalcount("0");
         if (response.data.success && response.status !== 203) {
 
 
-          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
-          setTotalcount(response.data.cordinatorList.length);
-
-          setRowData(response.data.cordinatorList);
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+          setRowData(response.data.userList);
         } else {
           setRowData([]);
-setTotalcount("0");
+          setTotalcount("0");
+
         }
       } catch (error) {
         console.error("Error:", error);
@@ -1082,7 +1171,7 @@ setTotalcount("0");
   const fetchFilteredMissionZone = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminCordinatorsList`,
+        `${apiURL}/admin/adminActivityList`,
         { zoneId: missionZone.find((item) => item.zone_name === value)?.zone_id },
         {
           headers: {
@@ -1095,13 +1184,13 @@ setTotalcount("0");
         if (response.data.success && response.status !== 203) {
 
 
-          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
-          setTotalcount(response.data.cordinatorList.length);
-
-          setRowData(response.data.cordinatorList);
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+          setRowData(response.data.userList);
         } else {
           setRowData([]);
-setTotalcount("0");
+          setTotalcount("0");
+
         }
       } catch (error) {
         console.error("Error:", error);
@@ -1134,7 +1223,6 @@ setTotalcount("0");
           },
         }
       );
-      
       setGrpName(response.data.groupList);
     } catch (error) {
       console.error("Error fetching category:", error);
@@ -1173,7 +1261,6 @@ setTotalcount("0");
         zoneId: zoneid
       };
 
-     
 
       try {
         // Clear group name to empty array before fetching
@@ -1238,12 +1325,11 @@ setTotalcount("0");
     handleGrpName
   ]);
 
-
   const fetchFilteredGrpName = async (value: string) => {
     if (token) {
       
       const response = await axios.post(
-        `${apiURL}/admin/adminCordinatorsList`,
+        `${apiURL}/admin/adminActivityList`,
         { groupId: grpName.find((item) => item.gp_name === value)?.gp_id },
         {
           headers: {
@@ -1254,14 +1340,14 @@ setTotalcount("0");
       );
       try {
         if (response.data.success && response.status !== 203) {
-          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
-          setTotalcount(response.data.cordinatorList.length);
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
 
-
-          setRowData(response.data.cordinatorList);
+          setRowData(response.data.userList);
         } else {
           setRowData([]);
-setTotalcount("0");
+          setTotalcount("0");
+
         }
       } catch (error) {
         console.error("Error:", error);
@@ -1278,39 +1364,70 @@ setTotalcount("0");
       >
         Export To Excel
       </button>
-      <div>
-        <label>Coordinator Id</label>
-        <div className="flex mb-3">
-          <input
-            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
-            value={coordid}
-            onChange={(e) => setCoordid(e.target.value)} // Update the state directly
-          />
-          <button
-            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-            onClick={() => handleFilterId(coordid)}
-          >
-            Search
-          </button>
+      <div className="flex flex-wrap gap-4 justify-center">
+        <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
+          <label>Activity Id</label>
+          <div className="flex mb-3">
+            <input
+              className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+              value={actid}
+              onChange={(e) => setActid(e.target.value)} // Update the state directly
+            />
+            <button
+              className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+              onClick={() => handleFilterId(actid)}
+            >
+              Search
+            </button>
+          </div>
+        </div>
+        <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
+          <label>User Id</label>
+          <div className="flex mb-3">
+            <input
+              className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+              value={userid}
+              onChange={(e) => setUserId(e.target.value)} // Update the state directly
+            />
+            <button
+              className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+              onClick={() => handleFilterUpId(userid)}
+            >
+              Search
+            </button>
+          </div>
+        </div>
+        <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
+          <label>Participant Name</label>
+          <div className="flex mb-3">
+            <input
+              className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+              value={partname}
+              onChange={(e) => setPartname(e.target.value)} // Update the state directly
+            />
+            <button
+              className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+              onClick={() => handleFilterPartName(partname)}
+            >
+              Search
+            </button>
+          </div>
         </div>
       </div>
-      <div>
-        <label>Coordinator Name</label>
-        <div className="flex mb-3">
-          <input
-            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
-            value={coordinator}
-            onChange={(e) => setCoordinator(e.target.value)} // Update the state directly
-          />
-          <button
-            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-            onClick={() => handleFilterCoordName(coordinator)}
-          >
-            Search
-          </button>
-        </div>
+
+      <div className="mb-4 flex items-center">
+        <input
+          type="checkbox"
+          id="hasEarning"
+          checked={hasEarning}
+          onChange={(e) => setHasEarning(e.target.checked)}
+          className="mr-2"
+        />
+        <label htmlFor="hasEarning" className="text-sm font-medium text-gray-700">
+          Has Earning
+        </label>
       </div>
-      <div>
+      {/* <div>
         <label>Email</label>
         <div className="flex mb-3">
           <input
@@ -1342,7 +1459,7 @@ setTotalcount("0");
             Search
           </button>
         </div>
-      </div>
+      </div> */}
 
       {/* country section  */}
       <div className="flex items-center mb-3 space-x-2">
@@ -1429,7 +1546,7 @@ setTotalcount("0");
 
                   {selectedDistrict != "" ?
 
-                    <><div className="flex items-center mb-3 space-x-2">
+                    <div className="flex items-center mb-3 space-x-2">
                       <label htmlFor="groupFilter" className="text-sm font-medium">
                         Lsgd:
                       </label>
@@ -1446,22 +1563,23 @@ setTotalcount("0");
                           </option>
                         ))}
                       </select>
-                    </div><div>
-                        <label>Ward No</label>
-                        <div className="flex mb-3">
-                          <input
-                            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
-                            value={selectedWard}
-                            onChange={(e) => setSelectedWard(e.target.value)} // Update the state directly
-                          />
-                          <button
-                            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-                            onClick={() => handleFilterChangeWard(selectedWard)}
-                          >
-                            Search
-                          </button>
-                        </div>
-                      </div></>
+                    </div>
+                    //  <div>
+                    //   <label>Ward No</label>
+                    //   <div className="flex mb-3">
+                    //     <input
+                    //       className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+                    //       value={selectedWard}
+                    //       onChange={(e) => setSelectedWard(e.target.value)} // Update the state directly
+                    //     />
+                    //     <button
+                    //       className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+                    //       onClick={() => handleFilterChangeWard(selectedWard)}
+                    //     >
+                    //       Search
+                    //     </button>
+                    //   </div> 
+                    // </div>
                     : ''}
                 </> : ''}
             </> : ''}
@@ -1487,7 +1605,7 @@ setTotalcount("0");
 
         </select>
       </div>
-      {grouptype === 'School' && (
+      {selectedSubCategory !== 'College' && grouptype === 'School' && (
         <>
           <div className="flex items-center mb-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
@@ -1773,6 +1891,7 @@ setTotalcount("0");
             </select>
           </div>
         </>)}
+
       <div className="flex items-center mb-3 space-x-2">
         <label htmlFor="groupFilter" className="text-sm font-medium">
           Group Name :
