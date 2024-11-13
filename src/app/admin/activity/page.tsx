@@ -16,7 +16,6 @@ import Cookies from 'js-cookie';
 import * as XLSX from 'xlsx';
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
-
 interface Country {
   cntry_id: number;
   cntry_name: string;
@@ -88,7 +87,6 @@ const AdminGrid = () => {
   const token = Cookies.get("adtoken");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const itemsPerPage = 10;
 
   const [totalcount, setTotalcount] = useState("");
   const [countries, setCountries] = useState<Country[]>([]);
@@ -103,11 +101,9 @@ const AdminGrid = () => {
   const [selectedWard, setSelectedWard] = useState("");
   const [lsgd, setLsgd] = useState<Lsgd[]>([]);
   const [corporation, setCorporation] = useState<Corp[]>([]);
-  const [partname, setPartname] = useState("");
-  const [hasEarning, setHasEarning] = useState(false);
+  const [coordinator, setCoordinator] = useState("");
   const [email, setEmail] = useState("");
-  const [actid, setActid] = useState("");
-  const [userid, setUserId] = useState("");
+  const [coordid, setCoordid] = useState("");
   const [mobile, setMobile] = useState("");
   const [grouptype, setGroupType] = useState("");
   const [selectedschoolType, setSelectedSchoolType] = useState("");
@@ -135,6 +131,7 @@ const AdminGrid = () => {
   const [selectZone, setSelectedZone] = useState('');
   const [selectedgrpName, setSelectedGrpName] = useState("");
   const [grpName, setGrpName] = useState<GrpName[]>([]);
+  const itemsPerPage = 10;
 
   const handlePageChange = (newPage: number) => {
     if (newPage > 0 && newPage <= totalPages) {
@@ -149,25 +146,20 @@ const AdminGrid = () => {
   }, [token, router]);
 
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
-    { field: "personal_activity_id", headerName: "Activity Id" },
-    { field: "participant_name", headerName: "Name" },
-    { field: "activity_social_media_link", headerName: "Activity Link" },
-    { field: "activity_description", headerName: "Description" },
-    { field: "activity_views", headerName: "View" },
-    { field: "activity_likes", headerName: "Like" },
-    { field: "activity_value", headerName: "Value" },
-    { field: "earnings", headerName: "Earnings"},
-    { field: "gp_name", headerName: "Group Name" },
-    { field: "group_type", headerName: "Category" },
-    { field: "activity_sub_category", headerName: "School Type" },
-    { field: "edu_district", headerName: "Education District" },
-    { field: "edu_sub_district_name", headerName: "Education Sub District" },
-    { field: "sahodaya_name", headerName: "Sahodaya" },
-    { field: "block_name", headerName: "Block" },
-    { field: "project_name", headerName: "Project" },
-    { field: "chapter_name", headerName: "Chapter" },
+    { field: "co_ord_id", headerName: "Coordinator Id" },
+    { field: "co_ord_name", headerName: "Name" },
+    { field: "co_email_id", headerName: "Email" },
+    { field: "co_username", headerName: "Username" },
+    { field: "group_type", headerName: "Group" },
     { field: "cntry_name", headerName: "Country" },
     { field: "st_name", headerName: "State" },
+    { field: "dis_name", headerName: "District" },
+    { field: "cop_name", headerName: "Cooperation" },
+    { field: "lsg_name", headerName: "LSGD" },
+    { field: "gp_ward_no", headerName: "Ward" },
+    { field: "gp_name", headerName: "Group Name" },
+    { field: "gp_refferal_name", headerName: "Referral Name" },
+
   ]);
 
   const defaultColDef = useMemo(() => {
@@ -179,12 +171,13 @@ const AdminGrid = () => {
 
   const onRowClicked = (event: RowClickedEvent) => {
 
-    const id = event.data.personal_activity_id;
-    router.push(`activity/${id}`);
+    const id = event.data.co_ord_id;
+    router.push(`coordinators/${id}`);
   };
+
   const handleExportToExcel = async () => {
     try {
-      const response = await axios.post(`${apiURL}/admin/adminActivityList`, {
+      const response = await axios.post(`${apiURL}/admin/adminCordinatorsList`, {
         "isExcel": true
       }, {
         headers: {
@@ -194,7 +187,7 @@ const AdminGrid = () => {
       });
       if (response.data.success && response.status != 203) {
         // Convert response zoneList into Excel
-        const datalist = response.data.userList
+        const datalist = response.data.cordinatorList
 
         // Create a worksheet from the zoneList data
         const worksheet = XLSX.utils.json_to_sheet(datalist);
@@ -216,54 +209,24 @@ const AdminGrid = () => {
     async function fetchdata() {
       if (token) {
 
-        const response = await axios.post(`${apiURL}/admin/adminActivityList?page=${currentPage}&limit=${itemsPerPage}`, {}, {
+        const response = await axios.post(`${apiURL}/admin/adminCordinatorsList?page=${currentPage}&limit=${itemsPerPage}`, {}, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         })
 
+
         if (response.data.success && response.status != 203) {
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
-          setTotalcount(response.data.totalCount);
-          setRowData(response.data.userList);
+          setTotalcount(response.data.cordinatorList.length);
+          setRowData(response.data.cordinatorList);
+
         }
       }
     };
     fetchdata();
   }, [currentPage, token]);
-
-  useEffect(() => {
-    const fetchCategory = async () => {
-      if (token && hasEarning) {
-        const response = await axios.post(
-          `${apiURL}/admin/adminActivityList`,
-          { hasEarnings: hasEarning },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        try {
-          if (response.data.success && response.status !== 203) {
-            setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-            setTotalcount(response.data.userList.length);
-
-            setRowData(response.data.userList);
-          } else {
-            setRowData([]);
-            setTotalcount("0");
-
-          }
-        } catch (error) {
-          console.error("Error:", error);
-        }
-      }
-    };
-    fetchCategory();
-  }, [hasEarning, token]);
 
   useEffect(() => {
     async function fetchData() {
@@ -424,10 +387,10 @@ const AdminGrid = () => {
     }
   }
 
-  const handleFilterPartName = (e: any) => {
+  const handleFilterCoordName = (e: any) => {
 
     if (e != "") {
-      fetchFilteredPartName(e);
+      fetchFilteredCoordName(e);
       setCurrentPage(1); // Reset to first page
     }
   };
@@ -454,178 +417,6 @@ const AdminGrid = () => {
 
       fetchFilteredMobile(e);
       setCurrentPage(1); // Reset to first page
-    }
-  };
-  const handleFilterUpId = (e: any) => {
-
-    if (e != "") {
-
-      fetchFilteredUpId(e);
-      setCurrentPage(1); // Reset to first page
-    }
-  };
-  const fetchFilteredUpId = async (value: string) => {
-    const filterdata = {
-      userId: parseInt(value)
-    }
-    if (token) {
-      const response = await axios.post(
-        `${apiURL}/admin/adminActivityList`,
-        filterdata,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      try {
-
-        if (response.data.success && response.status !== 203) {
-
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-
-
-          setRowData(response.data.Uploads);
-        } else {
-          setRowData([]);
-          setTotalcount("0");
-
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-  };
-
-
-  const fetchFilteredPartName = async (value: string) => {
-    if (token) {
-      const response = await axios.post(
-        `${apiURL}/admin/adminActivityList`,
-        { participantName: value },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      try {
-        if (response.data.success && response.status !== 203) {
-
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-          setRowData(response.data.userList);
-        } else {
-          setRowData([]);
-          setTotalcount("0");
-
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-  };
-
-  const fetchFilteredEmail = async (value: string) => {
-    if (token) {
-      const response = await axios.post(
-        `${apiURL}/admin/adminActivityList`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      try {
-        if (response.data.success && response.status !== 203) {
-
-
-          const filteredData = response.data.userList.filter(
-            (item: { co_email_id: string; }) => item.co_email_id === value
-          );
-          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-
-          setRowData(filteredData);
-        } else {
-          setRowData([]);
-          setTotalcount("0");
-
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-  };
-
-  const fetchFilteredId = async (value: string) => {
-    if (token) {
-      const response = await axios.post(
-        `${apiURL}/admin/adminActivityList`,
-        { activityId: parseInt(value) },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      try {
-        if (response.data.success && response.status !== 203) {
-
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-          setRowData(response.data.userList);
-        } else {
-          setRowData([]);
-          setTotalcount("0");
-
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-  };
-
-  const fetchFilteredMobile = async (value: string) => {
-    if (token) {
-      const response = await axios.post(
-        `${apiURL}/admin/adminActivityList`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      try {
-        if (response.data.success && response.status !== 203) {
-
-
-
-          const filteredData = response.data.userList.filter(
-            (item: { co_ord_contact: string; }) => item.co_ord_contact == value
-          );
-
-
-          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-
-          setRowData(filteredData);
-        } else {
-          setRowData([]);
-          setTotalcount("0");
-
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
     }
   };
 
@@ -681,7 +472,7 @@ const AdminGrid = () => {
   const fetchFilteredCntry = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminActivityList`,
+        `${apiURL}/admin/adminCordinatorsList`,
         { countryId: countries.find((item) => item.cntry_name === value)?.cntry_id },
         {
           headers: {
@@ -696,13 +487,14 @@ const AdminGrid = () => {
 
 
 
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-          setRowData(response.data.userList);
+          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
+          setTotalcount(response.data.cordinatorList.length);
+
+
+          setRowData(response.data.cordinatorList);
         } else {
           setRowData([]);
-          setTotalcount("0");
-
+setTotalcount("0");
         }
       } catch (error) {
         console.error("Error:", error);
@@ -713,7 +505,7 @@ const AdminGrid = () => {
   const fetchFilteredState = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminActivityList`,
+        `${apiURL}/admin/adminCordinatorsList`,
         { stateId: states.find((item) => item.st_name === value)?.st_id },
         {
           headers: {
@@ -728,13 +520,13 @@ const AdminGrid = () => {
 
 
 
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-          setRowData(response.data.userList);
+          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
+          setTotalcount(response.data.cordinatorList.length);
+
+          setRowData(response.data.cordinatorList);
         } else {
           setRowData([]);
-          setTotalcount("0");
-
+setTotalcount("0");
         }
       } catch (error) {
         console.error("Error:", error);
@@ -745,7 +537,7 @@ const AdminGrid = () => {
   const fetchFilteredDistrict = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminActivityList`,
+        `${apiURL}/admin/adminCordinatorsList`,
         { districtId: districts.find((item) => item.dis_name === value)?.dis_id },
         {
           headers: {
@@ -759,13 +551,13 @@ const AdminGrid = () => {
 
 
 
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-          setRowData(response.data.userList);
+          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
+          setTotalcount(response.data.cordinatorList.length);
+
+          setRowData(response.data.cordinatorList);
         } else {
           setRowData([]);
-          setTotalcount("0");
-
+setTotalcount("0");
         }
       } catch (error) {
         console.error("Error:", error);
@@ -775,7 +567,7 @@ const AdminGrid = () => {
   const fetchFilteredCorp = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminActivityList`,
+        `${apiURL}/admin/adminCordinatorsList`,
         { corporationId: corporation.find((item) => item.cop_name === value)?.cop_id },
         {
           headers: {
@@ -790,13 +582,13 @@ const AdminGrid = () => {
 
 
 
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-          setRowData(response.data.userList);
+          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
+          setTotalcount(response.data.cordinatorList.length);
+
+          setRowData(response.data.cordinatorList);
         } else {
           setRowData([]);
-          setTotalcount("0");
-
+setTotalcount("0");
         }
       } catch (error) {
         console.error("Error:", error);
@@ -806,7 +598,7 @@ const AdminGrid = () => {
   const fetchFilteredLsgd = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminActivityList`,
+        `${apiURL}/admin/adminCordinatorsList`,
         { lsgdId: lsgd.find((item) => item.lsg_name === value)?.lsg_id },
         {
           headers: {
@@ -821,13 +613,13 @@ const AdminGrid = () => {
 
 
 
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-          setRowData(response.data.userList);
+          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
+          setTotalcount(response.data.cordinatorList.length);
+
+          setRowData(response.data.cordinatorList);
         } else {
           setRowData([]);
-          setTotalcount("0");
-
+setTotalcount("0");
         }
       } catch (error) {
         console.error("Error:", error);
@@ -837,7 +629,7 @@ const AdminGrid = () => {
   const fetchFilteredWard = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminActivityList`,
+        `${apiURL}/admin/adminCordinatorsList`,
         { wardNo: parseInt(value) },
         {
           headers: {
@@ -851,13 +643,13 @@ const AdminGrid = () => {
 
 
 
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-          setRowData(response.data.userList);
+          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
+          setTotalcount(response.data.cordinatorList.length);
+
+          setRowData(response.data.cordinatorList);
         } else {
           setRowData([]);
-          setTotalcount("0");
-
+setTotalcount("0");
         }
       } catch (error) {
         console.error("Error:", error);
@@ -865,8 +657,126 @@ const AdminGrid = () => {
     }
   };
 
+  const fetchFilteredCoordName = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminCordinatorsList`,
+        { cordinatorName: value },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+
+          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
+          setTotalcount(response.data.cordinatorList.length);
+
+          setRowData(response.data.cordinatorList);
+        } else {
+          setRowData([]);
+setTotalcount("0");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+  const fetchFilteredEmail = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminCordinatorsList`,
+        { emailId: value },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
 
 
+
+
+          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
+          setTotalcount(response.data.cordinatorList.length);
+
+          setRowData(response.data.cordinatorList);
+        } else {
+          setRowData([]);
+setTotalcount("0");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+  const fetchFilteredId = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminCordinatorsList`,
+        { cordinatorId: parseInt(value) },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+
+
+          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
+          setTotalcount(response.data.cordinatorList.length);
+
+          setRowData(response.data.cordinatorList);
+        } else {
+          setRowData([]);
+setTotalcount("0");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+  const fetchFilteredMobile = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminCordinatorsList`,
+        { mobile: value },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+
+
+          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
+          setTotalcount(response.data.cordinatorList.length);
+
+          setRowData(response.data.cordinatorList);
+        } else {
+          setRowData([]);
+setTotalcount("0");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
 
 
   const handleFilterGrpType = (e: any) => {
@@ -881,7 +791,7 @@ const AdminGrid = () => {
   const fetchFilteredGrpType = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminActivityList`,
+        `${apiURL}/admin/adminCordinatorsList`,
         { groupTypeId: category.find((item) => item.group_type === value)?.id },
         {
           headers: {
@@ -894,13 +804,13 @@ const AdminGrid = () => {
         if (response.data.success && response.status !== 203) {
 
 
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-          setRowData(response.data.userList);
+          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
+          setTotalcount(response.data.cordinatorList.length);
+
+          setRowData(response.data.cordinatorList);
         } else {
           setRowData([]);
-          setTotalcount("0");
-
+setTotalcount("0");
         }
       } catch (error) {
         console.error("Error:", error);
@@ -923,7 +833,7 @@ const AdminGrid = () => {
   const fetchFilteredSchoolType = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminActivityList`,
+        `${apiURL}/admin/adminCordinatorsList`,
         { schoolTypeId: schoolType.find((item) => item.type_name === value)?.id },
         {
           headers: {
@@ -936,13 +846,13 @@ const AdminGrid = () => {
         if (response.data.success && response.status !== 203) {
 
 
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-          setRowData(response.data.userList);
+          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
+          setTotalcount(response.data.cordinatorList.length);
+
+          setRowData(response.data.cordinatorList);
         } else {
           setRowData([]);
-          setTotalcount("0");
-
+setTotalcount("0");
         }
       } catch (error) {
         console.error("Error:", error);
@@ -962,7 +872,7 @@ const AdminGrid = () => {
   const fetchFilteredSchoolCategory = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminActivityList`,
+        `${apiURL}/admin/adminCordinatorsList`,
         { subCategoryId: subcategoryOptions.find((item) => item.gp_cat_name === value)?.gp_cat_id },
         {
           headers: {
@@ -975,13 +885,13 @@ const AdminGrid = () => {
         if (response.data.success && response.status !== 203) {
 
 
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-          setRowData(response.data.userList);
+          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
+          setTotalcount(response.data.cordinatorList.length);
+
+          setRowData(response.data.cordinatorList);
         } else {
           setRowData([]);
-          setTotalcount("0");
-
+setTotalcount("0");
         }
       } catch (error) {
         console.error("Error:", error);
@@ -1009,7 +919,7 @@ const AdminGrid = () => {
   const fetchFilteredSahodaya = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminActivityList`,
+        `${apiURL}/admin/adminCordinatorsList`,
         { sahodayaId: sahodaya.find((item) => item.sahodaya_name === value)?.sahodaya_id },
         {
           headers: {
@@ -1022,13 +932,13 @@ const AdminGrid = () => {
         if (response.data.success && response.status !== 203) {
 
 
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-          setRowData(response.data.userList);
+          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
+          setTotalcount(response.data.cordinatorList.length);
+
+          setRowData(response.data.cordinatorList);
         } else {
           setRowData([]);
-          setTotalcount("0");
-
+setTotalcount("0");
         }
       } catch (error) {
         console.error("Error:", error);
@@ -1067,7 +977,7 @@ const AdminGrid = () => {
   const fetchFilteredEduSubDistrict = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminActivityList`,
+        `${apiURL}/admin/adminCordinatorsList`,
         { eduSubDistrictId: eduSubDistrict.find((item) => item.edu_sub_district_name === value)?.edu_sub_district_id },
         {
           headers: {
@@ -1080,13 +990,13 @@ const AdminGrid = () => {
         if (response.data.success && response.status !== 203) {
 
 
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-          setRowData(response.data.userList);
+          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
+          setTotalcount(response.data.cordinatorList.length);
+
+          setRowData(response.data.cordinatorList);
         } else {
           setRowData([]);
-          setTotalcount("0");
-
+setTotalcount("0");
         }
       } catch (error) {
         console.error("Error:", error);
@@ -1116,7 +1026,7 @@ const AdminGrid = () => {
   const fetchFilteredIcdsProject = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminActivityList`,
+        `${apiURL}/admin/adminCordinatorsList`,
         { projectId: icdsProject.find((item) => item.project_name === value)?.project_id },
         {
           headers: {
@@ -1129,13 +1039,13 @@ const AdminGrid = () => {
         if (response.data.success && response.status !== 203) {
 
 
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-          setRowData(response.data.userList);
+          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
+          setTotalcount(response.data.cordinatorList.length);
+
+          setRowData(response.data.cordinatorList);
         } else {
           setRowData([]);
-          setTotalcount("0");
-
+setTotalcount("0");
         }
       } catch (error) {
         console.error("Error:", error);
@@ -1172,7 +1082,7 @@ const AdminGrid = () => {
   const fetchFilteredMissionZone = async (value: string) => {
     if (token) {
       const response = await axios.post(
-        `${apiURL}/admin/adminActivityList`,
+        `${apiURL}/admin/adminCordinatorsList`,
         { zoneId: missionZone.find((item) => item.zone_name === value)?.zone_id },
         {
           headers: {
@@ -1185,13 +1095,13 @@ const AdminGrid = () => {
         if (response.data.success && response.status !== 203) {
 
 
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-          setRowData(response.data.userList);
+          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
+          setTotalcount(response.data.cordinatorList.length);
+
+          setRowData(response.data.cordinatorList);
         } else {
           setRowData([]);
-          setTotalcount("0");
-
+setTotalcount("0");
         }
       } catch (error) {
         console.error("Error:", error);
@@ -1224,6 +1134,7 @@ const AdminGrid = () => {
           },
         }
       );
+      
       setGrpName(response.data.groupList);
     } catch (error) {
       console.error("Error fetching category:", error);
@@ -1262,6 +1173,7 @@ const AdminGrid = () => {
         zoneId: zoneid
       };
 
+     
 
       try {
         // Clear group name to empty array before fetching
@@ -1326,11 +1238,12 @@ const AdminGrid = () => {
     handleGrpName
   ]);
 
+
   const fetchFilteredGrpName = async (value: string) => {
     if (token) {
       
       const response = await axios.post(
-        `${apiURL}/admin/adminActivityList`,
+        `${apiURL}/admin/adminCordinatorsList`,
         { groupId: grpName.find((item) => item.gp_name === value)?.gp_id },
         {
           headers: {
@@ -1341,14 +1254,14 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
+          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
+          setTotalcount(response.data.cordinatorList.length);
 
-          setRowData(response.data.userList);
+
+          setRowData(response.data.cordinatorList);
         } else {
           setRowData([]);
-          setTotalcount("0");
-
+setTotalcount("0");
         }
       } catch (error) {
         console.error("Error:", error);
@@ -1365,61 +1278,39 @@ const AdminGrid = () => {
       >
         Export To Excel
       </button>
-      <div className="flex flex-wrap gap-4 justify-start">
-        <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
-          <label className="mb-2 text-sm font-semibold">Activity Id</label>
-          <div className="flex mb-3 items-center">
-            <input
-              className="flex-1 border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700"
-              value={actid}
-              onChange={(e) => setActid(e.target.value)}
-            />
-            <button
-              className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-              onClick={() => handleFilterId(actid)}
-            >
-              Search
-            </button>
-          </div>
-        </div>
-
-        <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
-          <label className="mb-2 text-sm font-semibold">User Id</label>
-          <div className="flex mb-3 items-center">
-            <input
-              className="flex-1 border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700"
-              value={userid}
-              onChange={(e) => setUserId(e.target.value)}
-            />
-            <button
-              className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-              onClick={() => handleFilterUpId(userid)}
-            >
-              Search
-            </button>
-          </div>
-        </div>
-
-        <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
-          <label className="mb-2 text-sm font-semibold">Participant Name</label>
-          <div className="flex mb-3 items-center">
-            <input
-              className="flex-1 border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700"
-              value={partname}
-              onChange={(e) => setPartname(e.target.value)}
-            />
-            <button
-              className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-              onClick={() => handleFilterGrpName(partname)}
-            >
-              Search
-            </button>
-          </div>
+      <div>
+        <label>Coordinator Id</label>
+        <div className="flex mb-3">
+          <input
+            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+            value={coordid}
+            onChange={(e) => setCoordid(e.target.value)} // Update the state directly
+          />
+          <button
+            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+            onClick={() => handleFilterId(coordid)}
+          >
+            Search
+          </button>
         </div>
       </div>
-
-
-      {/* <div>
+      <div>
+        <label>Coordinator Name</label>
+        <div className="flex mb-3">
+          <input
+            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+            value={coordinator}
+            onChange={(e) => setCoordinator(e.target.value)} // Update the state directly
+          />
+          <button
+            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+            onClick={() => handleFilterCoordName(coordinator)}
+          >
+            Search
+          </button>
+        </div>
+      </div>
+      <div>
         <label>Email</label>
         <div className="flex mb-3">
           <input
@@ -1451,119 +1342,131 @@ const AdminGrid = () => {
             Search
           </button>
         </div>
-      </div> */}
-    
+      </div>
+
       {/* country section  */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-  {/* Country Field */}
-  <div className="flex flex-col mb-3 w-full">
-    <label htmlFor="groupFilter" className="text-sm font-medium">
-      Country:
-    </label>
-    <select
-      id="groupFilter"
-      value={selectedCntry}
-      onChange={handleFilterChangeCntry}
-      className="border border-gray-300 rounded p-1 w-full"
-    >
-      <option value="">Choose Country</option>
-      {countries.map((country) => (
-        <option key={country.cntry_id} value={country.cntry_name}>
-          {country.cntry_name}
-        </option>
-      ))}
-    </select>
-  </div>
+      <div className="flex items-center mb-3 space-x-2">
+        <label htmlFor="groupFilter" className="text-sm font-medium">
+          Country:
+        </label>
+        <select
+          id="groupFilter"
+          value={selectedCntry}
+          onChange={handleFilterChangeCntry}
+          className="border border-gray-300 rounded p-1"
+        >
+          <option value="">Choose Country</option>
+          {countries.map((country) => (
+            <option key={country.cntry_id} value={country.cntry_name}>
+              {country.cntry_name}
+            </option>
+          ))}
+        </select>
+      </div>
 
-  {/* State Field (Visible if selected country is India) */}
-  {selectedCntry === "India" && (
-    <div className="flex flex-col mb-3 w-full">
-      <label htmlFor="stateFilter" className="text-sm font-medium">
-        State:
-      </label>
-      <select
-        id="stateFilter"
-        value={selectedState}
-        onChange={handleFilterChangeState}
-        className="border border-gray-300 rounded p-1 w-full"
-      >
-        <option value="">Choose State</option>
-        {states.map((state) => (
-          <option key={state.st_id} value={state.st_name}>
-            {state.st_name}
-          </option>
-        ))}
-      </select>
-    </div>
-  )}
+      {selectedCntry == "India" ?
+        <>
+          <div className="flex items-center mb-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              State:
+            </label>
+            <select
+              id="groupFilter"
+              value={selectedState}
+              onChange={handleFilterChangeState}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose State</option>
+              {states.map((state) => (
+                <option key={state.st_id} value={state.st_name}>
+                  {state.st_name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-  {/* District Field (Visible if selected state is Kerala) */}
-  {selectedState === "Kerala" && (
-    <div className="flex flex-col mb-3 w-full">
-      <label htmlFor="districtFilter" className="text-sm font-medium">
-        District:
-      </label>
-      <select
-        id="districtFilter"
-        value={selectedDistrict}
-        onChange={handleFilterChangeDistrict}
-        className="border border-gray-300 rounded p-1 w-full"
-      >
-        <option value="">Choose District</option>
-        {districts.map((district) => (
-          <option key={district.dis_id} value={district.dis_name}>
-            {district.dis_name}
-          </option>
-        ))}
-      </select>
-    </div>
-  )}
+          {selectedState == "Kerala" ?
+            <>
+              <div className="flex items-center mb-3 space-x-2">
+                <label htmlFor="groupFilter" className="text-sm font-medium">
+                  District:
+                </label>
+                <select
+                  id="groupFilter"
+                  value={selectedDistrict}
+                  onChange={handleFilterChangeDistrict}
+                  className="border border-gray-300 rounded p-1"
+                >
+                  <option value="">Choose District</option>
+                  {districts.map((district) => (
+                    <option key={district.dis_id} value={district.dis_name}>
+                      {district.dis_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-  {/* Corporation Field (Visible if a district is selected) */}
-  {selectedDistrict && (
-    <div className="flex flex-col mb-3 w-full">
-      <label htmlFor="corpFilter" className="text-sm font-medium">
-        Corporation:
-      </label>
-      <select
-        id="corpFilter"
-        value={selectedCorp}
-        onChange={handleFilterChangeCorp}
-        className="border border-gray-300 rounded p-1 w-full"
-      >
-        <option value="">Choose Corporation</option>
-        {corporation.map((corp) => (
-          <option key={corp.cop_id} value={corp.cop_name}>
-            {corp.cop_name}
-          </option>
-        ))}
-      </select>
-    </div>
-  )}
+              {selectedDistrict != "" ?
+                <>
+                  <div className="flex items-center mb-3 space-x-2">
+                    <label htmlFor="groupFilter" className="text-sm font-medium">
+                      Corporation:
+                    </label>
+                    <select
+                      id="groupFilter"
+                      value={selectedCorp}
+                      onChange={handleFilterChangeCorp}
+                      className="border border-gray-300 rounded p-1"
+                    >
+                      <option value="">Choose Corporation</option>
+                      {corporation.map((corp) => (
+                        <option key={corp.cop_id} value={corp.cop_name}>
+                          {corp.cop_name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-  {/* Lsgd Field (Visible if a corporation is selected) */}
-  {selectedDistrict && (
-    <div className="flex flex-col mb-3 w-full">
-      <label htmlFor="lsgdFilter" className="text-sm font-medium">
-        Lsgd:
-      </label>
-      <select
-        id="lsgdFilter"
-        value={selectedLsgd}
-        onChange={handleFilterChangeLsgd}
-        className="border border-gray-300 rounded p-1 w-full"
-      >
-        <option value="">Choose Lsgd</option>
-        {lsgd && lsgd.map((lsg) => (
-          <option key={lsg.lsg_id} value={lsg.lsg_name}>
-            {lsg.lsg_name}
-          </option>
-        ))}
-      </select>
-    </div>
-  )}
-</div>
+                  {selectedDistrict != "" ?
 
+                    <><div className="flex items-center mb-3 space-x-2">
+                      <label htmlFor="groupFilter" className="text-sm font-medium">
+                        Lsgd:
+                      </label>
+                      <select
+                        id="groupFilter"
+                        value={selectedLsgd}
+                        onChange={handleFilterChangeLsgd}
+                        className="border border-gray-300 rounded p-1"
+                      >
+                        <option value="">Choose Lsgd</option>
+                        {lsgd && lsgd.map((lsg) => (
+                          <option key={lsg.lsg_id} value={lsg.lsg_name}>
+                            {lsg.lsg_name}
+                          </option>
+                        ))}
+                      </select>
+                    </div><div>
+                        <label>Ward No</label>
+                        <div className="flex mb-3">
+                          <input
+                            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+                            value={selectedWard}
+                            onChange={(e) => setSelectedWard(e.target.value)} // Update the state directly
+                          />
+                          <button
+                            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+                            onClick={() => handleFilterChangeWard(selectedWard)}
+                          >
+                            Search
+                          </button>
+                        </div>
+                      </div></>
+                    : ''}
+                </> : ''}
+            </> : ''}
+        </> : ''}
+      {/* group type  */}
       <div className="flex items-center mb-3 space-x-2">
         <label htmlFor="groupFilter" className="text-sm font-medium">
           Group Type:
@@ -1584,8 +1487,7 @@ const AdminGrid = () => {
 
         </select>
       </div>
-    
-      {selectedSubCategory !== 'College' && grouptype === 'School' && (
+      {grouptype === 'School' && (
         <>
           <div className="flex items-center mb-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
@@ -1871,7 +1773,27 @@ const AdminGrid = () => {
             </select>
           </div>
         </>)}
-      
+      <div className="flex items-center mb-3 space-x-2">
+        <label htmlFor="groupFilter" className="text-sm font-medium">
+          Group Name :
+        </label>
+        <select
+          id="groupFilter"
+          value={selectedgrpName}
+          onChange={handleFilterGrpName}
+          className="border border-gray-300 rounded p-1"
+        >
+          <option value="">Select Group Name</option>
+
+          {grpName.map((c) => (
+            <option key={c.gp_id} value={c.gp_name}>
+              {c.gp_name}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="flex items-center justify-center font-bold">Total Count : {totalcount}</div>
+
       <div className={"ag-theme-quartz"} style={{ height: 600 }}>
         <AgGridReact
           rowData={rowData}
