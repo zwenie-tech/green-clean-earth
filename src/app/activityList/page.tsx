@@ -1487,7 +1487,7 @@ const ActivityList = () => {
         </div>
       </div>
 
-      <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+      {/* <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} /> */}
       {/* {totalPages &&
       } */}
       {/* <div className="flex justify-center items-center space-x-2 my-4">
