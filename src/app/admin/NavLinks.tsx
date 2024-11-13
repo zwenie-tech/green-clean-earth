@@ -1,7 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-import { HomeIcon, LogOut, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -30,15 +30,12 @@ const links = [
   { name: "Manage Malayalam Mission Zone", href: "/admin/mmzone" },
   { name: "Manage News and Events", href: "/admin/news-and-events" },
   { name: "Manage Ads", href: "/admin/ads" },
-  { name: "Manage Clubs", href: "/admin/clubs" },
-  // { name: "Manage Mainpage Events", href: "/admin/mainevents" },
+  { name: "Manage Clubs", href: "/admin/clubs" }
 ];
-
-
 
 function NavLinks() {
   const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const token = Cookies.get("adtoken");
 
   const toggleNav = () => {
@@ -50,6 +47,7 @@ function NavLinks() {
 
   return (
     <div>
+      {/* Button only visible on small screens */}
       <button
         className="md:hidden flex h-[48px] grow items-center gap-2 rounded-md text-black p-3 text-sm font-medium hover:bg-light-green hover:text-primary md:flex-none md:justify-start md:p-2 md:px-3"
         onClick={toggleNav}
@@ -59,15 +57,18 @@ function NavLinks() {
         <Menu />
         Menu
       </button>
+      
+      {/* Navigation panel: toggleable on small screens, always shown on large screens */}
       <div
         id="nav-links"
         className={clsx(
-          "grid",
-          isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
-          "overflow-hidden transition-[grid-template-rows] duration-500 ease-in-out w-full"
+          "flex-col h-[500px] bg-white md:flex",
+          isOpen ? "flex" : "hidden",
+          "md:flex"
         )}
       >
-        <div className="flex flex-col gap-1 overflow-y-auto max-h-96 bg-white">
+        {/* Scrollable links container */}
+        <div className="flex-1 overflow-y-auto">
           {links.map((link) => (
             <Link
               key={link.name}
@@ -82,8 +83,10 @@ function NavLinks() {
               {link.name}
             </Link>
           ))}
+        </div>
+        {/* Fixed logout button */}
+        <div className="mt-2">
           <Separator className="my-2" />
-          {/* Logout button */}
           <LogoutDialog />
         </div>
       </div>

@@ -21,7 +21,8 @@ interface Acivitylist {
   activity_likes: string,
   activity_views: string,
   activity_value: string,
-  activity_on: string
+  activity_on: string,
+  earnings: number,
 }
 
 type Country = {
@@ -1439,7 +1440,7 @@ const ActivityList = () => {
       <div className="flex justify-center font-bold my-4">
         <p>Total Count: {totalCount}</p>
       </div>
-
+      <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
       <div className="container mx-auto p-6">
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white border-gray-200 rounded-t-lg">
@@ -1452,6 +1453,7 @@ const ActivityList = () => {
                 <th className="py-3 px-6 text-left">Name of Art - Brief Description</th>
                 <th className="py-3 px-6 text-left">Category</th>
                 <th className="py-3 px-6 text-left">Views and Likes</th>
+                <th className="py-3 px-6 text-left">Earnings</th>
                 <th className="py-3 px-6 text-left rounded-tr-lg">Value</th>
               </tr>
             </thead>
@@ -1468,6 +1470,7 @@ const ActivityList = () => {
                       <td className="py-3 px-6 text-left">{activity.activity_title}{activity.activity_description}</td>
                       <td className="py-3 px-6 text-left">{categories[activity.activity_category_id]}</td>
                       <td className="py-3 px-6 text-left">{activity.activity_views} Views, {activity.activity_likes} Likes</td>
+                      <td className="py-3 px-6 text-left">{activity.earnings}</td>
                       <td className="py-3 px-6 text-left">
                         {activity.activity_value}
                       </td>
