@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import NavigationBar from '@/components/navigationBar';
 import Footer from '@/components/footer';
 import { useForm } from "react-hook-form";
@@ -480,30 +480,11 @@ const ActivityList = () => {
     setWardNo("");
   };
 
-  useEffect(() => {
-    handleGrpName();
-  }, [selectedGrpType]);
-
-
-  async function handleGrpName() {
-    if (selectedGrpType) {
-      const groupId = category.find((item) => item.group_type === selectedGrpType)?.id;
-      const Response = await axios.get(`${apiURL}/common/groupName/${groupId}`);
-      setGrpName(Response.data.stateMapData);
-
-    }
-  }
-
-  const onDataSubmit = async (data: any) => {
+  
+  const onDataSubmit = async (data: any,page:any) => {
     try {
-      const responseall = await fetch(`${apiURL}/activity/all?limit=10000000`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      const response = await fetch(`${apiURL}/activity/all`, {
+      
+      const response = await fetch(`${apiURL}/activity/all?page=${page}&limit=${itemsPerPage}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -516,32 +497,12 @@ const ActivityList = () => {
         throw new Error("Network response was not ok");
       }
       try {
-        const resultall = await responseall.json();
         const result = await response.json();
-        setTotalCount(result.total);
 
-        setTotalPages(Math.ceil(resultall.activity.length / itemsPerPage));
         setActivityList(result.activity);
-        // setTreeNo('');
-        // setSelectedGrpType('');
-        // setSelectedGrpName('');
-        // setSelectedSubCategory('');
-        // setSelecteduDistrict('');
-        // setSelecteduSubDistrict('');
-        // setSelectschoolType('');
-        // setSelectSahodaya('');
-        // setSelectIcdsBlock('');
-        // setSelectIcdsProject('');
-        // setSelectedMission('');
-        // setSelectedZone('');
-        // setSelectedCountry('');
-        // setSelectedState('');
-        // setSelectedDistrict('');
-        // setSelectedCorp('');
-        // setSelectedLsgd('');
-        // setWardNo('');
+        
       } catch {
-        setTotalPages(1);
+        // setTotalPages(1);
         setActivityList([]);
       }
     } catch (error) {
@@ -551,9 +512,9 @@ const ActivityList = () => {
 
   useEffect(() => {
     if (filterData) {
-      onDataSubmit(filterData);
+      onDataSubmit(filterData,currentPage);
     }
-  }, [filterData]);
+  }, [currentPage, filterData]);
   useEffect(() => {
     async function fetchFirstData() {
       try {
@@ -564,16 +525,16 @@ const ActivityList = () => {
           },
         });
         const dataAll = await responseAll.json();
-        const totalActivities = dataAll.activity ? dataAll.activity.length : 0;
         
-        setTotalPages(Math.ceil(totalActivities / itemsPerPage));
+        setTotalCount(dataAll.activity.length)
+        setTotalPages(Math.ceil(dataAll.activity.length / itemsPerPage));
       } catch (error) {
         console.error("Error fetching total activities:", error);
       }
     }
   
     fetchFirstData();
-  }, [itemsPerPage]);
+  }, []);
   
   // Fetch data for the current page
   useEffect(() => {
@@ -611,8 +572,113 @@ const ActivityList = () => {
   const handlePageChange = (newPage: number) => {
     if (newPage > 0 && newPage <= totalPages) {
       setCurrentPage(newPage);
+      // Trigger data fetch with the updated page number
+      // onDataSubmit(filterData, newPage);
     }
   };
+
+  const handleFilterGrpName = (e: any) => {
+
+    if (e.target.value != "") {
+      setSelectedGrpName(e.target.value);
+      // fetchFilteredGrpName(e.target.value);
+      // setCurrentPage(1); // Reset to first page
+    }
+  };
+
+  const fetchgrpname = useCallback(async () => {
+    try {
+      // Clear group name to empty array before fetching
+      setGrpName([]);
+
+      const response = await axios.post(
+        `${apiURL}/common/groupName/`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setGrpName(response.data.groupList);
+    } catch (error) {
+      console.error("Error fetching category:", error);
+    }
+  }, []); // Empty dependency array ensures this only runs once
+
+  // Call fetchgrpname only once when the component mounts
+  useEffect(() => {
+    fetchgrpname();
+  }, [fetchgrpname]);
+
+  // Define handleGrpName using useCallback to memoize it
+  const handleGrpName = useCallback(async () => {
+    if (selectedGrpType) {
+      const groupId = category.find((item) => item.group_type === selectedGrpType)?.id;
+      const subcatid = subcategoryOptions.find((item) => item.gp_cat_name === selectedSubCategory)?.gp_cat_id;
+      const schooltypeid = schoolType.find((item) => item.type_name === selectschoolType)?.id;
+      const sahodayaid = sahodaya.find((item) => item.sahodaya_name === selectSahodaya)?.sahodaya_id;
+      const edudistid = eduDistrict.find((item) => item.edu_district === selecteduDistrict)?.edu_district_id;
+      const edusubid = eduSubDistrict.find((item) => item.edu_sub_district_name === selecteduSubDistrict)?.edu_sub_district_id;
+      const blockid = icdsBlock.find((item) => item.block_name === selectIcdsBlock)?.icds_block_id;
+      const projectid = icdsProject.find((item) => item.project_name === selectIcdsProject)?.project_id;
+      const chapterid = missionChapter.find((item) => item.chapter_name === selectMission)?.chapter_id;
+      const zoneid = missionZone.find((item) => item.zone_name === selectZone)?.zone_id;
+
+      const apidata = {
+        groupTypeId: groupId,
+        subCategoryId: subcatid,
+        schoolTypeId: schooltypeid,
+        eduDistrictId: edudistid,
+        eduSubDistrictId: edusubid,
+        sahodayaId: sahodayaid,
+        blockId: blockid,
+        projectId: projectid,
+        chapterId: chapterid,
+        zoneId: zoneid
+      };
+
+      try {
+        // Clear group name to empty array before fetching
+        setGrpName([]);
+
+        const response = await axios.post(
+          `${apiURL}/common/groupName/`,
+          apidata,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const GroupList = response.data.groupList;
+        setGrpName(GroupList);
+      } catch (error) {
+        console.error("Error fetching group names:", error);
+      }
+    }
+  }, [selectedGrpType, category, subcategoryOptions, schoolType, sahodaya, eduDistrict, eduSubDistrict, icdsBlock, icdsProject, missionChapter, missionZone, selectedSubCategory, selectschoolType, selectSahodaya, selecteduDistrict, selecteduSubDistrict, selectIcdsBlock, selectIcdsProject, selectMission, selectZone]);
+
+  // Trigger handleGrpName whenever dependencies change
+  useEffect(() => {
+    if (selectedGrpType) {
+      handleGrpName();
+    }
+  }, [
+    selectedGrpType,
+    selectedSubCategory,
+    selectschoolType,
+    selectSahodaya,
+    selecteduDistrict,
+    selecteduSubDistrict,
+    selectIcdsBlock,
+    selectIcdsProject,
+    selectMission,
+    selectZone,
+    handleGrpName
+  ]);
+
   const onSubmit = async (data: any) => {
     const dataWithIds: any = {};
     treeNo !== "" ? dataWithIds.treeNumber = parseInt(treeNo) : '';
@@ -651,7 +717,21 @@ const ActivityList = () => {
     selectMission ? dataWithIds.chapterId = missionChapter.find((item) => item.chapter_name === selectMission)?.chapter_id || null : null;
     selectZone ? dataWithIds.zoneId = missionZone.find((item) => item.zone_name === selectZone)?.zone_id || null : null;
     setFilterData(dataWithIds);
-    onDataSubmit(dataWithIds);
+    const responseall = await fetch(`${apiURL}/activity/all?limit=10000000`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    if(responseall.status==200){
+      const resultAll = await responseall.json();
+      // Update total pages based on total records
+      setTotalPages(Math.ceil(resultAll.activity.length / itemsPerPage));
+      setTotalCount(resultAll.activity.length);
+      onDataSubmit(dataWithIds,1);
+
+    }
 
   };
 
@@ -919,7 +999,8 @@ const ActivityList = () => {
                       <Select onValueChange={(value) => {
                         field.onChange(value);
                         setSelectedGrpType(value);
-                        handleGrpName();
+                    handleGrpName();
+                        
                       }} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
@@ -1327,23 +1408,24 @@ const ActivityList = () => {
                     </FormItem>
                   )}
                 />
-                {selectedGrpType !== "" && grpName && grpName.length > 0 && (
-                   <div className="w-full sm:col-span-2 md:col-span-1">
-                   <select
-                      className="w-full p-2 border border-black rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
-                      value={selectedgrpName}
-                      onChange={(e) => setSelectedGrpName(e.target.value)}
-                    >
-                      <option value="">Select Group Name</option>
-                      {grpName.map((c) => (
-                        <option key={c.gp_id} value={c.gp_name}>
-                          {c.gp_name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                {/* Group Name Select */}
 
-                )}
+                <div className="w-full sm:col-span-2 md:col-span-1">
+                  <select
+                    id="groupFilter"
+                    value={selectedgrpName}
+                    onChange={handleFilterGrpName}
+                    className="w-full p-2 border border-black rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
+                  >
+                    <option value="">Select Group Name</option>
+
+                    {grpName.map((c) => (
+                      <option key={c.gp_id} value={c.gp_name}>
+                        {c.gp_name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                
 
                 <Button type="submit" className="w-full bg-primary mx-auto text-center">
@@ -1405,8 +1487,34 @@ const ActivityList = () => {
         </div>
       </div>
 
-   
-     
+      <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+      {/* {totalPages &&
+      } */}
+      {/* <div className="flex justify-center items-center space-x-2 my-4">
+        <button
+        className={currentPage === 1 ? 
+          "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
+        : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+        }
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        <span className="text-xl">{currentPage}</span>
+        <button
+          className={currentPage === totalPages ? 
+            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
+          : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+          }
+          onClick={() => {
+            handlePageChange(currentPage + 1) 
+          }}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
+      </div> */}
       <Footer />
     </>
   );

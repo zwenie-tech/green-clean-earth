@@ -40,7 +40,7 @@ export function EditClub() {
   const form = useForm();
 
   async function onSubmit() {
-    console.log(category);
+    
     const formdata = {
       clubName: category
     };

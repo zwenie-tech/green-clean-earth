@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import NavigationBar from '@/components/navigationBar';
 import Footer from '@/components/footer';
 import { useForm } from "react-hook-form";
@@ -27,7 +27,7 @@ interface Participant {
   gp_name: string,
   total_upload: number,
   cntry_name: string,
-  st_name: string, 
+  st_name: string,
   dis_name: string,
   cop_name: string,
   lsg_name: string,
@@ -459,40 +459,10 @@ const ParticipateList = () => {
     setWardNo("");
   };
 
-  useEffect(() => {
-    handleGrpName();
-  }, [selectedGrpType]);
 
-
-  async function handleGrpName() {
-    if (selectedGrpType) {
-      const groupId = category.find((item) => item.group_type === selectedGrpType)?.id;
-      const Response = await axios.get(`${apiURL}/common/groupName/${groupId}`);
-      setGrpName(Response.data.stateMapData);
-
-    }
-  }
 
   const onDataSubmit = async (data: any, page = 1) => {
     try {
-      // Fetch all results to calculate total uploads (for pagination)
-      const responseAll = await fetch(`${apiURL}/uploads/filter?limit=10000000`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-  
-      if (!responseAll.ok) {
-        throw new Error("Failed to fetch all uploads.");
-      }
-  
-      const resultAll = await responseAll.json();
-  
-      // Update total pages based on total records
-      setTotalPages(Math.ceil(resultAll.Uploads.length / itemsPerPage));
-  
       // Fetch paginated data based on current page
       const response = await fetch(`${apiURL}/uploads/filter?page=${page}&limit=${itemsPerPage}`, {
         method: "POST",
@@ -501,17 +471,15 @@ const ParticipateList = () => {
         },
         body: JSON.stringify(data),
       });
-  
       if (!response.ok) {
         throw new Error("Failed to fetch paginated uploads.");
       }
-  
       const result = await response.json();
-  
       // Set paginated data and total count for the page
+     
+      setCurrentPage(page)
       setParticipantList(result.Uploads);
       setTotalCount(result.total);
-  
     } catch (error) {
       console.error("Error fetching data:", error);
       // Reset pagination and participant list on error
@@ -519,16 +487,16 @@ const ParticipateList = () => {
       setParticipantList([]);
     }
   };
-  
+
   // Handle page change for pagination
   const handlePageChange = (newPage: number) => {
     if (newPage > 0 && newPage <= totalPages) {
       setCurrentPage(newPage);
       // Trigger data fetch with the updated page number
-      onDataSubmit({ /* pass any form/filter data */ }, newPage);
+      onDataSubmit(filterData, newPage);
     }
   };
-  
+
   // Fetch initial data for total pages when the component mounts
   useEffect(() => {
     async function fetchInitialData() {
@@ -539,18 +507,18 @@ const ParticipateList = () => {
             'Content-Type': 'application/json',
           },
         });
-  
+
         if (!responseAll.ok) {
           throw new Error("Failed to fetch total uploads.");
         }
-  
+
         const dataAll = await responseAll.json();
         setTotalPages(Math.ceil(dataAll.Uploads.length / itemsPerPage));
       } catch (error) {
         console.error("Error fetching initial data:", error);
       }
     }
-  
+
     fetchInitialData();
   }, [itemsPerPage]);
   useEffect(() => {
@@ -569,7 +537,7 @@ const ParticipateList = () => {
 
     if (selectedGrpType !== "") {
       selectedGrpType ? dataWithIds.groupTypeId = parseInt(category.find((item) => item.group_type === selectedGrpType)?.id!) : null;
-      selectedgrpName !== "" ? dataWithIds.groupId = parseInt(grpName.find((item) => item.gp_name === selectedgrpName)?.gp_id!) : '';
+      selectedgrpName !== "" ? dataWithIds.groupId = parseInt(grpName.find((item) => item.gp_name === selectedgrpName)?.gp_id!) : null;
 
     }
 
@@ -604,9 +572,139 @@ const ParticipateList = () => {
 
 
     setFilterData(dataWithIds);
-    onDataSubmit(dataWithIds);
+    // Fetch all results to calculate total uploads (for pagination)
+    const responseAll = await fetch(`${apiURL}/uploads/filter?limit=10000000`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataWithIds),
+    });
+
+    if (!responseAll.ok) {
+      throw new Error("Failed to fetch all uploads.");
+    }
+
+   
+    if(responseAll.status==200){
+      const resultAll = await responseAll.json();
+      // Update total pages based on total records
+      setTotalPages(Math.ceil(resultAll.Uploads.length / itemsPerPage));
+      onDataSubmit(dataWithIds);
+
+    }
 
   };
+
+  const handleFilterGrpName = (e: any) => {
+
+    if (e.target.value != "") {
+      setSelectedGrpName(e.target.value);
+      // fetchFilteredGrpName(e.target.value);
+      // setCurrentPage(1); // Reset to first page
+    }
+  };
+
+
+  const fetchgrpname = useCallback(async () => {
+    try {
+      // Clear group name to empty array before fetching
+      setGrpName([]);
+
+      const response = await axios.post(
+        `${apiURL}/common/groupName/`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      
+      setGrpName(response.data.groupList);
+    } catch (error) {
+      console.error("Error fetching category:", error);
+    }
+  }, []); // Empty dependency array ensures this only runs once
+
+  // Call fetchgrpname only once when the component mounts
+  useEffect(() => {
+    fetchgrpname();
+  }, [fetchgrpname]);
+
+  // Define handleGrpName using useCallback to memoize it
+  const handleGrpName = useCallback(async () => {
+    if (selectedGrpType) {
+      const groupId = category.find((item) => item.group_type === selectedGrpType)?.id;
+      const subcatid = subcategoryOptions.find((item) => item.gp_cat_name === selectedSubCategory)?.gp_cat_id;
+      const schooltypeid = schoolType.find((item) => item.type_name === selectschoolType)?.id;
+      const sahodayaid = sahodaya.find((item) => item.sahodaya_name === selectSahodaya)?.sahodaya_id;
+      const edudistid = eduDistrict.find((item) => item.edu_district === selecteduDistrict)?.edu_district_id;
+      const edusubid = eduSubDistrict.find((item) => item.edu_sub_district_name === selecteduSubDistrict)?.edu_sub_district_id;
+      const blockid = icdsBlock.find((item) => item.block_name === selectIcdsBlock)?.icds_block_id;
+      const projectid = icdsProject.find((item) => item.project_name === selectIcdsProject)?.project_id;
+      const chapterid = missionChapter.find((item) => item.chapter_name === selectMission)?.chapter_id;
+      const zoneid = missionZone.find((item) => item.zone_name === selectZone)?.zone_id;
+
+      const apidata = {
+        groupTypeId: groupId,
+        subCategoryId: subcatid,
+        schoolTypeId: schooltypeid,
+        eduDistrictId: edudistid,
+        eduSubDistrictId: edusubid,
+        sahodayaId: sahodayaid,
+        blockId: blockid,
+        projectId: projectid,
+        chapterId: chapterid,
+        zoneId: zoneid
+      };
+
+     
+
+      try {
+        // Clear group name to empty array before fetching
+        setGrpName([]);
+
+        const response = await axios.post(
+          `${apiURL}/common/groupName/`,
+          apidata,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const GroupList = response.data.groupList;
+        
+        setGrpName(GroupList);
+      } catch (error) {
+        console.error("Error fetching group names:", error);
+      }
+    }
+  }, [selectedGrpType, category, subcategoryOptions, schoolType, sahodaya, eduDistrict, eduSubDistrict, icdsBlock, icdsProject, missionChapter, missionZone, selectedSubCategory, selectschoolType, selectSahodaya, selecteduDistrict, selecteduSubDistrict, selectIcdsBlock, selectIcdsProject, selectMission, selectZone]);
+
+  // Trigger handleGrpName whenever dependencies change
+  useEffect(() => {
+    if (selectedGrpType) {
+      handleGrpName();
+    }
+  }, [
+    selectedGrpType,
+    selectedSubCategory,
+    selectschoolType,
+    selectSahodaya,
+    selecteduDistrict,
+    selecteduSubDistrict,
+    selectIcdsBlock,
+    selectIcdsProject,
+    selectMission,
+    selectZone,
+    handleGrpName
+  ]);
+
+
+  
 
   return (
     <>
@@ -617,858 +715,858 @@ const ParticipateList = () => {
 
       {/* Search by Person Wise */}
       <div className='search1'>
-  <h1 className='text-lg text-center m-3'>Search by Person Wise</h1>
-  <div className="mx-5 md:mx-9 lg:mx-16 border-2 border-gray-300 shadow-lg flex justify-center items-center bg-gray-100 rounded-lg">
-    <Form {...formPersonal}>
-      <form onSubmit={formPersonal.handleSubmit(onSubmit)} noValidate className="space-y-8 w-full md:w-2/3">
-        <div className="flex flex-col gap-4 md:flex-row md:m-5 justify-center items-center">
+        <h1 className='text-lg text-center m-3'>Search by Person Wise</h1>
+        <div className="mx-5 md:mx-9 lg:mx-16 border-2 border-gray-300 shadow-lg flex justify-center items-center bg-gray-100 rounded-lg">
+          <Form {...formPersonal}>
+            <form onSubmit={formPersonal.handleSubmit(onSubmit)} noValidate className="space-y-8 w-full md:w-2/3">
+              <div className="flex flex-col gap-4 md:flex-row md:m-5 justify-center items-center">
 
-          {/* Tree Number Field */}
-          <FormField
-            control={formPersonal.control}
-            name="treeNumber"
-            render={({ field }) => (
-              <FormItem className="w-full md:w-1/3">
-                <FormControl>
-                  <Input {...field} placeholder="Enter Tree Number" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                {/* Tree Number Field */}
+                <FormField
+                  control={formPersonal.control}
+                  name="treeNumber"
+                  render={({ field }) => (
+                    <FormItem className="w-full md:w-1/3">
+                      <FormControl>
+                        <Input {...field} placeholder="Enter Tree Number" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-          {/* Name Field */}
-          <FormField
-            control={formPersonal.control}
-            name="coname"
-            render={({ field }) => (
-              <FormItem className="w-full md:w-1/3">
-                <FormControl>
-                  <Input {...field} placeholder="Name" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                {/* Name Field */}
+                <FormField
+                  control={formPersonal.control}
+                  name="coname"
+                  render={({ field }) => (
+                    <FormItem className="w-full md:w-1/3">
+                      <FormControl>
+                        <Input {...field} placeholder="Name" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-          {/* Phone Number Field */}
-          <FormField
-            control={formPersonal.control}
-            name="phoneNumber"
-            render={({ field }) => (
-              <FormItem className="w-full md:w-1/3">
-                <FormControl>
-                  <Input type="number" {...field} placeholder="Phone Number" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                {/* Phone Number Field */}
+                <FormField
+                  control={formPersonal.control}
+                  name="phoneNumber"
+                  render={({ field }) => (
+                    <FormItem className="w-full md:w-1/3">
+                      <FormControl>
+                        <Input type="number" {...field} placeholder="Phone Number" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-          {/* Submit Button */}
-          <Button type="submit" className="w-full md:w-1/3 bg-primary mx-auto text-center">
-            Search
-          </Button>
+                {/* Submit Button */}
+                <Button type="submit" className="w-full md:w-1/3 bg-primary mx-auto text-center">
+                  Search
+                </Button>
 
+              </div>
+            </form>
+          </Form>
         </div>
-      </form>
-    </Form>
-  </div>
-</div>
+      </div>
 
 
 
-  {/* Search by Country Wise */}
-<div className='search1 mb-5'>
-  <h1 className='text-lg text-center m-3'>Search by Country Wise</h1>
-  <div className="mx-5 md:mx-9 lg:mx-16 border-2 border-gray-300 shadow-lg bg-gray-100 rounded-lg p-4">
-    <Form {...formCountry}>
-      <form onSubmit={formCountry.handleSubmit(onSubmit)} noValidate className="w-full">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-items-center">
-          
-          {/* Country Select */}
-          <FormField
-            control={formCountry.control}
-            name="country"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <Select
-                  onValueChange={(value) => {
-                    field.onChange(value);
-                    setSelectedCountry(value);
-                  }}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Choose a country" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {countries.map((country) => (
-                      <SelectItem key={country.cntry_id} value={country.cntry_name}>
-                        {country.cntry_name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      {/* Search by Country Wise */}
+      <div className='search1 mb-5'>
+        <h1 className='text-lg text-center m-3'>Search by Country Wise</h1>
+        <div className="mx-5 md:mx-9 lg:mx-16 border-2 border-gray-300 shadow-lg bg-gray-100 rounded-lg p-4">
+          <Form {...formCountry}>
+            <form onSubmit={formCountry.handleSubmit(onSubmit)} noValidate className="w-full">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-items-center">
 
-          {/* State Select */}
-          {selectedCountry === 'India' && (
-            <FormField
-              control={formCountry.control}
-              name="state"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <Select
-                    onValueChange={(value) => {
-                      field.onChange(value);
-                      setSelectedState(value);
-                    }}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Choose a state" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {states.map((state) => (
-                        <SelectItem key={state.st_id} value={state.st_name}>
-                          {state.st_name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
+                {/* Country Select */}
+                <FormField
+                  control={formCountry.control}
+                  name="country"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <Select
+                        onValueChange={(value) => {
+                          field.onChange(value);
+                          setSelectedCountry(value);
+                        }}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Choose a country" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {countries.map((country) => (
+                            <SelectItem key={country.cntry_id} value={country.cntry_name}>
+                              {country.cntry_name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-          {/* District Select */}
-          {selectedState === 'Kerala' && (
-            <FormField
-              control={formCountry.control}
-              name="district"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <Select
-                    onValueChange={(value) => {
-                      field.onChange(value);
-                      setSelectedDistrict(value);
-                    }}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Choose a district" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {districts.map((district) => (
-                        <SelectItem key={district.dis_id} value={district.dis_name}>
-                          {district.dis_name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
+                {/* State Select */}
+                {selectedCountry === 'India' && (
+                  <FormField
+                    control={formCountry.control}
+                    name="state"
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <Select
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            setSelectedState(value);
+                          }}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Choose a state" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {states.map((state) => (
+                              <SelectItem key={state.st_id} value={state.st_name}>
+                                {state.st_name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
 
-          {/* Corporation Select */}
-          {selectedState === 'Kerala' && (
-            <FormField
-              control={formCountry.control}
-              name="corporation"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <Select
-                    onValueChange={(value) => {
-                      field.onChange(value);
-                      setSelectedCorp(value);
-                    }}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Choose a block" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {corporation.map((corp) => (
-                        <SelectItem key={corp.cop_id} value={corp.cop_name}>
-                          {corp.cop_name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
+                {/* District Select */}
+                {selectedState === 'Kerala' && (
+                  <FormField
+                    control={formCountry.control}
+                    name="district"
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <Select
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            setSelectedDistrict(value);
+                          }}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Choose a district" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {districts.map((district) => (
+                              <SelectItem key={district.dis_id} value={district.dis_name}>
+                                {district.dis_name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
 
-          {/* LSG Select */}
-          {selectedState === 'Kerala' && (
-            <FormField
-              control={formCountry.control}
-              name="lsg"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <Select
-                    onValueChange={(value) => {
-                      field.onChange(value);
-                      setSelectedLsgd(value);
-                    }}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Choose a LSG" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {lsgd ? (
-                        lsgd.map((lsg) => (
-                          <SelectItem key={lsg.lsg_id} value={lsg.lsg_name}>
-                            {lsg.lsg_name}
-                          </SelectItem>
-                        ))
-                      ) : (
-                        <SelectItem value="" disabled>
-                          Choose a LSG
-                        </SelectItem>
-                      )}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
+                {/* Corporation Select */}
+                {selectedState === 'Kerala' && (
+                  <FormField
+                    control={formCountry.control}
+                    name="corporation"
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <Select
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            setSelectedCorp(value);
+                          }}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Choose a block" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {corporation.map((corp) => (
+                              <SelectItem key={corp.cop_id} value={corp.cop_name}>
+                                {corp.cop_name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
 
-          {/* Ward Number Input */}
-          {selectedState === 'Kerala' && (
-            <FormField
-              control={formCountry.control}
-              name="wardNo"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormControl>
-                    <Input type="number" {...field} placeholder='Ward Number' className="w-full" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
+                {/* LSG Select */}
+                {selectedState === 'Kerala' && (
+                  <FormField
+                    control={formCountry.control}
+                    name="lsg"
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <Select
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            setSelectedLsgd(value);
+                          }}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Choose a LSG" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {lsgd ? (
+                              lsgd.map((lsg) => (
+                                <SelectItem key={lsg.lsg_id} value={lsg.lsg_name}>
+                                  {lsg.lsg_name}
+                                </SelectItem>
+                              ))
+                            ) : (
+                              <SelectItem value="" disabled>
+                                Choose a LSG
+                              </SelectItem>
+                            )}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
 
-          {/* Submit Button
+                {/* Ward Number Input */}
+                {selectedState === 'Kerala' && (
+                  <FormField
+                    control={formCountry.control}
+                    name="wardNo"
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <FormControl>
+                          <Input type="number" {...field} placeholder='Ward Number' className="w-full" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+
+                {/* Submit Button
           <div className="col-span-full flex justify-center"> */}
-            <Button
-              type="submit"
-              className="w-full bg-primary text-center px-6 py-2 rounded-md"
-            >
-              Search
-            </Button>
-          {/* </div> */}
+                <Button
+                  type="submit"
+                  className="w-full bg-primary text-center px-6 py-2 rounded-md"
+                >
+                  Search
+                </Button>
+                {/* </div> */}
 
+              </div>
+            </form>
+          </Form>
         </div>
-      </form>
-    </Form>
-  </div>
-</div>
+      </div>
 
 
       {/* Search by Group Wise */}
-<div className='search1 mb-5'>
-  <h1 className='text-lg text-center m-3'>Search by Group Wise</h1>
-  <div className="mx-5 md:mx-9 lg:mx-16 border-2 border-gray-300 shadow-lg bg-gray-100 rounded-lg p-4">
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} noValidate className="w-full">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ">
-          {/* Group Type Select */}
-          <FormField
-            control={form.control}
-            name="grptype"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <Select
-                  onValueChange={(value) => {
-                    field.onChange(value);
-                    setSelectedGrpType(value);
-                    handleGrpName();
-                  }}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Choose a group type" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {category.map((c) => (
-                      <SelectItem key={c.id} value={c.group_type}>
-                        {c.group_type}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      <div className='search1 mb-5'>
+        <h1 className='text-lg text-center m-3'>Search by Group Wise</h1>
+        <div className="mx-5 md:mx-9 lg:mx-16 border-2 border-gray-300 shadow-lg bg-gray-100 rounded-lg p-4">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} noValidate className="w-full">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ">
+                {/* Group Type Select */}
+                <FormField
+                  control={form.control}
+                  name="grptype"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <Select
+                        onValueChange={(value) => {
+                          field.onChange(value);
+                          setSelectedGrpType(value);
+                          handleGrpName();
+                        }}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Choose a group type" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {category.map((c) => (
+                            <SelectItem key={c.id} value={c.group_type}>
+                              {c.group_type}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-          {/* School Type Select */}
-          {selectedSubCategory !== 'College' && (
-            <FormField
-              control={form.control}
-              name="schooltype"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <Select
-                    onValueChange={(value) => {
-                      field.onChange(value);
-                      setSelectschoolType(value);
-                      if (value === 'CBSE' || value === 'General Education' || value === 'ICDS') {
-                        setSelectedCountryGrp('India');
-                      }
-                      if (value === 'General Education' || value === 'ICDS') {
-                        setSelectedStateGrp('Kerala');
-                      }
-                    }}
-                    defaultValue={field.value}
+                {/* School Type Select */}
+                {selectedSubCategory !== 'College' && (
+                  <FormField
+                    control={form.control}
+                    name="schooltype"
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <Select
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            setSelectschoolType(value);
+                            if (value === 'CBSE' || value === 'General Education' || value === 'ICDS') {
+                              setSelectedCountryGrp('India');
+                            }
+                            if (value === 'General Education' || value === 'ICDS') {
+                              setSelectedStateGrp('Kerala');
+                            }
+                          }}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Choose a school type" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {schoolType.map((s) => (
+                              <SelectItem key={s.id} value={s.type_name}>
+                                {s.type_name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+
+                {/* Conditionally Rendered Fields */}
+                {selectedSubCategory !== 'College' && selectschoolType === 'Malayalam Mission' && (
+                  <>
+                    {/* Mission Area */}
+                    <FormField
+                      control={form.control}
+                      name="missionarea"
+                      render={({ field }) => (
+                        <FormItem className="w-full">
+                          <Select
+                            onValueChange={(value) => {
+                              field.onChange(value);
+                              setSelectMissionarea(value);
+                            }}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Choose mission area" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="1">Global</SelectItem>
+                              <SelectItem value="2">India</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    {/* Mission Chapter */}
+                    <FormField
+                      control={form.control}
+                      name="missionchapter"
+                      render={({ field }) => (
+                        <FormItem className="w-full">
+                          <Select
+                            onValueChange={(value) => {
+                              field.onChange(value);
+                              setSelectedMission(value);
+                              handleChapter(value);
+                            }}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Choose a mission chapter" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {missionChapter && missionChapter.map((e) => (
+                                <SelectItem key={e.chapter_id} value={e.chapter_name}>
+                                  {e.chapter_name}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    {/* Mission Zone */}
+                    <FormField
+                      control={form.control}
+                      name="missionzone"
+                      render={({ field }) => (
+                        <FormItem className="w-full">
+                          <Select
+                            onValueChange={(value) => {
+                              field.onChange(value);
+                              setSelectedZone(value);
+                            }}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Choose a mission zone" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {missionZone && missionZone.map((e) => (
+                                <SelectItem key={e.zone_id} value={e.zone_name}>
+                                  {e.zone_name}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </>
+                )}
+
+                {/* CBSE Specific Fields */}
+                {selectschoolType === 'CBSE' && selectedSubCategory !== 'College' && (
+                  <>
+                    {/* State Select */}
+                    <FormField
+                      control={form.control}
+                      name="state"
+                      render={({ field }) => (
+                        <FormItem className="w-full">
+                          <Select
+                            onValueChange={(value) => {
+                              field.onChange(value);
+                              setSelectedStateGrp(value);
+                            }}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Choose a state" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {states.map((state) => (
+                                <SelectItem key={state.st_id} value={state.st_name}>
+                                  {state.st_name}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    {/* Sahodaya Select */}
+                    <FormField
+                      control={form.control}
+                      name="sahodaya"
+                      render={({ field }) => (
+                        <FormItem className="w-full">
+                          <Select
+                            onValueChange={(value) => {
+                              field.onChange(value);
+                              setSelectSahodaya(value);
+                            }}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Choose a sahodaya" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {sahodaya && sahodaya.map((s) => (
+                                <SelectItem key={s.sahodaya_id} value={s.sahodaya_name}>
+                                  {s.sahodaya_name}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </>
+                )}
+
+                {/* ICDS Specific Fields */}
+                {selectschoolType === 'ICDS' && selectedSubCategory !== 'College' && (
+                  <>
+                    {selectedStateGrp === 'Kerala' && (
+                      <FormField
+                        control={form.control}
+                        name="district"
+                        render={({ field }) => (
+                          <FormItem className="w-full">
+                            <Select
+                              onValueChange={(value) => {
+                                field.onChange(value);
+                                setSelectedDistrictGrp(value);
+                              }}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger className="w-full">
+                                  <SelectValue placeholder="Choose a district" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {districts.map((district) => (
+                                  <SelectItem key={district.dis_id} value={district.dis_name}>
+                                    {district.dis_name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    )}
+
+                    {/* ICDS Block */}
+                    <FormField
+                      control={form.control}
+                      name="icdsblock"
+                      render={({ field }) => (
+                        <FormItem className="w-full">
+                          <Select
+                            onValueChange={(value) => {
+                              field.onChange(value);
+                              handleIcds(value);
+                              setSelectIcdsBlock(value);
+                            }}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Choose an ICDS block" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {icdsBlock && icdsBlock.map((e) => (
+                                <SelectItem key={e.icds_block_id} value={e.block_name}>
+                                  {e.block_name}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    {/* ICDS Project */}
+                    <FormField
+                      control={form.control}
+                      name="icdsproject"
+                      render={({ field }) => (
+                        <FormItem className="w-full">
+                          <Select
+                            onValueChange={(value) => {
+                              field.onChange(value);
+                              setSelectIcdsProject(value);
+                            }}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Choose an ICDS project" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {icdsProject && icdsProject.map((e) => (
+                                <SelectItem key={e.project_id} value={e.project_name}>
+                                  {e.project_name}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </>
+                )}
+
+                {/* General Education Specific Fields */}
+                {selectschoolType === 'General Education' && selectedSubCategory !== 'College' && (
+                  <>
+                    {selectedStateGrp === 'Kerala' && (
+                      <FormField
+                        control={form.control}
+                        name="district"
+                        render={({ field }) => (
+                          <FormItem className="w-full">
+                            <Select
+                              onValueChange={(value) => {
+                                field.onChange(value);
+                                setSelectedDistrictGrp(value);
+                              }}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger className="w-full">
+                                  <SelectValue placeholder="Choose a district" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {districts.map((district) => (
+                                  <SelectItem key={district.dis_id} value={district.dis_name}>
+                                    {district.dis_name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    )}
+
+                    {/* Education District */}
+                    <FormField
+                      control={form.control}
+                      name="edudistrict"
+                      render={({ field }) => (
+                        <FormItem className="w-full">
+                          <Select
+                            onValueChange={(value) => {
+                              field.onChange(value);
+                              handleEduDistrict(value);
+                              setSelecteduDistrict(value);
+                            }}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Choose an education district" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {eduDistrict && eduDistrict.map((e) => (
+                                <SelectItem key={e.edu_district_id} value={e.edu_district}>
+                                  {e.edu_district}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    {/* Education Subdistrict */}
+                    <FormField
+                      control={form.control}
+                      name="edusubdistrict"
+                      render={({ field }) => (
+                        <FormItem className="w-full">
+                          <Select
+                            onValueChange={(value) => {
+                              field.onChange(value);
+                              setSelecteduSubDistrict(value);
+                            }}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Choose an education subdistrict" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {eduSubDistrict && eduSubDistrict.map((e) => (
+                                <SelectItem key={e.edu_sub_district_id} value={e.edu_sub_district_name}>
+                                  {e.edu_sub_district_name}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </>
+                )}
+
+                {/* Sub Category Select */}
+                <FormField
+                  control={form.control}
+                  name="subCategory"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <Select
+                        onValueChange={(value) => {
+                          field.onChange(value);
+                          setSelectedSubCategory(value);
+                        }}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Choose a sub category" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {subcategoryOptions.map((category) => (
+                            <SelectItem key={category.gp_cat_id} value={category.gp_cat_name}>
+                              {category.gp_cat_name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Group Name Select */}
+
+                <div className="w-full sm:col-span-2 md:col-span-1">
+                  <select
+                    id="groupFilter"
+                    value={selectedgrpName}
+                    onChange={handleFilterGrpName}
+                    className="w-full p-2 border border-black rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
                   >
-                    <FormControl>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Choose a school type" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {schoolType.map((s) => (
-                        <SelectItem key={s.id} value={s.type_name}>
-                          {s.type_name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
+                    <option value="">Select Group Name</option>
 
-          {/* Conditionally Rendered Fields */}
-          {selectedSubCategory !== 'College' && selectschoolType === 'Malayalam Mission' && (
-            <>
-              {/* Mission Area */}
-              <FormField
-                control={form.control}
-                name="missionarea"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <Select
-                      onValueChange={(value) => {
-                        field.onChange(value);
-                        setSelectMissionarea(value);
-                      }}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Choose mission area" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="1">Global</SelectItem>
-                        <SelectItem value="2">India</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Mission Chapter */}
-              <FormField
-                control={form.control}
-                name="missionchapter"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <Select
-                      onValueChange={(value) => {
-                        field.onChange(value);
-                        setSelectedMission(value);
-                        handleChapter(value);
-                      }}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Choose a mission chapter" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {missionChapter && missionChapter.map((e) => (
-                          <SelectItem key={e.chapter_id} value={e.chapter_name}>
-                            {e.chapter_name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Mission Zone */}
-              <FormField
-                control={form.control}
-                name="missionzone"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <Select
-                      onValueChange={(value) => {
-                        field.onChange(value);
-                        setSelectedZone(value);
-                      }}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Choose a mission zone" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {missionZone && missionZone.map((e) => (
-                          <SelectItem key={e.zone_id} value={e.zone_name}>
-                            {e.zone_name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </>
-          )}
-
-          {/* CBSE Specific Fields */}
-          {selectschoolType === 'CBSE' && selectedSubCategory !== 'College' && (
-            <>
-              {/* State Select */}
-              <FormField
-                control={form.control}
-                name="state"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <Select
-                      onValueChange={(value) => {
-                        field.onChange(value);
-                        setSelectedStateGrp(value);
-                      }}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Choose a state" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {states.map((state) => (
-                          <SelectItem key={state.st_id} value={state.st_name}>
-                            {state.st_name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Sahodaya Select */}
-              <FormField
-                control={form.control}
-                name="sahodaya"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <Select
-                      onValueChange={(value) => {
-                        field.onChange(value);
-                        setSelectSahodaya(value);
-                      }}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Choose a sahodaya" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {sahodaya && sahodaya.map((s) => (
-                          <SelectItem key={s.sahodaya_id} value={s.sahodaya_name}>
-                            {s.sahodaya_name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </>
-          )}
-
-          {/* ICDS Specific Fields */}
-          {selectschoolType === 'ICDS' && selectedSubCategory !== 'College' && (
-            <>
-              {selectedStateGrp === 'Kerala' && (
-                <FormField
-                  control={form.control}
-                  name="district"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <Select
-                        onValueChange={(value) => {
-                          field.onChange(value);
-                          setSelectedDistrictGrp(value);
-                        }}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Choose a district" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {districts.map((district) => (
-                            <SelectItem key={district.dis_id} value={district.dis_name}>
-                              {district.dis_name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )}
-
-              {/* ICDS Block */}
-              <FormField
-                control={form.control}
-                name="icdsblock"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <Select
-                      onValueChange={(value) => {
-                        field.onChange(value);
-                        handleIcds(value);
-                        setSelectIcdsBlock(value);
-                      }}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Choose an ICDS block" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {icdsBlock && icdsBlock.map((e) => (
-                          <SelectItem key={e.icds_block_id} value={e.block_name}>
-                            {e.block_name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* ICDS Project */}
-              <FormField
-                control={form.control}
-                name="icdsproject"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <Select
-                      onValueChange={(value) => {
-                        field.onChange(value);
-                        setSelectIcdsProject(value);
-                      }}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Choose an ICDS project" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {icdsProject && icdsProject.map((e) => (
-                          <SelectItem key={e.project_id} value={e.project_name}>
-                            {e.project_name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </>
-          )}
-
-          {/* General Education Specific Fields */}
-          {selectschoolType === 'General Education' && selectedSubCategory !== 'College' && (
-            <>
-              {selectedStateGrp === 'Kerala' && (
-                <FormField
-                  control={form.control}
-                  name="district"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <Select
-                        onValueChange={(value) => {
-                          field.onChange(value);
-                          setSelectedDistrictGrp(value);
-                        }}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Choose a district" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {districts.map((district) => (
-                            <SelectItem key={district.dis_id} value={district.dis_name}>
-                              {district.dis_name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )}
-
-              {/* Education District */}
-              <FormField
-                control={form.control}
-                name="edudistrict"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <Select
-                      onValueChange={(value) => {
-                        field.onChange(value);
-                        handleEduDistrict(value);
-                        setSelecteduDistrict(value);
-                      }}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Choose an education district" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {eduDistrict && eduDistrict.map((e) => (
-                          <SelectItem key={e.edu_district_id} value={e.edu_district}>
-                            {e.edu_district}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Education Subdistrict */}
-              <FormField
-                control={form.control}
-                name="edusubdistrict"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <Select
-                      onValueChange={(value) => {
-                        field.onChange(value);
-                        setSelecteduSubDistrict(value);
-                      }}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Choose an education subdistrict" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {eduSubDistrict && eduSubDistrict.map((e) => (
-                          <SelectItem key={e.edu_sub_district_id} value={e.edu_sub_district_name}>
-                            {e.edu_sub_district_name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </>
-          )}
-
-          {/* Sub Category Select */}
-          <FormField
-            control={form.control}
-            name="subCategory"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <Select
-                  onValueChange={(value) => {
-                    field.onChange(value);
-                    setSelectedSubCategory(value);
-                  }}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Choose a sub category" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {subcategoryOptions.map((category) => (
-                      <SelectItem key={category.gp_cat_id} value={category.gp_cat_name}>
-                        {category.gp_cat_name}
-                      </SelectItem>
+                    {grpName.map((c) => (
+                      <option key={c.gp_id} value={c.gp_name}>
+                        {c.gp_name}
+                      </option>
                     ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                  </select>
+                </div>
+              </div>
 
-          {/* Group Name Select */}
-          {selectedGrpType && grpName && grpName.length > 0 && (
-            <div className="w-full sm:col-span-2 md:col-span-1">
-              <select
-                className="w-full p-2 border border-black rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
-                value={selectedgrpName}
-                onChange={(e) => setSelectedGrpName(e.target.value)}
-              >
-                <option value="">Select Group Name</option>
-                {grpName.map((c) => (
-                  <option key={c.gp_id} value={c.gp_name}>
-                    {c.gp_name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
+              {/* Checkboxes */}
+              <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4'>
+                <div className="flex items-center space-x-2">
+                  <FormField
+                    control={form.control}
+                    name="twoupload"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            type="checkbox"
+                            checked={field.value}
+                            onChange={field.onChange}
+                            onBlur={field.onBlur}
+                            ref={field.ref}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <p>Have Two Upload</p>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <FormField
+                    control={form.control}
+                    name="threeupload"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            type="checkbox"
+                            checked={field.value}
+                            onChange={field.onChange}
+                            onBlur={field.onBlur}
+                            ref={field.ref}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <p>Have Three Upload</p>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <FormField
+                    control={form.control}
+                    name="fourupload"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            type="checkbox"
+                            checked={field.value}
+                            onChange={field.onChange}
+                            onBlur={field.onBlur}
+                            ref={field.ref}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <p>Have Four Upload</p>
+                </div>
+
+                {/* Submit Button */}
+                <div className="col-span-full sm:col-span-2 md:col-span-1 flex justify-center">
+                  <Button
+                    type="submit"
+                    className="w-full bg-primary text-center px-6 py-2 rounded-md"
+                  >
+                    Search
+                  </Button>
+                </div>
+              </div>
+            </form>
+          </Form>
         </div>
-
-        {/* Checkboxes */}
-        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4'>
-          <div className="flex items-center space-x-2">
-            <FormField
-              control={form.control}
-              name="twoupload"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      type="checkbox"
-                      checked={field.value}
-                      onChange={field.onChange}
-                      onBlur={field.onBlur}
-                      ref={field.ref}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <p>Have Two Upload</p>
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <FormField
-              control={form.control}
-              name="threeupload"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      type="checkbox"
-                      checked={field.value}
-                      onChange={field.onChange}
-                      onBlur={field.onBlur}
-                      ref={field.ref}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <p>Have Three Upload</p>
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <FormField
-              control={form.control}
-              name="fourupload"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      type="checkbox"
-                      checked={field.value}
-                      onChange={field.onChange}
-                      onBlur={field.onBlur}
-                      ref={field.ref}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <p>Have Four Upload</p>
-          </div>
-
-          {/* Submit Button */}
-          <div className="col-span-full sm:col-span-2 md:col-span-1 flex justify-center">
-            <Button
-              type="submit"
-              className="w-full bg-primary text-center px-6 py-2 rounded-md"
-            >
-              Search
-            </Button>
-          </div>
-        </div>
-      </form>
-    </Form>
-  </div>
-</div>
+      </div>
 
 
 
       <div className="flex justify-center font-bold my-4">
         <p>Total Count: {totalCount}</p>
       </div>
-      <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
-      <div className="container mx-auto p-6">
+       <div className="container mx-auto p-6">
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white border-gray-200 rounded-t-lg">
             <thead>
@@ -1540,8 +1638,8 @@ const ParticipateList = () => {
           </table>
         </div>
       </div>
-      
-      
+
+      <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
       <Footer />
     </>
   );

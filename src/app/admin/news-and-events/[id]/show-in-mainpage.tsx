@@ -92,7 +92,7 @@ export function ShowMainPage() {
 
                 if (response.data.success && response.status!=203) {
                     const msg = response.data.message;
-                    console.log(msg)
+                   
                     toast({
                         title: "Event Update Successfully.",
                         description: "",
@@ -104,7 +104,7 @@ export function ShowMainPage() {
                       }, 1800);
                   } else {
                     const msg = response.data.message;
-                    console.log(msg)
+                   
 
                     toast({
                         variant: "destructive",
@@ -113,7 +113,7 @@ export function ShowMainPage() {
                     });
                   }
             } catch (error:any) {
-                console.log()
+              
                 
                 toast({
                     variant: "destructive",
@@ -141,7 +141,7 @@ export function ShowMainPage() {
 
                 if (response.data.success && response.status!=203) {
                     const msg = response.data.message;
-                    console.log(msg)
+                   
                     toast({
                         title: "Event Update Successfully.",
                         description: "",
@@ -153,7 +153,7 @@ export function ShowMainPage() {
                       }, 1800);
                   } else {
                     const msg = response.data.message;
-                    console.log(msg)
+                   
 
                     toast({
                         variant: "destructive",

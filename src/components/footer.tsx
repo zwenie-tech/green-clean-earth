@@ -21,7 +21,7 @@ export default function Footer() {
       const response = await fetch(`${apiURL}/common/getAds`);
       const data = await response.json();
       if (data.success) {
-        console.log(data.count);
+        
         setAds(data.count);
       }
     };

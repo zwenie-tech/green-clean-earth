@@ -83,7 +83,7 @@ export function Eduform() {
             createdTime: dateTime,  // Include the formatted datetime
         };
         
-        console.log(dateTime)
+      
 
         if (token && dateTime!='') {
             try {

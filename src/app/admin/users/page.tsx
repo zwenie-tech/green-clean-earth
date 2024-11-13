@@ -8,7 +8,7 @@ import {
 import { AgGridReact } from "@ag-grid-community/react";
 import "@/app/admin/ag-grid-theme-builder.css"
 import { useRouter } from "next/navigation";
-import React, { StrictMode, useEffect, useMemo, useState } from "react";
+import React, { StrictMode, useCallback, useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { apiURL } from "@/app/requestsapi/request";
 import Cookies from 'js-cookie';
@@ -36,6 +36,50 @@ interface Lsgd {
   lsg_id: number;
   lsg_name: string;
 }
+type Category = {
+  id: string;
+  group_type: string;
+}
+interface SchoolType {
+  id: string;
+  type_name: string;
+}
+interface EduDistrict {
+  edu_district_id: string;
+  edu_district: string;
+}
+interface EduSubDistrict {
+  edu_sub_district_id: string;
+  edu_sub_district_name: string;
+}
+interface SubCategory {
+  gp_cat_id: string;
+  gp_cat_name: string;
+}
+interface Sahodaya {
+  sahodaya_id: string;
+  sahodaya_name: string;
+}
+interface IcdsBlock {
+  icds_block_id: string;
+  block_name: string;
+}
+interface IcdsProject {
+  project_id: string;
+  project_name: string;
+}
+interface MissionChapter {
+  chapter_id: string;
+  chapter_name: string;
+}
+interface MissionZone {
+  zone_id: string;
+  zone_name: string;
+}
+type GrpName = {
+  gp_id: string;
+  gp_name: string;
+}
 const AdminGrid = () => {
   const router = useRouter();
   const [rowData, setRowData] = useState([]);
@@ -61,6 +105,35 @@ const AdminGrid = () => {
   const [userid, setUserid] = useState("");
   const [mobile, setMobile] = useState("");
   const itemsPerPage = 10;
+
+  const [grouptype, setGroupType] = useState("");
+  const [selectedschoolType, setSelectedSchoolType] = useState("");
+  const [category, setCategory] = useState<Category[]>([]);
+  const [schoolType, setSchoolType] = useState<SchoolType[]>([]);
+  const [selectedDistrictGrp, setSelectedDistrictGrp] = useState("");
+  const [eduDistrict, setEduDistrict] = useState<EduDistrict[]>([]);
+  const [eduSubDistrict, setEduSubDistrict] = useState<EduSubDistrict[]>([]);
+  const [selectedCountryGrp, setSelectedCountryGrp] = useState("");
+  const [selectedStateGrp, setSelectedStateGrp] = useState("");
+  const [selectedSubCategory, setSelectedSubCategory] = useState("");
+  const [subcategoryOptions, setSubCategoryOptions] = useState<SubCategory[]>([]);
+  const [selectSahodaya, setSelectSahodaya] = useState('');
+  const [sahodaya, setSahodaya] = useState<Sahodaya[]>([]);
+  const [icdsBlock, setIcdsBlock] = useState<IcdsBlock[]>([]);
+  const [missionChapter, setMissionChapter] = useState<MissionChapter[]>([]);
+  const [selectMissionarea, setSelectMissionarea] = useState('');
+  const [selecteduDistrict, setSelecteduDistrict] = useState('');
+  const [selecteduSubDistrict, setSelecteduSubDistrict] = useState('');
+  const [selectIcdsBlock, setSelectIcdsBlock] = useState('');
+  const [selectIcdsProject, setSelectIcdsProject] = useState('');
+  const [missionZone, setMissionZone] = useState<MissionZone[]>([]);
+  const [icdsProject, setIcdsProject] = useState<IcdsProject[]>([]);
+  const [selectMission, setSelectedMission] = useState('');
+  const [selectZone, setSelectedZone] = useState('');
+  const [selectedgrpName, setSelectedGrpName] = useState("");
+  const [grpName, setGrpName] = useState<GrpName[]>([]);
+
+
   useEffect(() => {
     if (!token) {
       router.push("/admin/login");
@@ -117,6 +190,7 @@ const AdminGrid = () => {
             setRowData(response.data.userList);
           } else {
             setRowData([]);
+            setTotalcount("0");
 
           }
 
@@ -212,8 +286,8 @@ const AdminGrid = () => {
 
 
   const handleFilterCoordName = (e: any) => {
-    
-    if(e != ""){
+
+    if (e != "") {
       setFilterValue(e); // Update dropdown value
       fetchFilteredCoordName(e);
       setCurrentPage(1); // Reset to first page
@@ -221,72 +295,72 @@ const AdminGrid = () => {
   };
 
   const handleFilterEmail = (e: any) => {
-    
-    if(e != ""){
+
+    if (e != "") {
       setFilterValue(e); // Update dropdown value
       fetchFilteredEmail(e);
       setCurrentPage(1); // Reset to first page
     }
   };
   const handleFilterId = (e: any) => {
-    
-    if(e != ""){
+
+    if (e != "") {
       setFilterValue(e); // Update dropdown value
       fetchFilteredId(e);
       setCurrentPage(1); // Reset to first page
     }
   };
   const handleFilterMobile = (e: any) => {
-    
-    if(e != ""){
+
+    if (e != "") {
       setFilterValue(e); // Update dropdown value
       fetchFilteredMobile(e);
       setCurrentPage(1); // Reset to first page
     }
   };
-  
+
   const handleFilterChangeCntry = (e: any) => {
-    
-    
+
+
     setSelectedCntry(e.target.value); // Update dropdown value
     fetchFilteredCntry(e.target.value);
     setCurrentPage(1); // Reset to first page
   };
 
   const handleFilterChangeState = (e: any) => {
-    
-    
+
+
     setSelectedState(e.target.value); // Update dropdown value
     fetchFilteredState(e.target.value);
     setCurrentPage(1); // Reset to first page
   };
 
   const handleFilterChangeDistrict = (e: any) => {
-    
-    
+
+
     setSelectedDistrict(e.target.value); // Update dropdown value
     fetchFilteredDistrict(e.target.value);
     setCurrentPage(1); // Reset to first page
   };
 
   const handleFilterChangeCorp = (e: any) => {
-    
-    
+
+
     setSelectedCorp(e.target.value); // Update dropdown value
     fetchFilteredCorp(e.target.value);
     setCurrentPage(1); // Reset to first page
   };
 
   const handleFilterChangeLsgd = (e: any) => {
-    
-    
+
+
     setSelectedLsgd(e.target.value); // Update dropdown value
     fetchFilteredLsgd(e.target.value);
     setCurrentPage(1); // Reset to first page
   };
   const handleFilterChangeWard = (e: any) => {
-    
-    
+
+
     setSelectedWard(e); // Update dropdown value
     fetchFilteredWard(e);
     setCurrentPage(1); // Reset to first page
@@ -298,7 +372,7 @@ const AdminGrid = () => {
     if (token) {
       const response = await axios.post(
         `${apiURL}/admin/adminUserList`,
-        {countryId:countries.find((item) => item.cntry_name === value)?.cntry_id},
+        { countryId: countries.find((item) => item.cntry_name === value)?.cntry_id },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -308,16 +382,14 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-        
-          const filteredData = response.data.userList.filter(
-            (item: { cntry_name: string; }) => item.cntry_name === value
-          );
-        
 
-          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-          setRowData(filteredData);
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+
+          setRowData(response.data.userList);
         } else {
           setRowData([]);
+          setTotalcount("0");
         }
       } catch (error) {
         console.error("Error:", error);
@@ -329,7 +401,7 @@ const AdminGrid = () => {
     if (token) {
       const response = await axios.post(
         `${apiURL}/admin/adminUserList`,
-        {stateId:states.find((item) => item.st_name === value)?.st_id},
+        { stateId: states.find((item) => item.st_name === value)?.st_id },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -339,16 +411,15 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-         
-          const filteredData = response.data.userList.filter(
-            (item: { st_name: string; }) => item.st_name === value
-          );
-        
 
-          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-          setRowData(filteredData);
+
+
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+          setRowData(response.data.userList);
         } else {
           setRowData([]);
+          setTotalcount("0");
         }
       } catch (error) {
         console.error("Error:", error);
@@ -360,7 +431,7 @@ const AdminGrid = () => {
     if (token) {
       const response = await axios.post(
         `${apiURL}/admin/adminUserList`,
-        {districtId:districts.find((item) => item.dis_name === value)?.dis_id},
+        { districtId: districts.find((item) => item.dis_name === value)?.dis_id },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -370,16 +441,16 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          
-          const filteredData = response.data.userList.filter(
-            (item: { dis_name: string; }) => item.dis_name === value
-          );
-         
 
-          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-          setRowData(filteredData);
+
+
+
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+          setRowData(response.data.userList);
         } else {
           setRowData([]);
+          setTotalcount("0");
         }
       } catch (error) {
         console.error("Error:", error);
@@ -390,7 +461,7 @@ const AdminGrid = () => {
     if (token) {
       const response = await axios.post(
         `${apiURL}/admin/adminUserList`,
-        {corporationId:corporation.find((item) => item.cop_name === value)?.cop_id},
+        { corporationId: corporation.find((item) => item.cop_name === value)?.cop_id },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -400,16 +471,16 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          
-          const filteredData = response.data.userList.filter(
-            (item: { cop_name: string; }) => item.cop_name === value
-          );
-        
 
-          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-          setRowData(filteredData);
+
+
+
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+          setRowData(response.data.userList);
         } else {
           setRowData([]);
+          setTotalcount("0");
         }
       } catch (error) {
         console.error("Error:", error);
@@ -420,7 +491,7 @@ const AdminGrid = () => {
     if (token) {
       const response = await axios.post(
         `${apiURL}/admin/adminUserList`,
-        {lsgdId:lsgd.find((item) => item.lsg_name === value)?.lsg_id},
+        { lsgdId: lsgd.find((item) => item.lsg_name === value)?.lsg_id },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -430,16 +501,15 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-        
-          const filteredData = response.data.userList.filter(
-            (item: { lsg_name: string; }) => item.lsg_name === value
-          );
-       
 
-          setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
-          setRowData(filteredData);
+
+
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+          setRowData(response.data.userList);
         } else {
           setRowData([]);
+          setTotalcount("0");
         }
       } catch (error) {
         console.error("Error:", error);
@@ -450,7 +520,7 @@ const AdminGrid = () => {
     if (token) {
       const response = await axios.post(
         `${apiURL}/admin/adminUserList`,
-        {wardNo:parseInt(value)},
+        { wardNo: parseInt(value) },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -460,13 +530,15 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-         
-          
+
+
 
           setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
           setRowData(response.data.userList);
         } else {
           setRowData([]);
+          setTotalcount("0");
         }
       } catch (error) {
         console.error("Error:", error);
@@ -478,7 +550,7 @@ const AdminGrid = () => {
     if (token) {
       const response = await axios.post(
         `${apiURL}/admin/adminUserList`,
-        {cordinatorName:value},
+        { cordinatorName: value },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -488,14 +560,16 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          
 
-          
+
+
 
           setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
           setRowData(response.data.userList);
         } else {
           setRowData([]);
+          setTotalcount("0");
         }
       } catch (error) {
         console.error("Error:", error);
@@ -507,7 +581,7 @@ const AdminGrid = () => {
     if (token) {
       const response = await axios.post(
         `${apiURL}/admin/adminUserList`,
-        {email:value},
+        { email: value },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -517,13 +591,15 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-         
+
 
 
           setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
           setRowData(response.data.userList);
         } else {
           setRowData([]);
+          setTotalcount("0");
         }
       } catch (error) {
         console.error("Error:", error);
@@ -535,7 +611,7 @@ const AdminGrid = () => {
     if (token) {
       const response = await axios.post(
         `${apiURL}/admin/adminUserList`,
-        {userId:parseInt(value)},
+        { userId: parseInt(value) },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -545,13 +621,15 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-         
-          
+
+
 
           setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
           setRowData(response.data.userList);
         } else {
           setRowData([]);
+          setTotalcount("0");
         }
       } catch (error) {
         console.error("Error:", error);
@@ -563,7 +641,53 @@ const AdminGrid = () => {
     if (token) {
       const response = await axios.post(
         `${apiURL}/admin/adminUserList`,
-        {mobile:value},
+        { mobile: value },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+          setRowData(response.data.userList);
+        } else {
+          setRowData([]);
+          setTotalcount("0");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    async function fetchData() {
+      const categoryResponse = await fetch(`${apiURL}/category`);
+      const categoryData = await categoryResponse.json();
+
+      setCategory(categoryData.category);
+    }
+    fetchData();
+  }, []);
+
+  const handleFilterGrpType = async (e: any) => {
+    setGroupType(e.target.value); // Update dropdown value
+
+    fetchFilteredGrpType(e.target.value);
+    setCurrentPage(1); // Reset to first page
+  };
+
+  const fetchFilteredGrpType = async (value: string) => {
+    if (token) {
+
+      const response = await axios.post(
+        `${apiURL}/admin/adminUserList`,
+        { groupTypeId: category.find((item) => item.group_type === value)?.id },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -574,10 +698,13 @@ const AdminGrid = () => {
       try {
         if (response.data.success && response.status !== 203) {
          
+
           setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
           setRowData(response.data.userList);
         } else {
           setRowData([]);
+          setTotalcount("0");
         }
       } catch (error) {
         console.error("Error:", error);
@@ -585,7 +712,561 @@ const AdminGrid = () => {
     }
   };
 
-  
+
+  useEffect(() => {
+    const fetchClass = async () => {
+      try {
+        const responsetype = await axios.get(`${apiURL}/schoolType`);
+        setSchoolType(responsetype.data.schoolType);
+        const dis_id = districts.find((item) => item.dis_name === selectedDistrictGrp)?.dis_id;
+
+        const responseedudistrict = dis_id ? await axios.get(`${apiURL}/eduDistrict/${dis_id}`) : null;
+        responseedudistrict ? setEduDistrict(responseedudistrict.data.eduDistrict) : '';
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchClass();
+  }, [districts, selectedDistrictGrp]);
+
+  useEffect(() => {
+    const fetchCategory = async () => {
+      try {
+        const response = await axios.get(`${apiURL}/schoolCategory`);
+
+        setSubCategoryOptions(response.data.subCategory);
+      } catch (error) {
+        console.error("Error fetching category:", error);
+      }
+    };
+    fetchCategory();
+  }, []);
+  useEffect(() => {
+    const handleCbse = async () => {
+      if (selectedschoolType === 'CBSE' && selectedStateGrp) {
+        try {
+          const st_id = states.find((item) => item.st_name === selectedStateGrp)?.st_id;
+          const response = await axios.get(`${apiURL}/sahodaya/${st_id}`);
+          setSahodaya(response.data.sahodayaList);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
+      if (selectedschoolType === 'ICDS' && selectedDistrictGrp) {
+
+        try {
+          const dis_id = districts.find((item) => item.dis_name === selectedDistrictGrp)?.dis_id;
+
+
+          const response = await axios.get(`${apiURL}/icdsBlock/${dis_id}`);
+
+          setIcdsBlock(response.data.icdsBlockList);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+
+      }
+      if (selectedschoolType === 'Malayalam Mission' && selectMissionarea) {
+
+        try {
+          const response = await axios.get(`${apiURL}/malayalamMissionChapter/${selectMissionarea}`);
+          setMissionChapter(response.data.chapterList);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+
+      }
+    };
+    handleCbse();
+  }, [districts, selectedschoolType, states, selectMissionarea, selectedStateGrp, selectedDistrictGrp]);
+
+  const handleIcds = async (e: any) => {
+    try {
+      const icdsid = icdsBlock.find((item) => item.block_name === e)?.icds_block_id
+      const response = await axios.get(`${apiURL}/icdsProject/${icdsid}`);
+      setIcdsProject(response.data.icdsProjectList);
+
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+  const handleChapter = async (e: any) => {
+    try {
+      const chapterid = missionChapter.find((item) => item.chapter_name === e)?.chapter_id
+      const response = await axios.get(`${apiURL}/malayalamMissionZone/${chapterid}`);
+      setMissionZone(response.data.zoneList);
+
+
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+
+  const handleEduDistrict = async (e: any) => {
+    try {
+      const eduid = eduDistrict.find((item) => item.edu_district === e)?.edu_district_id
+      const responseedusubdistrict = await axios.get(`${apiURL}/eduSubDistrict/${eduid}`);
+      setEduSubDistrict(responseedusubdistrict.data.eduSubDistrict);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+
+  const handleFilterSchoolType = (e: any) => {
+
+    if (e.target.value != "") {
+      setSelectedSchoolType(e.target.value);
+      e.target.value === 'CBSE' ? setSelectedCountryGrp('India') : ''
+      e.target.value === 'General Education' || 'ICDS' ? setSelectedCountryGrp('India') : ''
+      e.target.value === 'General Education' || 'ICDS' ? setSelectedStateGrp('Kerala') : ''
+
+      fetchFilteredSchoolType(e.target.value);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+  const fetchFilteredSchoolType = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminUserList`,
+        { schoolTypeId: schoolType.find((item) => item.type_name === value)?.id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+
+
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+          setRowData(response.data.userList);
+        } else {
+          setRowData([]);
+          setTotalcount("0");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+  const handleFilterSchoolCategory = (e: any) => {
+
+    if (e.target.value != "") {
+      setSelectedSubCategory(e.target.value);
+      fetchFilteredSchoolCategory(e.target.value);
+
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+  const fetchFilteredSchoolCategory = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminUserList`,
+        { subCategoryId: subcategoryOptions.find((item) => item.gp_cat_name === value)?.gp_cat_id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+
+
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+          setRowData(response.data.userList);
+        } else {
+          setRowData([]);
+          setTotalcount("0");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+  const handleFilterSahodayaState = (e: any) => {
+
+    if (e.target.value != "") {
+      setSelectedStateGrp(e.target.value);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+  const handleFilterSahodaya = (e: any) => {
+
+    if (e.target.value != "") {
+      setSelectSahodaya(e.target.value);
+
+      fetchFilteredSahodaya(e.target.value);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+  const fetchFilteredSahodaya = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminUserList`,
+        { sahodayaId: sahodaya.find((item) => item.sahodaya_name === value)?.sahodaya_id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+
+
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+          setRowData(response.data.userList);
+        } else {
+          setRowData([]);
+          setTotalcount("0");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+
+  const handleFilterEDistrict = (e: any) => {
+
+    if (e.target.value != "") {
+      setSelectedDistrictGrp(e.target.value);
+      // fetchFilteredSahodaya(e.target.value);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+  const handleFilterEduDistrict = (e: any) => {
+
+    if (e.target.value != "") {
+      setSelecteduDistrict(e.target.value);
+
+      handleEduDistrict(e.target.value);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+  const handleFilterEduSubDistrict = (e: any) => {
+
+    if (e.target.value != "") {
+      setSelecteduSubDistrict(e.target.value);
+
+      fetchFilteredEduSubDistrict(e.target.value);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+  const fetchFilteredEduSubDistrict = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminUserList`,
+        { eduSubDistrictId: eduSubDistrict.find((item) => item.edu_sub_district_name === value)?.edu_sub_district_id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+
+
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+          setRowData(response.data.userList);
+        } else {
+          setRowData([]);
+          setTotalcount("0");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+
+  const handleFilterIcdsBlock = (e: any) => {
+
+    if (e.target.value != "") {
+      setSelectIcdsBlock(e.target.value);
+
+      handleIcds(e.target.value);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+  const handleFilterIcdsProject = (e: any) => {
+
+    if (e.target.value != "") {
+      setSelectIcdsProject(e.target.value);
+
+
+      fetchFilteredIcdsProject(e.target.value);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+  const fetchFilteredIcdsProject = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminUserList`,
+        { projectId: icdsProject.find((item) => item.project_name === value)?.project_id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+
+
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+          setRowData(response.data.userList);
+        } else {
+          setRowData([]);
+          setTotalcount("0");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+  const handleFilterMissionArea = (e: any) => {
+
+    if (e.target.value != "") {
+      setSelectMissionarea(e.target.value);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+  const handleFilterMissionChapter = (e: any) => {
+
+    if (e.target.value != "") {
+      setSelectedMission(e.target.value);
+
+
+      handleChapter(e.target.value);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+  const handleFilterMissionZone = (e: any) => {
+
+    if (e.target.value != "") {
+      setSelectedZone(e.target.value);
+
+
+      fetchFilteredMissionZone(e.target.value);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+  const fetchFilteredMissionZone = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminUserList`,
+        { zoneId: missionZone.find((item) => item.zone_name === value)?.zone_id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+
+
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+          setRowData(response.data.userList);
+        } else {
+          setRowData([]);
+          setTotalcount("0");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+  const handleFilterGrpName = (e: any) => {
+
+    if (e.target.value != "") {
+      setSelectedGrpName(e.target.value);
+      fetchFilteredGrpName(e.target.value);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+
+  const fetchgrpname = useCallback(async () => {
+    try {
+      // Clear group name to empty array before fetching
+      setGrpName([]);
+
+      const response = await axios.post(
+        `${apiURL}/common/groupName/`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      
+      setGrpName(response.data.groupList);
+    } catch (error) {
+      console.error("Error fetching category:", error);
+    }
+  }, []); // Empty dependency array ensures this only runs once
+
+  // Call fetchgrpname only once when the component mounts
+  useEffect(() => {
+    fetchgrpname();
+  }, [fetchgrpname]);
+
+  // Define handleGrpName using useCallback to memoize it
+  const handleGrpName = useCallback(async () => {
+    if (grouptype) {
+      const groupId = category.find((item) => item.group_type === grouptype)?.id;
+      const subcatid = subcategoryOptions.find((item) => item.gp_cat_name === selectedSubCategory)?.gp_cat_id;
+      const schooltypeid = schoolType.find((item) => item.type_name === selectedschoolType)?.id;
+      const sahodayaid = sahodaya.find((item) => item.sahodaya_name === selectSahodaya)?.sahodaya_id;
+      const edudistid = eduDistrict.find((item) => item.edu_district === selecteduDistrict)?.edu_district_id;
+      const edusubid = eduSubDistrict.find((item) => item.edu_sub_district_name === selecteduSubDistrict)?.edu_sub_district_id;
+      const blockid = icdsBlock.find((item) => item.block_name === selectIcdsBlock)?.icds_block_id;
+      const projectid = icdsProject.find((item) => item.project_name === selectIcdsProject)?.project_id;
+      const chapterid = missionChapter.find((item) => item.chapter_name === selectMission)?.chapter_id;
+      const zoneid = missionZone.find((item) => item.zone_name === selectZone)?.zone_id;
+
+      const apidata = {
+        groupTypeId: groupId,
+        subCategoryId: subcatid,
+        schoolTypeId: schooltypeid,
+        eduDistrictId: edudistid,
+        eduSubDistrictId: edusubid,
+        sahodayaId: sahodayaid,
+        blockId: blockid,
+        projectId: projectid,
+        chapterId: chapterid,
+        zoneId: zoneid
+      };
+
+     
+
+      try {
+        // Clear group name to empty array before fetching
+        setGrpName([]);
+
+        const response = await axios.post(
+          `${apiURL}/common/groupName/`,
+          apidata,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const GroupList = response.data.groupList;
+        
+        setGrpName(GroupList);
+      } catch (error) {
+        console.error("Error fetching group names:", error);
+      }
+    }
+  }, [
+    grouptype,
+    category,
+    subcategoryOptions,
+    schoolType,
+    sahodaya,
+    eduDistrict,
+    eduSubDistrict,
+    icdsBlock,
+    icdsProject,
+    missionChapter,
+    missionZone,
+    selectedSubCategory,
+    selectedschoolType,
+    selectSahodaya,
+    selecteduDistrict,
+    selecteduSubDistrict,
+    selectIcdsBlock,
+    selectIcdsProject,
+    selectMission,
+    selectZone
+  ]);
+
+  // Trigger handleGrpName whenever dependencies change
+  useEffect(() => {
+    if (grouptype) {
+      handleGrpName();
+    }
+  }, [
+    grouptype,
+    selectedSubCategory,
+    selectedschoolType,
+    selectSahodaya,
+    selecteduDistrict,
+    selecteduSubDistrict,
+    selectIcdsBlock,
+    selectIcdsProject,
+    selectMission,
+    selectZone,
+    handleGrpName
+  ]);
+
+
+  const fetchFilteredGrpName = async (value: string) => {
+    if (token) {
+      
+      const response = await axios.post(
+        `${apiURL}/admin/adminUserList`,
+        { groupId: grpName.find((item) => item.gp_name === value)?.gp_id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
+          setTotalcount(response.data.userList.length);
+          
+          setRowData(response.data.userList);
+        } else {
+          setRowData([]);
+          setTotalcount("0");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+
   return (
     <div className=" bg-slate-100">
       <button

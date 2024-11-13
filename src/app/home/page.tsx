@@ -41,8 +41,7 @@ const HomePage = () => {
       const response = await fetch(`${apiURL}/common/getMainPageEvents`);
       const data = await response.json();
       if (data.success) {
-        console.log(data.count[0]['created_time'].split("T")[0].split('-').reverse().join('-'))
-        setEvents(data.count);
+       setEvents(data.count);
       }
     };
 

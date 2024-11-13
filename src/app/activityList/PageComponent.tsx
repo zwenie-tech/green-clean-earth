@@ -76,23 +76,23 @@ const PaginationComponent: React.FC<PaginationProps> = ({ totalPages, currentPag
             );
           }
 
-          return (
-            <button
-              key={page}
-              className={`text-xl py-1 px-3 sm:text-sm sm:px-2 sm:py-1 rounded-md ${
-                page === currentPage
-                  ? 'font-bold text-white bg-[#3C6E1F]'
-                  : 'text-gray-600 hover:text-white hover:bg-[#3C6E1F]'
-              }`}
-              onClick={() => handlePageChange(Number(page))}
-              aria-current={page === currentPage ? 'page' : undefined}
-              aria-label={`Page ${page}`}
-            >
-              {page}
-            </button>
-          );
-        })}
-      </div>
+        return (
+          <button
+            key={page}
+            className={`text-xl py-1 px-3 sm:text-sm sm:px-2 sm:py-1 rounded-md ${
+              page === currentPage
+                ? 'font-bold text-white bg-[#3C6E1F]'
+                : 'text-gray-600 hover:text-white hover:bg-[#3C6E1F]'
+            }`}
+            onClick={() => handlePageChange(page as number)} // Ensure only numbers are passed
+            aria-current={page === currentPage ? 'page' : undefined}
+            aria-label={`Page ${page}`}
+          >
+            {page}
+          </button>
+        );
+      })}
+    </div>
 
      
       {currentPage < totalPages && (

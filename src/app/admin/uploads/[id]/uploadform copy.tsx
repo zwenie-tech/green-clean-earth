@@ -714,7 +714,7 @@ export function Uploadform() {
     //     districtId: districts.find((item) => item.dis_name === values.bldistrict)?.dis_id,
     //     blockName: values.block
     //   }
-    //   console.log(dbl)
+    //  
     //   if (token) {
     //     const response = await axios.post(`${apiURL}/adminEdit/modifyIcdsBlock`, dbl, {
     //       headers: {
@@ -754,7 +754,7 @@ export function Uploadform() {
     //             blockId : icdsBlock.find((item) => item.block_name === values.block)?.icds_block_id?.toString(),
     //             projectName : values.project
     //           }
-    //             console.log(dtp)
+    //             
     //             if (token) {
     //                   const response = await axios.post(`${apiURL}/adminEdit/modifyIcdsProject`, dtp, {
     //                     headers: {
@@ -796,7 +796,7 @@ export function Uploadform() {
     //     stateId : states.find((item) => item.st_name === values.sahostate)?.st_id?.toString(),
     //     sahodayaName : values.sahodaya
     //         }
-    //         console.log(d)
+    //         
     //         if (token) {
     //             const response = await axios.post(`${apiURL}/adminEdit/modifySahodaya`, d, {
     //               headers: {
@@ -837,7 +837,7 @@ export function Uploadform() {
     //       districtId : districts.find((item) => item.dis_name === values.edistrict)?.dis_id?.toString(),
     //       eduDistrictName : values.edudistrict
     //     }
-    //     console.log(d)
+    //     
     //     if (token) {
     //         const response = await axios.post(`${apiURL}/adminEdit/modifyEduDistrict`, d, {
     //           headers: {
@@ -877,7 +877,7 @@ export function Uploadform() {
     //         eduDistrictId : eduDistrict.find((item) => item.edu_district === values.edudistrict)?.edu_district_id?.toString(),
     //         eduSubDistrictName : values.edusubdistrict
     //       }
-    //         console.log(dt)
+    //         
     //         if (token) {
     //               const response = await axios.post(`${apiURL}/adminEdit/modifyEduSubDistrict`, dt, {
     //                 headers: {

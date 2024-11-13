@@ -30,7 +30,7 @@ export function AddActCatForm() {
   const form = useForm();
 
   async function onSubmit() {
-    console.log(category);
+    
     const formdata = {
       categoryName: category
     };

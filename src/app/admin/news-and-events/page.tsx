@@ -76,7 +76,7 @@ const AdminGrid = () => {
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
           localStorage.setItem("newsData", JSON.stringify(response.data.eventList));
           const events = response.data.eventList;
-          console.log(response.data.eventList)
+          
           const formattedEvents = events.map((event: {
             show_in_main: number; created_time: string | number | Date; 
 }) => {
@@ -92,7 +92,6 @@ const AdminGrid = () => {
             };
         });
         
-        console.log(formattedEvents);
           setRowData(formattedEvents);
         }
       }
