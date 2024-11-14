@@ -1189,7 +1189,7 @@ const AdminGrid = () => {
 
                   {selectedDistrict != "" ?
 
-                    <div className="flex items-center mb-3 space-x-2">
+                    <><div className="flex items-center mb-3 space-x-2">
                       <label htmlFor="groupFilter" className="text-sm font-medium">
                         Lsgd:
                       </label>
@@ -1206,23 +1206,22 @@ const AdminGrid = () => {
                           </option>
                         ))}
                       </select>
-                    </div>
-                    //  <div>
-                    //   <label>Ward No</label>
-                    //   <div className="flex mb-3">
-                    //     <input
-                    //       className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
-                    //       value={selectedWard}
-                    //       onChange={(e) => setSelectedWard(e.target.value)} // Update the state directly
-                    //     />
-                    //     <button
-                    //       className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-                    //       onClick={() => handleFilterChangeWard(selectedWard)}
-                    //     >
-                    //       Search
-                    //     </button>
-                    //   </div> 
-                    // </div>
+                    </div><div>
+                        <label>Ward No</label>
+                        <div className="flex mb-3">
+                          <input
+                            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+                            value={selectedWard}
+                            onChange={(e) => setSelectedWard(e.target.value)} // Update the state directly
+                          />
+                          {/* <button
+                            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+                            onClick={() => handleFilterChangeWard(selectedWard)}
+                          >
+                            Search
+                          </button> */}
+                        </div>
+                      </div></>
                     : ''}
                 </> : ''}
             </> : ''}

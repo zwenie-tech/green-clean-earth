@@ -1105,12 +1105,12 @@ setTotalcount("0");
           value={selectedWard}
           onChange={(e) => setSelectedWard(e.target.value)}
         />
-        <button
+        {/* <button
           className="text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
           onClick={() => handleFilterChangeWard(selectedWard)}
         >
           Search
-        </button>
+        </button> */}
       </div>
     </div>
   )}

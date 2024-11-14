@@ -1108,12 +1108,12 @@ const AdminGrid = () => {
                             value={selectedWard}
                             onChange={(e) => setSelectedWard(e.target.value)} // Update the state directly
                           />
-                          <button
+                          {/* <button
                             className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
                             onClick={() => handleFilterChangeWard(selectedWard)}
                           >
                             Search
-                          </button>
+                          </button> */}
                         </div>
                       </div></>
                     : ''}
