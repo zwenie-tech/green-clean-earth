@@ -152,12 +152,12 @@ export function Eduform() {
     });
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values);
+        
         const formdata = {
             blockId: icdsBlock.find((item) => item.block_name === selectIcdsBlock)?.icds_block_id?.toString(),
             projectName: selectIcdsProject
         }
-        console.log(formdata);
+        
 
         if (token) {
             const response = await axios.post(`${apiURL}/adminEdit/modifyIcdsProject?recordId=${coId}`, formdata, {

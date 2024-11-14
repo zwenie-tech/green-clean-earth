@@ -64,12 +64,12 @@ import { usePathname } from "next/navigation";
     });
   
     async function onSubmit(values: z.infer<typeof formSchema>) {
-      console.log(values);
+      
       const formdata = {
         isChallenged : values.ischallenge === "2" ? false : true,
         treeNumber: coId
       }
-      console.log(formdata);
+      
 
       if (token) {
         const response = await axios.post(`${apiURL}/adminEdit/updateChallenge`, formdata, {

@@ -82,7 +82,7 @@ export function Eduform() {
     
     useEffect(() => {
         async function fetchData() {
-          console.log(chapter_type_id)
+          
             chapter_name ? setSelectedMission(chapter_name) : '';
             chapter_type_id ? setSelectMissionarea(chapter_type_id) : '';
         }
@@ -114,12 +114,12 @@ export function Eduform() {
     });
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values);
+        
         const formdata = {
             chapterTypeId   : selectMissionarea,
             chapterName  : selectMission
               }
-        console.log(formdata);
+        
     
         if (token) {
           const response = await axios.post(`${apiURL}/adminEdit/modifyMMChapter?recordId=${coId}`, formdata, {

@@ -125,7 +125,7 @@ export function DeleteBtn() {
        isdeleted:true
     
     }
-    console.log(formdata);
+    
 
     if (token) {
       const response = await axios.post(`${apiURL}/adminEdit/addAds?recordId=${coId}`, formdata, {

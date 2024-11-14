@@ -101,7 +101,7 @@ function ActivityLabel() {
           
 
             setUserData(response.data.activityDetails);
-            console.log(udata)
+            
           } else {
 
           }

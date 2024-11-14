@@ -111,7 +111,7 @@ const AdminGrid = () => {
         
         if (response.data.success && response.status!=203) {
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
-          console.log(response.data.lsgdList)
+         
           setTotalcount(response.data.totalCount);
           setRowData(response.data.lsgdList);
         }
@@ -148,14 +148,14 @@ useEffect(() => {
 }, [districts, selectedDistrict]);
 
   const handleFilterChangeDistrict = (e: any) => {
-    console.log(e.target.value)
+    
 
     setSelectedDistrict(e.target.value); // Update dropdown value
     fetchFilteredDistrict(e.target.value);
     setCurrentPage(1); // Reset to first page
 };
 const handleFilterChangeCorp = (e: any) => {
-    console.log(e.target.value)
+    
 
     setSelectedCorp(e.target.value); // Update dropdown value
     fetchFilteredCorp(e.target.value);
@@ -165,8 +165,8 @@ const handleFilterChangeCorp = (e: any) => {
 const fetchFilteredDistrict = async (value: string) => {
   if (token) {
       const response = await axios.post(
-          `${apiURL}/admin/adminCorporationList?limit=${totalcount}`,
-          {},
+          `${apiURL}/admin/adminCorporationList`,
+          {districtId:districts.find((item) => item.dis_name === value)?.dis_id},
           {
               headers: {
                   Authorization: `Bearer ${token}`,
@@ -176,13 +176,13 @@ const fetchFilteredDistrict = async (value: string) => {
       );
       try {
           if (response.data.success && response.status !== 203) {
-              console.log('filter')
-              console.log(response.data)
-              console.log(response.data.lsgdList)
+              
+              
+             
               const filteredData = response.data.lsgdList.filter(
                   (item: { dis_name: string; }) => item.dis_name === value
               );
-              console.log(filteredData)
+              
 
               setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
               setRowData(filteredData);
@@ -197,8 +197,8 @@ const fetchFilteredDistrict = async (value: string) => {
 const fetchFilteredCorp = async (value: string) => {
   if (token) {
       const response = await axios.post(
-          `${apiURL}/admin/adminCorporationList?limit=${totalcount}`,
-          {},
+          `${apiURL}/admin/adminCorporationList`,
+          { corporationId:corporation.find((item) => item.cop_name === value)?.cop_id},
           {
               headers: {
                   Authorization: `Bearer ${token}`,
@@ -208,13 +208,13 @@ const fetchFilteredCorp = async (value: string) => {
       );
       try {
           if (response.data.success && response.status !== 203) {
-              console.log('filter')
-              console.log(response.data)
-              console.log(response.data.lsgdList)
+              
+              
+             
               const filteredData = response.data.lsgdList.filter(
                   (item: { cop_name: string; }) => item.cop_name === value
               );
-              console.log(filteredData)
+              
 
               setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
               setRowData(filteredData);
@@ -237,45 +237,48 @@ const fetchFilteredCorp = async (value: string) => {
           Export To Excel
         </button>
 
-        <div className="flex items-center mb-3 space-x-2">
-                                <label htmlFor="groupFilter" className="text-sm font-medium">
-                                    District:
-                                </label>
-                                <select
-                                    id="groupFilter"
-                                    value={selectedDistrict}
-                                    onChange={handleFilterChangeDistrict}
-                                    className="border border-gray-300 rounded p-1"
-                                >
-                                    <option value="">Choose District</option>
-                                    {districts.map((district) => (
-                                        <option key={district.dis_id} value={district.dis_name}>
-                                            {district.dis_name}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-3">
+  <div className="flex items-center space-x-2">
+    <label htmlFor="districtFilter" className="text-sm font-medium">
+      District:
+    </label>
+    <select
+      id="districtFilter"
+      value={selectedDistrict}
+      onChange={handleFilterChangeDistrict}
+      className="flex-1 border border-gray-300 rounded p-1"
+    >
+      <option value="">Choose District</option>
+      {districts.map((district) => (
+        <option key={district.dis_id} value={district.dis_name}>
+          {district.dis_name}
+        </option>
+      ))}
+    </select>
+  </div>
 
-                            {selectedDistrict != "" ?
-                                
-                                    <div className="flex items-center mb-3 space-x-2">
-                                        <label htmlFor="groupFilter" className="text-sm font-medium">
-                                            Corporation:
-                                        </label>
-                                        <select
-                                            id="groupFilter"
-                                            value={selectedCorp}
-                                            onChange={handleFilterChangeCorp}
-                                            className="border border-gray-300 rounded p-1"
-                                        >
-                                            <option value="">Choose Corporation</option>
-                                            {corporation.map((corp) => (
-                                                <option key={corp.cop_id} value={corp.cop_name}>
-                                                    {corp.cop_name}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>:""}
+  {selectedDistrict !== "" && (
+    <div className="flex items-center space-x-2">
+      <label htmlFor="corpFilter" className="text-sm font-medium">
+        Corporation:
+      </label>
+      <select
+        id="corpFilter"
+        value={selectedCorp}
+        onChange={handleFilterChangeCorp}
+        className="flex-1 border border-gray-300 rounded p-1"
+      >
+        <option value="">Choose Corporation</option>
+        {corporation.map((corp) => (
+          <option key={corp.cop_id} value={corp.cop_name}>
+            {corp.cop_name}
+          </option>
+        ))}
+      </select>
+    </div>
+  )}
+</div>
+
 
       <div className={"ag-theme-quartz"} style={{ height: 600 }}>
         <AgGridReact

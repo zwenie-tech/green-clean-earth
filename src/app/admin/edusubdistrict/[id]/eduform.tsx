@@ -138,7 +138,7 @@ export function Eduform() {
         if (selecteduDistrict) {
           const eduid = eduDistrict.find((item) => item.edu_district === selecteduDistrict)?.edu_district_id
           const responseedusubdistrict = await axios.get(`${apiURL}/eduSubDistrict/${eduid}`);
-          console.log(eduid, responseedusubdistrict)
+          
           setEduSubDistrict(responseedusubdistrict.data.eduSubDistrict);
         }
       } catch (error) {
@@ -161,7 +161,7 @@ export function Eduform() {
       eduDistrictId: eduDistrict.find((item) => item.edu_district === selecteduDistrict)?.edu_district_id?.toString(),
       eduSubDistrictName: selecteduSubDistrict
     }
-    console.log(formdata);
+    
 
     if (token) {
       const response = await axios.post(`${apiURL}/adminEdit/modifyEduSubDistrict?recordId=${coId}`, formdata, {

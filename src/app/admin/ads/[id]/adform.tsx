@@ -121,10 +121,11 @@ export function AdForm() {
     const formdata = {
       title: selecttitle,
        adLink:adlink, 
-       displayOrder:disporder
+       displayOrder:disporder,
+       isDeleted:false
     
     }
-    console.log(formdata);
+    
 
     if (token) {
       const response = await axios.post(`${apiURL}/adminEdit/addAds?recordId=${coId}`, formdata, {

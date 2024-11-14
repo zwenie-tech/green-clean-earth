@@ -98,7 +98,7 @@ export function Eduform() {
             try {
               const st_id = states.find((item) => item.st_name === selectedStateGrp)?.st_id;
               const response = await axios.get(`${apiURL}/sahodaya/${st_id}`);
-              console.log(response)
+              
               setSahodaya(response.data.sahodayaList);
             } catch (error) {
               console.error("Error fetching data:", error);
@@ -127,12 +127,12 @@ export function Eduform() {
     });
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-      console.log(values);
+      
       const formdata = {
         stateId : states.find((item) => item.st_name === selectedStateGrp)?.st_id?.toString(),
         sahodayaName : selectSahodaya
             }
-      console.log(formdata);
+      
   
       if (token) {
         const response = await axios.post(`${apiURL}/adminEdit/modifySahodaya?recordId=${coId}`, formdata, {

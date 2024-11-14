@@ -50,7 +50,7 @@ import { apiURL, fetchClubData } from "@/app/requestsapi/request";
 import axios from "axios";
 import imageCompression from "browser-image-compression";
 const formSchema = z.object({
- 
+
 });
 
 interface Country {
@@ -170,6 +170,7 @@ export function EditForm() {
   const [corporation, setCorporation] = useState<Corp[]>([]);
 
 
+  const [category, setCategory] = useState<Category[]>([]);
 
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedState, setSelectedState] = useState("");
@@ -184,20 +185,18 @@ export function EditForm() {
 
   const [gpname, setGpName] = useState("");
   const [location, setLocation] = useState("");
-  const [schoolcat, setSchoolCat] = useState("");
+  const [grptype, setGrptype] = useState<string>("");
   const [schoolCategory, setSchoolCategory] = useState<SubCategory[]>([]);
 
-  useEffect(() => {
-    const fetchCategory = async () => {
-      try {
-        const response = await axios.get(`${apiURL}/schoolCategory`);
 
-        setSchoolCategory(response.data.subCategory);
-      } catch (error) {
-        console.error("Error fetching category:", error);
-      }
-    };
-    fetchCategory();
+  useEffect(() => {
+    async function fetchData() {
+      const categoryResponse = await fetch(`${apiURL}/category`);
+      const categoryData = await categoryResponse.json();
+      
+      setCategory(categoryData.category);
+    }
+    fetchData();
   }, []);
   useEffect(() => {
     async function fetchdata() {
@@ -213,8 +212,8 @@ export function EditForm() {
 
           if (response.data.success && response.status != 203) {
             const udata = response.data.groupDetails;
-            const {gp_name,lsg_name,gp_ward_no,cop_name,city,dis_name,st_name,cntry_name,gp_cat_name,gp_location} = udata[0];
-            
+            const { gp_name, lsg_name, gp_ward_no, cop_name, city, dis_name, st_name, cntry_name, group_type, gp_location } = udata[0];
+
             setGpName(gp_name || "");
             setWardNo(gp_ward_no || "");
             setSelectedCorp(cop_name || "");
@@ -222,9 +221,9 @@ export function EditForm() {
             setSelectedDistrict(dis_name || "");
             setSelectedState(st_name || "");
             setSelectedCountry(cntry_name || "");
-            setSchoolCat(gp_cat_name || "");
+            setGrptype(group_type || "");
             setLocation(gp_location || "");
-            
+
             setSelectedLsgd(lsg_name || "");
 
           } else {
@@ -240,8 +239,8 @@ export function EditForm() {
     }
     fetchdata();
   }, [token, GpId]);
- 
-  
+
+
   useEffect(() => {
     async function fetchStates() {
       if (selectedCountry === "India") {
@@ -265,7 +264,7 @@ export function EditForm() {
       } else {
         setDistricts([]);
       }
-     
+
     }
     fetchDistricts();
   }, [selectedCountry, selectedState]);
@@ -280,7 +279,7 @@ export function EditForm() {
       } else {
         setCorporation([]);
       }
-    
+
     }
     fetchCorpData();
   }, [selectedCountry, selectedState, selectedDistrict, districts]);
@@ -295,7 +294,7 @@ export function EditForm() {
       } else {
         setLsgd([]);
       }
-      
+
     }
     fetchLsgdData();
   }, [selectedCountry, selectedState, selectedCorp, corporation]);
@@ -330,23 +329,23 @@ export function EditForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
 
-    console.log(values)
-const distid = districts.find((item) => item.dis_name === selectedDistrict)?.dis_id?.toString();
+    
+    const distid = districts.find((item) => item.dis_name === selectedDistrict)?.dis_id?.toString();
     const formdata = {
       groupName: gpname,
       countryId: countries.find((item) => item.cntry_name === selectedCountry)?.cntry_id,
       stateId: states.find((item) => item.st_name === selectedState)?.st_id?.toString(),
       corporationId: corporation.find((item) => item.cop_name === selectedCorp)?.cop_id?.toString(),
       districtId: districts.find((item) => item.dis_name === selectedDistrict)?.dis_id?.toString(),
-      lsgdId: lsgd.find((item) => item.lsg_name === selectedLsgd)?.lsg_id ,
-      wardNo: distid ? wardNo:null,
+      lsgdId: lsgd.find((item) => item.lsg_name === selectedLsgd)?.lsg_id,
+      wardNo: distid ? wardNo : null,
       city: city,
       province: city,
-      groupTypeId: schoolCategory.find((item) => item.gp_cat_name === schoolcat)?.gp_cat_id,
+      groupTypeId: category.find((item) => item.group_type === grptype)?.id,
       location: location,
       groupId: GpId
     }
-    console.log(formdata)
+    
 
     if (token) {
       const response = await axios.post(`${apiURL}/adminEdit/updateGroupDetails`, formdata, {
@@ -358,14 +357,14 @@ const distid = districts.find((item) => item.dis_name === selectedDistrict)?.dis
       try {
 
         if (response.data.success && response.status != 203) {
-          console.log(response)
+          
           toast({
             title: "Data Successfully Updated.",
             description: "",
           });
 
 
-          setTimeout(function() {
+          setTimeout(function () {
             window.location.reload();
           }, 1800);
 
@@ -412,7 +411,7 @@ const distid = districts.find((item) => item.dis_name === selectedDistrict)?.dis
             >
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
 
-                
+
                 <div className="mb-4">
                   <label className="form-label">Group Name</label>
                   <input
@@ -423,29 +422,29 @@ const distid = districts.find((item) => item.dis_name === selectedDistrict)?.dis
                   />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                  <Select
-                    onValueChange={(value) => {
-                      // setCountry(value);
-                      setSchoolCat(value);
+                <div >
+                  <label  className="block text-sm font-medium text-gray-700 mb-1">
+                    Group Type:
+                  </label>
+                  <select
+                    id="groupFilter"
+                    value={grptype}
+                    onChange={(event) => {
+                      setGrptype(event.target.value);
                     }}
-                    value={schoolcat || ""}
-                    defaultValue={schoolcat}
+                    className="block w-full px-3 py-2 border border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 sm:text-sm"
                   >
-                    <SelectTrigger className="block w-full px-3 py-2 border border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 sm:text-sm"
-                    >
-                      <SelectValue placeholder="Choose a category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {schoolCategory.map((s) => (
-                        <SelectItem key={s.gp_cat_id} value={s.gp_cat_name}>
-                          {s.gp_cat_name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    <option value="">Choose Group Type</option>
+
+                    {category.map((c, i) => (
+                      <option key={c.id} value={c.group_type}>
+                        {c.group_type}
+                      </option>
+                    ))}
+
+                  </select>
                 </div>
+                
 
 
                 <div>
@@ -604,7 +603,7 @@ const distid = districts.find((item) => item.dis_name === selectedDistrict)?.dis
                       </div></>
                   ))}
 
-                
+
 
                 <div className="mb-4">
                   <label className="form-label">Location</label>
@@ -615,7 +614,7 @@ const distid = districts.find((item) => item.dis_name === selectedDistrict)?.dis
                     onChange={(e) => setLocation(e.target.value)} />
                 </div>
 
-                
+
 
               </div>
 

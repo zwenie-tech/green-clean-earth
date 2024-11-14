@@ -82,7 +82,7 @@ const AdminGrid = () => {
         
         if (response.data.success && response.status!=203) {
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
-         console.log(response.data.sahodayaList[0])
+         
     localStorage.setItem("sahodayaData", JSON.stringify(response.data.sahodayaList));
 
           setRowData(response.data.sahodayaList); 
@@ -123,7 +123,7 @@ const AdminGrid = () => {
   };
 
   const handleFilterSahodayaState = (e: any) => {
-    console.log(e.target.value)
+    
     if (e.target.value != "") {
         setSelectedStateGrp(e.target.value);
         fetchFilteredSahodayaState(e.target.value);
@@ -132,7 +132,7 @@ const AdminGrid = () => {
 };
 
 const handleFilterSahodaya = (e: any) => {
-    console.log(e.target.value)
+    
     if (e.target.value != "") {
         setSelectSahodaya(e.target.value);
         fetchFilteredSahodaya(e.target.value);
@@ -154,12 +154,12 @@ const fetchFilteredSahodayaState = async (value: string) => {
       );
       try {
           if (response.data.success && response.status !== 203) {
-              console.log('filter')
-              console.log(response.data)
+              
+              
               const filteredData = response.data.sahodayaList.filter(
                   (item: { st_name: string; }) => item.st_name === value
               );
-              console.log(filteredData)
+              
 
               setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
               setRowData(filteredData);
@@ -185,12 +185,12 @@ const fetchFilteredSahodaya = async (value: string) => {
       );
       try {
           if (response.data.success && response.status !== 203) {
-              console.log('filter')
-              console.log(response.data)
+              
+              
               const filteredData = response.data.sahodayaList.filter(
                   (item: { sahodaya_name: string; }) => item.sahodaya_name === value
               );
-              console.log(filteredData)
+              
 
               setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
               setRowData(filteredData);
@@ -243,7 +243,7 @@ useEffect(() => {
         >
           Export To Excel
         </button>
-
+    <div className="flex flex-col md:flex-row gap-4">
         <div className="flex items-center mb-3 space-x-2">
                         <label htmlFor="groupFilter" className="text-sm font-medium">
                             Sahodaya State:
@@ -285,7 +285,7 @@ useEffect(() => {
                         </select>
                     </div>
 
-
+                    </div>
       <div className={"ag-theme-quartz"} style={{ height: 600 }}>
         <AgGridReact
           rowData={rowData}

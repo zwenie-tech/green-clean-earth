@@ -55,7 +55,7 @@ export function DeleteBtn() {
             if (token) {
                 const retrievedData = JSON.parse(localStorage.getItem("newsData") || "[]");
                 const itemdata = retrievedData.find((item: { id: string; }) => item.id == coId);
-                console.log([itemdata][0].event_body);
+                
                 const { location, event_heading, event_body,created_time } = [itemdata][0];
                 setLoc(location);
                 setHeading(event_heading);
@@ -78,16 +78,13 @@ export function DeleteBtn() {
         
 
         const formdata = {
-            eventHeading: heading,
-            eventBody: desc,
-            location: loc,
-            createdTime: dateTime,
-            isdeleted:true
+           
+            isDeleted:true
         };
 
         if (token) {
             try {
-                const response = await axios.post(`${apiURL}/adminEdit/modifyEvents?recordId=${coId}`, formdata, {
+                const response = await axios.post(`${apiURL}/adminEdit/updateMainPageEvent?recordId=${coId}`, formdata, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'

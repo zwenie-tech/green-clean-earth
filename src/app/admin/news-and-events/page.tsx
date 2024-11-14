@@ -45,6 +45,7 @@ const AdminGrid = () => {
     { field: "created_time", headerName: "Date" },
     { field: "location", headerName: "Place" },
     { field: "image_link", headerName: "Image" },
+    { field: "show_in_main", headerName: "Show in Mainpage" },
   ]);
 
   const defaultColDef = useMemo(() => {
@@ -73,10 +74,25 @@ const AdminGrid = () => {
 
         if (response.data.success && response.status != 203) {
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
-          console.log(response.data.eventList)
           localStorage.setItem("newsData", JSON.stringify(response.data.eventList));
-
-          setRowData(response.data.eventList);
+          const events = response.data.eventList;
+          
+          const formattedEvents = events.map((event: {
+            show_in_main: number; created_time: string | number | Date; 
+}) => {
+            const date = new Date(event.created_time);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+            const year = date.getFullYear();
+            
+            return {
+                ...event,
+                created_time: `${day}-${month}-${year}`,
+                show_in_main:event.show_in_main === 1 ? true : false
+            };
+        });
+        
+          setRowData(formattedEvents);
         }
       }
     };

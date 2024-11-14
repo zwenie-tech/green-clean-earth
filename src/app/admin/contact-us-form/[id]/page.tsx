@@ -32,7 +32,7 @@ function ActivityLabel() {
     async function fetchdata() {
       if(token){
         const retrievedData = JSON.parse(localStorage.getItem("myData") || "[]");
-        console.log(retrievedData.find((item: { id: string; }) => item.id == coId))
+       
       setUserData([retrievedData.find((item: { id: string; }) => item.id == coId)]);
       }
     }

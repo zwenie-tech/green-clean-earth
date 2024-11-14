@@ -82,7 +82,7 @@ function Page() {
 
 
             setUserData(response.data.cordinatorDetails);
-            console.log(udata)
+            
           } else {
 
           }

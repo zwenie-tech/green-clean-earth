@@ -128,12 +128,12 @@ export function Eduform() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    
     const formdata = {
       districtId: districts.find((item) => item.dis_name === selectedDistrict)?.dis_id?.toString(),
       blockName: selectIcdsBlock
     }
-    console.log(formdata);
+    
 
     if (token) {
       const response = await axios.post(`${apiURL}/adminEdit/modifyIcdsBlock?recordId=${coId}`, formdata, {

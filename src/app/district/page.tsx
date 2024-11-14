@@ -2,13 +2,13 @@
 import React, { useEffect, useState } from 'react';
 import NavigationBar from '@/components/navigationBar';
 import Footer from '@/components/footer';
-import Image from 'next/image';
 import { apiURL } from '../requestsapi/request';
 
 interface District {
   dis_name: string;
   upload_count: number;
   dis_id : number;
+  activity_count: number;
 }
 interface ApiResponse {
   districtList: District[];
@@ -75,7 +75,8 @@ const DistrictPage = () => {
               <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                 <th className="py-3 px-6 text-left rounded-tl-lg">Sl. No</th>
                 <th className="py-3 px-6 text-left">District Name</th>
-                <th className="py-3 px-6 text-left rounded-tr-lg">Upload Count</th>
+                <th className="py-3 px-6 text-left">Upload Count</th>
+                <th className="py-3 px-6 text-left rounded-tr-lg">Activity Count</th>
               </tr>
             </thead>
             <tbody>
@@ -84,6 +85,7 @@ const DistrictPage = () => {
                   <td className="py-3 px-6 text-left">{index + 1}</td>
                   <td className="py-3 px-6 text-left"><a href={`/district/district-page?i=${district.dis_id}&n=${district.dis_name}&u=${district.upload_count}`}>{district.dis_name}</a></td>
                   <td className="py-3 px-6 text-left">{district.upload_count}</td>
+                  <td className="py-3 px-6 text-left">{district.activity_count}</td>
                 </tr>
               ))}
             </tbody>

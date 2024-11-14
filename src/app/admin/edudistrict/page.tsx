@@ -115,7 +115,7 @@ const AdminGrid = () => {
 
           setTotalcount(response.data.totalCount);
 
-          console.log(response.data)
+          
           localStorage.setItem("eduData", JSON.stringify(response.data.eduDistrict));
 
           setRowData(response.data.eduDistrict);
@@ -152,7 +152,7 @@ const AdminGrid = () => {
   }, [districts, selectedDistrictGrp]);
 
   const handleFilterEDistrict = (e: any) => {
-    console.log(e.target.value)
+    
     if (e.target.value != "") {
       setSelectedDistrictGrp(e.target.value);
       fetchFilteredDistrict(e.target.value);
@@ -161,7 +161,7 @@ const AdminGrid = () => {
   };
 
   const handleFilterEduDistrict = (e: any) => {
-    console.log(e.target.value)
+    
     if (e.target.value != "") {
       setSelecteduDistrict(e.target.value);
       fetchFilteredEduDistrict(e.target.value);
@@ -183,12 +183,12 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          console.log('filter')
-          console.log(response.data)
+          
+          
           const filteredData = response.data.eduDistrict.filter(
             (item: { dis_name: string; }) => item.dis_name === value
           );
-          console.log(filteredData)
+          
 
           setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
           setRowData(filteredData);
@@ -215,12 +215,12 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          console.log('filter')
-          console.log(response.data)
+          
+          
           const filteredData = response.data.eduDistrict.filter(
             (item: { edu_district: string; }) => item.edu_district === value
           );
-          console.log(filteredData)
+          
 
           setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
           setRowData(filteredData);
@@ -243,6 +243,7 @@ const AdminGrid = () => {
       >
         Export To Excel
       </button>
+      <div className="flex flex-col md:flex-row gap-4">
       <div className="flex items-center mb-3 space-x-2">
         <label htmlFor="groupFilter" className="text-sm font-medium">
           District:
@@ -284,7 +285,7 @@ const AdminGrid = () => {
 
         </select>
       </div>
-
+     </div>
 
       <div className={"ag-theme-quartz"} style={{ height: 600 }}>
         <AgGridReact

@@ -204,7 +204,6 @@ export function Uploadform() {
             const udata = response.data.uploadDetails;
             const {source_name,lsg_name,up_ward,cop_name,city,dis_name,st_name,cntry_name,up_planter,us_name,up_landmark_details,up_tree_name} = udata[0];
             
-            console.log("test",lsg_name)
             setSource(source_name || "");
             setWardNo(up_ward || "");
             setSelectedCorp(cop_name || "");
@@ -327,7 +326,7 @@ export function Uploadform() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
 
-    console.log(values)
+    
 
     const formdata = {
       planterName: planter,
@@ -343,7 +342,7 @@ export function Uploadform() {
       treeName: treename,
       treeNumber: userId
     }
-    console.log(formdata)
+    
 
     if (token) {
       const response = await axios.post(`${apiURL}/adminEdit/updateUpload`, formdata, {
@@ -355,7 +354,7 @@ export function Uploadform() {
       try {
 
         if (response.data.success && response.status != 203) {
-          console.log(response)
+          
           toast({
             title: "Data Successfully Updated.",
             description: "",
