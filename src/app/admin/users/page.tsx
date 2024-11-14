@@ -323,7 +323,7 @@ const AdminGrid = () => {
 
 
     setSelectedCntry(e.target.value); // Update dropdown value
-    fetchFilteredCntry(e.target.value);
+    // fetchFilteredCntry(e.target.value);
     setCurrentPage(1); // Reset to first page
   };
 
@@ -331,7 +331,7 @@ const AdminGrid = () => {
 
 
     setSelectedState(e.target.value); // Update dropdown value
-    fetchFilteredState(e.target.value);
+    // fetchFilteredState(e.target.value);
     setCurrentPage(1); // Reset to first page
   };
 
@@ -339,7 +339,7 @@ const AdminGrid = () => {
 
 
     setSelectedDistrict(e.target.value); // Update dropdown value
-    fetchFilteredDistrict(e.target.value);
+    // fetchFilteredDistrict(e.target.value);
     setCurrentPage(1); // Reset to first page
   };
 
@@ -347,7 +347,7 @@ const AdminGrid = () => {
 
 
     setSelectedCorp(e.target.value); // Update dropdown value
-    fetchFilteredCorp(e.target.value);
+    // fetchFilteredCorp(e.target.value);
     setCurrentPage(1); // Reset to first page
   };
 
@@ -355,196 +355,17 @@ const AdminGrid = () => {
 
 
     setSelectedLsgd(e.target.value); // Update dropdown value
-    fetchFilteredLsgd(e.target.value);
+    // fetchFilteredLsgd(e.target.value);
     setCurrentPage(1); // Reset to first page
   };
   const handleFilterChangeWard = (e: any) => {
 
 
     setSelectedWard(e); // Update dropdown value
-    fetchFilteredWard(e);
+    // fetchFilteredWard(e);
     setCurrentPage(1); // Reset to first page
   };
 
-
-
-  const fetchFilteredCntry = async (value: string) => {
-    if (token) {
-      const response = await axios.post(
-        `${apiURL}/admin/adminUserList`,
-        { countryId: countries.find((item) => item.cntry_name === value)?.cntry_id },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      try {
-        if (response.data.success && response.status !== 203) {
-
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-
-          setRowData(response.data.userList);
-        } else {
-          setRowData([]);
-          setTotalcount("0");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-  };
-
-  const fetchFilteredState = async (value: string) => {
-    if (token) {
-      const response = await axios.post(
-        `${apiURL}/admin/adminUserList`,
-        { stateId: states.find((item) => item.st_name === value)?.st_id },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      try {
-        if (response.data.success && response.status !== 203) {
-
-
-
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-          setRowData(response.data.userList);
-        } else {
-          setRowData([]);
-          setTotalcount("0");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-  };
-
-  const fetchFilteredDistrict = async (value: string) => {
-    if (token) {
-      const response = await axios.post(
-        `${apiURL}/admin/adminUserList`,
-        { districtId: districts.find((item) => item.dis_name === value)?.dis_id },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      try {
-        if (response.data.success && response.status !== 203) {
-
-
-
-
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-          setRowData(response.data.userList);
-        } else {
-          setRowData([]);
-          setTotalcount("0");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-  };
-  const fetchFilteredCorp = async (value: string) => {
-    if (token) {
-      const response = await axios.post(
-        `${apiURL}/admin/adminUserList`,
-        { corporationId: corporation.find((item) => item.cop_name === value)?.cop_id },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      try {
-        if (response.data.success && response.status !== 203) {
-
-
-
-
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-          setRowData(response.data.userList);
-        } else {
-          setRowData([]);
-          setTotalcount("0");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-  };
-  const fetchFilteredLsgd = async (value: string) => {
-    if (token) {
-      const response = await axios.post(
-        `${apiURL}/admin/adminUserList`,
-        { lsgdId: lsgd.find((item) => item.lsg_name === value)?.lsg_id },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      try {
-        if (response.data.success && response.status !== 203) {
-
-
-
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-          setRowData(response.data.userList);
-        } else {
-          setRowData([]);
-          setTotalcount("0");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-  };
-  const fetchFilteredWard = async (value: string) => {
-    if (token) {
-      const response = await axios.post(
-        `${apiURL}/admin/adminUserList`,
-        { wardNo: parseInt(value) },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      try {
-        if (response.data.success && response.status !== 203) {
-
-
-
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-          setRowData(response.data.userList);
-        } else {
-          setRowData([]);
-          setTotalcount("0");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-  };
 
   const fetchFilteredCoordName = async (value: string) => {
     if (token) {
@@ -678,39 +499,11 @@ const AdminGrid = () => {
   const handleFilterGrpType = async (e: any) => {
     setGroupType(e.target.value); // Update dropdown value
 
-    fetchFilteredGrpType(e.target.value);
+    // fetchFilteredGrpType(e.target.value);
     setCurrentPage(1); // Reset to first page
   };
 
-  const fetchFilteredGrpType = async (value: string) => {
-    if (token) {
-
-      const response = await axios.post(
-        `${apiURL}/admin/adminUserList`,
-        { groupTypeId: category.find((item) => item.group_type === value)?.id },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      try {
-        if (response.data.success && response.status !== 203) {
-         
-
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-          setRowData(response.data.userList);
-        } else {
-          setRowData([]);
-          setTotalcount("0");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-  };
+  
 
 
   useEffect(() => {
@@ -820,78 +613,22 @@ const AdminGrid = () => {
       e.target.value === 'General Education' || 'ICDS' ? setSelectedCountryGrp('India') : ''
       e.target.value === 'General Education' || 'ICDS' ? setSelectedStateGrp('Kerala') : ''
 
-      fetchFilteredSchoolType(e.target.value);
+      // fetchFilteredSchoolType(e.target.value);
       setCurrentPage(1); // Reset to first page
     }
   };
 
-  const fetchFilteredSchoolType = async (value: string) => {
-    if (token) {
-      const response = await axios.post(
-        `${apiURL}/admin/adminUserList`,
-        { schoolTypeId: schoolType.find((item) => item.type_name === value)?.id },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      try {
-        if (response.data.success && response.status !== 203) {
-
-
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-          setRowData(response.data.userList);
-        } else {
-          setRowData([]);
-          setTotalcount("0");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-  };
 
   const handleFilterSchoolCategory = (e: any) => {
 
     if (e.target.value != "") {
       setSelectedSubCategory(e.target.value);
-      fetchFilteredSchoolCategory(e.target.value);
+      // fetchFilteredSchoolCategory(e.target.value);
 
       setCurrentPage(1); // Reset to first page
     }
   };
 
-  const fetchFilteredSchoolCategory = async (value: string) => {
-    if (token) {
-      const response = await axios.post(
-        `${apiURL}/admin/adminUserList`,
-        { subCategoryId: subcategoryOptions.find((item) => item.gp_cat_name === value)?.gp_cat_id },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      try {
-        if (response.data.success && response.status !== 203) {
-
-
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-          setRowData(response.data.userList);
-        } else {
-          setRowData([]);
-          setTotalcount("0");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-  };
 
   const handleFilterSahodayaState = (e: any) => {
 
@@ -906,39 +643,12 @@ const AdminGrid = () => {
     if (e.target.value != "") {
       setSelectSahodaya(e.target.value);
 
-      fetchFilteredSahodaya(e.target.value);
+      // fetchFilteredSahodaya(e.target.value);
       setCurrentPage(1); // Reset to first page
     }
   };
 
-  const fetchFilteredSahodaya = async (value: string) => {
-    if (token) {
-      const response = await axios.post(
-        `${apiURL}/admin/adminUserList`,
-        { sahodayaId: sahodaya.find((item) => item.sahodaya_name === value)?.sahodaya_id },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      try {
-        if (response.data.success && response.status !== 203) {
-
-
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-          setRowData(response.data.userList);
-        } else {
-          setRowData([]);
-          setTotalcount("0");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-  };
+  
 
 
   const handleFilterEDistrict = (e: any) => {
@@ -965,39 +675,12 @@ const AdminGrid = () => {
     if (e.target.value != "") {
       setSelecteduSubDistrict(e.target.value);
 
-      fetchFilteredEduSubDistrict(e.target.value);
+      // fetchFilteredEduSubDistrict(e.target.value);
       setCurrentPage(1); // Reset to first page
     }
   };
 
-  const fetchFilteredEduSubDistrict = async (value: string) => {
-    if (token) {
-      const response = await axios.post(
-        `${apiURL}/admin/adminUserList`,
-        { eduSubDistrictId: eduSubDistrict.find((item) => item.edu_sub_district_name === value)?.edu_sub_district_id },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      try {
-        if (response.data.success && response.status !== 203) {
-
-
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-          setRowData(response.data.userList);
-        } else {
-          setRowData([]);
-          setTotalcount("0");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-  };
+  
 
 
   const handleFilterIcdsBlock = (e: any) => {
@@ -1016,39 +699,12 @@ const AdminGrid = () => {
       setSelectIcdsProject(e.target.value);
 
 
-      fetchFilteredIcdsProject(e.target.value);
+      // fetchFilteredIcdsProject(e.target.value);
       setCurrentPage(1); // Reset to first page
     }
   };
 
-  const fetchFilteredIcdsProject = async (value: string) => {
-    if (token) {
-      const response = await axios.post(
-        `${apiURL}/admin/adminUserList`,
-        { projectId: icdsProject.find((item) => item.project_name === value)?.project_id },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      try {
-        if (response.data.success && response.status !== 203) {
-
-
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-          setRowData(response.data.userList);
-        } else {
-          setRowData([]);
-          setTotalcount("0");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-  };
+ 
 
   const handleFilterMissionArea = (e: any) => {
 
@@ -1075,44 +731,17 @@ const AdminGrid = () => {
       setSelectedZone(e.target.value);
 
 
-      fetchFilteredMissionZone(e.target.value);
+      // fetchFilteredMissionZone(e.target.value);
       setCurrentPage(1); // Reset to first page
     }
   };
 
-  const fetchFilteredMissionZone = async (value: string) => {
-    if (token) {
-      const response = await axios.post(
-        `${apiURL}/admin/adminUserList`,
-        { zoneId: missionZone.find((item) => item.zone_name === value)?.zone_id },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      try {
-        if (response.data.success && response.status !== 203) {
-
-
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-          setRowData(response.data.userList);
-        } else {
-          setRowData([]);
-          setTotalcount("0");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-  };
+ 
   const handleFilterGrpName = (e: any) => {
 
     if (e.target.value != "") {
       setSelectedGrpName(e.target.value);
-      fetchFilteredGrpName(e.target.value);
+      // fetchFilteredGrpName(e.target.value);
       setCurrentPage(1); // Reset to first page
     }
   };
@@ -1237,12 +866,34 @@ const AdminGrid = () => {
   ]);
 
 
-  const fetchFilteredGrpName = async (value: string) => {
-    if (token) {
-      
+  
+
+  useEffect(() => {
+    async function fetchFilterData() {
+
+      const payload = {
+        
+        countryId: countries.find((item) => item.cntry_name === selectedCntry)?.cntry_id,
+        stateId: states.find((item) => item.st_name === selectedState)?.st_id,
+        districtId: districts.find((item) => item.dis_name === selectedDistrict)?.dis_id,
+        corporationId: corporation.find((item) => item.cop_name === selectedCorp)?.cop_id,
+        lsgdId: lsgd.find((item) => item.lsg_name === selectedLsgd)?.lsg_id,
+        wardNo: parseInt(selectedWard),
+        groupTypeId: category.find((item) => item.group_type === grouptype)?.id,
+        schoolTypeId: schoolType.find((item) => item.type_name === selectedschoolType)?.id,
+        subCategoryId: subcategoryOptions.find((item) => item.gp_cat_name === selectedSubCategory)?.gp_cat_id,
+        sahodayaId: sahodaya.find((item) => item.sahodaya_name === selectSahodaya)?.sahodaya_id,
+        eduDistrictId: eduDistrict.find((item) => item.edu_district === selecteduDistrict)?.edu_district_id,
+        eduSubDistrictId: eduSubDistrict.find((item) => item.edu_sub_district_name === selecteduSubDistrict)?.edu_sub_district_id,
+        blockId: icdsBlock.find((item) => item.block_name === selectIcdsBlock)?.icds_block_id,
+        projectId: icdsProject.find((item) => item.project_name === selectIcdsProject)?.project_id,
+        chapterId: missionChapter.find((item) => item.chapter_name === selectMission)?.chapter_id,
+        zoneId: missionZone.find((item) => item.zone_name === selectZone)?.zone_id,
+        groupId: grpName.find((item) => item.gp_name === selectedgrpName)?.gp_id,
+      }
       const response = await axios.post(
-        `${apiURL}/admin/adminUserList`,
-        { groupId: grpName.find((item) => item.gp_name === value)?.gp_id },
+        `${apiURL}/admin/adminUserList?page=${currentPage}&limit=${itemsPerPage}`,
+        payload,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -1252,10 +903,11 @@ const AdminGrid = () => {
       );
       try {
         if (response.data.success && response.status !== 203) {
-          setTotalPages(Math.ceil(response.data.userList.length / itemsPerPage));
-          setTotalcount(response.data.userList.length);
-          
           setRowData(response.data.userList);
+          setTotalcount(response.data.totalCount);
+          setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
+
+          
         } else {
           setRowData([]);
           setTotalcount("0");
@@ -1264,8 +916,8 @@ const AdminGrid = () => {
         console.error("Error:", error);
       }
     }
-  };
-
+    fetchFilterData();
+  }, [category, corporation, countries, currentPage, districts, eduDistrict, eduSubDistrict, grouptype, grpName, icdsBlock, icdsProject, lsgd, missionChapter, missionZone, sahodaya, schoolType, selectIcdsBlock, selectIcdsProject, selectMission, selectSahodaya, selectZone, selectedCntry, selectedCorp, selectedDistrict, selectedLsgd, selectedState, selectedSubCategory, selectedWard, selectedgrpName, selectedschoolType, selecteduDistrict, selecteduSubDistrict, states, subcategoryOptions, token]);
 
   return (
     <div className=" bg-slate-100">
