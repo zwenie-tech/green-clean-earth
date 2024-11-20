@@ -156,7 +156,7 @@ const AdminGrid = () => {
     { field: "activity_views", headerName: "View" },
     { field: "activity_likes", headerName: "Like" },
     { field: "activity_value", headerName: "Value" },
-    { field: "hasEarnings", headerName: "Earnings" },
+    { field: "earnings", headerName: "Earnings" },
     { field: "gp_name", headerName: "Group Name" },
     { field: "group_type", headerName: "Category" },
     { field: "activity_sub_category", headerName: "School Type" },
