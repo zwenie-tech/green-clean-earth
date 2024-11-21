@@ -4,7 +4,6 @@ import Footer from '@/components/footer';
 import React, { useState, useEffect, Suspense } from 'react';
 import { apiURL, imageURL } from '../requestsapi/request';
 import { useRouter, useSearchParams } from 'next/navigation';
-
 interface GroupActivity {
   us_name: string;
   participant_name: string;
@@ -51,7 +50,12 @@ const ButtonDisplayFn: React.FC = () => {
   const [totalPagesUp, setTotalPagesUp] = useState(1);
   const itemsPerPage = 10;
 
- 
+  const router = useRouter();
+
+  const navigateToUserPage = (participantName: string, loginId: number) => {
+    router.push(`/user-page?u=${encodeURIComponent(participantName)}&id=${loginId}`);
+  };
+
     useEffect(() => {
       async function fetchfirstData(){
         const grpId = parseInt(grpid!);
@@ -193,7 +197,8 @@ const ButtonDisplayFn: React.FC = () => {
           <div className="container mx-auto p-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {groupUploads.length ? (groupUploads.map((upload) => (
-                <div key={upload.up_id} className="flex flex-col items-center p-4 border border-gray-200 rounded-lg" style={{ boxShadow: '0px 4px 10px 3px #00000040' }}>
+                <div key={upload.up_id} className="flex flex-col items-center p-4 border border-gray-200 rounded-lg" 
+                  style={{ boxShadow: '0px 4px 10px 3px #00000040' }} onClick={() => navigateToUserPage(upload.up_name, upload.up_reg_id)}>
                   <div className="w-full">
                     <img src={`${imageURL}${upload.up_file}`} alt={upload.up_tree_name} className="w-full h-auto object-cover rounded-lg" style={{ height: '250px' }} />
                   </div>
