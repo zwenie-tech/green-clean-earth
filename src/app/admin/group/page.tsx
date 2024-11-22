@@ -143,6 +143,9 @@ const AdminGrid = () => {
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
     { field: "gp_id", headerName: "Group Id" },
     { field: "gp_name", headerName: "Group name" },
+    { field: "co_ord_id", headerName: "Coordinator Id" },
+    { field: "co_ord_name", headerName: "Coordinator name" },
+    { field: "co_ord_contact", headerName: "Phone Number"},
     { field: "group_type", headerName: "Group type" },
     { field: "earnings", headerName: "Earnings"},
     { field: "type_name", headerName: "School type" },
@@ -156,7 +159,6 @@ const AdminGrid = () => {
     { field: "zone_name", headerName: "Zone" },
     { field: "cntry_name", headerName: "Country" },
     { field: "st_name", headerName: "State" },
-    { field: "co_ord_name", headerName: "Coordinator name" },
   ]);
 
   const defaultColDef = useMemo(() => {
