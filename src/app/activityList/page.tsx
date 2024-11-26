@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input"
 import axios from 'axios';
 import PaginationComponent from './PageComponent';
+import { ArrowDown, ArrowUp, Trash2 } from 'lucide-react';
 interface Acivitylist {
   personal_activity_id: number,
   login_id: number,
@@ -23,6 +24,7 @@ interface Acivitylist {
   activity_value: string,
   activity_on: string,
   earnings: number,
+  gp_name:string
 }
 
 type Country = {
@@ -132,6 +134,11 @@ const ActivityList = () => {
   const [selectedState, setSelectedState] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [filterData, setFilterData] = useState({});
+  const [orderdir1, setOrderDir1] = useState("DESC");
+  const [orderdir2, setOrderDir2] = useState("DESC");
+  const [orderdir3, setOrderDir3] = useState("DESC");
+  const [orderdir4, setOrderDir4] = useState("DESC");
+  const [orderfield, setOrderfield] = useState("");
 
   const [selectedCountryGrp, setSelectedCountryGrp] = useState("");
   const [selectedStateGrp, setSelectedStateGrp] = useState("");
@@ -277,24 +284,6 @@ const ActivityList = () => {
   }
   useEffect(() => {
     async function fetchfirstData() {
-      const responseall = await fetch(`${apiURL}/activity/all?limit=100000000000`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      });
-      const dataall = await responseall.json();
-
-      dataall.activity ? setTotalPages(Math.ceil(dataall.activity.length / itemsPerPage)) : '';
-    }
-    fetchfirstData();
-  }, []);
-
-  useEffect(() => {
-    async function fetchInitialData() {
-      const countryResponse = await fetch(`${apiURL}/country`);
-      const countryData = await countryResponse.json();
-      setCountries(countryData.country);
       try {
         const response = await fetch(`${apiURL}/activity/all?page=${currentPage}&limit=${itemsPerPage}`, {
           method: "POST",
@@ -310,6 +299,7 @@ const ActivityList = () => {
         try {
           const result = await response.json();
 
+          setTotalPages(Math.ceil(result.total / itemsPerPage));
 
           setActivityList(result.activity);
         } catch {
@@ -318,6 +308,16 @@ const ActivityList = () => {
       } catch (error) {
         console.error("Error:", error);
       }
+    }
+    fetchfirstData();
+  }, [currentPage]);
+
+  useEffect(() => {
+    async function fetchInitialData() {
+      const countryResponse = await fetch(`${apiURL}/country`);
+      const countryData = await countryResponse.json();
+      setCountries(countryData.country);
+      
     }
     fetchInitialData();
   }, [currentPage]);
@@ -498,7 +498,9 @@ const ActivityList = () => {
       }
       try {
         const result = await response.json();
-
+        setTotalPages(Math.ceil(result.total / itemsPerPage));
+        
+      setTotalCount(result.total);
         setActivityList(result.activity);
         
       } catch {
@@ -515,58 +517,58 @@ const ActivityList = () => {
       onDataSubmit(filterData,currentPage);
     }
   }, [currentPage, filterData]);
+  
+  
+
+  function sort(dir: string,field: string){
+    setOrderfield(field);
+    field === "gp_name" ? setOrderDir1(dir) : "";
+    field === "activity_on" ? setOrderDir2(dir) : "";
+    field === "earnings" ? setOrderDir3(dir) : "";
+    field === "activity_value" ? setOrderDir4(dir) : "";
+    
+  }
   useEffect(() => {
-    async function fetchFirstData() {
-      try {
-        const responseAll = await fetch(`${apiURL}/activity/all?limit=10000000`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        const dataAll = await responseAll.json();
-        
-        setTotalCount(dataAll.activity.length)
-        setTotalPages(Math.ceil(dataAll.activity.length / itemsPerPage));
-      } catch (error) {
-        console.error("Error fetching total activities:", error);
-      }
-    }
-  
-    fetchFirstData();
-  }, []);
-  
-  // Fetch data for the current page
-  useEffect(() => {
-    async function fetchDataForCurrentPage() {
-      try {
-        // Fetch countries
-        const countryResponse = await fetch(`${apiURL}/country`);
-        const countryData = await countryResponse.json();
-        setCountries(countryData.country);
-  
-        // Fetch activities for the current page
-        const response = await fetch(`${apiURL}/activity/all?page=${currentPage}&limit=${itemsPerPage}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-  
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+    const fetchClass = async () => {
+      if(orderfield !=""){
+
+      
+        const payload = {
+          ...filterData,
+          orderByField : orderfield,
+          orderDirection : orderfield === "gp_name" ? orderdir1 
+          : orderfield === "activity_on" ? orderdir2 
+          : orderfield === "earnings" ? orderdir3 
+          : orderfield === "activity_value" ? orderdir4 : ""
         }
-  
-        const result = await response.json();
-        setActivityList(result.activity || []); // Ensure it's an array
-      } catch (error) {
-        console.error('Error fetching page data:', error);
-        setActivityList([]); // Reset list on error
+   
+    const response = await axios.post(
+      `${apiURL}/activity/all?page=${currentPage}&limit=${itemsPerPage}`,
+      payload,
+      {
+        headers: {
+
+          "Content-Type": "application/json",
+        },
       }
+    );
+    try {
+      if (response.data.success && response.status !== 203) {
+        const result = await response.data;
+        setTotalPages(Math.ceil(result.total / itemsPerPage));
+        
+        setTotalCount(result.total);
+          setActivityList(result.activity);
+      } else {
+        setActivityList([]);
+      }
+    } catch (error) {
+      console.error("Error:", error);
     }
-  
-    fetchDataForCurrentPage();
-  }, [currentPage, itemsPerPage]);
+  }
+    };
+    fetchClass();
+  }, [currentPage, filterData, orderdir1, orderdir2, orderdir3, orderdir4, orderfield]);
   
   // Handle page change
   const handlePageChange = (newPage: number) => {
@@ -1448,13 +1450,19 @@ const ActivityList = () => {
               <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                 <th className="py-3 px-6 text-left w-16 bd-2 rounded-tl-lg">SL .No</th>
                 <th className="py-3 px-6 text-left">Activity Link</th>
-                <th className="py-3 px-6 text-left">Name</th>
+                <th className="py-3 px-6 text-left">Participant Name</th>
                 <th className="py-3 px-6 text-left">User Id</th>
+                <th className="py-3 px-6 text-left ">Group Name {orderdir1 === "DESC" ? <span onClick={() => sort("ASC", "gp_name")} className={orderfield === "gp_name" ? 'text-green-600' 
+                  :'text-gray-400'}><ArrowUp/></span> : <span className={orderfield === "gp_name" ? 'text-green-600' :'text-gray-400'} onClick={() => sort("DESC", "gp_name")}><ArrowDown/></span>}</th>
+                <th className="py-3 px-6 text-left">Upload Date {orderdir2 === "DESC" ? <span className={orderfield === "activity_on" ? 'text-green-600' :'text-gray-400'} onClick={() => sort("ASC", "activity_on")}><ArrowUp/></span> 
+                : <span className={orderfield === "activity_on" ? 'text-green-600' :'text-gray-400'} onClick={() => sort("DESC", "activity_on")}><ArrowDown/></span>}</th>
                 <th className="py-3 px-6 text-left">Name of Art - Brief Description</th>
                 <th className="py-3 px-6 text-left">Category</th>
                 <th className="py-3 px-6 text-left">Views and Likes</th>
-                <th className="py-3 px-6 text-left">Earnings</th>
-                <th className="py-3 px-6 text-left rounded-tr-lg">Value</th>
+                <th className="py-3 px-6 text-left">Earnings {orderdir3 === "DESC" ? <span className={orderfield === "earnings" ? 'text-green-600' :'text-gray-400'} onClick={() => sort("ASC", "earnings")}><ArrowUp/></span> 
+                : <span className={orderfield === "earnings" ? 'text-green-600' :'text-gray-400'} onClick={() => sort("DESC", "earnings")}><ArrowDown/></span>}</th>
+                <th className="py-3 px-6 text-left rounded-tr-lg">Value {orderdir4 === "DESC" ? <span className={orderfield === "activity_value" ? 'text-green-600' :'text-gray-400'} onClick={() => sort("ASC", "activity_value")}><ArrowUp/></span> 
+                : <span className={orderfield === "activity_value" ? 'text-green-600' :'text-gray-400'} onClick={() => sort("DESC", "activity_value")}><ArrowDown/></span>}</th>
               </tr>
             </thead>
             <tbody>
@@ -1467,6 +1475,8 @@ const ActivityList = () => {
                       <td className="py-3 px-6 text-left"><a href={activity.activity_social_media_link}>{activity.activity_social_media_link}</a></td>
                       <td className="py-3 px-6 text-left">{activity.participant_name}</td>
                       <td className="py-3 px-6 text-left"><a href={`/user-page?u=${activity.participant_name}&id=${activity.login_id}`}>{activity.login_id}</a></td>
+                      <td className="py-3 px-6 text-left">{activity.gp_name}</td>
+                      <td className="py-3 px-6 text-left">{activity.activity_on.split("T")[0].split('-').reverse().join('-')}</td>
                       <td className="py-3 px-6 text-left">{activity.activity_title}{activity.activity_description}</td>
                       <td className="py-3 px-6 text-left">{categories[activity.activity_category_id]}</td>
                       <td className="py-3 px-6 text-left">{activity.activity_views} Views, {activity.activity_likes} Likes</td>

@@ -1,4 +1,4 @@
-// "use client";
+"use client";
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -13,7 +13,7 @@ import { ImageUp, Upload } from "lucide-react"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { FormUploadPlant } from "@/app/my-profile/form_upload_plant"
 
-export function DialogUploadPlant({token}:any) {
+export function DialogUploadPlant() {
   
   return (
     <Dialog >

@@ -23,14 +23,14 @@ export function DialogUploadActivities({token}:any) {
       </DialogTrigger>
       <DialogContent className="sm:max-w-2xl " >
         <DialogHeader>
-          <DialogTitle>Upload Activities hello</DialogTitle>
+          <DialogTitle>Upload Activities</DialogTitle>
           <DialogDescription>
             {/* Provide details here */}
           </DialogDescription>
         </DialogHeader>
 
         <ScrollArea className="h-full w-full">
-            <FormUploadActivities token={token}/>
+            <FormUploadActivities/>
         </ScrollArea>
         <DialogFooter>
           {/* <Button type="submit" className="bg-primary hover:bg-primary/85">Submit</Button> */}
