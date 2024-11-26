@@ -126,6 +126,14 @@ const ButtonDisplayFn = () => {
           <p className='text-right font-bold w-1/2'>User Id:</p>
           <p className='w-1/2 font-bold'>{userid}</p>
         </div>
+        <div className='w-full flex justify-between items-center gap-3 '>
+          <p className='text-right font-bold w-1/2'>Upload Count:</p>
+          <p className='w-1/2 font-bold'>{totalCountUp}</p>
+        </div>
+        <div className='w-full flex justify-between items-center gap-3 '>
+          <p className='text-right font-bold w-1/2'>Activity Count:</p>
+          <p className='w-1/2 font-bold'>{totalCountAct}</p>
+        </div>
 
       </div>
       <hr className="h-1 bg-gray-300 border-0 mt-4 w-3/4 justify-center items-center mx-auto" />
@@ -149,9 +157,7 @@ const ButtonDisplayFn = () => {
       <div className="w-3/4 mx-auto">
         {activeButton === 'upload' && (
           <div className="container mx-auto p-4">
-            <div className="flex justify-center font-bold my-4">
-        <p>Upload Count: {totalCountUp}</p>
-      </div>
+            
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {uploads.map((upload) => (
                 <div
@@ -218,9 +224,7 @@ const ButtonDisplayFn = () => {
         {activeButton === 'activity' && (
           <div className="container mx-auto p-6">
             <div className="overflow-x-auto">
-            <div className="flex justify-center font-bold my-4">
-        <p>Activity Count: {totalCountAct}</p>
-      </div>
+            
               <table className="min-w-full bg-white border-gray-200 rounded-t-lg">
                 <thead>
                   <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">

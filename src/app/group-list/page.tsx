@@ -217,7 +217,8 @@ const GroupList = () => {
       const data: any = await response.json();
       if (data.success) {
         setTotalPages(Math.ceil(data.totalRecords / itemsPerPage));
-        setTotalCount(data.totalRecords)
+        setTotalCount(data.totalRecords);
+        console.log(data)
         setGroups(data.groupList);
       }
     };
