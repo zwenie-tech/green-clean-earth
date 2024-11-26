@@ -1450,8 +1450,10 @@ const ActivityList = () => {
               <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                 <th className="py-3 px-6 text-left w-16 bd-2 rounded-tl-lg">SL .No</th>
                 <th className="py-3 px-6 text-left">Activity Link</th>
+                <th className="py-3 px-6 text-left">Activity Id</th>
                 <th className="py-3 px-6 text-left">Participant Name</th>
                 <th className="py-3 px-6 text-left">User Id</th>
+                <th className="py-3 px-6 text-left">Chest Number</th>
                 <th className="py-3 px-6 text-left ">Group Name {orderdir1 === "DESC" ? <span onClick={() => sort("ASC", "gp_name")} className={orderfield === "gp_name" ? 'text-green-600' 
                   :'text-gray-400'}><ArrowUp/></span> : <span className={orderfield === "gp_name" ? 'text-green-600' :'text-gray-400'} onClick={() => sort("DESC", "gp_name")}><ArrowDown/></span>}</th>
                 <th className="py-3 px-6 text-left">Upload Date {orderdir2 === "DESC" ? <span className={orderfield === "activity_on" ? 'text-green-600' :'text-gray-400'} onClick={() => sort("ASC", "activity_on")}><ArrowUp/></span> 
@@ -1473,8 +1475,10 @@ const ActivityList = () => {
 
                       <td className="py-3 px-6 text-left">{startIndex + index + 1}</td>
                       <td className="py-3 px-6 text-left"><a href={activity.activity_social_media_link}>{activity.activity_social_media_link}</a></td>
+                      <td className="py-3 px-6 text-left">{activity.personal_activity_id}</td>
                       <td className="py-3 px-6 text-left">{activity.participant_name}</td>
                       <td className="py-3 px-6 text-left"><a href={`/user-page?u=${activity.participant_name}&id=${activity.login_id}`}>{activity.login_id}</a></td>
+                      <td className="py-3 px-6 text-left">{activity.activity_description}</td>
                       <td className="py-3 px-6 text-left">{activity.gp_name}</td>
                       <td className="py-3 px-6 text-left">{activity.activity_on.split("T")[0].split('-').reverse().join('-')}</td>
                       <td className="py-3 px-6 text-left">{activity.activity_title}{activity.activity_description}</td>
