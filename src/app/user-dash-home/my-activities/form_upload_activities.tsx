@@ -29,6 +29,7 @@ import { useSearchParams } from "next/navigation";
 import { uploadActivityData } from "@/app/requestsapi/request";
 import { useToast } from "@/components/ui/use-toast";
 import imageCompression from "browser-image-compression";
+import Cookies from "js-cookie";
 
 const MAX_FILE_SIZE = 1024 * 1024 * 100; // 100MB
 const TARGET_FILE_SIZE = 1024 * 1024 * 4; // 4MB
@@ -104,7 +105,8 @@ interface ActivitiesTabProps {
   token: string;
 }
 
-export function FormUploadActivities({ token }: ActivitiesTabProps) {
+export function FormUploadActivities() {
+  const token = Cookies.get("token");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
@@ -170,7 +172,7 @@ export function FormUploadActivities({ token }: ActivitiesTabProps) {
     }
 
     try {
-      const response = await uploadActivityData(formData, token, id);
+      const response = await uploadActivityData(formData, token!, id);
       if (response!.status == 201) {
         toast({
           title: "Submitted Successfully.",
