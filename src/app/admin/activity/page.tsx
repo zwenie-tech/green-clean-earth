@@ -216,7 +216,7 @@ const AdminGrid = () => {
   };
   useEffect(() => {
     async function fetchdata() {
-      if (token && userid == "" && actid == "" && partname == "") {
+      if (token && userid == "" && actid == "" && partname == "" && chestno=="") {
         const response = await axios.post(`${apiURL}/admin/adminActivityList?page=${currentPage}&limit=${itemsPerPage}`, {}, {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -464,8 +464,9 @@ const AdminGrid = () => {
   useEffect(() => {
     const fetchFilteredUpId = async () => {
       if (chestno != '') {
+        console.log(chestno)
         const filterdata = {
-          chestNumber: parseInt(chestno)
+          chestNumber: chestno
         }
         if (token) {
           const response = await axios.post(
@@ -927,7 +928,7 @@ const AdminGrid = () => {
 
   useEffect(() => {
     async function fetchFilterData() {
-      if (token && userid == "" && actid == "" && partname == "") {
+      if (token && userid == "" && actid == "" && partname == "" && chestno=="") {
 
 
         const payload = {

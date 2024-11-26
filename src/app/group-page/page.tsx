@@ -4,6 +4,7 @@ import Footer from '@/components/footer';
 import React, { useState, useEffect, Suspense } from 'react';
 import { apiURL, imageURL } from '../requestsapi/request';
 import { useRouter, useSearchParams } from 'next/navigation';
+
 interface GroupActivity {
   us_name: string;
   participant_name: string;
@@ -14,6 +15,7 @@ interface GroupActivity {
   activity_views: string;
   earnings: string | null;
   gp_id: number;
+  activity:string;
 }
 
 interface GroupUpload {
@@ -28,6 +30,8 @@ interface GroupUpload {
   gp_name: string;
   up_reg_id: number;
   gp_id: number;
+  is_challenged:number
+
 }
 export default function ButtonDisplay() {
   return (
@@ -48,53 +52,16 @@ const ButtonDisplayFn: React.FC = () => {
   const [currentPageUp, setCurrentPageUp] = useState(1);
   const [totalPagesAct, setTotalPagesAct] = useState(1);
   const [totalPagesUp, setTotalPagesUp] = useState(1);
+  const [upcount, setUpCount] = useState(1);
+  const [actcount, setActCount] = useState(1);
   const itemsPerPage = 10;
-
-  const router = useRouter();
-
+  const router = useRouter()
+  
   const navigateToUserPage = (participantName: string, loginId: number) => {
     router.push(`/user-page?u=${encodeURIComponent(participantName)}&id=${loginId}`);
   };
-
-    useEffect(() => {
-      async function fetchfirstData(){
-        const grpId = parseInt(grpid!);
-        const responseACTall = await fetch(`${apiURL}/activity/groupActivities?limit=100000000000`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },body: JSON.stringify({ groupId: grpId }),
-        }); 
-        if(responseACTall.status === 200)
-        {
-
-          const dataall = await responseACTall.json();
-          setTotalPagesAct(Math.ceil(dataall.groupActivities.length / itemsPerPage));
-          
-        }
-      }
-      fetchfirstData();
-    }, [grpid]);
-
-    useEffect(() => {
-      async function fetchfirstData(){
-        const grpId = parseInt(grpid!);
-        const responseUpall = await fetch(`${apiURL}/uploads/groupUploads?limit=100000000000`,{
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },body: JSON.stringify({ groupId: grpId }),
-        }); 
-        if(responseUpall.status === 200)
-        {
-
-          const dataall = await responseUpall.json();
-          setTotalPagesUp(Math.ceil(dataall.groupUploads.length / itemsPerPage));
-          
-        }
-      }
-      fetchfirstData();
-    }, [grpid]);
+ 
+    
 
     const handlePageChangeAct = (newPage: number) => {
       if (newPage > 0 && newPage <= totalPagesAct) {
@@ -122,7 +89,10 @@ const ButtonDisplayFn: React.FC = () => {
       });
       const data = await response.json();
       if (data.success) {
+        console.log(data)
         setGroupActivities(data.groupActivities);
+        setActCount(data.activity_count);
+        setTotalPagesAct(Math.ceil(data.activity_count / itemsPerPage));
       }
     } catch (error) {
       console.error('Error fetching group activities:', error);
@@ -142,7 +112,10 @@ const ButtonDisplayFn: React.FC = () => {
       });
       const data = await response.json();
       if (data.success) {
+        console.log(data)
         setGroupUploads(data.groupUploads);
+        setUpCount(data.upload_count);
+        setTotalPagesUp(Math.ceil(data.upload_count / itemsPerPage));
       }
     } catch (error) {
       console.error('Error fetching group uploads:', error);
@@ -168,8 +141,12 @@ const ButtonDisplayFn: React.FC = () => {
         </div>
         
         <div className="w-full flex justify-between items-center gap-3 ">
-          <p className="text-right font-bold w-1/2">Upload:</p>
-          <p className="w-1/2 font-bold">{grpuc}</p>
+          <p className="text-right font-bold w-1/2">Upload count:</p>
+          <p className="w-1/2 font-bold">{upcount}</p>
+        </div>
+        <div className="w-full flex justify-between items-center gap-3 ">
+          <p className="text-right font-bold w-1/2">Activity count:</p>
+          <p className="w-1/2 font-bold">{actcount}</p>
         </div>
       </div>
       <hr className="h-1 bg-gray-300 border-0 mt-4 w-3/4 justify-center items-center mx-auto" />
@@ -196,19 +173,32 @@ const ButtonDisplayFn: React.FC = () => {
         {activeButton === 'upload' && (
           <div className="container mx-auto p-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {groupUploads.length ? (groupUploads.map((upload) => (
-                <div key={upload.up_id} className="flex flex-col items-center p-4 border border-gray-200 rounded-lg" 
-                  style={{ boxShadow: '0px 4px 10px 3px #00000040' }} onClick={() => navigateToUserPage(upload.up_name, upload.up_reg_id)}>
-                  <div className="w-full">
-                    <img src={`${imageURL}${upload.up_file}`} alt={upload.up_tree_name} className="w-full h-auto object-cover rounded-lg" style={{ height: '250px' }} />
-                  </div>
-                  <div className="w-full pt-3 md:pl-4">
-                    <p>Plant name: {upload.up_tree_name}</p>
-                    <p>Uploaded No.: {upload.up_id}</p>
-                  </div>
-                </div>
-              ))): (<div>No data found</div>)}
+        {groupUploads.length ? (
+          groupUploads.map((upload) => (
+            <div key={upload.up_id} className="relative flex flex-col items-center p-4 border border-gray-200 rounded-lg"
+             style={{ boxShadow: '0px 4px 10px 3px #00000040' }} onClick={() => navigateToUserPage(upload.up_name, upload.up_reg_id)}>
+              
+              <div className="w-full">
+                {upload.is_challenged == 1 && (
+                  <img
+                    className="absolute top-0 left-0 transform translate-x-1/2 w-28 h-18 object-cover z-10"
+                    src="/images/chellenge.png"
+                    alt="Challenged"
+                  />
+                )}
+                <img src={`${imageURL}${upload.up_file}`} alt={upload.up_tree_name} className="w-full h-auto object-cover rounded-lg" style={{ height: '250px' }} />
+              </div>
+
+              <div className="w-full pt-3 md:pl-4">
+                <p>Plant name: {upload.up_tree_name}</p>
+                <p>Uploaded No.: {upload.up_id}</p>
+              </div>
             </div>
+          ))
+        ) : (
+          <div>No data found</div>
+        )}
+      </div>
             <div className="flex justify-center items-center space-x-2 my-4">
                   <button
                   className={currentPageUp === 1 ? 
@@ -249,6 +239,7 @@ const ButtonDisplayFn: React.FC = () => {
                     <th className="py-3 px-6 text-left">Category</th>
                     <th className="py-3 px-6 text-left">View/ Like/ Comment/ Share</th>
                     <th className="py-3 px-6 text-left rounded-tr-lg">Earnings</th>
+                    <th className="py-3 px-6 text-left rounded-tr-lg">Value</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -260,6 +251,7 @@ const ButtonDisplayFn: React.FC = () => {
                       <td className="py-3 px-6 text-left">{activity.activity_category}</td>
                       <td className="py-3 px-6 text-left">{activity.activity_likes} Likes & {activity.activity_views} Views</td>
                       <td className="py-3 px-6 text-left">{activity.earnings || "N/A"} </td>
+                      <td className="py-3 px-6 text-left">{activity.activity || "N/A"} </td>
                     </tr>
                   ))): <div>No data found</div>}
                 </tbody>
