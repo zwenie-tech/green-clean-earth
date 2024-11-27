@@ -98,6 +98,7 @@ const MyUploadedPlants = () => {
           },
         }); 
         const dataall = await responseall.json();
+        console.log(dataall)
         setTotalPages(Math.ceil(dataall.Uploads.length / itemsPerPage));
       }
       fetchfirstData();
@@ -118,6 +119,7 @@ const MyUploadedPlants = () => {
       });
       const result: ApiResponse = await response.json();
       if (result.success) {
+        console.log(result)
         setData(result.Uploads);
       }
     };

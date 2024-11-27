@@ -3,10 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Upload } from "lucide-react";
 import { DialogUploadActivities } from "./dialog_upload_activities";
 import Table from "@/components/table";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { apiURL, fetchActivityData } from "@/app/requestsapi/request";
 import Loading from "@/components/loading";
+import Cookies from "js-cookie";
 
 const headings = [
   "Sl No",
@@ -19,12 +20,21 @@ const headings = [
   "Earnings"
 ];
 
-export default function ActivitiesTab({ token }: any) {
+export default function ActivitiesTab() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ActivitiesTabFn />
+    </Suspense>
+  );
+}
+
+ function ActivitiesTabFn() {
   const [activity, setActivity] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
+  const token = Cookies.get("token");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 10;
