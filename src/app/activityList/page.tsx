@@ -504,7 +504,8 @@ const ActivityList = () => {
         setActivityList(result.activity);
         
       } catch {
-        // setTotalPages(1);
+        setTotalCount("0");
+        setTotalPages(1);
         setActivityList([]);
       }
     } catch (error) {

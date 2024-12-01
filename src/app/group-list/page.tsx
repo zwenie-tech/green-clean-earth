@@ -207,6 +207,7 @@ const GroupList = () => {
 
   useEffect(() => {
     const fetchGroups = async () => {
+      if(Object.keys(filterData).length === 0){
       const response = await fetch(`${apiURL}/common/groupList?page=${currentPage}&limit=${itemsPerPage}`, {
         method: 'POST',
         headers: {
@@ -221,10 +222,11 @@ const GroupList = () => {
         console.log(data)
         setGroups(data.groupList);
       }
+    }
     };
 
     fetchGroups();
-  }, [currentPage]);
+  }, [currentPage, filterData]);
 
   async function sort(dir: string,field: string){
     setOrderfield(field);
@@ -568,34 +570,44 @@ const GroupList = () => {
 
     setFilterData(dataWithIds);
 
-    const response = await axios.post(
-      `${apiURL}/common/groupList`,
-      dataWithIds,
-      {
-        headers: {
+  };
 
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    try {
-      if (response.data.success && response.status !== 203) {
+  useEffect(() => {
+    const onDataSubmit = async () => {
+      
+      
+      try {
+        // Fetch paginated data based on current page
+        const response = await fetch(`${apiURL}/common/groupList?page=${currentPage}&limit=${itemsPerPage}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(filterData),
+        });
+        if (!response.ok) {
+          throw new Error("Failed to fetch paginated uploads.");
+        }
+        const result = await response.json();
+        setGroups(result.groupList);
 
-        setTotalCount(response.data.totalRecords);
-        setTotalPages(Math.ceil(response.data.totalRecords / itemsPerPage));
-        setGroups(response.data.groupList);
-      } else {
+        console.log('part 2',)
+
+        console.log(result)
+        setTotalCount(result.totalRecords);
+        setTotalPages(Math.ceil(result.totalRecords / itemsPerPage));
+
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        // Reset pagination and participant list on error
+        setTotalCount("0")
+        setTotalPages(1);
         setGroups([]);
       }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-
-
-
-    // onDataSubmit(dataWithIds);
-
-  };
+    
+    };
+    onDataSubmit();
+  }, [currentPage, filterData]);
 
   const handleFilterGrpName = (e: any) => {
 
@@ -621,7 +633,7 @@ const GroupList = () => {
           },
         }
       );
-
+console.log('part3')
       setGrpName(response.data.groupList);
     } catch (error) {
       console.error("Error fetching category:", error);
@@ -1439,6 +1451,8 @@ const GroupList = () => {
       <div className="flex justify-center font-bold my-4">
         <p>Total Count: {totalCount}</p>
       </div>
+      <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+
       {/* Table */}
       <div className="container mx-auto p-6">
         <div className="overflow-x-auto">
@@ -1467,11 +1481,15 @@ const GroupList = () => {
                   <td className="py-3 px-6 text-left">{group.dis_name}</td>
                 </tr>
               ))}
+              {!groups || groups.length <= 0 && (
+                <tr>
+                  <td colSpan={6} className="py-3 px-6 text-center">No participants data available</td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
       </div>
-      <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
 
       {/* <div className="flex justify-center items-center space-x-2 my-4">
         <button
