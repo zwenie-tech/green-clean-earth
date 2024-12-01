@@ -145,6 +145,9 @@ const AdminGrid = () => {
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
     { field: "gp_id", headerName: "Group Id" },
     { field: "gp_name", headerName: "Group name" },
+    { field: "co_ord_name", headerName: "Coordinator name" },
+    { field: "co_ord_contact", headerName: "Phone Number"},
+    { field: "co_ord_id", headerName: "Cordinator Id"},
     { field: "group_type", headerName: "Group type" },
     { field: "upload_count", headerName: "Upload count" },
     { field: "activity_count", headerName: "Activity count" },
@@ -160,7 +163,6 @@ const AdminGrid = () => {
     { field: "zone_name", headerName: "Zone" },
     { field: "cntry_name", headerName: "Country" },
     { field: "st_name", headerName: "State" },
-    { field: "co_ord_name", headerName: "Coordinator name" },
   ]);
 
   const defaultColDef = useMemo(() => {
@@ -1468,7 +1470,7 @@ const AdminGrid = () => {
           rowData={rowData}
           columnDefs={[
             {
-              headerName: "Serial No", // Column header
+              headerName: "SL No", // Column header
               valueGetter: (params) => {
                 const itemsPerPage = 10; // Number of items per page
                 
@@ -1476,7 +1478,7 @@ const AdminGrid = () => {
                 // Calculate the serial number
                 return startIndex + params.node!.rowIndex! + 1;
               },
-              width: 100, // Optional: Adjust the width of the serial number column
+              width: 70, // Optional: Adjust the width of the serial number column
               suppressMenu: true, // Optional: Hide the column menu
               sortable: false, // Optional: Disable sorting for the serial number column
               filter: false, // Optional: Disable filtering for the serial number column

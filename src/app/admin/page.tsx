@@ -1520,7 +1520,7 @@ const GridExample = () => {
           rowData={rowData}
           columnDefs={[
             {
-              headerName: "Serial No", // Column header
+              headerName: "SL No", // Column header
               valueGetter: (params) => {
                 const itemsPerPage = 10; // Number of items per page
                 
@@ -1528,7 +1528,7 @@ const GridExample = () => {
                 // Calculate the serial number
                 return startIndex + params.node!.rowIndex! + 1;
               },
-              width: 100, // Optional: Adjust the width of the serial number column
+              width: 70, // Optional: Adjust the width of the serial number column
               suppressMenu: true, // Optional: Hide the column menu
               sortable: false, // Optional: Disable sorting for the serial number column
               filter: false, // Optional: Disable filtering for the serial number column
