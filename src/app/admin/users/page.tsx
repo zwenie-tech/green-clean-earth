@@ -13,6 +13,7 @@ import axios from "axios";
 import { apiURL } from "@/app/requestsapi/request";
 import Cookies from 'js-cookie';
 import * as XLSX from 'xlsx';
+import PaginationComponent from "../PageComponent";
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 interface Country {
@@ -132,6 +133,7 @@ const AdminGrid = () => {
   const [selectZone, setSelectedZone] = useState('');
   const [selectedgrpName, setSelectedGrpName] = useState("");
   const [grpName, setGrpName] = useState<GrpName[]>([]);
+  const [filterdata, setFilterData] = useState({});
 
 
   useEffect(() => {
@@ -174,7 +176,7 @@ const AdminGrid = () => {
 
   useEffect(() => {
     async function fetchdata() {
-      if (token) {
+      if (token && Object.keys(filterdata).length === 0) {
 
         const response = await axios.post(`${apiURL}/admin/adminUserList?page=${currentPage}&limit=${itemsPerPage}`, {}, {
           headers: {
@@ -201,7 +203,7 @@ const AdminGrid = () => {
       };
     }
     fetchdata();
-  }, [currentPage, token]);
+  }, [currentPage, filterdata, token]);
 
   const handleExportToExcel = async () => {
     try {
@@ -891,6 +893,7 @@ const AdminGrid = () => {
         zoneId: missionZone.find((item) => item.zone_name === selectZone)?.zone_id,
         groupId: grpName.find((item) => item.gp_name === selectedgrpName)?.gp_id,
       }
+      setFilterData(payload);
       const response = await axios.post(
         `${apiURL}/admin/adminUserList?page=${currentPage}&limit=${itemsPerPage}`,
         payload,
@@ -1450,9 +1453,26 @@ const AdminGrid = () => {
       <div className="flex items-center justify-center font-bold">Total Count : {totalcount}</div>
 
       <div className={"ag-theme-quartz"} style={{ height: 600 }}>
-        <AgGridReact
+      <AgGridReact
           rowData={rowData}
-          columnDefs={columnDefs}
+          columnDefs={[
+            {
+              headerName: "Serial No", // Column header
+              valueGetter: (params) => {
+                const itemsPerPage = 10; // Number of items per page
+                
+                const startIndex = (currentPage - 1) * itemsPerPage; // Calculate the start index for pagination
+                // Calculate the serial number
+                return startIndex + params.node!.rowIndex! + 1;
+              },
+              width: 100, // Optional: Adjust the width of the serial number column
+              suppressMenu: true, // Optional: Hide the column menu
+              sortable: false, // Optional: Disable sorting for the serial number column
+              filter: false, // Optional: Disable filtering for the serial number column
+              pinned: "left", // Optional: Pin the serial number column to the left (optional)
+            },
+            ...columnDefs, // Other columns (e.g., from your `columnDefs` array)
+          ]}
           defaultColDef={defaultColDef}
           onRowClicked={onRowClicked}
           rowSelection="multiple"
@@ -1461,9 +1481,10 @@ const AdminGrid = () => {
         // paginationPageSize={10}
         // paginationPageSizeSelector={[10, 25, 50]}
         />
-
       </div>
-      <div className="flex justify-center items-center space-x-2 my-4">
+      <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+
+      {/* <div className="flex justify-center items-center space-x-2 my-4">
         <button
           className={currentPage === 1 ?
             "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
@@ -1500,7 +1521,7 @@ const AdminGrid = () => {
         >
           Next
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };

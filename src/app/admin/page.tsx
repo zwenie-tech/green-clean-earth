@@ -16,6 +16,7 @@ import axios from "axios";
 import { apiURL } from "../requestsapi/request";
 import Cookies from 'js-cookie';
 import * as XLSX from 'xlsx';
+import PaginationComponent from "./PageComponent";
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
@@ -136,8 +137,9 @@ const GridExample = () => {
   const [selectZone, setSelectedZone] = useState('');
   const [selectedgrpName, setSelectedGrpName] = useState("");
   const [grpName, setGrpName] = useState<GrpName[]>([]);
-
+  const [filterdata, setFilterData] = useState({});
   const itemsPerPage = 10;
+
   useEffect(() => {
     if (!token) {
       router.push("/admin/login");
@@ -145,6 +147,7 @@ const GridExample = () => {
   }, [token, router]);
 
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
+    // { field: "slno", headerName: "Sl No" },
     { field: "up_id", headerName: "Tree No" },
     { field: "up_name", headerName: "Uploader name" },
     { field: "up_planter", headerName: "Planter name" },
@@ -175,7 +178,8 @@ const GridExample = () => {
   }
   useEffect(() => {
     async function fetchdata() {
-      if (token) {
+
+      if (token && Object.keys(filterdata).length === 0) {
         const response = await axios.post(`${apiURL}/admin/adminUploads?page=${currentPage}&limit=${itemsPerPage}`, {}, {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -187,9 +191,15 @@ const GridExample = () => {
           if (response.data.success && response.status != 203) {
             setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
             setTotalcount(response.data.totalCount);
-            setRowData(response.data.Uploads);
+            const data = response.data.Uploads;
+            // data.forEach((item: { slno: any; }, index: number) => {
+            //   item.slno = index + 1; // Serial number starts from 1
+            // });
+            // console.log('part1', data)
+            setRowData(data);
           } else {
             setTotalcount("0");
+
             setRowData([]);
 
           }
@@ -201,7 +211,7 @@ const GridExample = () => {
     }
 
     fetchdata();
-  }, [currentPage, token]);
+  }, [currentPage, filterdata, token]);
 
 
   const handleExportToExcel = async () => {
@@ -250,7 +260,7 @@ const GridExample = () => {
     setCurrentPage(1); // Reset to first page
   };
 
-  
+
 
   const handleFilterUpName = (e: any) => {
 
@@ -649,7 +659,7 @@ const GridExample = () => {
     }
   };
 
-  
+
 
   const handleFilterSchoolCategory = (e: any) => {
 
@@ -661,7 +671,7 @@ const GridExample = () => {
     }
   };
 
-  
+
   const handleFilterSahodayaState = (e: any) => {
 
     if (e.target.value != "") {
@@ -680,7 +690,7 @@ const GridExample = () => {
     }
   };
 
- 
+
 
   const handleFilterEDistrict = (e: any) => {
 
@@ -711,7 +721,7 @@ const GridExample = () => {
     }
   };
 
- 
+
 
 
   const handleFilterIcdsBlock = (e: any) => {
@@ -735,7 +745,7 @@ const GridExample = () => {
     }
   };
 
-  
+
 
   const handleFilterMissionArea = (e: any) => {
 
@@ -767,7 +777,7 @@ const GridExample = () => {
     }
   };
 
- 
+
   const handleFilterGrpName = (e: any) => {
 
     if (e.target.value != "") {
@@ -896,14 +906,14 @@ const GridExample = () => {
   ]);
 
 
- 
+
 
 
   useEffect(() => {
     async function fetchFilterData() {
 
       const payload = {
-        
+
         countryId: countries.find((item) => item.cntry_name === selectedCntry)?.cntry_id,
         stateId: states.find((item) => item.st_name === selectedState)?.st_id,
         districtId: districts.find((item) => item.dis_name === selectedDistrict)?.dis_id,
@@ -922,6 +932,8 @@ const GridExample = () => {
         zoneId: missionZone.find((item) => item.zone_name === selectZone)?.zone_id,
         groupId: grpName.find((item) => item.gp_name === selectedgrpName)?.gp_id,
       }
+      setFilterData(payload);
+
       const response = await axios.post(
         `${apiURL}/admin/adminUploads?page=${currentPage}&limit=${itemsPerPage}`,
         payload,
@@ -1506,7 +1518,24 @@ const GridExample = () => {
       <div className={"ag-theme-quartz"} style={{ height: 600 }}>
         <AgGridReact
           rowData={rowData}
-          columnDefs={columnDefs}
+          columnDefs={[
+            {
+              headerName: "Serial No", // Column header
+              valueGetter: (params) => {
+                const itemsPerPage = 10; // Number of items per page
+                
+                const startIndex = (currentPage - 1) * itemsPerPage; // Calculate the start index for pagination
+                // Calculate the serial number
+                return startIndex + params.node!.rowIndex! + 1;
+              },
+              width: 100, // Optional: Adjust the width of the serial number column
+              suppressMenu: true, // Optional: Hide the column menu
+              sortable: false, // Optional: Disable sorting for the serial number column
+              filter: false, // Optional: Disable filtering for the serial number column
+              pinned: "left", // Optional: Pin the serial number column to the left (optional)
+            },
+            ...columnDefs, // Other columns (e.g., from your `columnDefs` array)
+          ]}
           defaultColDef={defaultColDef}
           onRowClicked={onRowClicked}
           rowSelection="multiple"
@@ -1516,7 +1545,9 @@ const GridExample = () => {
         // paginationPageSizeSelector={[10, 25, 50]}
         />
       </div>
-      <div className="flex justify-center items-center space-x-2 my-4">
+      <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+
+      {/* <div className="flex justify-center items-center space-x-2 my-4">
         <button
           className={currentPage === 1 ?
             "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
@@ -1553,7 +1584,7 @@ const GridExample = () => {
         >
           Next
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };

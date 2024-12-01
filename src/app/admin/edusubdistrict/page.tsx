@@ -15,6 +15,7 @@ import { apiURL } from "@/app/requestsapi/request";
 import Cookies from 'js-cookie';
 import * as XLSX from 'xlsx';
 import { AddEduSubform } from "./[id]/addeduform";
+import PaginationComponent from "../PageComponent";
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 interface EduDistrict {
@@ -363,56 +364,38 @@ const fetchFilteredEduSubDistrict = async (value: string) => {
 </div>
 
       <div className={"ag-theme-quartz"} style={{ height: 600 }}>
-        <AgGridReact
+      <AgGridReact
           rowData={rowData}
-          columnDefs={columnDefs}
+          columnDefs={[
+            {
+              headerName: "Serial No", // Column header
+              valueGetter: (params) => {
+                const itemsPerPage = 10; // Number of items per page
+                
+                const startIndex = (currentPage - 1) * itemsPerPage; // Calculate the start index for pagination
+                // Calculate the serial number
+                return startIndex + params.node!.rowIndex! + 1;
+              },
+              width: 100, // Optional: Adjust the width of the serial number column
+              suppressMenu: true, // Optional: Hide the column menu
+              sortable: false, // Optional: Disable sorting for the serial number column
+              filter: false, // Optional: Disable filtering for the serial number column
+              pinned: "left", // Optional: Pin the serial number column to the left (optional)
+            },
+            ...columnDefs, // Other columns (e.g., from your `columnDefs` array)
+          ]}
           defaultColDef={defaultColDef}
           onRowClicked={onRowClicked}
           rowSelection="multiple"
           suppressRowClickSelection={true}
           pagination={false}
-          // paginationPageSize={10}
-          // paginationPageSizeSelector={[10, 25, 50]}
+        // paginationPageSize={10}
+        // paginationPageSizeSelector={[10, 25, 50]}
         />
       </div>
-      <div className="flex justify-center items-center space-x-2 my-4">
-        <button
-          className={currentPage === 1 ?
-            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
-            : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-          }
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-        {currentPage >= 4 && totalPages > 3 && <span className="text-xl text-gray-600">...</span>}
+      <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
 
-        {Array.from({ length: totalPages >= 3 ? 3 : totalPages }, (_, index) => currentPage < 4 ? index+1:currentPage+index-2).map((page) => (
-          <span
-            key={page}
-            className={`text-xl cursor-pointer text-gray-600 ${page === currentPage ? 'font-bold' : 'underline'}`}
-            onClick={() => handlePageChange(page)}
-          >
-            {page > 0 ? page : ''}
-          </span>
-        ))}
-
-        {currentPage > 1 && totalPages > 3 && currentPage!=totalPages && <span className="text-xl text-gray-600">...</span>}
-        {currentPage === 1 && totalPages > 3 && currentPage!=totalPages && <span className="text-xl text-gray-600">...</span>}
-
-
-        <button
-          className={currentPage === totalPages || totalPages === 1 ?
-            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
-            : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-          }
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages || totalPages === 1}
-        >
-          Next
-        </button>
-      </div>
+     
     </div>
   );
 };
