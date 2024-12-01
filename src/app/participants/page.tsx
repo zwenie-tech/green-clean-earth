@@ -288,9 +288,7 @@ const ParticipateList = () => {
   }
   useEffect(() => {
     async function fetchInitialData() {
-      const countryResponse = await fetch(`${apiURL}/country`);
-      const countryData = await countryResponse.json();
-      setCountries(countryData.country);
+      if(Object.keys(filterData).length === 0){
       try {
         const response = await fetch(`${apiURL}/uploads/filter?page=${currentPage}&limit=${itemsPerPage}`, {
           method: "POST",
@@ -305,14 +303,28 @@ const ParticipateList = () => {
         }
         try {
           const result = await response.json();
-
+          setTotalCount(result.total)
+          setTotalPages(Math.ceil(result.total / itemsPerPage));
+          console.log('part 1')
           setParticipantList(result.Uploads);
         } catch {
+          setTotalPages(1);
           setParticipantList([]);
         }
       } catch (error) {
         console.error("Error:", error);
       }
+    }
+    }
+    fetchInitialData();
+  }, [currentPage, filterData]);
+
+  useEffect(() => {
+    async function fetchInitialData() {
+      const countryResponse = await fetch(`${apiURL}/country`);
+      const countryData = await countryResponse.json();
+      setCountries(countryData.country);
+      
     }
     fetchInitialData();
   }, [currentPage]);
@@ -460,72 +472,83 @@ const ParticipateList = () => {
   };
 
 
+  useEffect(() => {
+    const onDataSubmit = async () => {
+      
+      
+      try {
+        // Fetch paginated data based on current page
+        const response = await fetch(`${apiURL}/uploads/filter?page=${currentPage}&limit=${itemsPerPage}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(filterData),
+        });
+        if (!response.ok) {
+          throw new Error("Failed to fetch paginated uploads.");
+        }
+        const result = await response.json();
+        setParticipantList(result.Uploads);
+        console.log('part 2',)
 
-  const onDataSubmit = async (data: any, page = 1) => {
-    try {
-      // Fetch paginated data based on current page
-      const response = await fetch(`${apiURL}/uploads/filter?page=${page}&limit=${itemsPerPage}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to fetch paginated uploads.");
+        console.log(result)
+        setTotalCount(result.total);
+        setTotalPages(Math.ceil(result.total / itemsPerPage));
+
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        // Reset pagination and participant list on error
+        setTotalCount("0")
+        setTotalPages(1);
+        setParticipantList([]);
       }
-      const result = await response.json();
-      // Set paginated data and total count for the page
+    
+    };
+    onDataSubmit();
+  }, [currentPage, filterData]);
+  // const onDataSubmit = async (data: any, page = 1) => {
+  //   try {
+  //     // Fetch paginated data based on current page
+  //     const response = await fetch(`${apiURL}/uploads/filter?page=${page}&limit=${itemsPerPage}`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(data),
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error("Failed to fetch paginated uploads.");
+  //     }
+  //     const result = await response.json();
+  //     // Set paginated data and total count for the page
      
-      setCurrentPage(page)
-      setParticipantList(result.Uploads);
-      setTotalCount(result.total);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      // Reset pagination and participant list on error
-      setTotalPages(1);
-      setParticipantList([]);
-    }
-  };
+  //     setCurrentPage(page)
+  //     setParticipantList(result.Uploads);
+  //     setTotalCount(result.total);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //     // Reset pagination and participant list on error
+  //     setTotalPages(1);
+  //     setParticipantList([]);
+  //   }
+  // };
 
   // Handle page change for pagination
   const handlePageChange = (newPage: number) => {
     if (newPage > 0 && newPage <= totalPages) {
       setCurrentPage(newPage);
       // Trigger data fetch with the updated page number
-      onDataSubmit(filterData, newPage);
+      // onDataSubmit(filterData, newPage);
     }
   };
 
-  // Fetch initial data for total pages when the component mounts
-  useEffect(() => {
-    async function fetchInitialData() {
-      try {
-        const responseAll = await fetch(`${apiURL}/uploads/filter?limit=10000000`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (!responseAll.ok) {
-          throw new Error("Failed to fetch total uploads.");
-        }
-
-        const dataAll = await responseAll.json();
-        setTotalPages(Math.ceil(dataAll.Uploads.length / itemsPerPage));
-      } catch (error) {
-        console.error("Error fetching initial data:", error);
-      }
-    }
-
-    fetchInitialData();
-  }, [itemsPerPage]);
-  useEffect(() => {
-    if (filterData) {
-      onDataSubmit(filterData);
-    }
-  }, [filterData]);
+  
+  // useEffect(() => {
+  //   if (filterData) {
+  //     onDataSubmit(filterData);
+  //   }
+  // }, [filterData]);
 
   const onSubmit = async (data: any) => {
     const dataWithIds: any = {};
@@ -572,27 +595,7 @@ const ParticipateList = () => {
 
 
     setFilterData(dataWithIds);
-    // Fetch all results to calculate total uploads (for pagination)
-    const responseAll = await fetch(`${apiURL}/uploads/filter?limit=10000000`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(dataWithIds),
-    });
-
-    if (!responseAll.ok) {
-      throw new Error("Failed to fetch all uploads.");
-    }
-
-   
-    if(responseAll.status==200){
-      const resultAll = await responseAll.json();
-      // Update total pages based on total records
-      setTotalPages(Math.ceil(resultAll.Uploads.length / itemsPerPage));
-      onDataSubmit(dataWithIds);
-
-    }
+    
 
   };
 
