@@ -151,27 +151,45 @@ const AdminGrid = () => {
   }, [token, router]);
 
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
-    { field: "personal_activity_id", headerName: "Activity Id" },
-    { field: "participant_name", headerName: "Name" },
-    { field: "us_id", headerName: "User Id" },
-    { field: "participant_address", headerName: "Tree Number" },
-    { field: "activity_social_media_link", headerName: "Activity Link" },
-    { field: "activity_description", headerName: "Chest Number" },
-    { field: "activity_views", headerName: "View" },
-    { field: "activity_likes", headerName: "Like" },
-    { field: "activity_value", headerName: "Value" },
-    { field: "earnings", headerName: "Earnings" },
-    { field: "gp_name", headerName: "Group Name" },
-    { field: "group_type", headerName: "Category" },
-    { field: "activity_sub_category", headerName: "School Type" },
-    { field: "edu_district", headerName: "Education District" },
-    { field: "edu_sub_district_name", headerName: "Education Sub District" },
-    { field: "sahodaya_name", headerName: "Sahodaya" },
-    { field: "block_name", headerName: "Block" },
-    { field: "project_name", headerName: "Project" },
-    { field: "chapter_name", headerName: "Chapter" },
-    { field: "cntry_name", headerName: "Country" },
-    { field: "st_name", headerName: "State" },
+    { field: "personal_activity_id", headerName: "Activity Id",width:120 },
+    { field: "participant_name", headerName: "Name",width:100 },
+    { field: "us_id", headerName: "User Id",width:100 },
+    { field: "participant_address", headerName: "Tree Number",width:140 },
+    { field: "activity_social_media_link", headerName: "Activity Link",width:140 },
+    { field: "activity_on", headerName: "Activity On",width:140,
+      valueFormatter: (params) => {
+        const date = new Date(params.value);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+    } 
+     },
+    { field: "activity_description", headerName: "Chest Number",width:140 },
+    { field: "activity_views", headerName: "View",width:100 },
+    { field: "activity_likes", headerName: "Like",width:100 },
+    { field: "activity_value", headerName: "Value",width:100 },
+    { field: "earnings", headerName: "Earnings",width:120 },
+    { field: "created_on", headerName: "Created On",width:140,
+      valueFormatter: (params) => {
+        const date = new Date(params.value);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+    } 
+     },
+    { field: "gp_name", headerName: "Group Name",width:140 },
+    { field: "group_type", headerName: "Category",width:120 },
+    { field: "activity_sub_category", headerName: "School Type",width:140 },
+    { field: "edu_district", headerName: "Education District",width:180 },
+    { field: "edu_sub_district_name", headerName: "Education Sub District",width:200 },
+    { field: "sahodaya_name", headerName: "Sahodaya",width:120 },
+    { field: "block_name", headerName: "Block",width:100 },
+    { field: "project_name", headerName: "Project",width:100 },
+    { field: "chapter_name", headerName: "Chapter",width:100 },
+    { field: "cntry_name", headerName: "Country",width:100 },
+    { field: "st_name", headerName: "State",width:100 },
   ]);
 
   const defaultColDef = useMemo(() => {
@@ -1565,7 +1583,7 @@ const AdminGrid = () => {
           rowData={rowData}
           columnDefs={[
             {
-              headerName: "Serial No", // Column header
+              headerName: "Sl No", // Column header
               valueGetter: (params) => {
                 const itemsPerPage = 10; // Number of items per page
                 
@@ -1573,7 +1591,7 @@ const AdminGrid = () => {
                 // Calculate the serial number
                 return startIndex + params.node!.rowIndex! + 1;
               },
-              width: 100, // Optional: Adjust the width of the serial number column
+              width: 70, // Optional: Adjust the width of the serial number column
               suppressMenu: true, // Optional: Hide the column menu
               sortable: false, // Optional: Disable sorting for the serial number column
               filter: false, // Optional: Disable filtering for the serial number column

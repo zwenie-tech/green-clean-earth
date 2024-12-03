@@ -143,17 +143,25 @@ const AdminGrid = () => {
   }, [token, router]);
 
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
-    { field: "us_id", headerName: "User Id" },
-    { field: "us_name", headerName: "Name" },
-    { field: "us_email", headerName: "Email" },
-    { field: "us_mobile", headerName: "Mobile" },
-    { field: "cntry_name", headerName: "Country" },
-    { field: "st_name", headerName: "State" },
-    { field: "dis_name", headerName: "District" },
-    { field: "us_address", headerName: "Address" },
-    { field: "created_on", headerName: "Registered date" },
-    { field: "gp_name", headerName: "Group name" },
-    { field: "co_ord_name", headerName: "Coordinator name" },
+    { field: "us_id", headerName: "User Id", width:100 },
+    { field: "us_name", headerName: "Name", width:100  },
+    { field: "us_email", headerName: "Email", width:100  },
+    { field: "us_mobile", headerName: "Mobile", width:100  },
+    { field: "cntry_name", headerName: "Country", width:100  },
+    { field: "st_name", headerName: "State", width:100  },
+    { field: "dis_name", headerName: "District", width:100  },
+    { field: "us_address", headerName: "Address", width:120  },
+    { field: "created_on", headerName: "Registered date", width:160 ,
+      valueFormatter: (params) => {
+        const date = new Date(params.value);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+    }
+     },
+    { field: "gp_name", headerName: "Group name", width:140  },
+    { field: "co_ord_name", headerName: "Coordinator name", width:180  },
   ]);
 
   const defaultColDef = useMemo(() => {
@@ -1457,7 +1465,7 @@ const AdminGrid = () => {
           rowData={rowData}
           columnDefs={[
             {
-              headerName: "Serial No", // Column header
+              headerName: "Sl No", // Column header
               valueGetter: (params) => {
                 const itemsPerPage = 10; // Number of items per page
                 
@@ -1465,7 +1473,7 @@ const AdminGrid = () => {
                 // Calculate the serial number
                 return startIndex + params.node!.rowIndex! + 1;
               },
-              width: 100, // Optional: Adjust the width of the serial number column
+              width: 70, // Optional: Adjust the width of the serial number column
               suppressMenu: true, // Optional: Hide the column menu
               sortable: false, // Optional: Disable sorting for the serial number column
               filter: false, // Optional: Disable filtering for the serial number column
