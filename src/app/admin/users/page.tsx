@@ -1465,7 +1465,7 @@ const AdminGrid = () => {
           rowData={rowData}
           columnDefs={[
             {
-              headerName: "Sl No", // Column header
+              headerName: "SL No", // Column header
               valueGetter: (params) => {
                 const itemsPerPage = 10; // Number of items per page
                 
