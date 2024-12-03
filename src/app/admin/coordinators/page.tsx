@@ -1457,7 +1457,7 @@ setTotalcount("0");
       </div>
       <div className="flex items-center justify-center font-bold">Total Count : {totalcount}</div>
 
-      <div className={"ag-theme-quartz"} style={{ height: 600 }}>
+      <div className={"ag-theme-quartz"} style={{ height: 530 }}>
       <AgGridReact
           rowData={rowData}
           columnDefs={[

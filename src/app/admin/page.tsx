@@ -1532,7 +1532,7 @@ const GridExample = () => {
 
       <div className="flex items-center justify-center font-bold">Total Count : {totalcount}</div>
 
-      <div className={"ag-theme-quartz"} style={{ height: 600 }}>
+      <div className={"ag-theme-quartz"} style={{ height: 500 }}>
         <AgGridReact
           rowData={rowData}
           columnDefs={[

@@ -14,6 +14,7 @@ import axios from "axios";
 import { apiURL } from "@/app/requestsapi/request";
 import Cookies from 'js-cookie';
 import * as XLSX from 'xlsx';
+import PaginationComponent from "../PageComponent";
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
@@ -118,7 +119,7 @@ const AdminGrid = () => {
         >
           Export To Excel
         </button>
-      <div className={"ag-theme-quartz"} style={{ height: 600 }}>
+      <div className={"ag-theme-quartz"} style={{ height: 500 }}>
         <AgGridReact
           rowData={rowData}
           columnDefs={columnDefs}
@@ -131,44 +132,9 @@ const AdminGrid = () => {
           paginationPageSizeSelector={[10, 25, 50]}
         />
       </div>
-      <div className="flex justify-center items-center space-x-2 my-4">
-        <button
-          className={currentPage === 1 ?
-            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
-            : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-          }
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-        {currentPage >= 4 && totalPages > 3 && <span className="text-xl text-gray-600">...</span>}
+      <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
 
-        {Array.from({ length: totalPages >= 3 ? 3 : totalPages }, (_, index) => currentPage < 4 ? index+1:currentPage+index-2).map((page) => (
-          <span
-            key={page}
-            className={`text-xl cursor-pointer text-gray-600 ${page === currentPage ? 'font-bold' : 'underline'}`}
-            onClick={() => handlePageChange(page)}
-          >
-            {page > 0 ? page : ''}
-          </span>
-        ))}
-
-        {currentPage > 1 && totalPages > 3 && currentPage!=totalPages && <span className="text-xl text-gray-600">...</span>}
-        {currentPage === 1 && totalPages > 3 && currentPage!=totalPages && <span className="text-xl text-gray-600">...</span>}
-
-
-        <button
-          className={currentPage === totalPages || totalPages === 1 ?
-            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
-            : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-          }
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages || totalPages === 1}
-        >
-          Next
-        </button>
-      </div>
+      
     </div>
   );
 };

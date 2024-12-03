@@ -1076,7 +1076,7 @@ export function EditGrpTypeForm() {
                                         </select>
                                     </div>
 
-                                    <div className="flex items-center mb-3 space-x-2">
+                                    <div className="flex items-center mb-3 space-x-2 mr-2">
                                         <label htmlFor="groupFilter" className="text-sm font-medium">
                                             Education District:
                                         </label>
@@ -1084,7 +1084,7 @@ export function EditGrpTypeForm() {
                                             id="groupFilter"
                                             value={selecteduDistrict}
                                             onChange={handleFilterEduDistrict}
-                                            className="border border-gray-300 rounded p-1"
+                                            className="border border-gray-300 rounded p-1 "
                                         >
                                             <option value="">Choose Education District</option>
 
@@ -1097,7 +1097,7 @@ export function EditGrpTypeForm() {
                                         </select>
                                     </div>
 
-                                    <div className="flex items-center mb-3 space-x-2">
+                                    <div className="flex items-center mb-3 space-x-2 ml-4">
                                         <label htmlFor="groupFilter" className="text-sm font-medium">
                                             Education Sub District:
                                         </label>

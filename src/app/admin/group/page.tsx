@@ -1475,7 +1475,7 @@ const AdminGrid = () => {
       <div className="flex items-center justify-center font-bold">Total Count : {totalcount}</div>
 
 
-      <div className={"ag-theme-quartz"} style={{ height: 600 }}>
+      <div className={"ag-theme-quartz"} style={{ height: 520 }}>
       <AgGridReact
           rowData={rowData}
           columnDefs={[
