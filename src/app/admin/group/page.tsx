@@ -145,6 +145,9 @@ const AdminGrid = () => {
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
     { field: "gp_id", headerName: "Group Id" ,width:120},
     { field: "gp_name", headerName: "Group name" ,width:140 },
+    { field: "co_ord_name", headerName: "Coordinator name",width:180 },
+    { field: "co_ord_contact", headerName: "Phone Number",width:160},
+    { field: "co_ord_id", headerName: "Cordinator Id",width:140},
     { field: "group_type", headerName: "Group type" ,width:140 },
     { field: "co_ord_created_on", headerName: "Created On" ,width:140,
       valueFormatter: (params) => {
