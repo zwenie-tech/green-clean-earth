@@ -44,9 +44,11 @@ function Page() {
       const response = await axios.post(`${apiURL}/user/forgotPassword`,apidata);
       if (response.status === 200) {
         Cookies.set("ph", values.phone.toString(), { expires: 1 });
+        Cookies.set("emailid", response.data.emailId, { expires: 1 });
+        console.log(response.data.emailId)
         toast({
           title: "Success",
-          description: "Password reset link sent to your phone number.",
+          description: "Password reset link sent to your email address.",
         });
         router.push(`/forgot-password-user/change-password`);
       } else {

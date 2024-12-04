@@ -41,6 +41,7 @@ function Page() {
   });
   const router = useRouter()
   const { toast } = useToast()
+  const emailid = Cookies.get('emailid');
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const phone = Cookies.get('ph');
     const apidata = {
@@ -102,7 +103,7 @@ function Page() {
                         <Input type="number" {...field} />
                       </FormControl>
                       <FormDescription>
-                        We have sent OTP in your registered email address
+                        `We have sent OTP in your registered email address {emailid}`
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
