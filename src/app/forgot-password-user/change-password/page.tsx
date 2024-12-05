@@ -103,7 +103,7 @@ function Page() {
                         <Input type="number" {...field} />
                       </FormControl>
                       <FormDescription>
-                        `We have sent OTP in your registered email address {emailid}`
+                        `We have sent OTP in email address {emailid}`
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
