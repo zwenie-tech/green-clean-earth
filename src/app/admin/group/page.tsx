@@ -143,26 +143,36 @@ const AdminGrid = () => {
     }
   }, [token, router]);
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
-    { field: "gp_id", headerName: "Group Id" },
-    { field: "gp_name", headerName: "Group name" },
-    { field: "co_ord_name", headerName: "Coordinator name" },
-    { field: "co_ord_contact", headerName: "Phone Number"},
-    { field: "co_ord_id", headerName: "Cordinator Id"},
-    { field: "group_type", headerName: "Group type" },
-    { field: "upload_count", headerName: "Upload count" },
-    { field: "activity_count", headerName: "Activity count" },
-    { field: "earnings", headerName: "Earnings"},
-    { field: "type_name", headerName: "School type" },
-    { field: "gp_cat_name", headerName: "School category" },
-    { field: "edu_district", headerName: "Edu district" },
-    { field: "edu_sub_district_name", headerName: "Edu sub district" },
-    { field: "sahodaya_name", headerName: "Sahodaya" },
-    { field: "block_name", headerName: "Block" },
-    { field: "project_name", headerName: "Project" },
-    { field: "chapter_name", headerName: "Chapter" },
-    { field: "zone_name", headerName: "Zone" },
-    { field: "cntry_name", headerName: "Country" },
-    { field: "st_name", headerName: "State" },
+    { field: "gp_id", headerName: "Group Id" ,width:120},
+    { field: "gp_name", headerName: "Group name" ,width:140 },
+    { field: "co_ord_name", headerName: "Coordinator name",width:180 },
+    { field: "co_ord_contact", headerName: "Phone Number",width:160},
+    { field: "co_ord_id", headerName: "Cordinator Id",width:140},
+    { field: "group_type", headerName: "Group type" ,width:140 },
+    { field: "co_ord_created_on", headerName: "Created On" ,width:140,
+      valueFormatter: (params) => {
+        const date = new Date(params.value);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+    } 
+     },
+    { field: "upload_count", headerName: "Upload count" ,width:140 },
+    { field: "activity_count", headerName: "Activity count" ,width:140 },
+    { field: "earnings", headerName: "Earnings" ,width:120},
+    { field: "type_name", headerName: "School type" ,width:140 },
+    { field: "gp_cat_name", headerName: "School category" ,width:160 },
+    { field: "edu_district", headerName: "Edu district",width:140 },
+    { field: "edu_sub_district_name", headerName: "Edu sub district" ,width:160 },
+    { field: "sahodaya_name", headerName: "Sahodaya"  ,width:120},
+    { field: "block_name", headerName: "Block" ,width:100 },
+    { field: "project_name", headerName: "Project" ,width:100 },
+    { field: "chapter_name", headerName: "Chapter" ,width:100 },
+    { field: "zone_name", headerName: "Zone" ,width:100 },
+    { field: "cntry_name", headerName: "Country" ,width:100 },
+    { field: "st_name", headerName: "State" ,width:100 },
+    { field: "co_ord_name", headerName: "Coordinator name" ,width:180 },
   ]);
 
   const defaultColDef = useMemo(() => {
@@ -233,7 +243,7 @@ const AdminGrid = () => {
       }
     };
     fetchdata();
-  }, [currentPage, token]);
+  }, [currentPage, filterdata, token]);
 
   useEffect(() => {
     async function fetchData() {
@@ -1465,7 +1475,7 @@ const AdminGrid = () => {
       <div className="flex items-center justify-center font-bold">Total Count : {totalcount}</div>
 
 
-      <div className={"ag-theme-quartz"} style={{ height: 600 }}>
+      <div className={"ag-theme-quartz"} style={{ height: 520 }}>
       <AgGridReact
           rowData={rowData}
           columnDefs={[

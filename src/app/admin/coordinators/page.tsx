@@ -148,19 +148,27 @@ const AdminGrid = () => {
   }, [token, router]);
 
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
-    { field: "co_ord_id", headerName: "Coordinator Id" },
-    { field: "co_ord_name", headerName: "Name" },
-    { field: "co_email_id", headerName: "Email" },
-    { field: "co_username", headerName: "Username" },
-    { field: "group_type", headerName: "Group" },
-    { field: "cntry_name", headerName: "Country" },
-    { field: "st_name", headerName: "State" },
-    { field: "dis_name", headerName: "District" },
-    { field: "cop_name", headerName: "Cooperation" },
-    { field: "lsg_name", headerName: "LSGD" },
-    { field: "gp_ward_no", headerName: "Ward" },
-    { field: "gp_name", headerName: "Group Name" },
-    { field: "gp_refferal_name", headerName: "Referral Name" },
+    { field: "co_ord_id", headerName: "Coordinator Id",width:150},
+    { field: "co_ord_name", headerName: "Name",width:100 },
+    { field: "co_email_id", headerName: "Email" ,width:100},
+    { field: "co_username", headerName: "Username",width:120 },
+    { field: "co_ord_created_on", headerName: "Created On",width:140,
+      valueFormatter: (params) => {
+      const date = new Date(params.value);
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+      const year = date.getFullYear();
+      return `${day}-${month}-${year}`;
+  } },
+    { field: "group_type", headerName: "Group",width:100 },
+    { field: "cntry_name", headerName: "Country",width:100 },
+    { field: "st_name", headerName: "State",width:100 },
+    { field: "dis_name", headerName: "District",width:100 },
+    { field: "cop_name", headerName: "Cooperation",width:130 },
+    { field: "lsg_name", headerName: "LSGD",width:100 },
+    { field: "gp_ward_no", headerName: "Ward",width:100 },
+    { field: "gp_name", headerName: "Group Name",width:140 },
+    { field: "gp_refferal_name", headerName: "Referral Name",width:160 },
 
   ]);
 
@@ -220,9 +228,11 @@ const AdminGrid = () => {
 
 
         if (response.data.success && response.status != 203) {
+          setRowData(response.data.cordinatorList);
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
           setTotalcount(response.data.totalCount);
-          setRowData(response.data.cordinatorList);
+          console.log(response.data)
+
 
         }
       }
@@ -1447,7 +1457,7 @@ setTotalcount("0");
       </div>
       <div className="flex items-center justify-center font-bold">Total Count : {totalcount}</div>
 
-      <div className={"ag-theme-quartz"} style={{ height: 600 }}>
+      <div className={"ag-theme-quartz"} style={{ height: 530 }}>
       <AgGridReact
           rowData={rowData}
           columnDefs={[

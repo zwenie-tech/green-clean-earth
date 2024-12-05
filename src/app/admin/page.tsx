@@ -146,21 +146,36 @@ const GridExample = () => {
     }
   }, [token, router]);
 
+
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
     // { field: "slno", headerName: "Sl No" },
-    { field: "up_id", headerName: "Tree No" },
-    { field: "up_name", headerName: "Uploader name" },
-    { field: "up_planter", headerName: "Planter name" },
-    { field: "up_tree_name", headerName: "Tree name" },
-    { field: "gp_name", headerName: "Group name" },
-    { field: "co_ord_name", headerName: "Coordinator name" },
-    { field: "group_type", headerName: "Group type" },
+    { field: "up_id", headerName: "Tree No", width: 100 },
+    { field: "up_name", headerName: "Uploader name", width: 150 },
+    { field: "up_planter", headerName: "Planter name", width: 140 },
+    { field: "up_tree_name", headerName: "Tree name", width: 140 },
+    { field: "up_date", headerName: "Date", width: 140 ,
+      valueFormatter: (params) => {
+      const date = new Date(params.value);
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+      const year = date.getFullYear();
+      return `${day}-${month}-${year}`;
+  }},
+    { field: "gp_name", headerName: "Group name", width: 140 },
+    { field: "co_ord_name", headerName: "Coordinator name", width: 180 },
+    { field: "group_type", headerName: "Group type", width: 120 },
   ]);
 
   const defaultColDef = useMemo(() => {
     return {
       filter: "agTextColumnFilter",
       floatingFilter: false,
+      autoSizeStrategy: {
+        type: 'fitContentWidth',
+        // Optional: Limit column sizes
+        defaultMinWidth: 100,
+        defaultMaxWidth: 500
+      },
     };
   }, []);
 
@@ -192,11 +207,13 @@ const GridExample = () => {
             setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
             setTotalcount(response.data.totalCount);
             const data = response.data.Uploads;
-            // data.forEach((item: { slno: any; }, index: number) => {
-            //   item.slno = index + 1; // Serial number starts from 1
-            // });
-            // console.log('part1', data)
-            setRowData(data);
+
+           
+
+            console.log('part1', data);  // Log the formatted data
+
+            setRowData(data);  // Set the updated data to state
+
           } else {
             setTotalcount("0");
 
@@ -1515,7 +1532,7 @@ const GridExample = () => {
 
       <div className="flex items-center justify-center font-bold">Total Count : {totalcount}</div>
 
-      <div className={"ag-theme-quartz"} style={{ height: 600 }}>
+      <div className={"ag-theme-quartz"} style={{ height: 500 }}>
         <AgGridReact
           rowData={rowData}
           columnDefs={[
@@ -1523,7 +1540,7 @@ const GridExample = () => {
               headerName: "SL No", // Column header
               valueGetter: (params) => {
                 const itemsPerPage = 10; // Number of items per page
-                
+
                 const startIndex = (currentPage - 1) * itemsPerPage; // Calculate the start index for pagination
                 // Calculate the serial number
                 return startIndex + params.node!.rowIndex! + 1;
