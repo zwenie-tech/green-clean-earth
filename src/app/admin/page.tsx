@@ -1141,7 +1141,7 @@ const GridExample = () => {
         {selectedDistrict && (
           <div className="flex flex-col mb-3 w-full">
             <label htmlFor="corpFilter" className="text-sm font-medium">
-              Corporation:
+              Block:
             </label>
             <select
               id="corpFilter"
@@ -1149,7 +1149,7 @@ const GridExample = () => {
               onChange={handleFilterChangeCorp}
               className="border border-gray-300 rounded p-1 w-full"
             >
-              <option value="">Choose Corporation</option>
+              <option value="">Choose Block</option>
               {corporation.map((corp) => (
                 <option key={corp.cop_id} value={corp.cop_name}>
                   {corp.cop_name}

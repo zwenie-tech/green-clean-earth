@@ -69,7 +69,7 @@ function ActivityLabel() {
           }}
         >
           <ChevronLeft />
-          <span className="text-base">Manage Corporation</span>
+          <span className="text-base">Manage Block</span>
         </div>
 
         <Corpform />
@@ -86,7 +86,7 @@ function ActivityLabel() {
           <p className="text-base">{userData[0].dis_name}</p>
         </div>
         <div className="">
-          <p className="text-sm text-gray-500">Corporation Name</p>
+          <p className="text-sm text-gray-500">Block Name</p>
           <p className="text-base">{userData[0].cop_name}</p>
         </div>
       </div>

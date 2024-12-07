@@ -201,12 +201,12 @@ export function AddCorpform() {
       <DialogTrigger asChild>
         <div className="flex items-center justify-start gap-2 my-4 cursor-pointer text-primary float-right">
           <Plus />
-          <span className="text-base">Add Corporation</span>
+          <span className="text-base">Add Block</span>
         </div>
       </DialogTrigger>
       <DialogContent className="max-w-4xl overflow-y-scroll max-h-[98%]">
         <DialogHeader>
-          <DialogTitle>Add Corporation</DialogTitle>
+          <DialogTitle>Add Block</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <div className="">

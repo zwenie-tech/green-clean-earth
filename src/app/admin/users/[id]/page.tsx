@@ -141,7 +141,7 @@ function Page() {
         </div>:""}
         {userData[0].cop_name ? 
         <div className="">
-          <p className="text-sm text-gray-500">Corporation</p>
+          <p className="text-sm text-gray-500">Block</p>
           <p className="text-base">{userData[0].cop_name}</p>
         </div>:''}
         {userData[0].lsg_name ? 

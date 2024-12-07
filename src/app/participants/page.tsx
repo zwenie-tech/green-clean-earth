@@ -1590,7 +1590,7 @@ const ParticipateList = () => {
                 <th className="py-3 px-6 text-left">Country</th>
                 <th className="py-3 px-6 text-left">State</th>
                 <th className="py-3 px-6 text-left">District</th>
-                <th className="py-3 px-6 text-left">Corporation</th>
+                <th className="py-3 px-6 text-left">Block</th>
                 <th className="py-3 px-6 text-left rounded-tr-lg">LSGD</th>
               </tr>
             </thead>

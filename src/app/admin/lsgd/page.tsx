@@ -60,7 +60,7 @@ const AdminGrid = () => {
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
     // { field: "state", headerName: "State" },
     { field: "dis_name", headerName: "District" },
-    { field: "cop_name", headerName: "Corporation" },
+    { field: "cop_name", headerName: "Block" },
     { field: "lsg_name", headerName: "LSGD" },
   ]);
 
@@ -329,7 +329,7 @@ const AdminGrid = () => {
   {selectedDistrict !== "" && (
     <div className="flex items-center space-x-2">
       <label htmlFor="corpFilter" className="text-sm font-medium">
-        Corporation:
+        Block:
       </label>
       <select
         id="corpFilter"
@@ -337,7 +337,7 @@ const AdminGrid = () => {
         onChange={handleFilterChangeCorp}
         className="flex-1 border border-gray-300 rounded p-1"
       >
-        <option value="">Choose Corporation</option>
+        <option value="">Choose Block</option>
         {corporation.map((corp) => (
           <option key={corp.cop_id} value={corp.cop_name}>
             {corp.cop_name}
