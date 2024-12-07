@@ -556,7 +556,7 @@ export function EditForm() {
                       >
                         <SelectTrigger className="block w-full px-3 py-2 border border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 sm:text-sm"
                         >
-                          <SelectValue placeholder="Choose a corporation" />
+                          <SelectValue placeholder="Choose a Block" />
                         </SelectTrigger>
                         <SelectContent>
                           {corporation.map((corp) => (

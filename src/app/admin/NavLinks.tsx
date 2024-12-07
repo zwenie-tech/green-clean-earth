@@ -19,7 +19,7 @@ const links = [
   { name: "Manage Activity Category", href: "/admin/activity-category" },
   { name: "Manage Challenges", href: "/admin/challenges" },
   { name: "Manage Contact us form", href: "/admin/contact-us-form" },
-  { name: "Manage Corporations", href: "/admin/corporation" },
+  { name: "Manage Blocks", href: "/admin/corporation" },
   { name: "Manage LSGD", href: "/admin/lsgd" },
   { name: "Manage Edu District", href: "/admin/edudistrict" },
   { name: "Manage Edu SubDistrict", href: "/admin/edusubdistrict" },

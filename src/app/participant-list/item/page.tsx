@@ -121,7 +121,7 @@ const Item: React.FC = () => {
               <div className="text-sm">{treeDetails.dis_name || 'N/A'}</div>
             </div>
             <div className="flex ml-2 mt-2 gap-2">
-              <div className="text-sm pl-5 mb-2">Corporation: </div>
+              <div className="text-sm pl-5 mb-2">Block: </div>
               <div className="text-sm">{treeDetails.cop_name || 'N/A'}</div>
             </div>
             <div className="flex ml-2 mt-2 gap-2">
