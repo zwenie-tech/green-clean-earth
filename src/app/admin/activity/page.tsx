@@ -1193,7 +1193,7 @@ const AdminGrid = () => {
                 <>
                   <div className="flex items-center mb-3 space-x-2">
                     <label htmlFor="groupFilter" className="text-sm font-medium">
-                      Corporation:
+                      Block:
                     </label>
                     <select
                       id="groupFilter"
@@ -1201,7 +1201,7 @@ const AdminGrid = () => {
                       onChange={handleFilterChangeCorp}
                       className="border border-gray-300 rounded p-1"
                     >
-                      <option value="">Choose Corporation</option>
+                      <option value="">Choose Block</option>
                       {corporation.map((corp) => (
                         <option key={corp.cop_id} value={corp.cop_name}>
                           {corp.cop_name}

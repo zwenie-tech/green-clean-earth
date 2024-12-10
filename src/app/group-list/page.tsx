@@ -22,6 +22,7 @@ interface Group {
   gp_code: string;
   upload_count: number;
   activity_count: number;
+  co_ord_name: string;
 }
 
 interface ApiResponse {
@@ -730,7 +731,7 @@ console.log('part3')
           ഗ്രൂപ് കോഡ് (GROUP CODE) ലഭിക്കാൻ ഇവിടെ CLICK ചെയ്യുക.
         </p>
       </div> */}
-      <p className='ml-7 mt-4 p-3'>ഇപ്പോൾ മത്സരത്തിൽ പങ്കെടുക്കുന്ന സ്ഥാപനങ്ങളുടെ GROUP CODE ചുവടെ ചേർക്കുന്നു</p>
+      {/* <p className='ml-7 mt-4 p-3'>ഇപ്പോൾ മത്സരത്തിൽ പങ്കെടുക്കുന്ന സ്ഥാപനങ്ങളുടെ GROUP CODE ചുവടെ ചേർക്കുന്നു</p> */}
 
       {/* Search by Country Wise */}
       <div className='search1 mb-5'>
@@ -1460,9 +1461,10 @@ console.log('part3')
             <thead>
               <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                 <th className="py-3 px-6 text-left w-16 rounded-tl-lg">Sl. No</th>
+                <th className="py-3 px-6 text-left">Group Id</th>
                 <th className="py-3 px-6 text-left">Group Name {orderdir1 === "DESC" ? <span className={orderfield === "gp_name" ? 'text-green-600' :'text-gray-400'} onClick={() => sort("ASC", "gp_name")}><ArrowUp/></span> 
                 : <span className={orderfield === "gp_name" ? 'text-green-600' :'text-gray-400'} onClick={() => sort("DESC", "gp_name")}><ArrowDown/></span>}</th>
-                <th className="py-3 px-6 text-left">Group Code</th>
+                <th className="py-3 px-6 text-left">Cordinator Name</th>
                 <th className="py-3 px-6 text-left">Upload Count {orderdir2 === "DESC" ? <span className={orderfield === "upload_count" ? 'text-green-600' :'text-gray-400'} onClick={() => sort("ASC", "upload_count")}><ArrowUp/></span> 
                 : <span className={orderfield === "upload_count" ? 'text-green-600' :'text-gray-400'} onClick={() => sort("DESC", "upload_count")}><ArrowDown/></span>}</th>
                 <th className="py-3 px-6 text-left">Activity Count {orderdir3 === "DESC" ? <span className={orderfield === "activity_count" ? 'text-green-600' :'text-gray-400'} onClick={() => sort("ASC", "activity_count")}><ArrowUp/></span> 
@@ -1474,8 +1476,9 @@ console.log('part3')
               {groups.map((group, index) => (
                 <tr key={group.gp_id} className="border border-gray-200 hover:bg-gray-100">
                   <td className="py-3 px-6 text-left">{startIndex + index + 1}</td>
+                  <td className="py-3 px-6 text-left">{group.gp_id}</td>
                   <a href={`/group-page?gname=${group.gp_name}&gid=${group.gp_id}&uc=${group.upload_count}`}><td className="py-3 px-6 text-left">{group.gp_name}</td></a>
-                  <td className="py-3 px-6 text-left">{group.gp_code}</td>
+                  <td className="py-3 px-6 text-left">{group.co_ord_name}</td>
                   <td className="py-3 px-6 text-left">{group.upload_count}</td>
                   <td className="py-3 px-6 text-left">{group.activity_count}</td>
                   <td className="py-3 px-6 text-left">{group.dis_name}</td>

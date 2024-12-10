@@ -206,7 +206,7 @@ export function Corpform() {
       </DialogTrigger>
       <DialogContent className="max-w-4xl overflow-y-scroll max-h-[98%]">
         <DialogHeader>
-          <DialogTitle>Edit Corporation</DialogTitle>
+          <DialogTitle>Edit Block</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <div className="">
