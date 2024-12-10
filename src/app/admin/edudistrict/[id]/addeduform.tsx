@@ -49,8 +49,6 @@ import { useToast } from "@/components/ui/use-toast";
 
 
 const formSchema = z.object({
-    dis_name: z.string().min(2).max(255),
-    edu_district: z.string().min(2).max(255),
 });
 
 interface ActivityData {
@@ -85,8 +83,8 @@ export function AddEduform() {
     const [eduDistrict, setEduDistrict] = useState<EduDistrict[]>([]);
     const [selecteduDistrict, setSelecteduDistrict] = useState('');
 
-    
-   
+
+
 
     useEffect(() => {
         async function fetchData() {
@@ -118,17 +116,18 @@ export function AddEduform() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-           
+
         },
     });
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        
+
         const formdata = {
-            districtId: districts.find((item) => item.dis_name === values.dis_name)?.dis_id?.toString(),
+            districtId: districts.find((item) => item.dis_name === selectedDistrict)?.dis_id?.toString(),
             eduDistrictName: selecteduDistrict
         }
-        
+        console.log(formdata)
+
 
         if (token) {
             const response = await axios.post(`${apiURL}/adminEdit/modifyEduDistrict`, formdata, {
@@ -192,33 +191,33 @@ export function AddEduform() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
 
                                 {/* District Field */}
-                                <FormField
-                                    control={form.control}
-                                    name="dis_name"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>District</FormLabel>
-                                            <Select onValueChange={(value) => {
-                                                field.onChange(value);
-                                                setSelectedDistrict(value);
-                                            }} defaultValue={field.value}>
-                                                <FormControl>
-                                                    <SelectTrigger>
-                                                        <SelectValue placeholder="Choose a district" />
-                                                    </SelectTrigger>
-                                                </FormControl>
-                                                <SelectContent>
-                                                    {districts.map((district) => (
-                                                        <SelectItem key={district.dis_id} value={district.dis_name}>
-                                                            {district.dis_name}
-                                                        </SelectItem>
-                                                    ))}
-                                                </SelectContent>
-                                            </Select>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">District</label>
+                                    <Select
+                                        onValueChange={(value) => {
+                                            // setCountry(value);
+                                            setSelectedDistrict(value);
+                                        }}
+                                        value={selectedDistrict || ""}
+                                        defaultValue={selectedDistrict}
+                                    >
+                                        <SelectTrigger className="block w-full px-3 py-2 border border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 sm:text-sm"
+                                        >
+                                            <SelectValue placeholder="Choose a district" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {districts.map((district) => (
+                                                <SelectItem key={district.dis_id} value={district.dis_name}>
+                                                    {district.dis_name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                
+
+
+                               
 
                                 <div className="mb-4">
                                     <label className="form-label">Edu District</label>
