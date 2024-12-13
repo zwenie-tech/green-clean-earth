@@ -114,7 +114,7 @@ const ParticipantList: React.FC = () => {
         <div 
           key={participant.up_id} 
           className="participant-item relative group" // Add `group` here
-          style={{ maxHeight: '450px', boxSizing: 'border-box' }}
+          
         >
           {/* Conditional image for challenged status */}
           {participant.is_challenged == 1 && (
@@ -132,41 +132,41 @@ const ParticipantList: React.FC = () => {
               }}
             >
               <img
-                className="w-full h-48 object-cover rounded-tl-lg rounded-tr-lg"
+                className="w-full h-80 object-cover rounded-tl-lg rounded-tr-lg"
                 src={`${imageURL}${participant.up_file}`}
                 //src="/images/image1.jpeg"
                 alt="Image"
               />
               <div className="flex justify-center mt-2 gap-1">
                 <div className="text-md text-center font-bold">Tree number:</div>
-                <div className="text-md">{participant.up_id}</div>
+                <div className="text-md font-bold">{participant.up_id}</div>
               </div>
-              <div className="flex justify-center mt-2 text-gray-600 gap-2">
+              <div className="flex justify-center mt-2 text-sm text-gray-500 gap-2">
                 <div className="text-md">{formatDate(participant.up_date)}</div>
                 <div className="text-md">{formatTime(participant.up_date)}</div>
               </div>
             </Link>
             <hr className="my-2" />
-            <div className="flex-grow flex flex-col justify-between">
-              <div className="flex gap-3">
+            <div className="flex-grow flex flex-col gap-3 justify-normal p-4">
+              {/* <div className="flex gap-3">
                 <div className="text-sm text-left pl-8" style={{width:'45%'}}>Tree name:</div>
                 <div className="text-sm">{participant.up_tree_name}</div>
-              </div>
-              <div className="flex gap-3">
+              </div> */}
+              {/* <div className="flex gap-3">
                 <div className="text-sm text-left pl-8" style={{width:'45%'}}>Planter name:</div>                 
                 <div className="text-sm">{participant.up_planter}</div>
+              </div> */}
+              <div className="">
+                {/* <div className="text-sm text-left pl-8" style={{width:'45%'}}>Uploader name:</div>                  */}
+                <div className="text-base font-bold text-center">{participant.up_name}</div>
               </div>
-              <div className="flex gap-3">
-                <div className="text-sm text-left pl-8" style={{width:'45%'}}>Uploader name:</div>                 
-                <div className="text-sm">{participant.up_name}</div>
-              </div>
-              <div className="flex gap-3">
-                <div className="text-sm text-left pl-8" style={{width:'45%'}}>Group name:</div>                 
-                <div className="text-sm">{participant.gp_name}</div>
+              <div className="flex gap-3 justify-center">
+                {/* <div className="text-sm" style={{width:'45%'}}>Group name:</div>                  */}
+                <div className="text-sm text-center">{participant.gp_name}</div>
               </div>
               {participant.is_challenged == 1 ? (
                 <div className="flex m-auto">
-                  <div className="text-sm text-center text-primary">This image has been challenged</div>
+                  <div className="text-sm py-2 text-center text-primary">This image has been challenged</div>
                 </div>
               ) : token!=null ? (
                 <div className="flex justify-center">
