@@ -63,31 +63,31 @@ const Item: React.FC = () => {
   return (
     <>
       <PageTitle title={`Tree number: ${treeDetails.up_id}`} />
-      <div className="rounded-lg shadow-lg max-w-screen-lg mx-auto">
+      <div className="rounded-lg shadow-lg max-w-screen-xl mx-auto">
         <div className="rounded-lg border">
           <div className='flex flex-col flex-wrap md:flex-row gap-3 p-4 overflow-hidden justify-center'>
             {treeDetails.up_file ? (
-                <img src={`${imageURL}${treeDetails.up_file}`} className='' alt='' width={200} height={200} />
+                <img src={`${imageURL}${treeDetails.up_file}`} className='object-cover h-80 w-60' alt='Image'/>
             ):
-              <div className="size-48 bg-light-gray grid place-content-center">To be Uploaded</div>
+              <div className="h-80 w-60 bg-light-gray grid place-content-center">To be Uploaded</div>
             }
             
             {treeDetails.up_file_2 ? (
-                <img src={`${imageURL}${treeDetails.up_file_2}`} className='' alt='' width={200} height={200} />
+                <img src={`${imageURL}${treeDetails.up_file_2}`} className='object-cover h-80 w-60' alt='Image'/>
             ):
-              <div className="size-48 bg-light-gray grid place-content-center">To be Uploaded</div>
+              <div className="h-80 w-60 bg-light-gray grid place-content-center">To be Uploaded</div>
             }
 
             {treeDetails.up_file_3 ? (
-                <img src={`${imageURL}${treeDetails.up_file_3}`} className='' alt='' width={200} height={200} />
+                <img src={`${imageURL}${treeDetails.up_file_3}`} className='object-cover h-80 w-60' alt='Image'/>
             ):
-              <div className="size-48 bg-light-gray grid place-content-center">To be Uploaded</div>
+              <div className="h-80 w-60 bg-light-gray grid place-content-center">To be Uploaded</div>
             }
 
             {treeDetails.up_file_4 ? (
-                <img src={`${imageURL}${treeDetails.up_file_4}`} className='' alt='' width={200} height={200} />
+                <img src={`${imageURL}${treeDetails.up_file_4}`} className='object-cover h-80 w-60' alt='Image'/>
             ):
-              <div className="size-48 bg-light-gray grid place-content-center">To be Uploaded</div>
+              <div className="h-80 w-60 bg-light-gray grid place-content-center">To be Uploaded</div>
             }
           </div>
           <hr className="my-2" />

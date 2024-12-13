@@ -23,7 +23,7 @@ interface Events {
   created_time: string;
   is_deleted: string;
   show_in_main: string;
-  
+  id:number
 }
 
 
@@ -472,7 +472,8 @@ const cards = [
               </div>
             </div>
             <h2 className="mt-4 text-2xl font-bold">{card.event_heading}</h2>
-            <p className="mt-2 text-gray-700">{card.event_body}</p>
+            <p className="my-2 text-gray-700 line-clamp-4">{card.event_body}</p>
+            <a href={`/events/${card.id}?slug=${card.id}`} className='self-start bg-white px-5 py-2 rounded-2xl'>Read more</a>
           </div>
         ))}
       </div>

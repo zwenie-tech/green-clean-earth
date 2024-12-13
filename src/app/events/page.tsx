@@ -98,7 +98,7 @@ const Events = () => {
                           <p className='text-left md:text-center'>{new Date(event.created_time).toLocaleDateString()}</p>
                         </div>
                         <div className="flex flex-col">
-                          <p className=' text-justify p-2 md:p-5'>{event.event_body}</p>
+                          <p className=' text-justify p-2 md:p-5 line-clamp-5'>{event.event_body}</p>
                           {event.event_body.length > 100 && (
                       <a href={`/events/${event.id}?slug=${event.id}`} className='self-start bg-white px-5 py-2 rounded-2xl'>Read more</a>
                     )}
