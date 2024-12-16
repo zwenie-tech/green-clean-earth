@@ -652,7 +652,7 @@ export function EditGrpTypeForm() {
 
     async function onSubmit(event: any) {
         event.preventDefault();
-        if (grouptype === 'School') {
+        if (grouptype === 'Educational Institution') {
             const selectedClubIds = clubOptions
                 .filter((club) => selectclub.includes(club.name))
                 .map((club) => club.id);
@@ -905,7 +905,7 @@ export function EditGrpTypeForm() {
 
 
 
-                            {grouptype === 'School' && (
+                            {grouptype === 'Educational Institution' && (
                                 <Form {...multiForm}>
 
                                     <FormField
@@ -964,7 +964,7 @@ export function EditGrpTypeForm() {
 
                 </select>
             </div> */}
-                            {grouptype === 'School' && (
+                            {grouptype === 'Educational Institution' && (
                                 <>
                                     <div className="flex items-center mb-3 space-x-2">
                                         <label htmlFor="groupFilter" className="text-sm font-medium">
@@ -1009,7 +1009,7 @@ export function EditGrpTypeForm() {
                                     </div>
                                 </>)}
                             {/* CBSE  */}
-                            {selectedschoolType === 'CBSE' && selectedSubCategory !== 'College' && grouptype === 'School' && (
+                            {selectedschoolType === 'CBSE' && selectedSubCategory !== 'College' && grouptype === 'Educational Institution' && (
                                 <>
                                     <div className="flex items-center mb-3 space-x-2">
                                         <label htmlFor="groupFilter" className="text-sm font-medium">
@@ -1053,7 +1053,7 @@ export function EditGrpTypeForm() {
                                     </div>
                                 </>)}
                             {/* GENERAL EDUCATION  */}
-                            {(selectedschoolType === 'General Education' && selectedSubCategory !== 'College') && grouptype === 'School' && (
+                            {(selectedschoolType === 'General Education' && selectedSubCategory !== 'College') && grouptype === 'Educational Institution' && (
                                 <>
                                     <div className="flex items-center mb-3 space-x-2">
                                         <label htmlFor="groupFilter" className="text-sm font-medium">
@@ -1120,7 +1120,7 @@ export function EditGrpTypeForm() {
                                 </>)}
 
                             {/* ICDS  */}
-                            {selectedschoolType === 'ICDS' && selectedSubCategory !== 'College' && grouptype === 'School' && (
+                            {selectedschoolType === 'ICDS' && selectedSubCategory !== 'College' && grouptype === 'Educational Institution' && (
                                 <>
                                     <div className="flex items-center mb-3 space-x-2">
                                         <label htmlFor="groupFilter" className="text-sm font-medium">
@@ -1187,7 +1187,7 @@ export function EditGrpTypeForm() {
                                 </>)}
 
                             {/* MALAYALAM MISSION  */}
-                            {selectedSubCategory !== 'College' && selectedschoolType === 'Malayalam Mission' && grouptype === 'School' && (
+                            {selectedSubCategory !== 'College' && selectedschoolType === 'Malayalam Mission' && grouptype === 'Educational Institution' && (
                                 <>
                                     <div className="flex items-center mb-3 space-x-2">
                                         <label htmlFor="groupFilter" className="text-sm font-medium">
@@ -1250,7 +1250,7 @@ export function EditGrpTypeForm() {
                                         </select>
                                     </div>
                                 </>)}
-                            {grouptype === 'School' && (
+                            {grouptype === 'Educational Institution' && (
                                 <div className="flex items-center mb-3 space-x-2">
                                     <label className="text-sm font-medium">Number of students:</label>
                                     <div className="flex mb-3">
