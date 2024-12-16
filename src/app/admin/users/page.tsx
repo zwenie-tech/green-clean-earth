@@ -1152,7 +1152,7 @@ const AdminGrid = () => {
 
         </select>
       </div>
-      {grouptype === 'School' && (
+      {grouptype === 'Educational Institution' && (
         <>
           <div className="flex items-center mb-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
@@ -1197,7 +1197,7 @@ const AdminGrid = () => {
           </div>
         </>)}
       {/* CBSE  */}
-      {selectedschoolType === 'CBSE' && selectedSubCategory !== 'College' && grouptype === 'School' && (
+      {selectedschoolType === 'CBSE' && selectedSubCategory !== 'College' && grouptype === 'Educational Institution' && (
         <>
           <div className="flex items-center mb-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
@@ -1241,7 +1241,7 @@ const AdminGrid = () => {
           </div>
         </>)}
       {/* GENERAL EDUCATION  */}
-      {(selectedschoolType === 'General Education' && selectedSubCategory !== 'College') && grouptype === 'School' && (
+      {(selectedschoolType === 'General Education' && selectedSubCategory !== 'College') && grouptype === 'Educational Institution' && (
         <>
           <div className="flex items-center mb-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
@@ -1308,7 +1308,7 @@ const AdminGrid = () => {
         </>)}
 
       {/* ICDS  */}
-      {selectedschoolType === 'ICDS' && selectedSubCategory !== 'College' && grouptype === 'School' && (
+      {selectedschoolType === 'ICDS' && selectedSubCategory !== 'College' && grouptype === 'Educational Institution' && (
         <>
           <div className="flex items-center mb-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
@@ -1375,7 +1375,7 @@ const AdminGrid = () => {
         </>)}
 
       {/* MALAYALAM MISSION  */}
-      {selectedSubCategory !== 'College' && selectedschoolType === 'Malayalam Mission' && grouptype === 'School' && (
+      {selectedSubCategory !== 'College' && selectedschoolType === 'Malayalam Mission' && grouptype === 'Educational Institution' && (
         <>
           <div className="flex items-center mb-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
