@@ -677,7 +677,7 @@ export function EditGrpTypeForm() {
             
 
             if (token) {
-                const response = await axios.post(`${apiURL}/adminEdit//updateSchoolDetails`, apidata, {
+                const response = await axios.post(`${apiURL}/adminEdit/updateSchoolDetails`, apidata, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
