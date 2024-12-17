@@ -222,7 +222,7 @@ export default function Register() {
 
       if (values.categoryId === "NGO")
         router.push("/register/ngo-additional-details?group_id=" + group_id);
-      else if (values.categoryId === "School")
+      else if (values.categoryId === "Educational Institution")
         router.push("/register/school-additional-details?group_id=" + group_id + "&pno=" + values.whatsapp_number);
       else if (values.categoryId === "Residence Association")
         router.push("/register/residenceass_additional_details?group_id=" + group_id);
