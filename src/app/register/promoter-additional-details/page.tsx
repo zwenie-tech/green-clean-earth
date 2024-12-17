@@ -181,7 +181,7 @@ function PromoterAdditionalDetailsForm() {
                         </FormControl>
                         <SelectContent>
                           {category.map((category) =>
-                            category.group_type !== "Promoter" ? (
+                            category.group_type !== "Individual/Promoter" ? (
                               <SelectItem key={category.id} value={category.group_type}>
                                 {category.group_type}
                               </SelectItem>

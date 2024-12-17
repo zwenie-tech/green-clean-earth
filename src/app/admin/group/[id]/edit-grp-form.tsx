@@ -815,7 +815,7 @@ export function EditGrpTypeForm() {
                 }
             };
         }
-        if (grouptype === 'Promoter') {
+        if (grouptype === 'Individual/Promoter') {
 
             const apidata = {
                 groupId: parseInt(Id!),
@@ -1289,7 +1289,7 @@ export function EditGrpTypeForm() {
                                     </div>
                                 </div>)}
 
-                            {grouptype === 'Promoter' && (
+                            {grouptype === 'Individual/Promoter' && (
                                 <>
                                     <div className="flex items-center mb-3 space-x-2">
                                         <label className="text-sm font-medium">City Name:</label>
@@ -1316,7 +1316,7 @@ export function EditGrpTypeForm() {
                                         >
                                             <option value="">Choose Group Type</option>
 
-                                            {category.map((c, i) => c.group_type !== "Promoter" ? (
+                                            {category.map((c, i) => c.group_type !== "Individual/Promoter" ? (
                                                 <option key={c.id} value={c.group_type}>
                                                     {c.group_type}
                                                 </option>
