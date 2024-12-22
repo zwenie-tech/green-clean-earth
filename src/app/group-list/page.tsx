@@ -208,7 +208,7 @@ const GroupList = () => {
 
   useEffect(() => {
     const fetchGroups = async () => {
-      if(Object.keys(filterData).length === 0){
+      if(Object.keys(filterData).length === 0 && orderfield==""){
       const response = await fetch(`${apiURL}/common/groupList?page=${currentPage}&limit=${itemsPerPage}`, {
         method: 'POST',
         headers: {
@@ -227,7 +227,7 @@ const GroupList = () => {
     };
 
     fetchGroups();
-  }, [currentPage, filterData]);
+  }, [currentPage, filterData, orderfield]);
 
   async function sort(dir: string,field: string){
     setOrderfield(field);
@@ -575,7 +575,8 @@ const GroupList = () => {
 
   useEffect(() => {
     const onDataSubmit = async () => {
-      
+      if(orderfield==""){
+
       
       try {
         // Fetch paginated data based on current page
@@ -605,10 +606,11 @@ const GroupList = () => {
         setTotalPages(1);
         setGroups([]);
       }
+    }
     
     };
     onDataSubmit();
-  }, [currentPage, filterData]);
+  }, [currentPage, filterData, orderfield]);
 
   const handleFilterGrpName = (e: any) => {
 
