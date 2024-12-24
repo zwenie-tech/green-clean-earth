@@ -284,6 +284,7 @@ const ActivityList = () => {
   }
   useEffect(() => {
     async function fetchfirstData() {
+      if(Object.keys(filterData).length === 0 && orderfield==""){
       try {
         const response = await fetch(`${apiURL}/activity/all?page=${currentPage}&limit=${itemsPerPage}`, {
           method: "POST",
@@ -309,8 +310,9 @@ const ActivityList = () => {
         console.error("Error:", error);
       }
     }
+    }
     fetchfirstData();
-  }, [currentPage]);
+  }, [currentPage, filterData, orderfield]);
 
   useEffect(() => {
     async function fetchInitialData() {
@@ -480,16 +482,17 @@ const ActivityList = () => {
     setWardNo("");
   };
 
-  
-  const onDataSubmit = async (data: any,page:any) => {
+  useEffect(() => {
+  const onDataSubmit = async () => {
+    if(Object.keys(filterData).length != 0 && orderfield==""){
     try {
       
-      const response = await fetch(`${apiURL}/activity/all?page=${page}&limit=${itemsPerPage}`, {
+      const response = await fetch(`${apiURL}/activity/all?page=${currentPage}&limit=${itemsPerPage}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(filterData),
       });
 
 
@@ -512,14 +515,10 @@ const ActivityList = () => {
       console.error("Error:", error);
     }
   }
+  };
+  onDataSubmit();
+}, [currentPage, filterData, orderfield]);
 
-  useEffect(() => {
-    if (filterData) {
-      onDataSubmit(filterData,currentPage);
-    }
-  }, [currentPage, filterData]);
-  
-  
 
   function sort(dir: string,field: string){
     setOrderfield(field);
@@ -532,8 +531,6 @@ const ActivityList = () => {
   useEffect(() => {
     const fetchClass = async () => {
       if(orderfield !=""){
-
-      
         const payload = {
           ...filterData,
           orderByField : orderfield,
@@ -561,6 +558,8 @@ const ActivityList = () => {
         setTotalCount(result.total);
           setActivityList(result.activity);
       } else {
+        setTotalCount("0");
+        setTotalPages(1);
         setActivityList([]);
       }
     } catch (error) {
@@ -720,21 +719,7 @@ const ActivityList = () => {
     selectMission ? dataWithIds.chapterId = missionChapter.find((item) => item.chapter_name === selectMission)?.chapter_id || null : null;
     selectZone ? dataWithIds.zoneId = missionZone.find((item) => item.zone_name === selectZone)?.zone_id || null : null;
     setFilterData(dataWithIds);
-    const responseall = await fetch(`${apiURL}/activity/all?limit=10000000`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-    if(responseall.status==200){
-      const resultAll = await responseall.json();
-      // Update total pages based on total records
-      setTotalPages(Math.ceil(resultAll.activity.length / itemsPerPage));
-      setTotalCount(resultAll.activity.length);
-      onDataSubmit(dataWithIds,1);
-
-    }
+    
 
   };
 
