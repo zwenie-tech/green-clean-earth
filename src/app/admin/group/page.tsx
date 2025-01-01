@@ -172,7 +172,7 @@ const AdminGrid = () => {
     { field: "zone_name", headerName: "Zone" ,width:100 },
     { field: "cntry_name", headerName: "Country" ,width:100 },
     { field: "st_name", headerName: "State" ,width:100 },
-    { field: "co_ord_name", headerName: "Coordinator name" ,width:180 },
+    { field: "gp_referral_name", headerName: "Referral Name" ,width:180 },
   ]);
 
   const defaultColDef = useMemo(() => {
