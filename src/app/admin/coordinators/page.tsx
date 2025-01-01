@@ -169,7 +169,7 @@ const AdminGrid = () => {
     { field: "gp_ward_no", headerName: "Ward",width:100 },
     { field: "gp_name", headerName: "Group Name",width:140 },
     { field: "gp_refferal_name", headerName: "Referral Name",width:160 },
-
+    { field: "refferal_count", headerName: "Refferal Count", width: 100}
   ]);
 
   const defaultColDef = useMemo(() => {
