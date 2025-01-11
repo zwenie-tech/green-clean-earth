@@ -24,7 +24,7 @@ interface Acivitylist {
   activity_value: string,
   activity_on: string,
   earnings: number,
-  gp_name:string
+  gp_name: string
 }
 
 type Country = {
@@ -284,32 +284,32 @@ const ActivityList = () => {
   }
   useEffect(() => {
     async function fetchfirstData() {
-      if(Object.keys(filterData).length === 0 && orderfield==""){
-      try {
-        const response = await fetch(`${apiURL}/activity/all?page=${currentPage}&limit=${itemsPerPage}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          }
-        });
-
-        if (!response.ok) {
-
-          throw new Error("Network response was not ok");
-        }
+      if (Object.keys(filterData).length === 0 && orderfield == "") {
         try {
-          const result = await response.json();
+          const response = await fetch(`${apiURL}/activity/all?page=${currentPage}&limit=${itemsPerPage}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            }
+          });
 
-          setTotalPages(Math.ceil(result.total / itemsPerPage));
+          if (!response.ok) {
 
-          setActivityList(result.activity);
-        } catch {
-          setActivityList([]);
+            throw new Error("Network response was not ok");
+          }
+          try {
+            const result = await response.json();
+
+            setTotalPages(Math.ceil(result.total / itemsPerPage));
+            setTotalCount(result.total);
+            setActivityList(result.activity);
+          } catch {
+            setActivityList([]);
+          }
+        } catch (error) {
+          console.error("Error:", error);
         }
-      } catch (error) {
-        console.error("Error:", error);
       }
-    }
     }
     fetchfirstData();
   }, [currentPage, filterData, orderfield]);
@@ -319,7 +319,7 @@ const ActivityList = () => {
       const countryResponse = await fetch(`${apiURL}/country`);
       const countryData = await countryResponse.json();
       setCountries(countryData.country);
-      
+
     }
     fetchInitialData();
   }, [currentPage]);
@@ -483,93 +483,93 @@ const ActivityList = () => {
   };
 
   useEffect(() => {
-  const onDataSubmit = async () => {
-    if(Object.keys(filterData).length != 0 && orderfield==""){
-    try {
-      
-      const response = await fetch(`${apiURL}/activity/all?page=${currentPage}&limit=${itemsPerPage}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(filterData),
-      });
+    const onDataSubmit = async () => {
+      if (Object.keys(filterData).length != 0 && orderfield == "") {
+        try {
+
+          const response = await fetch(`${apiURL}/activity/all?page=${currentPage}&limit=${itemsPerPage}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(filterData),
+          });
 
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          try {
+            const result = await response.json();
+            setTotalPages(Math.ceil(result.total / itemsPerPage));
+
+            setTotalCount(result.total);
+            setActivityList(result.activity);
+
+          } catch {
+            setTotalCount("0");
+            setTotalPages(1);
+            setActivityList([]);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
       }
-      try {
-        const result = await response.json();
-        setTotalPages(Math.ceil(result.total / itemsPerPage));
-        
-      setTotalCount(result.total);
-        setActivityList(result.activity);
-        
-      } catch {
-        setTotalCount("0");
-        setTotalPages(1);
-        setActivityList([]);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  }
-  };
-  onDataSubmit();
-}, [currentPage, filterData, orderfield]);
+    };
+    onDataSubmit();
+  }, [currentPage, filterData, orderfield]);
 
 
-  function sort(dir: string,field: string){
+  function sort(dir: string, field: string) {
     setOrderfield(field);
     field === "gp_name" ? setOrderDir1(dir) : "";
     field === "activity_on" ? setOrderDir2(dir) : "";
     field === "earnings" ? setOrderDir3(dir) : "";
     field === "activity_value" ? setOrderDir4(dir) : "";
-    
+
   }
   useEffect(() => {
     const fetchClass = async () => {
-      if(orderfield !=""){
+      if (orderfield != "") {
         const payload = {
           ...filterData,
-          orderByField : orderfield,
-          orderDirection : orderfield === "gp_name" ? orderdir1 
-          : orderfield === "activity_on" ? orderdir2 
-          : orderfield === "earnings" ? orderdir3 
-          : orderfield === "activity_value" ? orderdir4 : ""
+          orderByField: orderfield,
+          orderDirection: orderfield === "gp_name" ? orderdir1
+            : orderfield === "activity_on" ? orderdir2
+              : orderfield === "earnings" ? orderdir3
+                : orderfield === "activity_value" ? orderdir4 : ""
         }
-   
-    const response = await axios.post(
-      `${apiURL}/activity/all?page=${currentPage}&limit=${itemsPerPage}`,
-      payload,
-      {
-        headers: {
 
-          "Content-Type": "application/json",
-        },
+        const response = await axios.post(
+          `${apiURL}/activity/all?page=${currentPage}&limit=${itemsPerPage}`,
+          payload,
+          {
+            headers: {
+
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        try {
+          if (response.data.success && response.status !== 203) {
+            const result = await response.data;
+            setTotalPages(Math.ceil(result.total / itemsPerPage));
+
+            setTotalCount(result.total);
+            setActivityList(result.activity);
+          } else {
+            setTotalCount("0");
+            setTotalPages(1);
+            setActivityList([]);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
       }
-    );
-    try {
-      if (response.data.success && response.status !== 203) {
-        const result = await response.data;
-        setTotalPages(Math.ceil(result.total / itemsPerPage));
-        
-        setTotalCount(result.total);
-          setActivityList(result.activity);
-      } else {
-        setTotalCount("0");
-        setTotalPages(1);
-        setActivityList([]);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  }
     };
     fetchClass();
   }, [currentPage, filterData, orderdir1, orderdir2, orderdir3, orderdir4, orderfield]);
-  
+
   // Handle page change
   const handlePageChange = (newPage: number) => {
     if (newPage > 0 && newPage <= totalPages) {
@@ -719,7 +719,7 @@ const ActivityList = () => {
     selectMission ? dataWithIds.chapterId = missionChapter.find((item) => item.chapter_name === selectMission)?.chapter_id || null : null;
     selectZone ? dataWithIds.zoneId = missionZone.find((item) => item.zone_name === selectZone)?.zone_id || null : null;
     setFilterData(dataWithIds);
-    
+
 
   };
 
@@ -779,7 +779,7 @@ const ActivityList = () => {
         <div className="mx-5 md:mx-9 lg:mx-16 border-2 border-gray-300 shadow-lg bg-gray-100 rounded-lg p-4 justify-center items-cente">
           <Form {...formCountry}>
             <form onSubmit={formCountry.handleSubmit(onSubmit)} noValidate className="space-y-4 w-full">
-             <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-items-center'>
+              <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-items-center'>
                 <FormField
                   control={formCountry.control}
                   name="country"
@@ -978,7 +978,7 @@ const ActivityList = () => {
         <div className="mx-5 md:mx-9 lg:mx-16 border-2 border-gray-300 shadow-lg bg-gray-100 rounded-lg p-4">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} noValidate className="space-y-4 w-full">
-            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
+              <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
                 <FormField
                   control={form.control}
                   name="grptype"
@@ -987,8 +987,8 @@ const ActivityList = () => {
                       <Select onValueChange={(value) => {
                         field.onChange(value);
                         setSelectedGrpType(value);
-                    handleGrpName();
-                        
+                        handleGrpName();
+
                       }} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
@@ -1414,7 +1414,7 @@ const ActivityList = () => {
                     ))}
                   </select>
                 </div>
-               
+
 
                 <Button type="submit" className="w-full bg-primary mx-auto text-center">
                   Search
@@ -1440,17 +1440,17 @@ const ActivityList = () => {
                 <th className="py-3 px-6 text-left">Participant Name</th>
                 <th className="py-3 px-6 text-left">User Id</th>
                 <th className="py-3 px-6 text-left">Chest Number</th>
-                <th className="py-3 px-6 text-left ">Group Name {orderdir1 === "DESC" ? <span onClick={() => sort("ASC", "gp_name")} className={orderfield === "gp_name" ? 'text-green-600' 
-                  :'text-gray-400'}><ArrowUp/></span> : <span className={orderfield === "gp_name" ? 'text-green-600' :'text-gray-400'} onClick={() => sort("DESC", "gp_name")}><ArrowDown/></span>}</th>
-                <th className="py-3 px-6 text-left">Upload Date {orderdir2 === "DESC" ? <span className={orderfield === "activity_on" ? 'text-green-600' :'text-gray-400'} onClick={() => sort("ASC", "activity_on")}><ArrowUp/></span> 
-                : <span className={orderfield === "activity_on" ? 'text-green-600' :'text-gray-400'} onClick={() => sort("DESC", "activity_on")}><ArrowDown/></span>}</th>
+                <th className="py-3 px-6 text-left ">Group Name {orderdir1 === "DESC" ? <span onClick={() => sort("ASC", "gp_name")} className={orderfield === "gp_name" ? 'text-green-600'
+                  : 'text-gray-400'}><ArrowUp /></span> : <span className={orderfield === "gp_name" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("DESC", "gp_name")}><ArrowDown /></span>}</th>
+                <th className="py-3 px-6 text-left">Upload Date {orderdir2 === "DESC" ? <span className={orderfield === "activity_on" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("ASC", "activity_on")}><ArrowUp /></span>
+                  : <span className={orderfield === "activity_on" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("DESC", "activity_on")}><ArrowDown /></span>}</th>
                 <th className="py-3 px-6 text-left">Name of Art - Brief Description</th>
                 <th className="py-3 px-6 text-left">Category</th>
                 <th className="py-3 px-6 text-left">Views and Likes</th>
-                <th className="py-3 px-6 text-left">Earnings {orderdir3 === "DESC" ? <span className={orderfield === "earnings" ? 'text-green-600' :'text-gray-400'} onClick={() => sort("ASC", "earnings")}><ArrowUp/></span> 
-                : <span className={orderfield === "earnings" ? 'text-green-600' :'text-gray-400'} onClick={() => sort("DESC", "earnings")}><ArrowDown/></span>}</th>
-                <th className="py-3 px-6 text-left rounded-tr-lg">Value {orderdir4 === "DESC" ? <span className={orderfield === "activity_value" ? 'text-green-600' :'text-gray-400'} onClick={() => sort("ASC", "activity_value")}><ArrowUp/></span> 
-                : <span className={orderfield === "activity_value" ? 'text-green-600' :'text-gray-400'} onClick={() => sort("DESC", "activity_value")}><ArrowDown/></span>}</th>
+                <th className="py-3 px-6 text-left">Earnings {orderdir3 === "DESC" ? <span className={orderfield === "earnings" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("ASC", "earnings")}><ArrowUp /></span>
+                  : <span className={orderfield === "earnings" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("DESC", "earnings")}><ArrowDown /></span>}</th>
+                <th className="py-3 px-6 text-left rounded-tr-lg">Value {orderdir4 === "DESC" ? <span className={orderfield === "activity_value" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("ASC", "activity_value")}><ArrowUp /></span>
+                  : <span className={orderfield === "activity_value" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("DESC", "activity_value")}><ArrowDown /></span>}</th>
               </tr>
             </thead>
             <tbody>

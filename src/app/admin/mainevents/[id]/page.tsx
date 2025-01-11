@@ -11,7 +11,7 @@ import imageCompression from 'browser-image-compression';
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
-import { BsImages, BsPaperclip } from "react-icons/bs";
+import { BsImages, BsPaperclip } from "react-icons/bs"; 
 import Cookies from 'js-cookie';
 import { AdForm } from "./adform";
 import { apiURL, imageURL } from "@/app/requestsapi/request";
@@ -34,37 +34,37 @@ function Page() {
   const [userData, setUserData] = useState<ActivityData[]>([]);
   const [edit1, setEdit1] = useState(0);
 
-  useEffect(() => { 
+  useEffect(() => {
     if (!token) {
       router.push("/admin/login");
     }
   }, [token, router]);
   useEffect(() => {
     async function fetchdata() {
-      if(token){
+      if (token) {
         const retrievedData = JSON.parse(localStorage.getItem("adData") || "[]");
-        const itemdata = retrievedData.find((item: { id  : string; }) => item.id == coId)
-        
-          // Get all cookies
-          const allCookies = Cookies.get();
+        const itemdata = retrievedData.find((item: { id: string; }) => item.id == coId)
 
-          // Remove all cookies
-          Object.keys(allCookies).forEach(cookieName => {
-              Cookies.remove(cookieName);
-          });
+        // Get all cookies
+        const allCookies = Cookies.get();
 
-         Cookies.set('adtoken', token, { expires: 1 });
+        // Remove all cookies
+        Object.keys(allCookies).forEach(cookieName => {
+          Cookies.remove(cookieName);
+        });
+
+        Cookies.set('adtoken', token, { expires: 1 });
         Cookies.set('title', [itemdata][0].title, { expires: 1 });
         Cookies.set('ad_link', [itemdata][0].ad_link, { expires: 1 });
         Cookies.set('display_order', [itemdata][0].display_order, { expires: 1 });
-        
 
-      setUserData([itemdata]);
+
+        setUserData([itemdata]);
       }
     }
     fetchdata();
   }, [coId, token]);
-  
+
   return (
     <div className="">
       {/* {lastSegment} */}
@@ -82,8 +82,8 @@ function Page() {
         <AdForm />
       </div>
       {userData[0] &&
-      <div className="grid gap-4 md:gap-6 grid-cols-1 md:grid-cols-2 p-2 md:p-5 md:border md:shadow-md md:rounded-lg">
-         <div className='overflow-hidden'>
+        <div className="grid gap-4 md:gap-6 grid-cols-1 md:grid-cols-2 p-2 md:p-5 md:border md:shadow-md md:rounded-lg">
+          <div className='overflow-hidden'>
             {userData[0].ad_image ? (
               <div>
                 <div className="aspect-square h-40 w-40">
@@ -106,21 +106,21 @@ function Page() {
               <><p>Image</p><UploadButton id={coId} isEdit={false} /></>
             )}
           </div>
-       
-        <div className="">
-          <p className="text-sm text-gray-500">Title</p>
-          <p className="text-base">{userData[0].title}</p>
+
+          <div className="">
+            <p className="text-sm text-gray-500">Title</p>
+            <p className="text-base">{userData[0].title}</p>
+          </div>
+          <div className="">
+            <p className="text-sm text-gray-500">Ad Link</p>
+            <p className="text-base">{userData[0].ad_link}</p>
+          </div>
+          <div className="">
+            <p className="text-sm text-gray-500">Display Order</p>
+            <p className="text-base">{userData[0].display_order}</p>
+          </div>
+
         </div>
-        <div className="">
-          <p className="text-sm text-gray-500">Ad Link</p>
-          <p className="text-base">{userData[0].ad_link}</p>
-        </div>
-        <div className="">
-          <p className="text-sm text-gray-500">Display Order</p>
-          <p className="text-base">{userData[0].display_order}</p>
-        </div>
-       
-      </div>
       }
     </div>
   );
@@ -186,7 +186,7 @@ const formSchema = z.object({
 
 type ImageFormData = z.infer<typeof formSchema>;
 
-const UploadButton = ({id, isEdit }: any) => {
+const UploadButton = ({ id, isEdit }: any) => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
   const form = useForm<ImageFormData>({
