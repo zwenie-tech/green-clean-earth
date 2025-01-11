@@ -41,7 +41,7 @@ const ParticipantList: React.FC = () => {
     const response = await fetch(`${apiURL}/uploads/all?page=${page}&limit=${itemsPerPage}`);
     const data = await response.json();
     setParticipants(data.Uploads);
-    setTotalCount(data.totalCount);
+    setTotalCount(112500 + data.totalCount);
     setTotalPages(Math.ceil(data.totalCount / itemsPerPage));
 
   }
