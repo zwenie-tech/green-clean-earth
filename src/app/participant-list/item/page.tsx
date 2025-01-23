@@ -3,6 +3,14 @@ import React, { Suspense, useEffect, useState } from 'react';
 import PageTitle from '@/components/sm/pageTitle';
 import { apiURL, imageURL } from '@/app/requestsapi/request';
 import { useSearchParams } from 'next/navigation';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 
 interface TreeDetails {
   up_id: number;
@@ -67,25 +75,110 @@ const Item: React.FC = () => {
         <div className="rounded-lg border">
           <div className='flex flex-col flex-wrap md:flex-row gap-3 p-4 overflow-hidden justify-center'>
             {treeDetails.up_file ? (
-                <img src={`${imageURL}${treeDetails.up_file}`} className='object-cover h-80 w-60' alt='Image'/>
+                // <img src={`${imageURL}${treeDetails.up_file}`} className='object-cover h-80 w-60' alt='Image'/>
+                <Dialog>
+                <DialogTrigger>
+                <div className=''>
+                  <img 
+                    src={`${imageURL}${treeDetails.up_file}`} 
+                    alt='' 
+                    className='object-cover h-80 w-60'
+                  />
+                </div>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Image</DialogTitle>
+                    {/* <DialogDescription></DialogDescription> */}
+                  </DialogHeader>
+                  <img 
+                    src={`${imageURL}${treeDetails.up_file}`} 
+                    alt='' 
+                    className='w-full h-full object-cover'
+                  />
+                </DialogContent>
+              </Dialog>
             ):
               <div className="h-80 w-60 bg-light-gray grid place-content-center">To be Uploaded</div>
             }
             
             {treeDetails.up_file_2 ? (
-                <img src={`${imageURL}${treeDetails.up_file_2}`} className='object-cover h-80 w-60' alt='Image'/>
+              <Dialog>
+                <DialogTrigger>
+                <div className=''>
+                  <img 
+                    src={`${imageURL}${treeDetails.up_file_2}`} 
+                    alt='' 
+                    className='object-cover h-80 w-60'
+                  />
+                </div>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Image</DialogTitle>
+                    {/* <DialogDescription></DialogDescription> */}
+                  </DialogHeader>
+                  <img 
+                    src={`${imageURL}${treeDetails.up_file_2}`} 
+                    alt='' 
+                    className='w-full h-full object-cover'
+                  />
+                </DialogContent>
+              </Dialog>
             ):
               <div className="h-80 w-60 bg-light-gray grid place-content-center">To be Uploaded</div>
             }
 
             {treeDetails.up_file_3 ? (
-                <img src={`${imageURL}${treeDetails.up_file_3}`} className='object-cover h-80 w-60' alt='Image'/>
+                <Dialog>
+                <DialogTrigger>
+                <div className=''>
+                  <img 
+                    src={`${imageURL}${treeDetails.up_file_3}`} 
+                    alt='' 
+                    className='object-cover h-80 w-60'
+                  />
+                </div>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Image</DialogTitle>
+                    {/* <DialogDescription></DialogDescription> */}
+                  </DialogHeader>
+                  <img 
+                    src={`${imageURL}${treeDetails.up_file_3}`} 
+                    alt='' 
+                    className='w-full h-full object-cover'
+                  />
+                </DialogContent>
+              </Dialog>
             ):
               <div className="h-80 w-60 bg-light-gray grid place-content-center">To be Uploaded</div>
             }
 
             {treeDetails.up_file_4 ? (
-                <img src={`${imageURL}${treeDetails.up_file_4}`} className='object-cover h-80 w-60' alt='Image'/>
+                <Dialog>
+                <DialogTrigger>
+                <div className=''>
+                  <img 
+                    src={`${imageURL}${treeDetails.up_file_4}`} 
+                    alt='' 
+                    className='object-cover h-80 w-60'
+                  />
+                </div>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Image</DialogTitle>
+                    {/* <DialogDescription></DialogDescription> */}
+                  </DialogHeader>
+                  <img 
+                    src={`${imageURL}${treeDetails.up_file_4}`} 
+                    alt='' 
+                    className='w-full h-full object-cover'
+                  />
+                </DialogContent>
+              </Dialog>
             ):
               <div className="h-80 w-60 bg-light-gray grid place-content-center">To be Uploaded</div>
             }
