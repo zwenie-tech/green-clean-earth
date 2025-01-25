@@ -88,12 +88,9 @@ Follow the link to join GreenCleanEarth mission.
             <DialogDescription></DialogDescription>
           </DialogHeader>
           <div>
-            <p className="text-base">
-              🥦ഗ്രീൻ ക്ലീൻ കേരള  ഹരിത  മത്സരങ്ങളിൽ  പങ്കെടുക്കാൻ ..........
-              <br />
-              🥦താഴെക്കൊടുത്ത ലിങ്കിൽ ക്ലിക്ക് ചെയ്തു  രജിസ്റ്റർ ചെയ്തതിനുശേഷം യൂസർ നെയ്മും പാസ്സ്‌വേർഡും  ക്രിയേറ്റ് ചെയ്തു  സബ്മിറ്റ് ചെയ്യുക.
-              👇🏼
-            </p>
+            
+            <p className="font-semibold">ഗ്രീൻ ക്ലീൻ കേരള ഹരിത മത്സരങ്ങളിൽ പങ്കെടുക്കാൻ</p>
+            <p className="">താഴെക്കൊടുത്ത ലിങ്കിൽ ക്ലിക്ക് ചെയ്തു രജിസ്റ്റർ ചെയ്തതിനുശേഷം യൂസർ നെയ്മും പാസ്സ്‌വേർഡും ക്രിയേറ്റ് ചെയ്തു സബ്മിറ്റ് ചെയ്യുക. 👇🏼</p>
             <Link
               href={`/user-register?id=${id}&ref=${referral_code}`}
               className="text-green-600 text-base"
