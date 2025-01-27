@@ -1008,7 +1008,7 @@ const ActivityList = () => {
                   )}
                 />
 
-                {selectedSubCategory !== 'College' && (
+                {selectedGrpType == 'Educational Institution' && selectedSubCategory !== 'College' && (
                   <FormField
                     control={form.control}
                     name="schooltype"
@@ -1370,32 +1370,34 @@ const ActivityList = () => {
                     />
                   </>
                 )}
-                <FormField
-                  control={form.control}
-                  name="subCategory"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <Select onValueChange={(value) => {
-                        field.onChange(value);
-                        setSelectedSubCategory(value);
-                      }} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Choose a sub category" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {subcategoryOptions.map((category) => (
-                            <SelectItem key={category.gp_cat_id} value={category.gp_cat_name}>
-                              {category.gp_cat_name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                {selectedGrpType == 'Educational Institution' &&
+                  <FormField
+                    control={form.control}
+                    name="subCategory"
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <Select onValueChange={(value) => {
+                          field.onChange(value);
+                          setSelectedSubCategory(value);
+                        }} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Choose a sub category" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {subcategoryOptions.map((category) => (
+                              <SelectItem key={category.gp_cat_id} value={category.gp_cat_name}>
+                                {category.gp_cat_name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                }
                 {/* Group Name Select */}
 
                 <div className="w-full sm:col-span-2 md:col-span-1">

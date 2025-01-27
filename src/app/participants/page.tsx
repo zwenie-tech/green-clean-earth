@@ -288,33 +288,33 @@ const ParticipateList = () => {
   }
   useEffect(() => {
     async function fetchInitialData() {
-      if(Object.keys(filterData).length === 0){
-      try {
-        const response = await fetch(`${apiURL}/uploads/filter?page=${currentPage}&limit=${itemsPerPage}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          }
-        });
-
-        if (!response.ok) {
-
-          throw new Error("Network response was not ok");
-        }
+      if (Object.keys(filterData).length === 0) {
         try {
-          const result = await response.json();
-          setTotalCount(result.total)
-          setTotalPages(Math.ceil(result.total / itemsPerPage));
-          console.log('part 1')
-          setParticipantList(result.Uploads);
-        } catch {
-          setTotalPages(1);
-          setParticipantList([]);
+          const response = await fetch(`${apiURL}/uploads/filter?page=${currentPage}&limit=${itemsPerPage}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            }
+          });
+
+          if (!response.ok) {
+
+            throw new Error("Network response was not ok");
+          }
+          try {
+            const result = await response.json();
+            setTotalCount(result.total)
+            setTotalPages(Math.ceil(result.total / itemsPerPage));
+            console.log('part 1')
+            setParticipantList(result.Uploads);
+          } catch {
+            setTotalPages(1);
+            setParticipantList([]);
+          }
+        } catch (error) {
+          console.error("Error:", error);
         }
-      } catch (error) {
-        console.error("Error:", error);
       }
-    }
     }
     fetchInitialData();
   }, [currentPage, filterData]);
@@ -324,7 +324,7 @@ const ParticipateList = () => {
       const countryResponse = await fetch(`${apiURL}/country`);
       const countryData = await countryResponse.json();
       setCountries(countryData.country);
-      
+
     }
     fetchInitialData();
   }, [currentPage]);
@@ -474,8 +474,8 @@ const ParticipateList = () => {
 
   useEffect(() => {
     const onDataSubmit = async () => {
-      
-      
+
+
       try {
         // Fetch paginated data based on current page
         const response = await fetch(`${apiURL}/uploads/filter?page=${currentPage}&limit=${itemsPerPage}`, {
@@ -503,7 +503,7 @@ const ParticipateList = () => {
         setTotalPages(1);
         setParticipantList([]);
       }
-    
+
     };
     onDataSubmit();
   }, [currentPage, filterData]);
@@ -522,7 +522,7 @@ const ParticipateList = () => {
   //     }
   //     const result = await response.json();
   //     // Set paginated data and total count for the page
-     
+
   //     setCurrentPage(page)
   //     setParticipantList(result.Uploads);
   //     setTotalCount(result.total);
@@ -543,7 +543,7 @@ const ParticipateList = () => {
     }
   };
 
-  
+
   // useEffect(() => {
   //   if (filterData) {
   //     onDataSubmit(filterData);
@@ -595,7 +595,7 @@ const ParticipateList = () => {
 
 
     setFilterData(dataWithIds);
-    
+
 
   };
 
@@ -623,7 +623,7 @@ const ParticipateList = () => {
           },
         }
       );
-      
+
       setGrpName(response.data.groupList);
     } catch (error) {
       console.error("Error fetching category:", error);
@@ -662,7 +662,7 @@ const ParticipateList = () => {
         zoneId: zoneid
       };
 
-     
+
 
       try {
         // Clear group name to empty array before fetching
@@ -679,7 +679,7 @@ const ParticipateList = () => {
         );
 
         const GroupList = response.data.groupList;
-        
+
         setGrpName(GroupList);
       } catch (error) {
         console.error("Error fetching group names:", error);
@@ -707,7 +707,7 @@ const ParticipateList = () => {
   ]);
 
 
-  
+
 
   return (
     <>
@@ -1029,7 +1029,7 @@ const ParticipateList = () => {
                 />
 
                 {/* School Type Select */}
-                {selectedSubCategory !== 'College' && (
+                {selectedGrpType == 'Educational Institution' && selectedSubCategory !== 'College' && (
                   <FormField
                     control={form.control}
                     name="schooltype"
@@ -1431,35 +1431,37 @@ const ParticipateList = () => {
                 )}
 
                 {/* Sub Category Select */}
-                <FormField
-                  control={form.control}
-                  name="subCategory"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <Select
-                        onValueChange={(value) => {
-                          field.onChange(value);
-                          setSelectedSubCategory(value);
-                        }}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Choose a sub category" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {subcategoryOptions.map((category) => (
-                            <SelectItem key={category.gp_cat_id} value={category.gp_cat_name}>
-                              {category.gp_cat_name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                {selectedGrpType == 'Educational Institution' &&
+                  <FormField
+                    control={form.control}
+                    name="subCategory"
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <Select
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            setSelectedSubCategory(value);
+                          }}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Choose a sub category" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {subcategoryOptions.map((category) => (
+                              <SelectItem key={category.gp_cat_id} value={category.gp_cat_name}>
+                                {category.gp_cat_name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                }
 
                 {/* Group Name Select */}
 
@@ -1571,10 +1573,10 @@ const ParticipateList = () => {
       </div>
       <div className="flex justify-end mx-5 md:mx-9 lg:mx-16">
         <div>
-        <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+          <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
         </div>
       </div>
-      
+
       <div className="container mx-auto p-6">
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white border-gray-200 rounded-t-lg">
