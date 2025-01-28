@@ -16,7 +16,7 @@ import { baseURL } from "@/app/requestsapi/request";
 import { useToast } from "@/components/ui/use-toast";
 import { useSearchParams } from "next/navigation";
 import { FaUpload } from "react-icons/fa";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 export function DialogAddUser() {
   return (
@@ -28,7 +28,7 @@ export function DialogAddUser() {
 function DialogAddUserfn() {
   const { toast } = useToast();
   const searchParams = useSearchParams();
-  const referral_code = Cookies.get('cord_refcode');
+  const referral_code = Cookies.get("cord_refcode");
   const id = searchParams.get("id");
   const message = `
  
@@ -69,17 +69,12 @@ Follow the link to join GreenCleanEarth mission.
   return (
     <Dialog>
       <DialogTrigger asChild>
-        
-      <label className="btn btn-primary flex align-items-center bg-light-green rounded-lg cursor-pointer transform transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10"style={{width:'350px',height: '70px',boxShadow:'1px 4px 5px 3px #00000040'}} >
-    <div
-     style={{ width: '60px',height: '70px',backgroundColor: 'white',borderRadius: '20px',borderWidth: '1px',borderColor: '#3C6E1F',display:'flex',justifyContent: 'center',alignItems: 'center',}}
-    >
-    <FaUpload />
-
-   </div>
-    <div className="pt-5 p-1 text-lg md:text-2xl md:pt-5 md:pr-3">Invite Users</div>
-    
-  </label>
+        <label className="flex items-center justify-center bg-light-green rounded-lg cursor-pointer transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10">
+          <div>
+            <FaUpload />
+          </div>
+          <div className="p-4 text-xl">Invite Users</div>
+        </label>
       </DialogTrigger>
       <DialogContent className="max-w-[calc(100%-2rem)] sm:max-w-[425px] mx-auto my-4 p-0 flex flex-col">
         <div className="flex-grow overflow-y-auto p-6">
@@ -88,9 +83,13 @@ Follow the link to join GreenCleanEarth mission.
             <DialogDescription></DialogDescription>
           </DialogHeader>
           <div>
-            
-            <p className="font-semibold">ഗ്രീൻ ക്ലീൻ കേരള ഹരിത മത്സരങ്ങളിൽ പങ്കെടുക്കാൻ</p>
-            <p className="">താഴെക്കൊടുത്ത ലിങ്കിൽ ക്ലിക്ക് ചെയ്തു രജിസ്റ്റർ ചെയ്തതിനുശേഷം യൂസർ നെയ്മും പാസ്സ്‌വേർഡും ക്രിയേറ്റ് ചെയ്തു സബ്മിറ്റ് ചെയ്യുക. 👇🏼</p>
+            <p className="font-semibold">
+              ഗ്രീൻ ക്ലീൻ കേരള ഹരിത മത്സരങ്ങളിൽ പങ്കെടുക്കാൻ
+            </p>
+            <p className="">
+              താഴെക്കൊടുത്ത ലിങ്കിൽ ക്ലിക്ക് ചെയ്തു രജിസ്റ്റർ ചെയ്തതിനുശേഷം യൂസർ
+              നെയ്മും പാസ്സ്‌വേർഡും ക്രിയേറ്റ് ചെയ്തു സബ്മിറ്റ് ചെയ്യുക. 👇🏼
+            </p>
             <Link
               href={`/user-register?id=${id}&ref=${referral_code}`}
               className="text-green-600 text-base"
@@ -98,18 +97,18 @@ Follow the link to join GreenCleanEarth mission.
               {baseURL}/user-register?id={parseInt(id!)}&ref={referral_code}
             </Link>
             <p className="py-2">
-              🥦 സംശയങ്ങൾക്ക് 
-              <br/>
-              🥦 9645 9645 92 
-              <br/>
-              🥦 Web: www.GreenCleanEarth.org 
-              <br/>
+              🥦 സംശയങ്ങൾക്ക്
+              <br />
+              🥦 9645 9645 92
+              <br />
+              🥦 Web: www.GreenCleanEarth.org
+              <br />
               🥦 Youtube /fb/insta: Green Clean Kerala
-              <br/>
+              <br />
               🥦 Whatsapp/Telegram : 9645 9645 92
-              <br/>
-              🥦 Mail: GreenCleanKerala@gmail.Com 
-              <br/>
+              <br />
+              🥦 Mail: GreenCleanKerala@gmail.Com
+              <br />
               🥦 Follow the link to join GreenCleanEarth mission.
             </p>
           </div>
@@ -122,7 +121,10 @@ Follow the link to join GreenCleanEarth mission.
             {isCopied ? (
               <span className="text-xs">Copied!</span>
             ) : (
-              <span className="text-xs"><Copy className="h-5 w-10" />Copy</span>
+              <span className="text-xs">
+                <Copy className="h-5 w-10" />
+                Copy
+              </span>
             )}
           </Button>
         </div>
