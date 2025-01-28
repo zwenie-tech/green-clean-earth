@@ -208,28 +208,28 @@ const GroupList = () => {
 
   useEffect(() => {
     const fetchGroups = async () => {
-      if(Object.keys(filterData).length === 0 && orderfield==""){
-      const response = await fetch(`${apiURL}/common/groupList?page=${currentPage}&limit=${itemsPerPage}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      });
+      if (Object.keys(filterData).length === 0 && orderfield == "") {
+        const response = await fetch(`${apiURL}/common/groupList?page=${currentPage}&limit=${itemsPerPage}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        });
 
-      const data: any = await response.json();
-      if (data.success) {
-        setTotalPages(Math.ceil(data.totalRecords / itemsPerPage));
-        setTotalCount(data.totalRecords);
-        console.log(data)
-        setGroups(data.groupList);
+        const data: any = await response.json();
+        if (data.success) {
+          setTotalPages(Math.ceil(data.totalRecords / itemsPerPage));
+          setTotalCount(data.totalRecords);
+          console.log(data)
+          setGroups(data.groupList);
+        }
       }
-    }
     };
 
     fetchGroups();
   }, [currentPage, filterData, orderfield]);
 
-  async function sort(dir: string,field: string){
+  async function sort(dir: string, field: string) {
     setOrderfield(field);
     field === "gp_name" ? setOrderDir1(dir) : "";
     field === "upload_count" ? setOrderDir2(dir) : "";
@@ -238,83 +238,84 @@ const GroupList = () => {
 
   useEffect(() => {
     const fetchClass = async () => {
-      if(orderfield !=""){
-
-      
-      const dataWithIds: any = {};
-    // treeNo !== "" ? dataWithIds.treeNumber = parseInt(treeNo) : '';
+      if (orderfield != "") {
 
 
+        const dataWithIds: any = {};
+        // treeNo !== "" ? dataWithIds.treeNumber = parseInt(treeNo) : '';
 
-    if (selectedGrpType !== "") {
-      selectedGrpType ? dataWithIds.groupTypeId = parseInt(category.find((item) => item.group_type === selectedGrpType)?.id!) : null;
-      selectedgrpName !== "" ? dataWithIds.groupId = parseInt(grpName.find((item) => item.gp_name === selectedgrpName)?.gp_id!) : '';
 
-    }
 
-    if (selectedCountry !== "") {
-      dataWithIds.countryId = countries.find((item) => item.cntry_name === selectedCountry)?.cntry_id
-    }
+        if (selectedGrpType !== "") {
+          selectedGrpType ? dataWithIds.groupTypeId = parseInt(category.find((item) => item.group_type === selectedGrpType)?.id!) : null;
+          selectedgrpName !== "" ? dataWithIds.groupId = parseInt(grpName.find((item) => item.gp_name === selectedgrpName)?.gp_id!) : '';
 
-    if (selectedCountry === "India") {
-      dataWithIds.stateId = states.find((item) => item.st_name === selectedState)?.st_id || null;
+        }
 
-      if (selectedState === "Kerala") {
-        dataWithIds.districtId = districts.find((item) => item.dis_name === selectedDistrict)?.dis_id || null;
-        dataWithIds.corporationId = corporation.find((item) => item.cop_name === selectedCorp)?.cop_id || null;
-        dataWithIds.lsgdId = lsgd.find((item) => item.lsg_name === selectedLsgd)?.lsg_id || null;
-        dataWithIds.wardNo = wardNo != "" ? parseInt(wardNo) || null : null;
+        if (selectedCountry !== "") {
+          dataWithIds.countryId = countries.find((item) => item.cntry_name === selectedCountry)?.cntry_id
+        }
+
+        if (selectedCountry === "India") {
+          dataWithIds.stateId = states.find((item) => item.st_name === selectedState)?.st_id || null;
+
+          if (selectedState === "Kerala") {
+            dataWithIds.districtId = districts.find((item) => item.dis_name === selectedDistrict)?.dis_id || null;
+            dataWithIds.corporationId = corporation.find((item) => item.cop_name === selectedCorp)?.cop_id || null;
+            dataWithIds.lsgdId = lsgd.find((item) => item.lsg_name === selectedLsgd)?.lsg_id || null;
+            dataWithIds.wardNo = wardNo != "" ? parseInt(wardNo) || null : null;
+          }
+        }
+
+        selectedSubCategory ? dataWithIds.subCategoryId = subcategoryOptions.find((item) => item.gp_cat_name === selectedSubCategory)?.gp_cat_id || null : null;
+        selectschoolType ? dataWithIds.schoolTypeId = schoolType.find((item) => item.type_name === selectschoolType)?.id || null : null;
+        selecteduDistrict ? dataWithIds.eduDistrictId = eduDistrict.find((item) => item.edu_district === selecteduDistrict)?.edu_district_id || null : null;
+        selecteduSubDistrict ? dataWithIds.eduSubDistrictId = eduSubDistrict.find((item) => item.edu_sub_district_name === selecteduSubDistrict)?.edu_sub_district_id || null : null;
+        selectSahodaya ? dataWithIds.sahodayaId = sahodaya.find((item) => item.sahodaya_name === selectSahodaya)?.sahodaya_id || null : null;
+        selectIcdsBlock ? dataWithIds.blockId = icdsBlock.find((item) => item.block_name === selectIcdsBlock)?.icds_block_id || null : null;
+        selectIcdsProject ? dataWithIds.projectId = icdsProject.find((item) => item.project_name === selectIcdsProject)?.project_id || null : null;
+        selectMission ? dataWithIds.chapterId = missionChapter.find((item) => item.chapter_name === selectMission)?.chapter_id || null : null;
+        selectZone ? dataWithIds.zoneId = missionZone.find((item) => item.zone_name === selectZone)?.zone_id || null : null;
+
+        twoupload === 'true' ? dataWithIds.hasTwoUploads = twoupload : null;
+        threeupload === 'true' ? dataWithIds.hasThreeUploads = threeupload : null;
+        fourupload === 'true' ? dataWithIds.hasFourUploads = fourupload : null;
+
+
+        const payload = {
+          ...dataWithIds,
+          orderByField: orderfield,
+          orderDirection: orderfield === "gp_name" ? orderdir1
+            : orderfield === "upload_count" ? orderdir2
+              : orderfield === "activity_count" ? orderdir3 : ""
+        }
+        const response = await axios.post(
+          `${apiURL}/common/groupList?page=${currentPage}&limit=${itemsPerPage}`,
+          payload,
+          {
+            headers: {
+
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        try {
+          if (response.data.success && response.status !== 203) {
+
+            setTotalCount(response.data.totalRecords);
+            setTotalPages(Math.ceil(response.data.totalRecords / itemsPerPage));
+            setGroups(response.data.groupList);
+          } else {
+            setGroups([]);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
       }
-    }
-
-    selectedSubCategory ? dataWithIds.subCategoryId = subcategoryOptions.find((item) => item.gp_cat_name === selectedSubCategory)?.gp_cat_id || null : null;
-    selectschoolType ? dataWithIds.schoolTypeId = schoolType.find((item) => item.type_name === selectschoolType)?.id || null : null;
-    selecteduDistrict ? dataWithIds.eduDistrictId = eduDistrict.find((item) => item.edu_district === selecteduDistrict)?.edu_district_id || null : null;
-    selecteduSubDistrict ? dataWithIds.eduSubDistrictId = eduSubDistrict.find((item) => item.edu_sub_district_name === selecteduSubDistrict)?.edu_sub_district_id || null : null;
-    selectSahodaya ? dataWithIds.sahodayaId = sahodaya.find((item) => item.sahodaya_name === selectSahodaya)?.sahodaya_id || null : null;
-    selectIcdsBlock ? dataWithIds.blockId = icdsBlock.find((item) => item.block_name === selectIcdsBlock)?.icds_block_id || null : null;
-    selectIcdsProject ? dataWithIds.projectId = icdsProject.find((item) => item.project_name === selectIcdsProject)?.project_id || null : null;
-    selectMission ? dataWithIds.chapterId = missionChapter.find((item) => item.chapter_name === selectMission)?.chapter_id || null : null;
-    selectZone ? dataWithIds.zoneId = missionZone.find((item) => item.zone_name === selectZone)?.zone_id || null : null;
-
-    twoupload === 'true' ? dataWithIds.hasTwoUploads = twoupload : null;
-    threeupload === 'true' ? dataWithIds.hasThreeUploads = threeupload : null;
-    fourupload === 'true' ? dataWithIds.hasFourUploads = fourupload : null;
-
-   
-    const payload = {
-      ...dataWithIds,
-      orderByField : orderfield,
-      orderDirection : orderfield === "gp_name" ? orderdir1 
-      : orderfield === "upload_count" ? orderdir2 
-      : orderfield === "activity_count" ? orderdir3 : ""
-    }
-    const response = await axios.post(
-      `${apiURL}/common/groupList?page=${currentPage}&limit=${itemsPerPage}`,
-      payload,
-      {
-        headers: {
-
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    try {
-      if (response.data.success && response.status !== 203) {
-
-        setTotalCount(response.data.totalRecords);
-        setTotalPages(Math.ceil(response.data.totalRecords / itemsPerPage));
-        setGroups(response.data.groupList);
-      } else {
-        setGroups([]);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }}
     };
     fetchClass();
   }, [category, corporation, countries, currentPage, districts, eduDistrict, eduSubDistrict, fourupload, grpName, icdsBlock, icdsProject, lsgd, missionChapter, missionZone, orderdir1, orderdir2, orderdir3, orderfield, sahodaya, schoolType, selectIcdsBlock, selectIcdsProject, selectMission, selectSahodaya, selectZone, selectedCorp, selectedCountry, selectedDistrict, selectedGrpType, selectedLsgd, selectedState, selectedSubCategory, selectedgrpName, selecteduDistrict, selecteduSubDistrict, selectschoolType, states, subcategoryOptions, threeupload, twoupload, wardNo]);
-  
+
   useEffect(() => {
     const fetchClass = async () => {
       try {
@@ -575,39 +576,39 @@ const GroupList = () => {
 
   useEffect(() => {
     const onDataSubmit = async () => {
-      if(orderfield==""){
+      if (orderfield == "") {
 
-      
-      try {
-        // Fetch paginated data based on current page
-        const response = await fetch(`${apiURL}/common/groupList?page=${currentPage}&limit=${itemsPerPage}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(filterData),
-        });
-        if (!response.ok) {
-          throw new Error("Failed to fetch paginated uploads.");
+
+        try {
+          // Fetch paginated data based on current page
+          const response = await fetch(`${apiURL}/common/groupList?page=${currentPage}&limit=${itemsPerPage}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(filterData),
+          });
+          if (!response.ok) {
+            throw new Error("Failed to fetch paginated uploads.");
+          }
+          const result = await response.json();
+          setGroups(result.groupList);
+
+          console.log('part 2',)
+
+          console.log(result)
+          setTotalCount(result.totalRecords);
+          setTotalPages(Math.ceil(result.totalRecords / itemsPerPage));
+
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          // Reset pagination and participant list on error
+          setTotalCount("0")
+          setTotalPages(1);
+          setGroups([]);
         }
-        const result = await response.json();
-        setGroups(result.groupList);
-
-        console.log('part 2',)
-
-        console.log(result)
-        setTotalCount(result.totalRecords);
-        setTotalPages(Math.ceil(result.totalRecords / itemsPerPage));
-
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        // Reset pagination and participant list on error
-        setTotalCount("0")
-        setTotalPages(1);
-        setGroups([]);
       }
-    }
-    
+
     };
     onDataSubmit();
   }, [currentPage, filterData, orderfield]);
@@ -636,7 +637,7 @@ const GroupList = () => {
           },
         }
       );
-console.log('part3')
+      console.log('part3')
       setGrpName(response.data.groupList);
     } catch (error) {
       console.error("Error fetching category:", error);
@@ -986,7 +987,7 @@ console.log('part3')
                 />
 
                 {/* School Type Select */}
-                {selectedSubCategory !== 'College' && (
+                {selectedGrpType == 'Educational Institution' && selectedSubCategory !== 'College' && (
                   <FormField
                     control={form.control}
                     name="schooltype"
@@ -1388,36 +1389,37 @@ console.log('part3')
                 )}
 
                 {/* Sub Category Select */}
-                <FormField
-                  control={form.control}
-                  name="subCategory"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <Select
-                        onValueChange={(value) => {
-                          field.onChange(value);
-                          setSelectedSubCategory(value);
-                        }}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Choose a sub category" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {subcategoryOptions.map((category) => (
-                            <SelectItem key={category.gp_cat_id} value={category.gp_cat_name}>
-                              {category.gp_cat_name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
+                {selectedGrpType == 'Educational Institution' &&
+                  <FormField
+                    control={form.control}
+                    name="subCategory"
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <Select
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            setSelectedSubCategory(value);
+                          }}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Choose a sub category" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {subcategoryOptions.map((category) => (
+                              <SelectItem key={category.gp_cat_id} value={category.gp_cat_name}>
+                                {category.gp_cat_name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                }
                 {/* Group Name Select */}
 
                 <div className="w-full sm:col-span-2 md:col-span-1">
@@ -1464,13 +1466,13 @@ console.log('part3')
               <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                 <th className="py-3 px-6 text-left w-16 rounded-tl-lg">Sl. No</th>
                 <th className="py-3 px-6 text-left">Group Id</th>
-                <th className="py-3 px-6 text-left">Group Name {orderdir1 === "DESC" ? <span className={orderfield === "gp_name" ? 'text-green-600' :'text-gray-400'} onClick={() => sort("ASC", "gp_name")}><ArrowUp/></span> 
-                : <span className={orderfield === "gp_name" ? 'text-green-600' :'text-gray-400'} onClick={() => sort("DESC", "gp_name")}><ArrowDown/></span>}</th>
+                <th className="py-3 px-6 text-left">Group Name {orderdir1 === "DESC" ? <span className={orderfield === "gp_name" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("ASC", "gp_name")}><ArrowUp /></span>
+                  : <span className={orderfield === "gp_name" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("DESC", "gp_name")}><ArrowDown /></span>}</th>
                 <th className="py-3 px-6 text-left">Cordinator Name</th>
-                <th className="py-3 px-6 text-left">Upload Count {orderdir2 === "DESC" ? <span className={orderfield === "upload_count" ? 'text-green-600' :'text-gray-400'} onClick={() => sort("ASC", "upload_count")}><ArrowUp/></span> 
-                : <span className={orderfield === "upload_count" ? 'text-green-600' :'text-gray-400'} onClick={() => sort("DESC", "upload_count")}><ArrowDown/></span>}</th>
-                <th className="py-3 px-6 text-left">Activity Count {orderdir3 === "DESC" ? <span className={orderfield === "activity_count" ? 'text-green-600' :'text-gray-400'} onClick={() => sort("ASC", "activity_count")}><ArrowUp/></span> 
-                : <span className={orderfield === "activity_count" ? 'text-green-600' :'text-gray-400'} onClick={() => sort("DESC", "activity_count")}><ArrowDown/></span>}</th>
+                <th className="py-3 px-6 text-left">Upload Count {orderdir2 === "DESC" ? <span className={orderfield === "upload_count" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("ASC", "upload_count")}><ArrowUp /></span>
+                  : <span className={orderfield === "upload_count" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("DESC", "upload_count")}><ArrowDown /></span>}</th>
+                <th className="py-3 px-6 text-left">Activity Count {orderdir3 === "DESC" ? <span className={orderfield === "activity_count" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("ASC", "activity_count")}><ArrowUp /></span>
+                  : <span className={orderfield === "activity_count" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("DESC", "activity_count")}><ArrowDown /></span>}</th>
                 <th className="py-3 px-6 text-left rounded-tr-lg">District</th>
               </tr>
             </thead>
