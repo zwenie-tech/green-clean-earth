@@ -48,7 +48,7 @@ const AdminGrid = () => {
 
   const defaultColDef = useMemo(() => {
     return {
-      filter: "agTextColumnFilter",
+      // filter: "agTextColumnFilter",
       floatingFilter: false,
     };
   }, []);
