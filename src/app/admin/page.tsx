@@ -168,7 +168,7 @@ const GridExample = () => {
 
   const defaultColDef = useMemo(() => {
     return {
-      filter: "agTextColumnFilter",
+      // filter: "agTextColumnFilter",
       floatingFilter: false,
       autoSizeStrategy: {
         type: 'fitContentWidth',
