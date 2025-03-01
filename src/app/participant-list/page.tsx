@@ -9,7 +9,7 @@ import Link from "next/link";
 import Loading from "@/components/loading";
 import axios from "axios";
 import Cookies from "js-cookie";
-import PaginationComponent from "./PageComponent";
+import PaginationComponent from "../PageComponent";
 
 
 type Participant = {

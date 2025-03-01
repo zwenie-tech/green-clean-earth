@@ -9,8 +9,8 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input"
 import axios from 'axios';
-import PaginationComponent from './PageComponent';
 import { ArrowDown, ArrowUp, Trash2 } from 'lucide-react';
+import PaginationComponent from '../PageComponent';
 interface Acivitylist {
   personal_activity_id: number,
   login_id: number,

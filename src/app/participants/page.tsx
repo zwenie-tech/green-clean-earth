@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input"
 import axios from 'axios';
 import Link from "next/link";
-import PaginationComponent from './PageComponent';
+import PaginationComponent from '../PageComponent';
 import { Label } from '@radix-ui/react-label';
 
 
