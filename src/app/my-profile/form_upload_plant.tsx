@@ -86,7 +86,12 @@ export function FormUploadPlant() {
   const id = searchParams.get("id");
   const us_name = Cookies.get('name');
   const token = Cookies.get('token');
+
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+
+
   const form = useForm<ContactFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -105,6 +110,7 @@ export function FormUploadPlant() {
       const compressedImage = await resizeImage(selectedImage);
       formData.append("image", compressedImage);
     }
+    setIsLoading(true);
 
     try {
       const response = await uploadPlantData(formData, token as string);
@@ -244,9 +250,15 @@ export function FormUploadPlant() {
             </div>
           </div>
         </div>
-        <Button type="submit" className="bg-green-700 w-[100%]">
-          Submit
-        </Button>
+        {isLoading ? (
+          <div className="flex justify-center loader">
+          <span className="">Loading...</span>
+        </div>
+      ) : (
+        <Button type="submit" className="bg-green-700 w-[100%] ">
+        Submit
+      </Button>
+      )}
       </form>
     </Form>
   );
