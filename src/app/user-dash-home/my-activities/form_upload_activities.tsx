@@ -111,6 +111,7 @@ export function FormUploadActivities() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [subCategories, setSubCategories] = useState<SubCategory[]>([]);
@@ -170,7 +171,7 @@ export function FormUploadActivities() {
     if (selectedImage) {
       formData.append("activityThumbnail", selectedImage);
     }
-
+    setIsLoading(true);
     try {
       const response = await uploadActivityData(formData, token!, id);
       if (response!.status == 201) {
@@ -395,9 +396,16 @@ export function FormUploadActivities() {
               </div>
             </div> */}
         </div>
+        <div>
+      {isLoading ? (
+        <div className="loader float-end">Loading...</div> // Show loader when isLoading is true
+      ) : (
         <Button type="submit" className="bg-primary float-end">
           Submit
         </Button>
+      )}
+    </div>
+        
       </form>
     </Form>
   );

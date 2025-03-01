@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input"
 import axios from 'axios';
-import PaginationComponent from './PageComponent';
+import PaginationComponent from '../PageComponent';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { Field } from '@headlessui/react';
 // Define the interface for the API response data

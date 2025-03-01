@@ -29,7 +29,7 @@ export function DialogUploadActivities() {
       </DialogTrigger>
       <DialogContent className="sm:max-w-2xl ">
         <DialogHeader>
-          <DialogTitle>Upload Activities hello</DialogTitle>
+          <DialogTitle>Upload Activities</DialogTitle>
           <DialogDescription>{/* Provide details here */}</DialogDescription>
         </DialogHeader>
 
