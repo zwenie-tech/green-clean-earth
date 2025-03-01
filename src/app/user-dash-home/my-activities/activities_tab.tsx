@@ -105,7 +105,7 @@ export default function ActivitiesTab() {
 
   return (
     <div className="">
-      <DialogUploadActivities token={token} />
+      {/* <DialogUploadActivities token={token} /> */}
       {/* <p>Table</p> */}
       {activity.length === 0 ? (
         <div>No activity data available</div>
