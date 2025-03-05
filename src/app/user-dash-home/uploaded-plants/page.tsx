@@ -45,6 +45,7 @@ type PlantData = {
   up_lsgd: string | null;
   lsg_name: string | null;
   up_ward: string | null;
+  is_challenged: number | null;
 };
 
 type ApiResponse = {
@@ -58,7 +59,7 @@ function formatDate(isoString: string) {
   const day = String(date.getUTCDate()).padStart(2, '0');
   const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Months are 0-based
   const year = date.getUTCFullYear();
-  
+
 
   const formattedDate = `${day}/${month}/${year}`;
 
@@ -89,27 +90,27 @@ const MyUploadedPlants = () => {
   const [edit4, setEdit4] = useState(0);
   const itemsPerPage = 10;
 
- 
-    useEffect(() => {
-      async function fetchfirstData(){
-        const responseall = await fetch(`${apiURL}/uploads/me?limit=100000000000`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }); 
-        const dataall = await responseall.json();
-        console.log(dataall)
-        setTotalPages(Math.ceil(dataall.Uploads.length / itemsPerPage));
-      }
-      fetchfirstData();
-    }, [token]);
 
-    const handlePageChange = (newPage: number) => {
-      if (newPage > 0 && newPage <= totalPages) {
-        
-        setCurrentPage(newPage);
-      }
+  useEffect(() => {
+    async function fetchfirstData() {
+      const responseall = await fetch(`${apiURL}/uploads/me?limit=100000000000`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const dataall = await responseall.json();
+      console.log(dataall)
+      setTotalPages(Math.ceil(dataall.Uploads.length / itemsPerPage));
     }
+    fetchfirstData();
+  }, [token]);
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage > 0 && newPage <= totalPages) {
+
+      setCurrentPage(newPage);
+    }
+  }
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(`${apiURL}/uploads/me?page=${currentPage}&limit=${itemsPerPage}`, {
@@ -125,7 +126,7 @@ const MyUploadedPlants = () => {
     };
 
     fetchData();
-  }, [token,currentPage]);
+  }, [token, currentPage]);
 
   return (
     <main className='min-h-screen flex flex-col'>
@@ -149,7 +150,7 @@ const MyUploadedPlants = () => {
               {data.map((plant) => (
                 <tr key={plant.up_id} className='align-top'>
                   <td className='border border-black p-4'>
-                    <Link 
+                    <Link
                       href={{
                         pathname: 'uploaded-plants/plant',
                         query: { tree: plant.up_id },
@@ -164,55 +165,83 @@ const MyUploadedPlants = () => {
                   <td className='border border-black p-4'>
                     <div className='overflow-hidden'>
                       {plant.up_file ? (
-                        // <Image src={`${imageURL}${plant.up_file}`} alt='' width={200} height={200} />
                         <div>
-                        <div className="aspect-square h-40 w-40">
-                          <img 
-                            src={`${imageURL}${plant.up_file}`} 
-                            alt="Selected" 
-                            width={150} 
-                            height={150}
-                            className='h-full w-full object-cover'
-                          />
-                        </div>
-                        <h1 className='m-5'> Uploaded on <br/>{formatDate(plant.up_date)} {formatTime(plant.up_date)}</h1>
-                        {edit1 ?
-                          <UploadButton imageNo={1} treeNo={plant.up_id} isEdit={true}/>:
-                          <p className='text-primary underline flex items-center justify-center m-5' 
-                          onClick={()=>{setEdit1(1)}}>Edit</p>
-                          }
+                          <div className="aspect-square h-40 w-40 relative">
+                            {/* Main Uploaded Image */}
+                            <img
+                              src={`${imageURL}${plant.up_file}`}
+                              alt="Selected"
+                              width={150}
+                              height={150}
+                              className='h-full w-full object-cover'
+                            />
+
+                            {/* Challenge Badge on Top */}
+                            {plant.is_challenged == 1 && (
+                              <img
+                                className="absolute top-0 left-0 w-full h-full object-contain z-10"
+                                src="/images/chellenge.png"
+                                alt="Challenged"
+                              />
+                            )}
+                          </div>
+
+                          <h1 className='m-5'>
+                            Uploaded on <br />
+                            {formatDate(plant.up_date)} {formatTime(plant.up_date)}
+                          </h1>
+
+                          {edit1 ? (
+                            <UploadButton imageNo={1} treeNo={plant.up_id} isEdit={true} />
+                          ) : (
+                            <p
+                              className='text-primary underline flex items-center justify-center m-5'
+                              onClick={() => setEdit1(1)}
+                            >
+                              Edit
+                            </p>
+                          )}
                         </div>
                       ) : (
-                        <UploadButton imageNo={1} treeNo={plant.up_id} isEdit={false}/>
+                        <UploadButton imageNo={1} treeNo={plant.up_id} isEdit={false} />
                       )}
                     </div>
+
                   </td>
                   <td className='border border-black p-4'>
                     <div className='w-56 h-56  md:max-w-[200px]'>
                       {plant.up_file_2 ? (
                         // <Image src={`${imageURL}${plant.up_file}`} alt='' width={200} height={200} />
                         <div>
-                        <div className="aspect-square h-40 w-40">
-                          <img 
-                            src={`${imageURL}${plant.up_file_2}`} 
-                            alt="Selected" 
-                            width={150} 
-                            height={150}
-                            className='h-full w-full object-cover'
-                          />
-                        </div>
-                        <h1 className='m-5'>
-                          Uploaded on <br />
-                          {plant.up_file_2_time ? `${formatDate(plant.up_file_2_time)} ${formatTime(plant.up_file_2_time)}` : "No upload date available"}
-                        </h1>
-                        {edit2 ?
-                          <UploadButton imageNo={2} treeNo={plant.up_id} isEdit={true}/>:
-                          <p className='text-primary underline flex items-center justify-center m-5' 
-                          onClick={()=>{setEdit2(1)}}>Edit</p>
+                          <div className="aspect-square h-40 w-40 relative">
+                            <img
+                              src={`${imageURL}${plant.up_file_2}`}
+                              alt="Selected"
+                              width={150}
+                              height={150}
+                              className='h-full w-full object-cover'
+                            />
+                             {/* Challenge Badge on Top */}
+                             {plant.is_challenged == 1 && (
+                              <img
+                                className="absolute top-0 left-0 w-full h-full object-contain z-10"
+                                src="/images/chellenge.png"
+                                alt="Challenged"
+                              />
+                            )}
+                          </div>
+                          <h1 className='m-5'>
+                            Uploaded on <br />
+                            {plant.up_file_2_time ? `${formatDate(plant.up_file_2_time)} ${formatTime(plant.up_file_2_time)}` : "No upload date available"}
+                          </h1>
+                          {edit2 ?
+                            <UploadButton imageNo={2} treeNo={plant.up_id} isEdit={true} /> :
+                            <p className='text-primary underline flex items-center justify-center m-5'
+                              onClick={() => { setEdit2(1) }}>Edit</p>
                           }
                         </div>
                       ) : (
-                        <UploadButton imageNo={2} treeNo={plant.up_id} isEdit={false}/>
+                        <UploadButton imageNo={2} treeNo={plant.up_id} isEdit={false} />
                       )}
                     </div>
                   </td>
@@ -220,57 +249,73 @@ const MyUploadedPlants = () => {
                     <div className='w-56 h-56  md:max-w-[200px]'>
                       {plant.up_file_2 ? (plant.up_file_3 ? (
                         <div>
-                          <div className="aspect-square h-40 w-40">
-                            <img 
-                              src={`${imageURL}${plant.up_file_3}`} 
-                              alt="Selected" 
-                              width={150} 
+                          <div className="aspect-square h-40 w-40 relative">
+                            <img
+                              src={`${imageURL}${plant.up_file_3}`}
+                              alt="Selected"
+                              width={150}
                               height={150}
                               className='h-full w-full object-cover'
                             />
+                            {/* Challenge Badge on Top */}
+                            {plant.is_challenged == 1 && (
+                              <img
+                                className="absolute top-0 left-0 w-full h-full object-contain z-10"
+                                src="/images/chellenge.png"
+                                alt="Challenged"
+                              />
+                            )}
                           </div>
                           <h1 className='m-5'>
                             Uploaded on <br />
                             {plant.up_file_3_time ? `${formatDate(plant.up_file_3_time)} ${formatTime(plant.up_file_3_time)}` : "No upload date available"}
                           </h1>
                           {edit3 ?
-                          <UploadButton imageNo={3} treeNo={plant.up_id} isEdit={true}/>:
-                          <p className='text-primary underline flex items-center justify-center m-5' 
-                          onClick={()=>{setEdit3(1)}}>Edit</p>
+                            <UploadButton imageNo={3} treeNo={plant.up_id} isEdit={true} /> :
+                            <p className='text-primary underline flex items-center justify-center m-5'
+                              onClick={() => { setEdit3(1) }}>Edit</p>
                           }
                         </div>
 
                       ) : (
-                        <UploadButton imageNo={3} treeNo={plant.up_id} isEdit={false}/>
-                      )):(<div className='bg-slate-200'></div>)}
+                        <UploadButton imageNo={3} treeNo={plant.up_id} isEdit={false} />
+                      )) : (<div className='bg-slate-200'></div>)}
                     </div>
                   </td>
                   <td className='border border-black p-4'>
                     <div className='w-56 h-56  md:max-w-[200px]'>
-                    {plant.up_file_2 && plant.up_file_3 ? (plant.up_file_4 ? (
+                      {plant.up_file_2 && plant.up_file_3 ? (plant.up_file_4 ? (
                         <div className=''>
-                          <div className="aspect-square h-40 w-40">
-                            <img 
-                              src={`${imageURL}${plant.up_file_4}`} 
-                              alt="Selected" 
-                              width={150} 
+                          <div className="aspect-square h-40 w-40 relative">
+                            <img
+                              src={`${imageURL}${plant.up_file_4}`}
+                              alt="Selected"
+                              width={150}
                               height={150}
                               className='h-full w-full object-cover'
                             />
-                            </div>
-                            <h1 className='m-5'>
-                              Uploaded on <br />
-                              {plant.up_file_4_time ? `${formatDate(plant.up_file_4_time)} ${formatTime(plant.up_file_4_time)}` : "No upload date available"}
-                            </h1>
-                            {edit4 ?
-                          <UploadButton imageNo={4} treeNo={plant.up_id} isEdit={true}/>:
-                          <p className='text-primary underline flex items-center justify-center m-5' 
-                          onClick={()=>{setEdit4(1)}}>Edit</p>
+                            {/* Challenge Badge on Top */}
+                            {plant.is_challenged == 1 && (
+                              <img
+                                className="absolute top-0 left-0 w-full h-full object-contain z-10"
+                                src="/images/chellenge.png"
+                                alt="Challenged"
+                              />
+                            )}
+                          </div>
+                          <h1 className='m-5'>
+                            Uploaded on <br />
+                            {plant.up_file_4_time ? `${formatDate(plant.up_file_4_time)} ${formatTime(plant.up_file_4_time)}` : "No upload date available"}
+                          </h1>
+                          {edit4 ?
+                            <UploadButton imageNo={4} treeNo={plant.up_id} isEdit={true} /> :
+                            <p className='text-primary underline flex items-center justify-center m-5'
+                              onClick={() => { setEdit4(1) }}>Edit</p>
                           }
                         </div>
                       ) : (
-                        <UploadButton imageNo={4} treeNo={plant.up_id} isEdit={false}/>
-                      )):(<div className='bg-slate-200'></div>)}
+                        <UploadButton imageNo={4} treeNo={plant.up_id} isEdit={false} />
+                      )) : (<div className='bg-slate-200'></div>)}
                     </div>
                   </td>
                 </tr>
@@ -281,10 +326,10 @@ const MyUploadedPlants = () => {
       </div>
       <div className="flex justify-center items-center space-x-2 my-4">
         <button
-        className={currentPage === 1 ? 
-          "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
-        : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-        }
+          className={currentPage === 1 ?
+            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
+            : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+          }
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
         >
@@ -292,20 +337,20 @@ const MyUploadedPlants = () => {
         </button>
         <span className="text-xl">{currentPage}</span>
         <button
-          className={currentPage === totalPages ? 
-            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
-          : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+          className={currentPage === totalPages ?
+            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
+            : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
           }
           onClick={() => {
-            handlePageChange(currentPage + 1) 
+            handlePageChange(currentPage + 1)
           }}
           disabled={currentPage === totalPages}
         >
           Next
         </button>
 
-        
-      </div>  
+
+      </div>
       <GceBadge />
       <Footer />
     </main>
@@ -368,7 +413,7 @@ const formSchema = z.object({
 
 type ImageFormData = z.infer<typeof formSchema>;
 
-const UploadButton = ({imageNo,treeNo,isEdit}:any) => {
+const UploadButton = ({ imageNo, treeNo, isEdit }: any) => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
   const form = useForm<ImageFormData>({
@@ -410,7 +455,7 @@ const UploadButton = ({imageNo,treeNo,isEdit}:any) => {
         });
       }
       // Reload the page
-      setTimeout(function() {
+      setTimeout(function () {
         window.location.reload();
       }, 1800);
 
@@ -427,13 +472,13 @@ const UploadButton = ({imageNo,treeNo,isEdit}:any) => {
   return (
     <div>
       <div className={cn("flex md:flex-row w-[100%] flex-col")}>
-          <div className="flex w-[100%] gap-2 flex-col">
-            {!isEdit && (<Form {...form}>
-              <form
-                noValidate
-                onSubmit={form.handleSubmit(onSubmit)}
-                className='flex flex-col gap-4 place-items-center'  
-              >
+        <div className="flex w-[100%] gap-2 flex-col">
+          {!isEdit && (<Form {...form}>
+            <form
+              noValidate
+              onSubmit={form.handleSubmit(onSubmit)}
+              className='flex flex-col gap-4 place-items-center'
+            >
               <div
                 className={`flex w-[100%] gap-4  flex-col items-center md:flex-col md:justify-between md:items-center`}
               >
@@ -500,100 +545,100 @@ const UploadButton = ({imageNo,treeNo,isEdit}:any) => {
               <Button size="sm" variant={'default'} type="submit">
                 Upload
               </Button>
-                  
-              </form>
-            </Form>)}
-            
-          </div>
+
+            </form>
+          </Form>)}
+
+        </div>
       </div>
 
-        {isEdit && (
+      {isEdit && (
         <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
           <div className="fixed inset-0 bg-black opacity-50"></div>
           <div className="bg-white rounded-lg shadow-lg p-6 z-10 w-full max-w-md mx-auto">
             <h2 className="text-xl font-bold mb-4">Edit Image</h2>
             <div className="flex justify-center mt-4">
-          
-            <Form {...form}>
-              <form
-                noValidate
-                onSubmit={form.handleSubmit(onSubmit)}
-                className='flex flex-col gap-4 place-items-center'  
-              >
-              <div
-                className={`flex w-[100%] gap-4  flex-col items-center md:flex-col md:justify-between md:items-center`}
-              >
-                <div
-                  className={`flex md:flex-[1] h-[fit-content] md:justify-between md:flex-row`}
+
+              <Form {...form}>
+                <form
+                  noValidate
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className='flex flex-col gap-4 place-items-center'
                 >
-                  {selectedImage ? (
-                    <div className=" max-w-[200px]">
-                      <img
-                        src={URL.createObjectURL(selectedImage)}
-                        alt="Selected"
-                        className='max-h-32'
-                      />
-                    </div>
-                  ) : (
-                    <div className="inline-flex items-center justify-between">
-                      <div className="p-2 justify-center items-center flex">
-                        <BsImages size={28} />
-                      </div>
-                    </div>
-                  )}
-                </div>
-                <FormField
-                  control={form.control}
-                  name="image"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Button
-                          size="sm"
-                          type="button"
-                          className="bg-white hover:bg-primary/10 border border-primary text-primary"
-                        >
-                          <input
-                            type="file"
-                            className="hidden"
-                            id="fileInput"
-                            accept="image/*"
-                            onBlur={field.onBlur}
-                            name={field.name}
-                            onChange={async (e) => {
-                              const files = e.target.files;
-                              if (files && files[0]) {
-                                const validFiles = await validateAndResizeImage(files);
-                                field.onChange(validFiles);
-                                setSelectedImage(validFiles?.[0] || null);
-                              }
-                            }}
-                            ref={field.ref}
+                  <div
+                    className={`flex w-[100%] gap-4  flex-col items-center md:flex-col md:justify-between md:items-center`}
+                  >
+                    <div
+                      className={`flex md:flex-[1] h-[fit-content] md:justify-between md:flex-row`}
+                    >
+                      {selectedImage ? (
+                        <div className=" max-w-[200px]">
+                          <img
+                            src={URL.createObjectURL(selectedImage)}
+                            alt="Selected"
+                            className='max-h-32'
                           />
-                          <label
-                            htmlFor="fileInput"
-                            className="text-neutral-90 flex gap-2 justify-center items-center w-full"
-                          >
-                            <BsPaperclip /> Choose file
-                          </label>
-                        </Button>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <Button size="sm" variant={'default'} type="submit">
-                Upload
-              </Button>
-                  {isEdit?
-        
-        <p className='text-primary underline flex items-center justify-center m-1' onClick={()=>{window.location.reload()}}>Cancel</p>
-                    :''
+                        </div>
+                      ) : (
+                        <div className="inline-flex items-center justify-between">
+                          <div className="p-2 justify-center items-center flex">
+                            <BsImages size={28} />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <FormField
+                      control={form.control}
+                      name="image"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Button
+                              size="sm"
+                              type="button"
+                              className="bg-white hover:bg-primary/10 border border-primary text-primary"
+                            >
+                              <input
+                                type="file"
+                                className="hidden"
+                                id="fileInput"
+                                accept="image/*"
+                                onBlur={field.onBlur}
+                                name={field.name}
+                                onChange={async (e) => {
+                                  const files = e.target.files;
+                                  if (files && files[0]) {
+                                    const validFiles = await validateAndResizeImage(files);
+                                    field.onChange(validFiles);
+                                    setSelectedImage(validFiles?.[0] || null);
+                                  }
+                                }}
+                                ref={field.ref}
+                              />
+                              <label
+                                htmlFor="fileInput"
+                                className="text-neutral-90 flex gap-2 justify-center items-center w-full"
+                              >
+                                <BsPaperclip /> Choose file
+                              </label>
+                            </Button>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <Button size="sm" variant={'default'} type="submit">
+                    Upload
+                  </Button>
+                  {isEdit ?
+
+                    <p className='text-primary underline flex items-center justify-center m-1' onClick={() => { window.location.reload() }}>Cancel</p>
+                    : ''
                   }
 
-              </form>
-            </Form>
+                </form>
+              </Form>
             </div>
           </div>
         </div>
