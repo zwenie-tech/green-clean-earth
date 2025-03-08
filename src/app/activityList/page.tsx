@@ -1477,7 +1477,6 @@ const ActivityList = () => {
             <thead>
               <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                 <th className="py-3 px-6 text-left w-16 bd-2 rounded-tl-lg">SL .No</th>
-                <th className="py-3 px-6 text-left">Activity Link</th>
                 <th className="py-3 px-6 text-left">Activity Id</th>
                 <th className="py-3 px-6 text-left">Participant Name</th>
                 <th className="py-3 px-6 text-left">User Id</th>
@@ -1502,14 +1501,13 @@ const ActivityList = () => {
                     <tr key={activity.personal_activity_id} className="border border-gray-200 hover:bg-gray-100">
 
                       <td className="py-3 px-6 text-left">{startIndex + index + 1}</td>
-                      <td className="py-3 px-6 text-left"><a href={activity.activity_social_media_link}>{activity.activity_social_media_link}</a></td>
                       <td className="py-3 px-6 text-left">{activity.personal_activity_id}</td>
                       <td className="py-3 px-6 text-left">{activity.participant_name}</td>
                       <td className="py-3 px-6 text-left"><a href={`/user-page?u=${activity.participant_name}&id=${activity.login_id}`}>{activity.login_id}</a></td>
                       <td className="py-3 px-6 text-left">{activity.activity_description}</td>
                       <td className="py-3 px-6 text-left">{activity.gp_name}</td>
                       <td className="py-3 px-6 text-left">{activity.activity_on.split("T")[0].split('-').reverse().join('-')}</td>
-                      <td className="py-3 px-6 text-left">{activity.activity_title}{activity.activity_description}</td>
+                      <td className="py-3 px-6 text-left"><a href={activity.activity_social_media_link}>{activity.activity_title}{activity.activity_description}</a></td>
                       <td className="py-3 px-6 text-left">{categories[activity.activity_category_id]}</td>
                       <td className="py-3 px-6 text-left">{activity.activity_views} Views, {activity.activity_likes} Likes</td>
                       <td className="py-3 px-6 text-left">{activity.earnings}</td>

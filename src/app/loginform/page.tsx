@@ -239,7 +239,7 @@ const LoginForm = () => {
                         )}
                       />
                       <div className="flex justify-center w-full">
-                        <Button type="submit" style={{ width: '50%' }} className="bg-primary items-center">Submit</Button>
+                        <Button type="submit" style={{ width: '50%' }} className="bg-green-950 items-center">Submit</Button>
                       </div>
                       <div className="flex justify-center w-full mt-4">
                         <a href="/forgot-password-user" className="text-primary">Forgot your password?</a>
@@ -290,7 +290,7 @@ const LoginForm = () => {
                         )}
                       />
                       <div className="flex justify-center w-full">
-                        <Button type="submit" style={{ width: '50%' }} className="bg-primary items-center">Submit</Button>
+                        <Button type="submit" style={{ width: '50%' }} className="bg-green-950 items-center">Submit</Button>
                       </div>
                       <div className="flex justify-center w-full mt-4">
                         <a href="/forgot-password-coordinator" className="text-primary">Forgot your password?</a>

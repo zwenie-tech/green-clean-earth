@@ -34,11 +34,11 @@ const NavigationBar = () => {
     { href: "/loginform", label: "Login" },
     { href: "/events", label: "Events & News" },
     { href: "/get-plant", label: "Get Plant" },
-    { href: "/group-list", label: "Group List" },
+    { href: "/group-list", label: "Scoreboard" },
     { href: "/participant-list", label: "Participant List" },
     { href: "/activityList", label: "Activity List" },
     { href: "/faq", label: "FAQ" },
-    { href: "/scoreboard", label: "Scoreboard" },
+    { href: "/scoreboard", label: "Milestone" },
     { href: "/about-us", label: "About Us" },
     { href: "/contact", label: "Contact" },
   ];
