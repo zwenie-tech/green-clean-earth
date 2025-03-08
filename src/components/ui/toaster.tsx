@@ -34,7 +34,7 @@ export function Toaster() {
 
           {/* "Ok" button at the bottom center */}
           <button
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="mt-4 px-4 py-2 bg-primary text-white rounded hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
             onClick={() => dismiss(id)} // Dismiss the toast by ID
           >
             OK
