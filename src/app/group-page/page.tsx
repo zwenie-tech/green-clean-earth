@@ -153,7 +153,7 @@ const ButtonDisplayFn: React.FC = () => {
       <div className="flex flex-row bg-light-gray justify-center items-center w-3/4 mx-auto">
         <button
           onClick={() => setActiveButton('upload')}
-          className={`w-1/2 text-center font-bold bg-light-gray py-3 text-[#3C6E1F] hover:bg-primary/15 border-b-2 ${
+          className={`w-1/2 text-center font-bold text-xl bg-light-gray py-3 text-[#3C6E1F] hover:bg-primary/15 border-b-2 ${
             activeButton === 'upload' ? 'border-[#3C6E1F]' : 'border-transparent'
           }`}
         >
@@ -161,7 +161,7 @@ const ButtonDisplayFn: React.FC = () => {
         </button>
         <button
           onClick={() => setActiveButton('activity')}
-          className={`w-1/2 text-center font-bold bg-light-gray hover:bg-primary/15 py-3 text-[#3C6E1F] border-b-2 ${
+          className={`w-1/2 text-center font-bold text-xl bg-light-gray hover:bg-primary/15 py-3 text-[#3C6E1F] border-b-2 ${
             activeButton === 'activity' ? 'border-[#3C6E1F]' : 'border-transparent'
           }`}
         >

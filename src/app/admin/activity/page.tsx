@@ -83,6 +83,10 @@ type GrpName = {
   gp_id: string;
   gp_name: string;
 }
+interface ActivityCategory {
+  activity_category: string;
+  activity_category_id: string;
+}
 const AdminGrid = () => {
   const router = useRouter();
   const [rowData, setRowData] = useState([]);
@@ -137,6 +141,8 @@ const AdminGrid = () => {
   const [selectedgrpName, setSelectedGrpName] = useState("");
   const [grpName, setGrpName] = useState<GrpName[]>([]);
   const [filterdata, setFilterData] = useState({});
+  const [actcategories, setActCategories] = useState<ActivityCategory[]>([]);
+  const [actcat, setActCat] = useState("");
 
   const handlePageChange = (newPage: number) => {
     if (newPage > 0 && newPage <= totalPages) {
@@ -628,6 +634,13 @@ const AdminGrid = () => {
   };
 
 
+  const handleFilterActCat= (e: any) => {
+
+
+    setActCat(e.target.value); // Update dropdown value
+    // fetchFilteredCntry(e.target.value);
+    setCurrentPage(1); // Reset to first page
+  };
 
   const handleFilterChangeCntry = (e: any) => {
 
@@ -943,7 +956,22 @@ const AdminGrid = () => {
   ]);
 
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(`${apiURL}/activity_category`);
+        const categoriesData = response.data.activity_category;
+        
+        console.log(categoriesData)
 
+        setActCategories(categoriesData);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
 
   useEffect(() => {
@@ -962,6 +990,7 @@ const AdminGrid = () => {
           groupTypeId: category.find((item) => item.group_type === grouptype)?.id,
           schoolTypeId: schoolType.find((item) => item.type_name === selectedschoolType)?.id,
           subCategoryId: subcategoryOptions.find((item) => item.gp_cat_name === selectedSubCategory)?.gp_cat_id,
+          activityCategoryId: actcategories.find((item) => item.activity_category === actcat)?.activity_category_id,
           sahodayaId: sahodaya.find((item) => item.sahodaya_name === selectSahodaya)?.sahodaya_id,
           eduDistrictId: eduDistrict.find((item) => item.edu_district === selecteduDistrict)?.edu_district_id,
           eduSubDistrictId: eduSubDistrict.find((item) => item.edu_sub_district_name === selecteduSubDistrict)?.edu_sub_district_id,
@@ -971,6 +1000,7 @@ const AdminGrid = () => {
           zoneId: missionZone.find((item) => item.zone_name === selectZone)?.zone_id,
           groupId: grpName.find((item) => item.gp_name === selectedgrpName)?.gp_id,
         }
+        
         setFilterData(payload);
         const response = await axios.post(
           `${apiURL}/admin/adminActivityList?page=${currentPage}&limit=${itemsPerPage}`,
@@ -1001,7 +1031,7 @@ const AdminGrid = () => {
       }
     }
     fetchFilterData();
-  }, [actid, category, chestno, corporation, countries, currentPage, districts, eduDistrict, eduSubDistrict, grouptype, grpName, icdsBlock, icdsProject, lsgd, missionChapter, missionZone, partname, sahodaya, schoolType, selectIcdsBlock, selectIcdsProject, selectMission, selectSahodaya, selectZone, selectedCntry, selectedCorp, selectedDistrict, selectedLsgd, selectedState, selectedSubCategory, selectedWard, selectedgrpName, selectedschoolType, selecteduDistrict, selecteduSubDistrict, states, subcategoryOptions, token, userid]);
+  }, [actcat, actcategories, actid, category, chestno, corporation, countries, currentPage, districts, eduDistrict, eduSubDistrict, grouptype, grpName, icdsBlock, icdsProject, lsgd, missionChapter, missionZone, partname, sahodaya, schoolType, selectIcdsBlock, selectIcdsProject, selectMission, selectSahodaya, selectZone, selectedCntry, selectedCorp, selectedDistrict, selectedLsgd, selectedState, selectedSubCategory, selectedWard, selectedgrpName, selectedschoolType, selecteduDistrict, selecteduSubDistrict, states, subcategoryOptions, token, userid]);
 
 
 
@@ -1126,6 +1156,25 @@ const AdminGrid = () => {
           </button>
         </div>
       </div> */}
+      {/* country section  */}
+      <div className="flex items-center mb-3 space-x-2">
+        <label htmlFor="groupFilter" className="text-sm font-medium">
+          Activity Category:
+        </label>
+        <select
+          id="groupFilter"
+          value={actcat}
+          onChange={handleFilterActCat}
+          className="border border-gray-300 rounded p-1"
+        >
+          <option value="">Choose Activity Category</option>
+          {actcategories.map((c) => (
+            <option key={c.activity_category_id} value={c.activity_category}>
+              {c.activity_category}
+            </option>
+          ))}
+        </select>
+      </div>
 
       {/* country section  */}
       <div className="flex items-center mb-3 space-x-2">

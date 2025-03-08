@@ -99,9 +99,15 @@ interface MissionZone {
   zone_name: string;
 }
 
+interface ActivityCategory {
+  activity_category: string;
+  activity_category_id: string;
+}
+
 
 const ActivityList = () => {
   const [categories, setCategories] = useState<{ [key: number]: string }>({});
+  const [actcategories, setActCategories] = useState<ActivityCategory[]>([]);
   const [activitylist, setActivityList] = useState<Acivitylist[]>([]);
   const [countries, setCountries] = useState<Country[]>([]);
   const [states, setStates] = useState<State[]>([]);
@@ -162,7 +168,8 @@ const ActivityList = () => {
   const formPersonal = useForm({
     defaultValues: {
       coname: '',
-      phoneNumber: ''
+      phoneNumber: '',
+      activity_category:''
     },
   });
   const formCountry = useForm({
@@ -299,7 +306,7 @@ const ActivityList = () => {
           }
           try {
             const result = await response.json();
-
+            console.log(result.activity)
             setTotalPages(Math.ceil(result.total / itemsPerPage));
             setTotalCount(result.total);
             setActivityList(result.activity);
@@ -319,6 +326,8 @@ const ActivityList = () => {
       const countryResponse = await fetch(`${apiURL}/country`);
       const countryData = await countryResponse.json();
       setCountries(countryData.country);
+
+      
 
     }
     fetchInitialData();
@@ -354,6 +363,9 @@ const ActivityList = () => {
           acc[category.activity_category_id] = category.activity_category;
           return acc;
         }, {});
+        console.log(categoriesData)
+
+        setActCategories(categoriesData);
         setCategories(categoriesMap);
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -686,6 +698,7 @@ const ActivityList = () => {
     treeNo !== "" ? dataWithIds.treeNumber = parseInt(treeNo) : '';
     data.coname !== "" ? dataWithIds.name = data.coname : '';
     data.phoneNumber !== "" ? dataWithIds.phoneNumber = data.phoneNumber : '';
+    data.activity_category !== "" ? dataWithIds.activityCategoryId = actcategories.find((item) => item.activity_category === data.activity_category)?.activity_category_id  : '';
 
 
     if (selectedGrpType !== "") {
@@ -718,6 +731,7 @@ const ActivityList = () => {
     selectIcdsProject ? dataWithIds.projectId = icdsProject.find((item) => item.project_name === selectIcdsProject)?.project_id || null : null;
     selectMission ? dataWithIds.chapterId = missionChapter.find((item) => item.chapter_name === selectMission)?.chapter_id || null : null;
     selectZone ? dataWithIds.zoneId = missionZone.find((item) => item.zone_name === selectZone)?.zone_id || null : null;
+    console.log(dataWithIds)
     setFilterData(dataWithIds);
 
 
@@ -762,6 +776,32 @@ const ActivityList = () => {
                     </FormItem>
                   )}
                 />
+                <FormField
+                    control={formPersonal.control}
+                    name="activity_category"
+                    render={({ field }) => (
+                      <FormItem className="flex-1 w-2/3 md:w-1/3">
+                        <Select onValueChange={(value) => {
+                          field.onChange(value);
+                          // setSelectedDistrict(value);
+                        }} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Choose activity category" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {actcategories.map((c) => (
+                              <SelectItem key={c.activity_category_id} value={c.activity_category}>
+                                {c.activity_category}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
                 <Button type="submit" className="w-full md:w-1/3 bg-primary mx-auto text-center">
                   Search
@@ -1437,7 +1477,6 @@ const ActivityList = () => {
             <thead>
               <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                 <th className="py-3 px-6 text-left w-16 bd-2 rounded-tl-lg">SL .No</th>
-                <th className="py-3 px-6 text-left">Activity Link</th>
                 <th className="py-3 px-6 text-left">Activity Id</th>
                 <th className="py-3 px-6 text-left">Participant Name</th>
                 <th className="py-3 px-6 text-left">User Id</th>
@@ -1462,14 +1501,13 @@ const ActivityList = () => {
                     <tr key={activity.personal_activity_id} className="border border-gray-200 hover:bg-gray-100">
 
                       <td className="py-3 px-6 text-left">{startIndex + index + 1}</td>
-                      <td className="py-3 px-6 text-left"><a href={activity.activity_social_media_link}>{activity.activity_social_media_link}</a></td>
                       <td className="py-3 px-6 text-left">{activity.personal_activity_id}</td>
                       <td className="py-3 px-6 text-left">{activity.participant_name}</td>
                       <td className="py-3 px-6 text-left"><a href={`/user-page?u=${activity.participant_name}&id=${activity.login_id}`}>{activity.login_id}</a></td>
                       <td className="py-3 px-6 text-left">{activity.activity_description}</td>
                       <td className="py-3 px-6 text-left">{activity.gp_name}</td>
                       <td className="py-3 px-6 text-left">{activity.activity_on.split("T")[0].split('-').reverse().join('-')}</td>
-                      <td className="py-3 px-6 text-left">{activity.activity_title}{activity.activity_description}</td>
+                      <td className="py-3 px-6 text-left"><a href={activity.activity_social_media_link}>{activity.activity_title}{activity.activity_description}</a></td>
                       <td className="py-3 px-6 text-left">{categories[activity.activity_category_id]}</td>
                       <td className="py-3 px-6 text-left">{activity.activity_views} Views, {activity.activity_likes} Likes</td>
                       <td className="py-3 px-6 text-left">{activity.earnings}</td>

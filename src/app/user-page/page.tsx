@@ -140,14 +140,14 @@ const ButtonDisplayFn = () => {
       <div className="flex flex-row bg-light-gray justify-center items-center w-3/4 mx-auto">
         <button
           onClick={showFirstMessage}
-          className={`w-1/2 text-center font-bold bg-light-gray py-3 text-[#3C6E1F] hover:bg-primary/15 border-b-2 ${activeButton === 'upload' ? 'border-[#3C6E1F]' : 'border-transparent'
+          className={`w-1/2 text-center font-bold text-xl bg-light-gray py-3 text-[#3C6E1F] hover:bg-primary/15 border-b-2 ${activeButton === 'upload' ? 'border-[#3C6E1F]' : 'border-transparent'
             }`}
         >
           Upload
         </button>
         <button
           onClick={showSecondMessage}
-          className={`w-1/2 text-center font-bold bg-light-gray hover:bg-primary/15 py-3 text-[#3C6E1F] border-b-2 ${activeButton === 'activity' ? 'border-[#3C6E1F]' : 'border-transparent'
+          className={`w-1/2 text-center font-bold text-xl bg-light-gray hover:bg-primary/15 py-3 text-[#3C6E1F] border-b-2 ${activeButton === 'activity' ? 'border-[#3C6E1F]' : 'border-transparent'
             }`}
         >
           Activity

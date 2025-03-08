@@ -18,6 +18,7 @@ interface PlantUpload {
   up_file_3_time: string | null;
   up_file_4: string | null;
   up_file_4_time: string | null;
+  is_challenged: number | null;
 }
 
 const PlantuploadContent = () => {
@@ -32,28 +33,28 @@ const PlantuploadContent = () => {
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 10;
 
- 
-    useEffect(() => {
-      async function fetchfirstData(){
-        const responseall = await fetch(`${apiURL}/coordinator/our-uploads?limit=100000000000`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ groupid: gid })
-        }); 
-        const dataall = await responseall.json();
-        setTotalPages(Math.ceil(dataall.data.length / itemsPerPage));
-      }
-      fetchfirstData();
-    }, [token,gid]);
 
-    const handlePageChange = (newPage: number) => {
-      if (newPage > 0 && newPage <= totalPages) {
-        setCurrentPage(newPage);
-      }
+  useEffect(() => {
+    async function fetchfirstData() {
+      const responseall = await fetch(`${apiURL}/coordinator/our-uploads?limit=100000000000`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ groupid: gid })
+      });
+      const dataall = await responseall.json();
+      setTotalPages(Math.ceil(dataall.data.length / itemsPerPage));
     }
+    fetchfirstData();
+  }, [token, gid]);
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  }
   if (!token) {
     // Redirect to the login page
     router.push("/login");
@@ -85,7 +86,7 @@ const PlantuploadContent = () => {
     };
 
     fetchUploads();
-  }, [gid,token,currentPage]);
+  }, [gid, token, currentPage]);
 
   return (
     <>
@@ -97,9 +98,9 @@ const PlantuploadContent = () => {
         <div className='ml-auto'>
           <button
             className='rounded-xl md:mr-5 text-[#FFFFFF]  p-2 mr-4'
-            // style={{ boxShadow: '1px 4px 5px 3px #00000040' }}
+          // style={{ boxShadow: '1px 4px 5px 3px #00000040' }}
           >
-            
+
           </button>
         </div>
       </div>
@@ -140,35 +141,29 @@ const PlantuploadContent = () => {
                     <td className="py-3 px-6 text-left">{upload.up_planter}</td>
                     <td className="py-3 px-6 text-left">{upload.up_name}</td>
 
-                    <td className="py-3 px-6 text-left">
-                      {upload.up_file ? (
-                        <img src={`${imageURL}${upload.up_file}`} alt="Upload" style={{ height: '100px' }} />
-                      ) : (
-                        "No Image"
-                      )}
-                    </td>
-                    <td className="py-3 px-6 text-left">
-                      {upload.up_file_2 ? (
-                        <img src={`${imageURL}${upload.up_file_2}`} alt="Upload" style={{ height: '100px' }} />
-                      ) : (
-                        "No Image"
-                      )}
-                    </td>
-                    <td className="py-3 px-6 text-left">
-                      {upload.up_file_3 ? (
-                        <img src={`${imageURL}${upload.up_file_3}`} alt="Upload" style={{ height: '100px' }} />
-                      ) : (
-                        "No Image"
-                      )}
-                    </td>
-                    <td className="py-3 px-6 text-left">
-                      {upload.up_file_4 ? (
-                        <img src={`${imageURL}${upload.up_file_4}`} alt="Upload" style={{ height: '100px' }} />
-                      ) : (
-                        "No Image"
-                      )}
-                    </td>
+                    {[upload.up_file, upload.up_file_2, upload.up_file_3, upload.up_file_4].map((file, index) => (
+                      <td key={index} className="py-3 px-6 text-left">
+                        {file ? (
+                          <div className="relative w-[100px] h-[100px]">
+                            {/* Uploaded Image */}
+                            <img src={`${imageURL}${file}`} alt="Upload" className="w-full h-full object-cover" />
+
+                            {/* Challenge Badge (Overlay) */}
+                            {upload.is_challenged == 1 && (
+                              <img
+                                className="absolute top-0 left-0 w-full h-full object-contain z-10"
+                                src="/images/chellenge.png"
+                                alt="Challenged"
+                              />
+                            )}
+                          </div>
+                        ) : (
+                          "No Image"
+                        )}
+                      </td>
+                    ))}
                   </tr>
+
                 ))
               )}
             </tbody>
@@ -177,10 +172,10 @@ const PlantuploadContent = () => {
       </div>
       <div className="flex justify-center items-center space-x-2 my-4">
         <button
-        className={currentPage === 1 ? 
-          "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
-        : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-        }
+          className={currentPage === 1 ?
+            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
+            : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+          }
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
         >
@@ -188,12 +183,12 @@ const PlantuploadContent = () => {
         </button>
         <span className="text-xl">{currentPage}</span>
         <button
-          className={currentPage === totalPages ? 
-            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
-          : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+          className={currentPage === totalPages ?
+            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
+            : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
           }
           onClick={() => {
-            handlePageChange(currentPage + 1) 
+            handlePageChange(currentPage + 1)
           }}
           disabled={currentPage === totalPages}
         >
