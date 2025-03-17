@@ -47,6 +47,8 @@ const ButtonDisplayFn: React.FC = () => {
   const searchParams = useSearchParams();
   const grpname = searchParams.get("gname");
   const grpid = searchParams.get("gid");
+  const groupType = searchParams.get("groupType");
+  const cordinatorName = searchParams.get("cordinator");
   const grpuc = searchParams.get("uc");
   const [currentPageAct, setCurrentPageAct] = useState(1);
   const [currentPageUp, setCurrentPageUp] = useState(1);
@@ -61,8 +63,6 @@ const ButtonDisplayFn: React.FC = () => {
     router.push(`/user-page?u=${encodeURIComponent(participantName)}&id=${loginId}`);
   };
  
-    
-
     const handlePageChangeAct = (newPage: number) => {
       if (newPage > 0 && newPage <= totalPagesAct) {
      
@@ -139,7 +139,14 @@ const ButtonDisplayFn: React.FC = () => {
           <p className="text-right font-bold w-1/2">Group Id:</p>
           <p className="w-1/2 font-bold">{grpid}</p>
         </div>
-        
+        <div className="w-full flex justify-between items-center gap-3 ">
+          <p className="text-right font-bold w-1/2">Coordinator Name:</p>
+          <p className="w-1/2 font-bold">{cordinatorName}</p>
+        </div>
+        <div className="w-full flex justify-between items-center gap-3 ">
+          <p className="text-right font-bold w-1/2">Group Type:</p>
+          <p className="w-1/2 font-bold">{groupType}</p>
+        </div>
         <div className="w-full flex justify-between items-center gap-3 ">
           <p className="text-right font-bold w-1/2">Upload count:</p>
           <p className="w-1/2 font-bold">{upcount}</p>
