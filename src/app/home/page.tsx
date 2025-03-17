@@ -274,9 +274,9 @@ const cards = [
           </div>
         </div>
       </div>
-     <div className="container">
+     <div className="container mx-auto p-0">
        {/* container 1 */}
-        <div onClick={toggleOpen1} className={`p-4 my-4 mt-6 mx-4 shadow-md rounded-lg ${isOpen1 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
+        <div onClick={toggleOpen1} className={`p-4 my-4 mt-6 shadow-md rounded-lg ${isOpen1 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold " style={{color:'#3C6E1F'}}>ഒരുകോടി വൃക്ഷത്തൈ സെൽഫികളുമായി കേരളം UNEP യിലേക്ക്...</h2>
           <button className="text-xl">
@@ -293,7 +293,7 @@ const cards = [
         )}
            </div>
            {/* container 2 */}
-          <div onClick={toggleOpen2} className={`p-4 my-4 mx-4 shadow-md rounded-lg ${isOpen2 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
+          <div onClick={toggleOpen2} className={`p-4 my-4 shadow-md rounded-lg ${isOpen2 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold " style={{color:'#3C6E1F'}}>ആയിരം കോടി രൂപയുടെ സുസ്ഥിര വികസിത പ്രൊജക്റ്റ്  തയ്യാറാക്കൽ</h2>
           <button className="text-xl">
@@ -310,7 +310,7 @@ const cards = [
         )}
            </div>
            {/* container 3 */}
-           <div onClick={toggleOpen3} className={`p-4 my-4 mx-4 shadow-md rounded-lg ${isOpen3 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
+           <div onClick={toggleOpen3} className={`p-4 my-4 shadow-md rounded-lg ${isOpen3 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold " style={{color:'#3C6E1F'}}>ഐക്യരാഷ്ട്രസഭ 17 സുസ്ഥിര വികസനം ലക്ഷ്യങ്ങൾ (Sustainable Development Goals)</h2>
           <button className="text-xl">
@@ -329,7 +329,7 @@ const cards = [
         )}
            </div>
            {/* container 4 */}
-           <div onClick={toggleOpen4} className={`p-4  my-4 mx-4  shadow-md rounded-lg ${isOpen4 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
+           <div onClick={toggleOpen4} className={`p-4 my-4 shadow-md rounded-lg ${isOpen4 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold " style={{color:'#3C6E1F'}}>ഹരിത മത്സരങ്ങൾ</h2>
           <button className="text-xl">
@@ -346,7 +346,7 @@ const cards = [
         )}
            </div>
            {/* container 5 */}
-           <div onClick={toggleOpen5} className={`p-4  my-4 mx-4 shadow-md rounded-lg ${isOpen5 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
+           <div onClick={toggleOpen5} className={`p-4 my-4 shadow-md rounded-lg ${isOpen5 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold" style={{color:'#3C6E1F'}}>ഗ്രീനിങ് കോഴിക്കോട് - 2023-24</h2>
           <button className="text-xl">
@@ -363,7 +363,7 @@ const cards = [
         )}
            </div>
            {/* container 6 */}
-           <div onClick={toggleOpen6} className={`p-4  my-4 mx-4  shadow-md rounded-lg ${isOpen6 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
+           <div onClick={toggleOpen6} className={`p-4  my-4 shadow-md rounded-lg ${isOpen6 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold " style={{color:'#3C6E1F'}}>ഗ്രീൻ ക്ലീൻ കേരള മിഷൻ</h2>
           <button className="text-xl">
@@ -381,7 +381,7 @@ const cards = [
            </div>
        
            {/* container 7 */}
-           <div onClick={toggleOpen7} className={`p-4  my-4 mx-4  shadow-md rounded-lg ${isOpen7 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
+           <div onClick={toggleOpen7} className={`p-4  my-4 shadow-md rounded-lg ${isOpen7 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold " style={{color:'#3C6E1F'}}>നാഴികക്കല്ലുകൾ -ഗ്രീൻ ക്ലീൻ കേരള -വൃക്ഷത്തൈ പരിപാലന മത്സരം</h2>
           <button className="text-xl">
@@ -401,7 +401,7 @@ const cards = [
            </div>
      </div>
     {/*textSlide */}
-  <div className="relative w-full">
+  <div className="container mx-auto p-0 relative w-full">
     <div className="absolute top-0 left-0 right-0 z-20 flex justify-between items-center py-4 h-full pointer-events-none">
       <button
         onClick={handlePrevClick}
