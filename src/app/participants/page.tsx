@@ -1606,7 +1606,7 @@ const ParticipateList = () => {
                     <td className="py-3 px-6 text-left">{p.up_id}</td>
                     <td className="py-3 px-6 text-left">{p.up_planter}</td>
                     <td className="py-3 px-6 text-left"><a href={`/user-page?u=${p.up_name}&id=${p.up_reg_id}`}>{p.up_name}/{p.up_reg_id}</a></td>
-                    <td className="py-3 px-6 text-left"><a href={`/group-page?gname=${p.gp_name}&gid=${p.gp_id}&uc=${p.total_upload}`}>{p.gp_name}/{p.total_upload}</a></td>
+                    <td className="py-3 px-6 text-left"><a href={`/group-page?gname=${p.gp_name}&gid=${p.gp_id}&uc=${p.total_upload}&cordinator=${group.co_ord_contact}&groupType=${group.group_type}`}>{p.gp_name}/{p.total_upload}</a></td>
                     <td className="py-3 px-6 text-left">{p.up_tree_name}</td>
                     <td className="py-3 px-6 text-left">
                       {p.up_file ? (
