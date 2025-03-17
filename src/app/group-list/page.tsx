@@ -1466,19 +1466,37 @@ const GroupList = () => {
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white border-gray-200 rounded-t-lg">
             <thead>
-              <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                <th className="py-3 px-6 text-left w-16 rounded-tl-lg">Sl. No</th>
-                <th className="py-3 px-6 text-left">Group Id</th>
-                <th className="py-3 px-6 text-left">Group Name {orderdir1 === "DESC" ? <span className={orderfield === "gp_name" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("ASC", "gp_name")}><ArrowUp /></span>
-                  : <span className={orderfield === "gp_name" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("DESC", "gp_name")}><ArrowDown /></span>}</th>
-                <th className="py-3 px-6 text-left">Cordinator Name</th>
-                <th className="py-3 px-6 text-left">Upload Count {orderdir2 === "DESC" ? <span className={orderfield === "upload_count" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("ASC", "upload_count")}><ArrowUp /></span>
-                  : <span className={orderfield === "upload_count" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("DESC", "upload_count")}><ArrowDown /></span>}</th>
-                <th className="py-3 px-6 text-left">Activity Count {orderdir3 === "DESC" ? <span className={orderfield === "activity_count" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("ASC", "activity_count")}><ArrowUp /></span>
-                  : <span className={orderfield === "activity_count" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("DESC", "activity_count")}><ArrowDown /></span>}</th>
-                <th className="py-3 px-6 text-left">District</th>
-                <th className="py-3 px-6 text-left">State</th>
-                <th className="py-3 px-6 text-left">Country</th>
+              <tr className="bg-gray-200 text-gray-600 uppercase text-sm">
+                <th className="py-3 px-2 text-left w-16 rounded-tl-lg">Sl. No</th>
+                <th className="py-3 px-2 text-left">Group Id</th>
+                <th className="py-3 px-2 text-left"><span className="">Group Name</span> {orderdir1 === "DESC" ? <span className={orderfield === "gp_name" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("ASC", "gp_name")}><ArrowUp className='inline-block' /></span>
+                  : <span className={orderfield === "gp_name" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("DESC", "gp_name")}><ArrowDown className='inline-block' /></span>}</th>
+                
+                <th className="py-3 px-2 text-left">Cordinator Name</th>              
+                <th className="py-3 px-2 text-left whitespace-nowrap">
+                  <span className="inline-flex items-center gap-1">
+                    Upload Count
+                    {orderdir2 === "DESC" ? 
+                      <span className={orderfield === "upload_count" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("ASC", "upload_count")}><ArrowUp /></span>
+                    :
+                      <span className={orderfield === "upload_count" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("DESC", "upload_count")}><ArrowDown /></span>
+                    }
+                  </span>
+                </th>
+
+                <th className="py-3 px-2 text-left whitespace-nowrap">
+                  <span className="inline-flex items-center gap-1">
+                    Activity Count
+                    {orderdir3 === "DESC" ?
+                      <span className={orderfield === "activity_count" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("ASC", "activity_count")}><ArrowUp /></span>
+                    : 
+                      <span className={orderfield === "activity_count" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("DESC", "activity_count")}><ArrowDown /></span>
+                    }
+                  </span>
+                </th>
+                <th className="py-3 px-2 text-left">District</th>
+                <th className="py-3 px-2 text-left">State</th>
+                <th className="py-3 px-2 text-left">Country</th>
               </tr>
             </thead>
             <tbody>

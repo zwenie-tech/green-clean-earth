@@ -1481,18 +1481,88 @@ const ActivityList = () => {
                 <th className="py-3 px-6 text-left">Participant Name</th>
                 <th className="py-3 px-6 text-left">User Id</th>
                 <th className="py-3 px-6 text-left">Chest Number</th>
-                <th className="py-3 px-6 text-left ">Group Name {orderdir1 === "DESC" ? <span onClick={() => sort("ASC", "gp_name")} className={orderfield === "gp_name" ? 'text-green-600'
-                  : 'text-gray-400'}><ArrowUp /></span> : <span className={orderfield === "gp_name" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("DESC", "gp_name")}><ArrowDown /></span>}</th>
-                <th className="py-3 px-6 text-left">Upload Date {orderdir2 === "DESC" ? <span className={orderfield === "activity_on" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("ASC", "activity_on")}><ArrowUp /></span>
-                  : <span className={orderfield === "activity_on" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("DESC", "activity_on")}><ArrowDown /></span>}</th>
+                <th className="py-3 px-6 text-left flex items-center gap-2">
+                  Group Name
+                  {orderdir1 === "DESC" ? (
+                    <span
+                      onClick={() => sort("ASC", "gp_name")}
+                      className={orderfield === "gp_name" ? "text-green-600" : "text-gray-400"}
+                    >
+                      <ArrowUp />
+                    </span>
+                  ) : (
+                    <span
+                      onClick={() => sort("DESC", "gp_name")}
+                      className={orderfield === "gp_name" ? "text-green-600" : "text-gray-400"}
+                    >
+                      <ArrowDown />
+                    </span>
+                  )}
+                </th>
+                <th className="py-3 px-6 text-left">
+                  <div className="flex items-center gap-2">
+                    Upload Date
+                    {orderdir2 === "DESC" ? (
+                      <span
+                        className={orderfield === "activity_on" ? "text-green-600" : "text-gray-400"}
+                        onClick={() => sort("ASC", "activity_on")}
+                      >
+                        <ArrowUp />
+                      </span>
+                    ) : (
+                      <span
+                        className={orderfield === "activity_on" ? "text-green-600" : "text-gray-400"}
+                        onClick={() => sort("DESC", "activity_on")}
+                      >
+                        <ArrowDown />
+                      </span>
+                    )}
+                  </div>
+                </th>
                 <th className="py-3 px-6 text-left">Name of Art - Brief Description</th>
                 <th className="py-3 px-6 text-left">Category</th>
                 <th className="py-3 px-6 text-left">Views and Likes</th>
-                <th className="py-3 px-6 text-left">Earnings {orderdir3 === "DESC" ? <span className={orderfield === "earnings" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("ASC", "earnings")}><ArrowUp /></span>
-                  : <span className={orderfield === "earnings" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("DESC", "earnings")}><ArrowDown /></span>}</th>
-                <th className="py-3 px-6 text-left rounded-tr-lg">Value {orderdir4 === "DESC" ? <span className={orderfield === "activity_value" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("ASC", "activity_value")}><ArrowUp /></span>
-                  : <span className={orderfield === "activity_value" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("DESC", "activity_value")}><ArrowDown /></span>}</th>
-              </tr>
+                <th className="py-3 px-6 text-left">
+                  <div className="flex items-center gap-2">
+                    Earnings
+                    {orderdir3 === "DESC" ? (
+                      <span
+                        className={orderfield === "earnings" ? "text-green-600" : "text-gray-400"}
+                        onClick={() => sort("ASC", "earnings")}
+                      >
+                        <ArrowUp />
+                      </span>
+                    ) : (
+                      <span
+                        className={orderfield === "earnings" ? "text-green-600" : "text-gray-400"}
+                        onClick={() => sort("DESC", "earnings")}
+                      >
+                        <ArrowDown />
+                      </span>
+                    )}
+                  </div>
+                </th>
+                <th className="py-3 px-6 text-left rounded-tr-lg">
+                  <div className="flex items-center gap-2">
+                    Value
+                    {orderdir4 === "DESC" ? (
+                      <span
+                        className={orderfield === "activity_value" ? "text-green-600" : "text-gray-400"}
+                        onClick={() => sort("ASC", "activity_value")}
+                      >
+                        <ArrowUp />
+                      </span>
+                    ) : (
+                      <span
+                        className={orderfield === "activity_value" ? "text-green-600" : "text-gray-400"}
+                        onClick={() => sort("DESC", "activity_value")}
+                      >
+                        <ArrowDown />
+                      </span>
+                    )}
+                  </div>
+                </th>
+                </tr>
             </thead>
             <tbody>
               {activitylist && activitylist.length > 0 ? (
