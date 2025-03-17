@@ -31,7 +31,9 @@ interface Participant {
   dis_name: string,
   cop_name: string,
   lsg_name: string,
-  gp_id: number
+  gp_id: number,
+  group_type:string;
+  co_ord_name: string;
 }
 
 type Country = {
@@ -1606,7 +1608,7 @@ const ParticipateList = () => {
                     <td className="py-3 px-6 text-left">{p.up_id}</td>
                     <td className="py-3 px-6 text-left">{p.up_planter}</td>
                     <td className="py-3 px-6 text-left"><a href={`/user-page?u=${p.up_name}&id=${p.up_reg_id}`}>{p.up_name}/{p.up_reg_id}</a></td>
-                    <td className="py-3 px-6 text-left"><a href={`/group-page?gname=${p.gp_name}&gid=${p.gp_id}&uc=${p.total_upload}&cordinator=${group.co_ord_contact}&groupType=${group.group_type}`}>{p.gp_name}/{p.total_upload}</a></td>
+                    <td className="py-3 px-6 text-left"><a href={`/group-page?gname=${p.gp_name}&gid=${p.gp_id}&uc=${p.total_upload}&cordinator=${p.co_ord_name}&groupType=${p.group_type}`}>{p.gp_name}/{p.total_upload}</a></td>
                     <td className="py-3 px-6 text-left">{p.up_tree_name}</td>
                     <td className="py-3 px-6 text-left">
                       {p.up_file ? (

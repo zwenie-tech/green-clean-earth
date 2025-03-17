@@ -1486,7 +1486,7 @@ const GroupList = () => {
                 <tr key={group.gp_id} className="border border-gray-200 hover:bg-gray-100">
                   <td className="py-3 px-6 text-left">{startIndex + index + 1}</td>
                   <td className="py-3 px-6 text-left">{group.gp_id}</td>
-                  <a href={`/group-page?gname=${group.gp_name}&gid=${group.gp_id}&uc=${group.upload_count}&cordinator=${group.co_ord_contact}&groupType=${group.group_type}`}><td className="py-3 px-6 text-left">{group.gp_name}</td></a>
+                  <a href={`/group-page?gname=${group.gp_name}&gid=${group.gp_id}&uc=${group.upload_count}&cordinator=${group.co_ord_name}&groupType=${group.group_type}`}><td className="py-3 px-6 text-left">{group.gp_name}</td></a>
                   <td className="py-3 px-6 text-left">{group.co_ord_name}</td>
                   <td className="py-3 px-6 text-left">{group.upload_count}</td>
                   <td className="py-3 px-6 text-left">{group.activity_count}</td>
