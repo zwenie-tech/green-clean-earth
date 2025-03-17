@@ -23,6 +23,9 @@ interface Group {
   upload_count: number;
   activity_count: number;
   co_ord_name: string;
+  group_type:string;
+  st_name:string;
+  cntry_name:string
 }
 
 interface ApiResponse {
@@ -1473,7 +1476,9 @@ const GroupList = () => {
                   : <span className={orderfield === "upload_count" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("DESC", "upload_count")}><ArrowDown /></span>}</th>
                 <th className="py-3 px-6 text-left">Activity Count {orderdir3 === "DESC" ? <span className={orderfield === "activity_count" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("ASC", "activity_count")}><ArrowUp /></span>
                   : <span className={orderfield === "activity_count" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("DESC", "activity_count")}><ArrowDown /></span>}</th>
-                <th className="py-3 px-6 text-left rounded-tr-lg">District</th>
+                <th className="py-3 px-6 text-left">District</th>
+                <th className="py-3 px-6 text-left">State</th>
+                <th className="py-3 px-6 text-left">Country</th>
               </tr>
             </thead>
             <tbody>
@@ -1481,11 +1486,13 @@ const GroupList = () => {
                 <tr key={group.gp_id} className="border border-gray-200 hover:bg-gray-100">
                   <td className="py-3 px-6 text-left">{startIndex + index + 1}</td>
                   <td className="py-3 px-6 text-left">{group.gp_id}</td>
-                  <a href={`/group-page?gname=${group.gp_name}&gid=${group.gp_id}&uc=${group.upload_count}`}><td className="py-3 px-6 text-left">{group.gp_name}</td></a>
+                  <a href={`/group-page?gname=${group.gp_name}&gid=${group.gp_id}&uc=${group.upload_count}&cordinator=${group.co_ord_contact}&groupType=${group.group_type}`}><td className="py-3 px-6 text-left">{group.gp_name}</td></a>
                   <td className="py-3 px-6 text-left">{group.co_ord_name}</td>
                   <td className="py-3 px-6 text-left">{group.upload_count}</td>
                   <td className="py-3 px-6 text-left">{group.activity_count}</td>
                   <td className="py-3 px-6 text-left">{group.dis_name}</td>
+                  <td className="py-3 px-6 text-left">{group.st_name}</td>
+                  <td className="py-3 px-6 text-left">{group.cntry_name}</td>
                 </tr>
               ))}
               {!groups || groups.length <= 0 && (
