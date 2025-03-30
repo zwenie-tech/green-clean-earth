@@ -19,7 +19,7 @@ export function Toaster() {
         <Toast
           key={id}
           {...props}
-          className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-900 shadow-lg rounded-lg p-4 w-[600px] h-[200] flex flex-col items-center justify-center"
+          className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-900 shadow-lg rounded-lg p-4 w-[400px] h-[200] flex flex-col items-center justify-center"
         >
           <div className="text-center">
             {title && <ToastTitle className="font-bold text-lg">{title}</ToastTitle>}

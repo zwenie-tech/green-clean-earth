@@ -129,7 +129,7 @@ function UserDashHomeFn() {
               </Link>
 
               {/* Lucky Draw */}
-              <Link
+              {/* <Link
                 className="flex flex-col justify-start items-start gap-3 text-xl border-2 border-dashed border-primary rounded-3xl py-6 md:py-10 bg-white hover:bg-primary/10 transition-all hover:scale-105"
                 href={"/user-dash-home/narukkeduppu"}
               >
@@ -140,7 +140,7 @@ function UserDashHomeFn() {
                 <div>
                   <p className="px-6 py-2 font-normal text-base">Lucky Draw</p>
                 </div>
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>
