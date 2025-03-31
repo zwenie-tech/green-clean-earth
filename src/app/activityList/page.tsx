@@ -1641,7 +1641,7 @@ const ActivityList = () => {
 
                       <td className="py-3 px-6 text-left">{startIndex + index + 1}</td>
                       <td className="py-3 px-6 text-left"><a href={`/group-page?gname=${activity.gp_name}&gid=${activity.gp_id}&uc=${0}&cordinator=${activity.co_ord_name}&groupType=${activity.group_type}`}>{activity.gp_name}</a></td>
-                      <td className="py-3 px-6 text-left"><a href={`/user-page?u=${activity.participant_name}&id=${activity.login_id}`}>{activity.us_name}</a></td>
+                      <td className="py-3 px-6 text-left"><a href={`/user-page?u=${activity.us_name}&id=${activity.login_id}`}>{activity.us_name}</a></td>
                       <td className="py-3 px-6 text-left">{activity.activity_description}</td>
                       <td className="py-3 px-6 text-left">{activity.activity_category}</td>
                       {/* <td className="py-3 px-6 text-left">{activity.activity_on.split("T")[0].split('-').reverse().join('-')}</td> */}
