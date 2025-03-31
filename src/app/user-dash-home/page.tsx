@@ -19,6 +19,7 @@ import {
   UserRoundCog,
 } from "lucide-react";
 import Link from "next/link";
+import { Link as LinkIcon } from "lucide-react"; // Rename it to avoid conflicts with <a>
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { DialogUploadPlant } from "@/app/user-dash-home/dialog-upload-plants";
@@ -30,6 +31,10 @@ function UserDashHomeFn() {
   const token = Cookies.get("token");
   const username = Cookies.get('name');
   const userId = Cookies.get('userId');
+  const gpId = Cookies.get('groupId');
+  const groupName = Cookies.get('groupName');
+  const cordName = Cookies.get('cordinatorName');
+  const groupType = Cookies.get('groupType');
   const [clientUsername, setClientUsername] = useState<string | null>(null);
   useEffect(() => {
     if (!token) {
@@ -54,6 +59,16 @@ function UserDashHomeFn() {
               <>
                 <h1 className='text-3xl mt-2 font-bold text-[#3C6E1F]'>{clientUsername}</h1>
                 <h1 className='text-3xl mt-2 font-bold text-[#3C6E1F]'>User Id: {userId}</h1>
+                <h3 className="text-xl mt-2 font-bold text-[#3C6E1F] flex justify-center items-center gap-1 text-center">
+                  Group Name: 
+                  <a 
+                    href={`/group-page?gname=${groupName}&gid=${gpId}&uc=${0}&cordinator=${cordName}&groupType=${groupType}`} 
+                    className="text-[#3C6E1F] hover:underline flex items-center gap-1"
+                  >
+                    {groupName}
+                    <LinkIcon size={18} className="text-[#3C6E1F]" />
+                  </a>
+                </h3>
               </>
             ) : (
               <div>Loading...</div> // Placeholder while username is being loaded

@@ -75,6 +75,10 @@ const LoginForm = () => {
       const token = result.data.token;
       const refcode = result.data.refferalCode;
       const uname = result.data.userName;
+      const groupId = result.data.groupId;
+      const groupName = result.data.groupName;
+      const cordinatorName = result.data.cordinatorName;
+      const groupType = result.data.groupType;
       
 
       
@@ -87,7 +91,10 @@ const LoginForm = () => {
         Cookies.set("login_type", "user", { expires: 1 });
         Cookies.set("user_refcode", refcode, { expires: 1 });
         Cookies.set("name", uname, { expires: 1 });
-
+        Cookies.set("groupId", groupId, { expires: 1 });
+        Cookies.set("groupName", groupName, { expires: 1 });
+        Cookies.set("cordinatorName", cordinatorName, { expires: 1 });
+        Cookies.set("groupType", groupType, { expires: 1 });
         Cookies.set("userId", id, { expires: 1 });
         
         router.replace("/user-dash-home?id=" + id);
