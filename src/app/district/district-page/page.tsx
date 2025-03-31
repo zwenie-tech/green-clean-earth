@@ -4,6 +4,7 @@ import Footer from '@/components/footer';
 import React, { useState, useEffect, Suspense } from 'react';
 import { apiURL, imageURL } from '../../requestsapi/request';
 import { useSearchParams } from 'next/navigation';
+import { LinkIcon, ExternalLink } from 'lucide-react';
 
 // Define TypeScript interfaces for the API responses
 interface DistrictActivity {
@@ -268,12 +269,36 @@ const ButtonDisplayFn: React.FC = () => {
                   {activities.length > 0 ? activities.map((activity, index) => (
                     <tr key={index} className="border border-gray-200 hover:bg-gray-100">
                       <td className="py-3 px-6 text-left">{index + 1}</td>
-                      <td className="py-3 px-6 text-left"><a href={`/group-page?gname=${activity.gp_name}&gid=${activity.gp_id}&uc=${0}&cordinator=${activity.co_ord_name}&groupType=${activity.group_type}`}>{activity.gp_name}</a></td>
-                      <td className="py-3 px-6 text-left"><a href={`/user-page?u=${activity.us_name}&id=${activity.login_id}`}>{activity.us_name}</a></td>
-                      <td className="py-3 px-6 text-left">{activity.activity_description}</td>
+                      <td className="py-3 px-6 text-left">
+                        <a 
+                          href={`/group-page?gname=${activity.gp_name}&gid=${activity.gp_id}&uc=${0}&cordinator=${activity.co_ord_name}&groupType=${activity.group_type}`} 
+                          className="text-black hover:underline flex items-center gap-1"
+                        >
+                          {activity.gp_name}
+                          <LinkIcon size={16} className="text-blue-600" />
+                        </a>
+                      </td>
+                      <td className="py-3 px-6 text-left">
+                        <a 
+                          href={`/user-page?u=${activity.us_name}&id=${activity.login_id}`} 
+                          className="text-black hover:underline flex items-center gap-1"
+                        >
+                          {activity.us_name}
+                          <LinkIcon size={16} className="text-blue-600" />
+                        </a>
+                      </td>                      <td className="py-3 px-6 text-left">{activity.activity_description}</td>
                       <td className="py-3 px-6 text-left">{activity.activity_category}</td>
-                      <td className="py-3 px-6 text-left"><a href={activity.activity_social_media_link}>{activity.activity_title}</a></td>
-                      <td className="py-3 px-6 text-left">{activity.personal_activity_id}</td>
+                      <td className="py-3 px-6 text-left">
+                        <a 
+                          href={activity.activity_social_media_link} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="text-black hover:underline flex items-center gap-1"
+                        >
+                          {activity.activity_title}
+                          <ExternalLink size={16} className="text-blue-600" />
+                        </a>
+                      </td>                      <td className="py-3 px-6 text-left">{activity.personal_activity_id}</td>
                       <td className="py-3 px-6 text-left">{activity.login_id || "N/A"} </td>
                       <td className="py-3 px-6 text-left">{activity.earnings || "N/A"} </td>
                       <td className="py-3 px-6 text-left">{activity.activity_views} Views, {activity.activity_likes} Likes</td>
