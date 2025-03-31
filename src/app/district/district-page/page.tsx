@@ -15,6 +15,14 @@ interface DistrictActivity {
   activity_likes: string;
   activity_views: string;
   earnings: string | null;
+  login_id: number;
+  group_type: string;
+  gp_id: number;
+  gp_name:string;
+  co_ord_name:string;
+  activity_description: string;
+  activity_title: string;
+  personal_activity_id: string;
 }
 
 interface ApiResponse {
@@ -245,24 +253,30 @@ const ButtonDisplayFn: React.FC = () => {
                 <thead>
                   <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                     <th className="py-3 px-6 text-left w-16 bd-2 rounded-tl-lg">Sl. No</th>
-                    <th className="py-3 px-6 text-left">View/ Like/ Comment/ Share</th>
+                    <th className="py-3 px-6 text-left">Group Name</th>
+                    <th className="py-3 px-6 text-left">User Name</th>
+                    <th className="py-3 px-6 text-left">Chest Number</th>
                     <th className="py-3 px-6 text-left">Category</th>
-                    <th className="py-3 px-6 text-left">Name & address of participant</th>
-                    <th className="py-3 px-6 text-left">Name of art brief description</th>
-                    <th className="py-3 px-6 text-left">Thumbnail</th>
-                    <th className="py-3 px-6 text-left rounded-tr-lg">Value</th>
+                    <th className="py-3 px-6 text-left">Name of Activity</th>
+                    <th className="py-3 px-6 text-left">Activity Id</th>
+                    <th className="py-3 px-6 text-left">User Id</th>
+                    <th className="py-3 px-6 text-left">Earning</th>
+                    <th className="py-3 px-6 text-left rounded-tr-lg">Remarks</th>
                   </tr>
                 </thead>
                 <tbody>
                   {activities.length > 0 ? activities.map((activity, index) => (
                     <tr key={index} className="border border-gray-200 hover:bg-gray-100">
                       <td className="py-3 px-6 text-left">{index + 1}</td>
-                      <td className="py-3 px-6 text-left">{`${activity.activity_likes} Likes & ${activity.activity_views} Views`}</td>
+                      <td className="py-3 px-6 text-left"><a href={`/group-page?gname=${activity.gp_name}&gid=${activity.gp_id}&uc=${0}&cordinator=${activity.co_ord_name}&groupType=${activity.group_type}`}>{activity.gp_name}</a></td>
+                      <td className="py-3 px-6 text-left"><a href={`/user-page?u=${activity.us_name}&id=${activity.login_id}`}>{activity.us_name}</a></td>
+                      <td className="py-3 px-6 text-left">{activity.activity_description}</td>
                       <td className="py-3 px-6 text-left">{activity.activity_category}</td>
-                      <td className="py-3 px-6 text-left">{activity.participant_name}</td>
-                      <td className="py-3 px-6 text-left">{activity.activity_social_media_link}</td>
-                      <td className="py-3 px-6 text-left"><img src={`${imageURL}${activity.activity_thumbnail}`} style={{ height: '100px' }} alt="Thumbnail" /></td>
-                      <td className="py-3 px-6 text-left">{activity.earnings || 'N/A'}</td>
+                      <td className="py-3 px-6 text-left"><a href={activity.activity_social_media_link}>{activity.activity_title}</a></td>
+                      <td className="py-3 px-6 text-left">{activity.personal_activity_id}</td>
+                      <td className="py-3 px-6 text-left">{activity.login_id || "N/A"} </td>
+                      <td className="py-3 px-6 text-left">{activity.earnings || "N/A"} </td>
+                      <td className="py-3 px-6 text-left">{activity.activity_views} Views, {activity.activity_likes} Likes</td>
                     </tr>
                   )) : <center><div className='text-center'>No activities found</div></center>}
                 </tbody>

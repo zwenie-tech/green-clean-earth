@@ -270,7 +270,7 @@ function Page() {
             : ''}
           {uploadData[0].source_name ?
             <div className="">
-              <p className="text-sm text-gray-500">Source</p>
+              <p className="text-sm text-gray-500">Club</p>
               <p className="text-base">{uploadData[0].source_name}</p>
             </div>
             : ''}
