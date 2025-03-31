@@ -1546,7 +1546,7 @@ const ActivityList = () => {
                 </th> */}
                 <th className="py-3 px-6 text-left">Activity Id</th>
                 <th className="py-3 px-6 text-left">User Id</th>
-                <th className="py-3 px-6 text-left rounded-tr-lg">
+                <th className="py-3 px-6 text-left">
                   <div className="flex items-center gap-2">
                     Earnings
                     {orderdir3 === "DESC" ? (
@@ -1566,7 +1566,8 @@ const ActivityList = () => {
                     )}
                   </div>
                 </th>
-                
+                <th className="py-3 px-6 text-left rounded-tr-lg">Remarks</th>
+
                 {/* <th className="py-3 px-6 text-left">Participant Name</th>
                 <th className="py-3 px-6 text-left">Chest Number</th>
                 <th className="py-3 px-6 text-left flex items-center gap-2">
@@ -1647,8 +1648,8 @@ const ActivityList = () => {
                       <td className="py-3 px-6 text-left"><a href={activity.activity_social_media_link}>{activity.activity_title}</a></td>
                       <td className="py-3 px-6 text-left">{activity.personal_activity_id}</td>
                       <td className="py-3 px-6 text-left">{activity.login_id}</td>
-                      {/* <td className="py-3 px-6 text-left">{activity.activity_views} Views, {activity.activity_likes} Likes</td> */}
                       <td className="py-3 px-6 text-left ">{activity.earnings}</td>
+                      <td className="py-3 px-6 text-left">{activity.activity_views} Views, {activity.activity_likes} Likes</td>
                     </tr>
                   </>
                 ))

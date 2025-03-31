@@ -260,7 +260,8 @@ const ButtonDisplayFn: React.FC = () => {
                     <th className="py-3 px-6 text-left">Name of Activity</th>
                     <th className="py-3 px-6 text-left">Activity Id</th>
                     <th className="py-3 px-6 text-left">User Id</th>
-                    <th className="py-3 px-6 text-left rounded-tr-lg">Earning</th>
+                    <th className="py-3 px-6 text-left">Earning</th>
+                    <th className="py-3 px-6 text-left rounded-tr-lg">Remarks</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -275,6 +276,7 @@ const ButtonDisplayFn: React.FC = () => {
                       <td className="py-3 px-6 text-left">{activity.personal_activity_id}</td>
                       <td className="py-3 px-6 text-left">{activity.login_id || "N/A"} </td>
                       <td className="py-3 px-6 text-left">{activity.earnings || "N/A"} </td>
+                      <td className="py-3 px-6 text-left">{activity.activity_views} Views, {activity.activity_likes} Likes</td>
                     </tr>
                   )) : <center><div className='text-center'>No activities found</div></center>}
                 </tbody>
