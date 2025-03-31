@@ -38,7 +38,7 @@ const NavigationBar = () => {
     { href: "/participant-list", label: "Participant List" },
     { href: "/activityList", label: "Activity List" },
     { href: "/faq", label: "FAQ" },
-    { href: "/scoreboard", label: "Milestone" },
+    { href: "/scoreboard", label: "Map" },
     { href: "/about-us", label: "About Us" },
     { href: "/contact", label: "Contact" },
   ];
@@ -57,7 +57,7 @@ const NavigationBar = () => {
     { href: "/participant-list", label: "Participant List" },
     { href: "/activityList", label: "Activity List" },
     { href: "/faq", label: "FAQ" },
-    { href: "/scoreboard", label: "Milestone" },
+    { href: "/scoreboard", label: "Map" },
     { href: "/about-us", label: "About Us" },
     { href: "/contact", label: "Contact" },
     { href: "/logout", label: "Logout" },
