@@ -55,6 +55,7 @@ const ButtonDisplayFn: React.FC = () => {
   const groupType = searchParams.get("groupType");
   const cordinatorName = searchParams.get("cordinator");
   const grpuc = searchParams.get("uc");
+  const tabselect = searchParams.get("up");
   const [currentPageAct, setCurrentPageAct] = useState(1);
   const [currentPageUp, setCurrentPageUp] = useState(1);
   const [totalPagesAct, setTotalPagesAct] = useState(1);
@@ -131,6 +132,10 @@ const ButtonDisplayFn: React.FC = () => {
     fetchGroupActivities(currentPageAct);
     fetchGroupUploads(currentPageUp);
   }, [currentPageAct, currentPageUp]);
+
+  useEffect(() => {
+    setActiveButton(tabselect == 'f' ? "activity" : "upload")
+  }, [tabselect]);
 
   return (
     <div>
