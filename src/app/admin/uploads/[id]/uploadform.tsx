@@ -577,7 +577,7 @@ export function Uploadform() {
                   ))}
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Source</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Club</label>
                   <Select
                     onValueChange={(value) => {
                       // setCountry(value);
@@ -588,7 +588,7 @@ export function Uploadform() {
                   >
                     <SelectTrigger className="block w-full px-3 py-2 border border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 sm:text-sm"
                     >
-                      <SelectValue placeholder="Choose a source" />
+                      <SelectValue placeholder="Choose a club" />
                     </SelectTrigger>
                     <SelectContent>
                       {clubOptions.map((club) => (

@@ -4,6 +4,7 @@ import Footer from '@/components/footer';
 import React, { useState, useEffect, Suspense } from 'react';
 import { apiURL, imageURL } from '../requestsapi/request';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { ExternalLink, LinkIcon } from 'lucide-react';
 
 interface GroupActivity {
   us_name: string;
@@ -16,6 +17,10 @@ interface GroupActivity {
   earnings: string | null;
   gp_id: number;
   activity:string;
+  activity_description: string;
+  activity_title: string;
+  personal_activity_id: number;
+  login_id: number;
 }
 
 interface GroupUpload {
@@ -47,6 +52,8 @@ const ButtonDisplayFn: React.FC = () => {
   const searchParams = useSearchParams();
   const grpname = searchParams.get("gname");
   const grpid = searchParams.get("gid");
+  const groupType = searchParams.get("groupType");
+  const cordinatorName = searchParams.get("cordinator");
   const grpuc = searchParams.get("uc");
   const [currentPageAct, setCurrentPageAct] = useState(1);
   const [currentPageUp, setCurrentPageUp] = useState(1);
@@ -61,8 +68,6 @@ const ButtonDisplayFn: React.FC = () => {
     router.push(`/user-page?u=${encodeURIComponent(participantName)}&id=${loginId}`);
   };
  
-    
-
     const handlePageChangeAct = (newPage: number) => {
       if (newPage > 0 && newPage <= totalPagesAct) {
      
@@ -139,7 +144,14 @@ const ButtonDisplayFn: React.FC = () => {
           <p className="text-right font-bold w-1/2">Group Id:</p>
           <p className="w-1/2 font-bold">{grpid}</p>
         </div>
-        
+        <div className="w-full flex justify-between items-center gap-3 ">
+          <p className="text-right font-bold w-1/2">Coordinator Name:</p>
+          <p className="w-1/2 font-bold">{cordinatorName}</p>
+        </div>
+        <div className="w-full flex justify-between items-center gap-3 ">
+          <p className="text-right font-bold w-1/2">Group Type:</p>
+          <p className="w-1/2 font-bold">{groupType}</p>
+        </div>
         <div className="w-full flex justify-between items-center gap-3 ">
           <p className="text-right font-bold w-1/2">Upload count:</p>
           <p className="w-1/2 font-bold">{upcount}</p>
@@ -153,7 +165,7 @@ const ButtonDisplayFn: React.FC = () => {
       <div className="flex flex-row bg-light-gray justify-center items-center w-3/4 mx-auto">
         <button
           onClick={() => setActiveButton('upload')}
-          className={`w-1/2 text-center font-bold bg-light-gray py-3 text-[#3C6E1F] hover:bg-primary/15 border-b-2 ${
+          className={`w-1/2 text-center font-bold text-xl bg-light-gray py-3 text-[#3C6E1F] hover:bg-primary/15 border-b-2 ${
             activeButton === 'upload' ? 'border-[#3C6E1F]' : 'border-transparent'
           }`}
         >
@@ -161,7 +173,7 @@ const ButtonDisplayFn: React.FC = () => {
         </button>
         <button
           onClick={() => setActiveButton('activity')}
-          className={`w-1/2 text-center font-bold bg-light-gray hover:bg-primary/15 py-3 text-[#3C6E1F] border-b-2 ${
+          className={`w-1/2 text-center font-bold text-xl bg-light-gray hover:bg-primary/15 py-3 text-[#3C6E1F] border-b-2 ${
             activeButton === 'activity' ? 'border-[#3C6E1F]' : 'border-transparent'
           }`}
         >
@@ -234,24 +246,44 @@ const ButtonDisplayFn: React.FC = () => {
                 <thead>
                   <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                     <th className="py-3 px-6 text-left w-16 bd-2 rounded-tl-lg">Sl. No</th>
-                    <th className="py-3 px-6 text-left">Name & address of participant</th>
-                    <th className="py-3 px-6 text-left">Activity Link</th>
+                    <th className="py-3 px-6 text-left">User Name</th>
+                    <th className="py-3 px-6 text-left">Chest Number</th>
                     <th className="py-3 px-6 text-left">Category</th>
-                    <th className="py-3 px-6 text-left">View/ Like/ Comment/ Share</th>
-                    <th className="py-3 px-6 text-left rounded-tr-lg">Earnings</th>
-                    <th className="py-3 px-6 text-left rounded-tr-lg">Value</th>
+                    <th className="py-3 px-6 text-left">Name of Activity</th>
+                    <th className="py-3 px-6 text-left">Activity Id</th>
+                    <th className="py-3 px-6 text-left">User Id</th>
+                    <th className="py-3 px-6 text-left">Earning</th>
+                    <th className="py-3 px-6 text-left rounded-tr-lg">Remarks</th>
                   </tr>
                 </thead>
                 <tbody>
                   {groupActivities.length ? (groupActivities.map((activity, index) => (
                     <tr key={index} className="border border-gray-200 hover:bg-gray-100">
                       <td className="py-3 px-6 text-left">{index + 1}</td>
-                      <td className="py-3 px-6 text-left">{activity.participant_name}</td>
-                      <td className="py-3 px-6 text-left"><a href={activity.activity_social_media_link}>{activity.activity_social_media_link}</a></td>
+                      <td className="py-3 px-6 text-left">
+                        <a 
+                          href={`/user-page?u=${activity.us_name}&id=${activity.login_id}`} 
+                          className="text-black hover:underline flex items-center gap-1"
+                        >
+                          {activity.us_name}
+                          <LinkIcon size={16} className="text-blue-600" />
+                        </a>
+                      </td>                      <td className="py-3 px-6 text-left">{activity.activity_description}</td>
                       <td className="py-3 px-6 text-left">{activity.activity_category}</td>
-                      <td className="py-3 px-6 text-left">{activity.activity_likes} Likes & {activity.activity_views} Views</td>
+                      <td className="py-3 px-6 text-left">
+                        <a 
+                          href={activity.activity_social_media_link} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="text-black hover:underline flex items-center gap-1"
+                        >
+                          {activity.activity_title}
+                          <ExternalLink size={16} className="text-blue-600" />
+                        </a>
+                      </td>                      <td className="py-3 px-6 text-left">{activity.personal_activity_id}</td>
+                      <td className="py-3 px-6 text-left">{activity.login_id || "N/A"} </td>
                       <td className="py-3 px-6 text-left">{activity.earnings || "N/A"} </td>
-                      <td className="py-3 px-6 text-left">{activity.activity || "N/A"} </td>
+                      <td className="py-3 px-6 text-left">{activity.activity_views} Views, {activity.activity_likes} Likes</td>
                     </tr>
                   ))): <div>No data found</div>}
                 </tbody>

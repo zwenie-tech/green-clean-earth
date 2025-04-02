@@ -11,6 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { Link } from 'lucide-react';
 
 interface TreeDetails {
   up_id: number;
@@ -41,6 +42,10 @@ interface TreeDetails {
   project_name: string;
   chapter_name: string;
   zone_name: string;
+  group_type: string;
+  gp_id: number;
+  co_ord_name:string;
+  up_reg_id: number;
 }
 interface Participant {
   id : number;
@@ -189,17 +194,33 @@ const Item: React.FC = () => {
               <div className="text-sm pl-5 mb-2">Planter name: </div>
               <div className="text-sm">{treeDetails.up_planter}</div>
             </div>
-            <div className="flex ml-2 mt-2 gap-2">
-              <div className="text-sm pl-5 mb-2">Uploader name: </div>
-              <div className="text-sm">{treeDetails.up_name}</div>
+            <div className="flex ml-2 mt-2 gap-2 items-center">
+              <div className="text-sm pl-5">Uploader name:</div>
+              <div className="text-sm flex items-center gap-1">
+                <a 
+                  href={`/user-page?u=${treeDetails.up_name}&id=${treeDetails.up_reg_id}`} 
+                  className="text-blue-500 hover:underline flex items-center gap-1"
+                >
+                  {treeDetails.up_name}
+                  <Link size={16} className="text-blue-600" />
+                </a>
+              </div>
             </div>
             <div className="flex ml-2 mt-2 gap-2">
               <div className="text-sm pl-5 mb-2">Tree name: </div>
               <div className="text-sm">{treeDetails.up_tree_name}</div>
             </div>
-            <div className="flex ml-2 mt-2 gap-2">
-              <div className="text-sm pl-5 mb-2">Group Name: </div>
-              <div className="text-sm">{treeDetails.gp_name || 'N/A'}</div>
+            <div className="flex ml-2 mt-2 gap-2 items-center">
+              <div className="text-sm pl-5">Uploader name:</div>
+              <div className="text-sm flex items-center gap-1">
+                <a 
+                  href={`/group-page?gname=${treeDetails.gp_name}&gid=${treeDetails.gp_id}&uc=${0}&cordinator=${treeDetails.co_ord_name}&groupType=${treeDetails.group_type}`} 
+                  className="text-blue-500 hover:underline flex items-center gap-1"
+                >
+                  {treeDetails.gp_name}
+                  <Link size={16} className="text-blue-600" />
+                </a>
+              </div>
             </div>
             <div className="flex ml-2 mt-2 gap-2">
               <div className="text-sm pl-5 mb-2">Country: </div>

@@ -34,6 +34,9 @@ const Dashboard = () => {
   const InviteInstitutionsButton = () => {
     router.push("/dashboard/invite-institute");
   };
+  const NarukkeduppuButton = () => {
+    router.push("/dashboard/narukkeduppu");
+  };
   const LogoutButton = () => {
     router.push("/logout");
   };
@@ -159,6 +162,16 @@ const Dashboard = () => {
               <FaUpload />
             </div>
             <div className="p-4 text-xl">Our Team</div>
+          </label>
+
+          <label
+            className="flex items-center justify-center bg-light-green rounded-lg cursor-pointer transition-all duration-300 hover:scale-110 hover:bg-light-gray hover:z-10"
+            onClick={NarukkeduppuButton}
+          >
+            <div>
+              <FaUpload />
+            </div>
+            <div className="p-4 text-xl">നറുക്കെടുപ്പ്</div>
           </label>
         </div>
       </div>

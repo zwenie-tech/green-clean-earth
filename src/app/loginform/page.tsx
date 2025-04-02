@@ -91,7 +91,13 @@ const LoginForm = () => {
       const token = result.data.token;
       const refcode = result.data.refferalCode;
       const uname = result.data.userName;
+      const groupId = result.data.groupId;
+      const groupName = result.data.groupName;
+      const cordinatorName = result.data.cordinatorName;
+      const groupType = result.data.groupType;
+      
 
+      
       if (id) {
         toast({
           title: "Account logged in.",
@@ -101,7 +107,10 @@ const LoginForm = () => {
         Cookies.set("login_type", "user", { expires: 1 });
         Cookies.set("user_refcode", refcode, { expires: 1 });
         Cookies.set("name", uname, { expires: 1 });
-
+        Cookies.set("groupId", groupId, { expires: 1 });
+        Cookies.set("groupName", groupName, { expires: 1 });
+        Cookies.set("cordinatorName", cordinatorName, { expires: 1 });
+        Cookies.set("groupType", groupType, { expires: 1 });
         Cookies.set("userId", id, { expires: 1 });
 
         router.replace("/user-dash-home?id=" + id);
@@ -242,7 +251,7 @@ const LoginForm = () => {
                         )}
                       />
                       <div className="flex justify-center w-full">
-                        <Button type="submit" style={{ width: '50%' }} className="bg-primary items-center" disabled={isSubmitUserBtnDisabled}>Submit</Button>
+                        <Button type="submit" style={{ width: '50%' }} className="bg-green-950 items-center">Submit</Button>
                       </div>
                       <div className="flex justify-center w-full mt-4">
                         <a href="/forgot-password-user" className="text-primary">Forgot your password?</a>
@@ -290,7 +299,7 @@ const LoginForm = () => {
                         )}
                       />
                       <div className="flex justify-center w-full">
-                        <Button type="submit" style={{ width: '50%' }} className="bg-primary items-center" disabled={isSubmitBtnDisabled}>Submit</Button>
+                        <Button type="submit" style={{ width: '50%' }} className="bg-green-950 items-center">Submit</Button>
                       </div>
                       <div className="flex justify-center w-full mt-4">
                         <a href="/forgot-password-coordinator" className="text-primary">Forgot your password?</a>
