@@ -52,14 +52,13 @@ const LoginForm = () => {
   useEffect(() => {
     // Check if both username and password are filled for the user form
     const isUserFormFilled = userWatch.mobile && userWatch.password;
-    console.log('user',!isUserFormFilled)
+
     setIsSubmitUserBtnDisabled(!isUserFormFilled); // Disable/enable submit button
   }, [userWatch]);
 
   useEffect(() => {
     // Check if both username and password are filled for the coordinator form
     const isCoordinatorFormFilled = coordinatorWatch.username && coordinatorWatch.password;
-    console.log('coord',!isCoordinatorFormFilled)
     setIsSubmitBtnDisabled(!isCoordinatorFormFilled); // Disable/enable submit button
   }, [coordinatorWatch]);
 
@@ -95,9 +94,8 @@ const LoginForm = () => {
       const groupName = result.data.groupName;
       const cordinatorName = result.data.cordinatorName;
       const groupType = result.data.groupType;
-      
 
-      
+
       if (id) {
         toast({
           title: "Account logged in.",
