@@ -6,6 +6,7 @@ import PageTitle from '@/components/sm/pageTitle';
 import GceBadge from '@/components/gceBadge';
 import Footer from '@/components/footer';
 import { apiURL } from '../requestsapi/request';
+import PaginationComponent from '../PageComponent';
 
 
 // Define the interface for a single event
@@ -112,30 +113,10 @@ const Events = () => {
           </div>
         </div>
       </div>
+      
       <div className="flex justify-center items-center space-x-2 my-4">
-        <button
-        className={currentPage === 1 ? 
-          "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
-        : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-        }
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-        <span className="text-xl">{currentPage}</span>
-        <button
-          className={currentPage === totalPages ? 
-            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
-          : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-          }
-          onClick={() => {
-            handlePageChange(currentPage + 1) 
-          }}
-          disabled={currentPage === totalPages}
-        >
-          Next
-        </button>
+      <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+        
       </div>
       <GceBadge />
       <Footer />
