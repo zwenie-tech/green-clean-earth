@@ -99,7 +99,7 @@ const MyUploadedPlants = () => {
         },
       });
       const dataall = await responseall.json();
-      console.log(dataall)
+      console.log('test',dataall)
       setTotalPages(Math.ceil(dataall.Uploads.length / itemsPerPage));
     }
     fetchfirstData();

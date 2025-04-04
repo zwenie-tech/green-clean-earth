@@ -46,6 +46,11 @@ interface TreeDetails {
   gp_id: number;
   co_ord_name:string;
   up_reg_id: number;
+  up_date: string;
+  up_file_2_time: string;
+  up_file_3_time: string;
+  up_file_4_time: string;
+    
 }
 interface Participant {
   id : number;
@@ -62,6 +67,7 @@ const Item: React.FC = () => {
       const response = await fetch(`${apiURL}/uploads/treeDetails/${id}`);
       const data = await response.json();
       if (data.success) {
+        console.log(data)
         setTreeDetails(data.treeDetails[0]);
       }
     };
@@ -73,6 +79,35 @@ const Item: React.FC = () => {
     return <div>Loading...</div>;
   }
 
+  function formatDateString(dateString: string): string {
+    // Create a new Date object from the given string
+    const currentDate = new Date(dateString);
+
+    // Format the time
+    let hours: number = currentDate.getHours();
+    let minutes: number = currentDate.getMinutes();
+    let seconds: number = currentDate.getSeconds();
+    let ampm: string = hours >= 12 ? 'PM' : 'AM';
+
+    // Convert to 12-hour format and handle edge cases
+    hours = hours % 12;
+    hours = hours === 0 ? 12 : hours; // Handle midnight (0) as 12
+
+    // Ensure minutes and seconds are formatted correctly as strings for display
+    const formattedMinutes: string = minutes < 10 ? '0' + minutes : minutes.toString(); 
+    const formattedSeconds: string = seconds < 10 ? '0' + seconds : seconds.toString(); 
+
+    // Get the formatted time and date
+    const formattedTime = `${hours}:${formattedMinutes}:${formattedSeconds} ${ampm}`;
+    const formattedDate = currentDate.toISOString().split('T')[0]; // Get the date in YYYY-MM-DD format
+
+    // Return the formatted date and time
+    return `${formattedDate} ${formattedTime}`;
+}
+
+
+
+  
   return (
     <>
       <PageTitle title={`Tree number: ${treeDetails.up_id}`} />
@@ -90,6 +125,7 @@ const Item: React.FC = () => {
                     className='object-cover h-80 w-60'
                   />
                 </div>
+                <caption className='inline'>{formatDateString(treeDetails.up_date)}</caption>
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
@@ -116,6 +152,7 @@ const Item: React.FC = () => {
                     alt='' 
                     className='object-cover h-80 w-60'
                   />
+                <caption className='inline'>{formatDateString(treeDetails.up_file_2_time)}</caption>
                 </div>
                 </DialogTrigger>
                 <DialogContent>
@@ -144,6 +181,7 @@ const Item: React.FC = () => {
                     className='object-cover h-80 w-60'
                   />
                 </div>
+                <caption className='inline'>{formatDateString(treeDetails.up_file_3_time)}</caption>
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
@@ -170,6 +208,7 @@ const Item: React.FC = () => {
                     alt='' 
                     className='object-cover h-80 w-60'
                   />
+                <caption className='inline'>{formatDateString(treeDetails.up_file_4_time)}</caption>
                 </div>
                 </DialogTrigger>
                 <DialogContent>
