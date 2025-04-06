@@ -49,7 +49,7 @@ const PaginationComponent: React.FC<PaginationProps> = ({ totalPages, currentPag
   };
 
   return (
-    <div className="flex justify-center sm:justify-end items-center space-y-2 sm:space-y-0 sm:space-x-2 my-4 md:px-9">
+    <div className="flex justify-center sm:justify-end items-center space-y-2 sm:space-y-0 sm:space-x-2 my-4">
 
       {currentPage > 1 && (
         <button
