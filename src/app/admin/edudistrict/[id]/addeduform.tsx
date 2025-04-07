@@ -126,7 +126,7 @@ export function AddEduform() {
             districtId: districts.find((item) => item.dis_name === selectedDistrict)?.dis_id?.toString(),
             eduDistrictName: selecteduDistrict
         }
-        console.log(formdata)
+        // console.log(formdata)
 
 
         if (token) {

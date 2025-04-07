@@ -105,7 +105,7 @@ const ButtonDisplayFn = () => {
       .then(response => response.json())
       .then(data => {
         if (data.success) {
-          console.log(data)
+          // console.log(data)
           setTotalPagesAct(Math.ceil(data.activity_count / itemsPerPage));
           setTotalCountAct(data.activity_count)
 

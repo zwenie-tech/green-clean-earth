@@ -223,7 +223,7 @@ const GroupList = () => {
         if (data.success) {
           setTotalPages(Math.ceil(data.totalRecords / itemsPerPage));
           setTotalCount(data.totalRecords);
-          console.log(data)
+          // console.log(data)
           setGroups(data.groupList);
         }
       }
@@ -597,9 +597,9 @@ const GroupList = () => {
           const result = await response.json();
           setGroups(result.groupList);
 
-          console.log('part 2',)
+          // console.log('part 2',)
 
-          console.log(result)
+          // console.log(result)
           setTotalCount(result.totalRecords);
           setTotalPages(Math.ceil(result.totalRecords / itemsPerPage));
 
@@ -640,7 +640,7 @@ const GroupList = () => {
           },
         }
       );
-      console.log('part3')
+      // console.log('part3')
       setGrpName(response.data.groupList);
     } catch (error) {
       console.error("Error fetching category:", error);

@@ -307,7 +307,7 @@ const ParticipateList = () => {
             const result = await response.json();
             setTotalCount(result.total)
             setTotalPages(Math.ceil(result.total / itemsPerPage));
-            console.log('part 1')
+            // console.log('part 1')
             setParticipantList(result.Uploads);
           } catch {
             setTotalPages(1);
@@ -492,9 +492,9 @@ const ParticipateList = () => {
         }
         const result = await response.json();
         setParticipantList(result.Uploads);
-        console.log('part 2',)
+        // console.log('part 2',)
 
-        console.log(result)
+        // console.log(result)
         setTotalCount(result.total);
         setTotalPages(Math.ceil(result.total / itemsPerPage));
 

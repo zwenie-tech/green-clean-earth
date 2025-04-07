@@ -67,7 +67,7 @@ const Item: React.FC = () => {
       const response = await fetch(`${apiURL}/uploads/treeDetails/${id}`);
       const data = await response.json();
       if (data.success) {
-        console.log(data)
+        // console.log(data)
         setTreeDetails(data.treeDetails[0]);
       }
     };

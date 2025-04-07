@@ -1,23 +1,25 @@
 'use client';
 
+import React, { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import Cookies from "js-cookie";
+import Link from 'next/link';
+import Image from 'next/image';
+import { BsImages, BsPaperclip } from 'react-icons/bs';
+
 import NavigationBar from '@/components/navigationBar';
 import PageTitle from '@/components/sm/pageTitle';
 import GceBadge from '@/components/gceBadge';
 import Footer from '@/components/footer';
-import Image from 'next/image';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { cn } from '@/lib/utils';
-import { BsImages, BsPaperclip } from 'react-icons/bs';
 import { Button } from '@/components/ui/button';
-import { useState, useEffect } from 'react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import imageCompression from 'browser-image-compression';
-import { useForm } from 'react-hook-form';
-import Link from 'next/link';
-import { apiURL, imageURL, uploadPlantData } from '@/app/requestsapi/request';
-import Cookies from "js-cookie";
 import { useToast } from '@/components/ui/use-toast';
+import { apiURL, imageURL, uploadPlantData } from '@/app/requestsapi/request';
+import { UploadButton } from './upload_form';
+import PaginationComponent from '@/app/PageComponent';
 
 type PlantData = {
   up_id: number;
@@ -49,307 +51,280 @@ type PlantData = {
 };
 
 type ApiResponse = {
+  total: number;
   Uploads: PlantData[];
   success: boolean;
 };
 
+type EditState = {
+  image1: boolean;
+  image2: boolean;
+  image3: boolean;
+  image4: boolean;
+};
+
+type EditStates = Record<number, EditState>;
+
+type UploadButtonProps = {
+  imageNo: number;
+  treeNo: number;
+  isEdit: boolean;
+  onComplete: () => void; // Changed from optional to required
+};
+
+
+
+const MemoizedUploadButton = React.memo(UploadButton);
+
+type PlantImageKeys =
+  | 'up_file'
+  | 'up_file_2'
+  | 'up_file_3'
+  | 'up_file_4';
+
+type PlantTimeKeys =
+  | 'up_date'
+  | 'up_file_2_time'
+  | 'up_file_3_time'
+  | 'up_file_4_time';
+
+const getPlantImageKey = (imageNumber: number): PlantImageKeys => {
+  if (imageNumber === 1) return 'up_file';
+  if (imageNumber === 2) return 'up_file_2';
+  if (imageNumber === 3) return 'up_file_3';
+  if (imageNumber === 4) return 'up_file_4';
+  throw new Error(`Invalid image number: ${imageNumber}`);
+};
+
+const getPlantTimeKey = (imageNumber: number): PlantTimeKeys => {
+  if (imageNumber === 1) return 'up_date';
+  if (imageNumber === 2) return 'up_file_2_time';
+  if (imageNumber === 3) return 'up_file_3_time';
+  if (imageNumber === 4) return 'up_file_4_time';
+  throw new Error(`Invalid image number: ${imageNumber}`);
+};
 function formatDate(isoString: string) {
   const date = new Date(isoString);
-
   const day = String(date.getUTCDate()).padStart(2, '0');
-  const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Months are 0-based
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
   const year = date.getUTCFullYear();
-
-
-  const formattedDate = `${day}/${month}/${year}`;
-
-  return `${formattedDate}`;
+  return `${day}/${month}/${year}`;
 }
 
 function formatTime(isoString: string) {
   const date = new Date(isoString);
   let hours = String(date.getUTCHours()).padStart(2, '0');
   const minutes = String(date.getUTCMinutes()).padStart(2, '0');
-  const seconds = String(date.getUTCSeconds()).padStart(2, '0');
-  let hour = parseInt(hours) % 12;
-
-  const formattedTime = `${hour}:${minutes} ${parseInt(hours) >= 12 ? 'PM' : 'AM'}`;
-
-  return `${formattedTime}`;
+  let hour = parseInt(hours) % 12 || 12;
+  return `${hour}:${minutes} ${parseInt(hours) >= 12 ? 'PM' : 'AM'}`;
 }
+
 
 const MyUploadedPlants = () => {
   const [data, setData] = useState<PlantData[]>([]);
-  const token = Cookies.get('token');
+  const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [showDialog, setShowDialog] = useState<boolean>(false);
-  const [edit1, setEdit1] = useState(0);
-  const [edit2, setEdit2] = useState(0);
-  const [edit3, setEdit3] = useState(0);
-  const [edit4, setEdit4] = useState(0);
+  const [editStates, setEditStates] = useState<EditStates>({});
+  const token = Cookies.get('token');
   const itemsPerPage = 10;
-
-
-  useEffect(() => {
-    async function fetchfirstData() {
-      const responseall = await fetch(`${apiURL}/uploads/me?limit=100000000000`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const dataall = await responseall.json();
-      console.log('test',dataall)
-      setTotalPages(Math.ceil(dataall.Uploads.length / itemsPerPage));
-    }
-    fetchfirstData();
-  }, [token]);
 
   const handlePageChange = (newPage: number) => {
     if (newPage > 0 && newPage <= totalPages) {
-
       setCurrentPage(newPage);
     }
-  }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(`${apiURL}/uploads/me?page=${currentPage}&limit=${itemsPerPage}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const result: ApiResponse = await response.json();
-      if (result.success) {
-        console.log(result)
-        setData(result.Uploads);
+      setIsLoading(true);
+      try {
+        const response = await fetch(`${apiURL}/uploads/me?page=${currentPage}&limit=${itemsPerPage}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const result: ApiResponse = await response.json();
+        if (result.success) {
+          setTotalPages(Math.ceil(result.total / itemsPerPage));
+          setData(result.Uploads);
+
+          // Initialize edit states for all plants
+          const initialEditStates: EditStates = {};
+          result.Uploads.forEach(plant => {
+            initialEditStates[plant.up_id] = {
+              image1: false,
+              image2: false,
+              image3: false,
+              image4: false
+            };
+          });
+          setEditStates(initialEditStates);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    fetchData();
+    if (token) {
+      fetchData();
+    }
   }, [token, currentPage]);
+
+  const toggleEditState = (plantId: number, imageNumber: number) => {
+    setEditStates(prev => {
+      const imageKey = `image${imageNumber}` as keyof EditState;
+      return {
+        ...prev,
+        [plantId]: {
+          ...prev[plantId],
+          [imageKey]: !prev[plantId]?.[imageKey]
+        }
+      };
+    });
+  };
+
+  const renderImageCell = (plant: PlantData, imageNumber: number) => {
+    const imageKey = getPlantImageKey(imageNumber);
+    const timeKey = getPlantTimeKey(imageNumber);
+
+    const imageValue = plant[imageKey] as string | null;
+    const timeValue = plant[timeKey] as string | null;
+    const editKey = `image${imageNumber}` as keyof EditState;
+    const isEdit = editStates[plant.up_id]?.[editKey];
+
+    // Check if previous image exists (for images 2-4)
+    if (imageNumber > 1) {
+      const prevImageKey = getPlantImageKey(imageNumber - 1);
+      if (!plant[prevImageKey]) {
+        return <div className='bg-slate-200 w-full h-full'></div>;
+      }
+    }
+
+    return (
+      <div className='w-full'>
+        {imageValue ? (
+          <div className='flex flex-col items-center'>
+            <div className="relative aspect-square w-full max-w-[120px] sm:max-w-[150px]">
+              <img
+                src={`${imageURL}${imageValue}`}
+                alt={`Plant image ${imageNumber}`}
+                className='absolute h-full w-full object-cover rounded'
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = '/images/placeholder.png';
+                }}
+              />
+              {plant.is_challenged == 1 && (
+                <img
+                  className="absolute top-0 left-0 w-full h-full object-contain z-10"
+                  src="/images/chellenge.png"
+                  alt="Challenged"
+                />
+              )}
+            </div>
+
+            <div className='mt-2 text-center text-xs sm:text-sm'>
+              <p>Uploaded on</p>
+              <p>{timeValue ? `${formatDate(timeValue)}` : "N/A"}</p>
+              <p>{timeValue ? `${formatTime(timeValue)}` : ""}</p>
+            </div>
+
+            {isEdit ? (
+              <MemoizedUploadButton
+                imageNo={imageNumber}
+                treeNo={plant.up_id}
+                isEdit={true}
+                onComplete={() => toggleEditState(plant.up_id, imageNumber)}
+              />
+            ) : (
+              <button
+                className='text-primary underline text-xs sm:text-sm mt-1'
+                onClick={() => toggleEditState(plant.up_id, imageNumber)}
+              >
+                Edit
+              </button>
+            )}
+          </div>
+        ) : (
+          <div className='flex justify-center'>
+            <MemoizedUploadButton
+              imageNo={imageNumber}
+              treeNo={plant.up_id}
+              isEdit={false}
+              onComplete={() => { }}
+            />
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <main className='min-h-screen flex flex-col'>
       <NavigationBar />
-      <div className='mx-2 mt-6'>
+      <div className='mx-2 mt-6 px-2 sm:px-4'>
         <PageTitle title='My Uploaded Plants' />
-        <div className="overflow-x-scroll">
-          <table className='mx-auto table-fixed border-collapse border border-black'>
-            <thead>
-              <tr className='border border-black'>
-                <th className='border border-black p-4'>Tree #</th>
-                <th className='border border-black p-4'>Planter</th>
-                <th className='border border-black p-4'>Uploader</th>
-                <th className='border border-black p-4'>Image 1</th>
-                <th className='border border-black p-4'>Image 2</th>
-                <th className='border border-black p-4'>Image 3</th>
-                <th className='border border-black p-4'>Image 4</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((plant) => (
-                <tr key={plant.up_id} className='align-top'>
-                  <td className='border border-black p-4'>
-                    <Link
-                      href={{
-                        pathname: 'uploaded-plants/plant',
-                        query: { tree: plant.up_id },
-                      }}
-                      className='text-primary underline'
-                    >
-                      {plant.up_id}
-                    </Link>
-                  </td>
-                  <td className='border border-black p-4'>{plant.up_planter}</td>
-                  <td className='border border-black p-4'>{plant.up_name}</td>
-                  <td className='border border-black p-4'>
-                    <div className='overflow-hidden'>
-                      {plant.up_file ? (
-                        <div>
-                          <div className="aspect-square h-40 w-40 relative">
-                            {/* Main Uploaded Image */}
-                            <img
-                              src={`${imageURL}${plant.up_file}`}
-                              alt="Selected"
-                              width={150}
-                              height={150}
-                              className='h-full w-full object-cover'
-                            />
 
-                            {/* Challenge Badge on Top */}
-                            {plant.is_challenged == 1 && (
-                              <img
-                                className="absolute top-0 left-0 w-full h-full object-contain z-10"
-                                src="/images/chellenge.png"
-                                alt="Challenged"
-                              />
-                            )}
-                          </div>
+        {isLoading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+          </div>
+        ) : (
+          <>
+            <div className="w-full overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
+              <div className="w-full overflow-x-auto">
+                <table className="min-w-[1200px] w-full divide-y divide-gray-200">
+                  <thead>
+                    <tr>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tree #</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Planter</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Uploader</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Image 1</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Image 2</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Image 3</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Image 4</th>
+                    </tr>
+                  </thead>
+                  <tbody className='bg-white divide-y divide-gray-200'>
+                    {data.map((plant) => (
+                      <tr key={`plant-${plant.up_id}`} className='hover:bg-gray-50'>
+                        <td className='px-4 py-4 text-sm font-medium text-primary whitespace-nowrap'>
+                          <Link
+                            href={{
+                              pathname: 'uploaded-plants/plant',
+                              query: { tree: plant.up_id },
+                            }}
+                            className='hover:text-primary-dark text-primary underline'
+                          >
+                            {plant.up_id}
+                          </Link>
+                        </td>
+                        <td className='px-4 py-4 text-sm text-gray-500 whitespace-nowrap '>
+                          {plant.up_planter}
+                        </td>
+                        <td className='px-4 py-4 text-sm text-gray-500 whitespace-nowrap '>
+                          {plant.up_name}
+                        </td>
+                        <td className='px-4 py-4 whitespace-nowrap'>{renderImageCell(plant, 1)}</td>
+                        <td className='px-4 py-4 whitespace-nowrap '>{renderImageCell(plant, 2)}</td>
+                        <td className='px-4 py-4 whitespace-nowrap '>{renderImageCell(plant, 3)}</td>
+                        <td className='px-4 py-4 whitespace-nowrap'>{renderImageCell(plant, 4)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
 
-                          <h1 className='m-5'>
-                            Uploaded on <br />
-                            {formatDate(plant.up_date)} {formatTime(plant.up_date)}
-                          </h1>
-
-                          {edit1 ? (
-                            <UploadButton imageNo={1} treeNo={plant.up_id} isEdit={true} />
-                          ) : (
-                            <p
-                              className='text-primary underline flex items-center justify-center m-5'
-                              onClick={() => setEdit1(1)}
-                            >
-                              Edit
-                            </p>
-                          )}
-                        </div>
-                      ) : (
-                        <UploadButton imageNo={1} treeNo={plant.up_id} isEdit={false} />
-                      )}
-                    </div>
-
-                  </td>
-                  <td className='border border-black p-4'>
-                    <div className='w-56 h-56  md:max-w-[200px]'>
-                      {plant.up_file_2 ? (
-                        // <Image src={`${imageURL}${plant.up_file}`} alt='' width={200} height={200} />
-                        <div>
-                          <div className="aspect-square h-40 w-40 relative">
-                            <img
-                              src={`${imageURL}${plant.up_file_2}`}
-                              alt="Selected"
-                              width={150}
-                              height={150}
-                              className='h-full w-full object-cover'
-                            />
-                             {/* Challenge Badge on Top */}
-                             {plant.is_challenged == 1 && (
-                              <img
-                                className="absolute top-0 left-0 w-full h-full object-contain z-10"
-                                src="/images/chellenge.png"
-                                alt="Challenged"
-                              />
-                            )}
-                          </div>
-                          <h1 className='m-5'>
-                            Uploaded on <br />
-                            {plant.up_file_2_time ? `${formatDate(plant.up_file_2_time)} ${formatTime(plant.up_file_2_time)}` : "No upload date available"}
-                          </h1>
-                          {edit2 ?
-                            <UploadButton imageNo={2} treeNo={plant.up_id} isEdit={true} /> :
-                            <p className='text-primary underline flex items-center justify-center m-5'
-                              onClick={() => { setEdit2(1) }}>Edit</p>
-                          }
-                        </div>
-                      ) : (
-                        <UploadButton imageNo={2} treeNo={plant.up_id} isEdit={false} />
-                      )}
-                    </div>
-                  </td>
-                  <td className='border border-black p-4'>
-                    <div className='w-56 h-56  md:max-w-[200px]'>
-                      {plant.up_file_2 ? (plant.up_file_3 ? (
-                        <div>
-                          <div className="aspect-square h-40 w-40 relative">
-                            <img
-                              src={`${imageURL}${plant.up_file_3}`}
-                              alt="Selected"
-                              width={150}
-                              height={150}
-                              className='h-full w-full object-cover'
-                            />
-                            {/* Challenge Badge on Top */}
-                            {plant.is_challenged == 1 && (
-                              <img
-                                className="absolute top-0 left-0 w-full h-full object-contain z-10"
-                                src="/images/chellenge.png"
-                                alt="Challenged"
-                              />
-                            )}
-                          </div>
-                          <h1 className='m-5'>
-                            Uploaded on <br />
-                            {plant.up_file_3_time ? `${formatDate(plant.up_file_3_time)} ${formatTime(plant.up_file_3_time)}` : "No upload date available"}
-                          </h1>
-                          {edit3 ?
-                            <UploadButton imageNo={3} treeNo={plant.up_id} isEdit={true} /> :
-                            <p className='text-primary underline flex items-center justify-center m-5'
-                              onClick={() => { setEdit3(1) }}>Edit</p>
-                          }
-                        </div>
-
-                      ) : (
-                        <UploadButton imageNo={3} treeNo={plant.up_id} isEdit={false} />
-                      )) : (<div className='bg-slate-200'></div>)}
-                    </div>
-                  </td>
-                  <td className='border border-black p-4'>
-                    <div className='w-56 h-56  md:max-w-[200px]'>
-                      {plant.up_file_2 && plant.up_file_3 ? (plant.up_file_4 ? (
-                        <div className=''>
-                          <div className="aspect-square h-40 w-40 relative">
-                            <img
-                              src={`${imageURL}${plant.up_file_4}`}
-                              alt="Selected"
-                              width={150}
-                              height={150}
-                              className='h-full w-full object-cover'
-                            />
-                            {/* Challenge Badge on Top */}
-                            {plant.is_challenged == 1 && (
-                              <img
-                                className="absolute top-0 left-0 w-full h-full object-contain z-10"
-                                src="/images/chellenge.png"
-                                alt="Challenged"
-                              />
-                            )}
-                          </div>
-                          <h1 className='m-5'>
-                            Uploaded on <br />
-                            {plant.up_file_4_time ? `${formatDate(plant.up_file_4_time)} ${formatTime(plant.up_file_4_time)}` : "No upload date available"}
-                          </h1>
-                          {edit4 ?
-                            <UploadButton imageNo={4} treeNo={plant.up_id} isEdit={true} /> :
-                            <p className='text-primary underline flex items-center justify-center m-5'
-                              onClick={() => { setEdit4(1) }}>Edit</p>
-                          }
-                        </div>
-                      ) : (
-                        <UploadButton imageNo={4} treeNo={plant.up_id} isEdit={false} />
-                      )) : (<div className='bg-slate-200'></div>)}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div className="flex justify-center items-center space-x-2 my-4">
-        <button
-          className={currentPage === 1 ?
-            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
-            : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-          }
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-        <span className="text-xl">{currentPage}</span>
-        <button
-          className={currentPage === totalPages ?
-            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
-            : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-          }
-          onClick={() => {
-            handlePageChange(currentPage + 1)
-          }}
-          disabled={currentPage === totalPages}
-        >
-          Next
-        </button>
-
-
+            <PaginationComponent
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </>
+        )}
       </div>
       <GceBadge />
       <Footer />
@@ -358,291 +333,3 @@ const MyUploadedPlants = () => {
 };
 
 export default MyUploadedPlants;
-
-const MAX_FILE_SIZE = 1024 * 1024 * 100; // 100MB
-const TARGET_FILE_SIZE = 1024 * 1024 * 4; // 4MB
-const ACCEPTED_IMAGE_MIME_TYPES = [
-  "image/jpeg",
-  "image/jpg",
-  "image/png",
-  "image/webp",
-];
-
-async function resizeImage(file: File) {
-  const options = {
-    maxSizeMB: TARGET_FILE_SIZE / (1024 * 1024),
-    maxWidthOrHeight: 1920,
-    useWebWorker: true,
-  };
-
-  try {
-    const resizedFile = await imageCompression(file, options);
-    return resizedFile;
-  } catch (error) {
-    console.error('Error resizing the image:', error);
-    throw error;
-  }
-}
-
-async function validateAndResizeImage(files: FileList | null) {
-  if (!files || files.length === 0) {
-    return files;
-  }
-
-  const file = files[0];
-  if (file.size > TARGET_FILE_SIZE) {
-    const resizedFile = await resizeImage(file);
-    return [resizedFile] as unknown as FileList;
-  }
-
-  return files;
-}
-
-const formSchema = z.object({
-  image: z
-    .any()
-    .refine(async (files) => {
-      const validFiles = await validateAndResizeImage(files);
-      return validFiles![0]?.size <= MAX_FILE_SIZE;
-    }, "Max image size is 100MB.")
-    .refine(
-      (files) => ACCEPTED_IMAGE_MIME_TYPES.includes(files?.[0]?.type),
-      "Only .jpg, .jpeg, .png and .webp formats are supported."
-    ),
-});
-
-type ImageFormData = z.infer<typeof formSchema>;
-
-const UploadButton = ({ imageNo, treeNo, isEdit }: any) => {
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-
-  const form = useForm<ImageFormData>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      image: undefined,
-    },
-  });
-  const token = Cookies.get('token');
-  const { toast } = useToast();
-
-
-  const onSubmit = async (data: any) => {
-    const formData = new FormData();
-    formData.append("imageNumber", imageNo);
-    formData.append("treeNumber", treeNo);
-
-    if (selectedImage) {
-      const compressedImage = await resizeImage(selectedImage);
-      formData.append("image", compressedImage);
-    }
-    try {
-      const response = await fetch(`${apiURL}/uploads/updateImage`, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-        },
-        body: formData,
-      });
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      const result = await response.json();
-      if (result) {
-        toast({
-          title: "Plant Uploaded Successfully.",
-          description: "Your plant image successfully updated",
-        });
-      }
-      // Reload the page
-      setTimeout(function () {
-        window.location.reload();
-      }, 1800);
-
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Oops, Something went wrong!",
-        description: "Please try again...",
-      });
-      console.error("Error:", error);
-    }
-  };
-
-  return (
-    <div>
-      <div className={cn("flex md:flex-row w-[100%] flex-col")}>
-        <div className="flex w-[100%] gap-2 flex-col">
-          {!isEdit && (<Form {...form}>
-            <form
-              noValidate
-              onSubmit={form.handleSubmit(onSubmit)}
-              className='flex flex-col gap-4 place-items-center'
-            >
-              <div
-                className={`flex w-[100%] gap-4  flex-col items-center md:flex-col md:justify-between md:items-center`}
-              >
-                <div
-                  className={`flex md:flex-[1] h-[fit-content] md:justify-between md:flex-row`}
-                >
-                  {selectedImage ? (
-                    <div className=" max-w-[200px]">
-                      <img
-                        src={URL.createObjectURL(selectedImage)}
-                        alt="Selected"
-                        className='max-h-32'
-                      />
-                    </div>
-                  ) : (
-                    <div className="inline-flex items-center justify-between">
-                      <div className="p-2 justify-center items-center flex">
-                        <BsImages size={28} />
-                      </div>
-                    </div>
-                  )}
-                </div>
-                <FormField
-                  control={form.control}
-                  name="image"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Button
-                          size="sm"
-                          type="button"
-                          className="bg-white hover:bg-primary/10 border border-primary text-primary"
-                        >
-                          <input
-                            type="file"
-                            className="hidden"
-                            id="fileInput"
-                            accept="image/*"
-                            onBlur={field.onBlur}
-                            name={field.name}
-                            onChange={async (e) => {
-                              const files = e.target.files;
-                              if (files && files[0]) {
-                                const validFiles = await validateAndResizeImage(files);
-                                field.onChange(validFiles);
-                                setSelectedImage(validFiles?.[0] || null);
-                              }
-                            }}
-                            ref={field.ref}
-                          />
-                          <label
-                            htmlFor="fileInput"
-                            className="text-neutral-90 flex gap-2 justify-center items-center w-full"
-                          >
-                            <BsPaperclip /> Choose file
-                          </label>
-                        </Button>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <Button size="sm" variant={'default'} type="submit">
-                Upload
-              </Button>
-
-            </form>
-          </Form>)}
-
-        </div>
-      </div>
-
-      {isEdit && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
-          <div className="fixed inset-0 bg-black opacity-50"></div>
-          <div className="bg-white rounded-lg shadow-lg p-6 z-10 w-full max-w-md mx-auto">
-            <h2 className="text-xl font-bold mb-4">Edit Image</h2>
-            <div className="flex justify-center mt-4">
-
-              <Form {...form}>
-                <form
-                  noValidate
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className='flex flex-col gap-4 place-items-center'
-                >
-                  <div
-                    className={`flex w-[100%] gap-4  flex-col items-center md:flex-col md:justify-between md:items-center`}
-                  >
-                    <div
-                      className={`flex md:flex-[1] h-[fit-content] md:justify-between md:flex-row`}
-                    >
-                      {selectedImage ? (
-                        <div className=" max-w-[200px]">
-                          <img
-                            src={URL.createObjectURL(selectedImage)}
-                            alt="Selected"
-                            className='max-h-32'
-                          />
-                        </div>
-                      ) : (
-                        <div className="inline-flex items-center justify-between">
-                          <div className="p-2 justify-center items-center flex">
-                            <BsImages size={28} />
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    <FormField
-                      control={form.control}
-                      name="image"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <Button
-                              size="sm"
-                              type="button"
-                              className="bg-white hover:bg-primary/10 border border-primary text-primary"
-                            >
-                              <input
-                                type="file"
-                                className="hidden"
-                                id="fileInput"
-                                accept="image/*"
-                                onBlur={field.onBlur}
-                                name={field.name}
-                                onChange={async (e) => {
-                                  const files = e.target.files;
-                                  if (files && files[0]) {
-                                    const validFiles = await validateAndResizeImage(files);
-                                    field.onChange(validFiles);
-                                    setSelectedImage(validFiles?.[0] || null);
-                                  }
-                                }}
-                                ref={field.ref}
-                              />
-                              <label
-                                htmlFor="fileInput"
-                                className="text-neutral-90 flex gap-2 justify-center items-center w-full"
-                              >
-                                <BsPaperclip /> Choose file
-                              </label>
-                            </Button>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <Button size="sm" variant={'default'} type="submit">
-                    Upload
-                  </Button>
-                  {isEdit ?
-
-                    <p className='text-primary underline flex items-center justify-center m-1' onClick={() => { window.location.reload() }}>Cancel</p>
-                    : ''
-                  }
-
-                </form>
-              </Form>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  )
-}

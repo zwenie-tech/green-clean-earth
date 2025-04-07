@@ -95,7 +95,7 @@ const ButtonDisplayFn: React.FC = () => {
       });
       const data = await response.json();
       if (data.success) {
-        console.log(data)
+        // console.log(data)
         setGroupActivities(data.groupActivities);
         setActCount(data.activity_count);
         setTotalPagesAct(Math.ceil(data.activity_count / itemsPerPage));
@@ -118,7 +118,7 @@ const ButtonDisplayFn: React.FC = () => {
       });
       const data = await response.json();
       if (data.success) {
-        console.log(data)
+        // console.log(data)
         setGroupUploads(data.groupUploads);
         setUpCount(data.upload_count);
         setTotalPagesUp(Math.ceil(data.upload_count / itemsPerPage));

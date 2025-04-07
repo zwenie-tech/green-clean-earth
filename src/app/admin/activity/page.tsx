@@ -252,7 +252,7 @@ const AdminGrid = () => {
 
         if (response.data.success && response.status != 203) {
           setRowData(response.data.userList);
-          console.log('this', response.data)
+          // console.log('this', response.data)
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
           setTotalcount(response.data.totalCount);
         }
@@ -278,7 +278,7 @@ const AdminGrid = () => {
           if (response.data.success && response.status !== 203) {
             setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
             setTotalcount(response.data.totalCount);
-            console.log('this 1', response.data)
+            // console.log('this 1', response.data)
 
             setRowData(response.data.userList);
           } else {
@@ -490,7 +490,7 @@ const AdminGrid = () => {
   useEffect(() => {
     const fetchFilteredUpId = async () => {
       if (chestno != '') {
-        console.log(chestno)
+        // console.log(chestno)
         const filterdata = {
           chestNumber: chestno
         }
@@ -508,7 +508,7 @@ const AdminGrid = () => {
           try {
 
             if (response.data.success && response.status !== 203) {
-              console.log('chest', response.data)
+              // console.log('chest', response.data)
               setRowData(response.data.userList);
               setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
               setTotalcount(response.data.totalCount);
@@ -546,7 +546,7 @@ const AdminGrid = () => {
           try {
 
             if (response.data.success && response.status !== 203) {
-              console.log('usid', response.data)
+              // console.log('usid', response.data)
               setRowData(response.data.userList);
               setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
               setTotalcount(response.data.totalCount);
@@ -582,7 +582,7 @@ const AdminGrid = () => {
   
             setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
             setTotalcount(response.data.totalCount);
-            console.log('this 2', response.data)
+            // console.log('this 2', response.data)
   
             setRowData(response.data.userList);
           } else {
@@ -619,7 +619,7 @@ const AdminGrid = () => {
 
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
           setTotalcount(response.data.totalCount);
-          console.log('this 3', response.data)
+          // console.log('this 3', response.data)
 
           setRowData(response.data.userList);
         } else {
@@ -962,7 +962,7 @@ const AdminGrid = () => {
         const response = await axios.get(`${apiURL}/activity_category`);
         const categoriesData = response.data.activity_category;
         
-        console.log(categoriesData)
+        // console.log(categoriesData)
 
         setActCategories(categoriesData);
       } catch (error) {
@@ -1014,7 +1014,7 @@ const AdminGrid = () => {
         );
         try {
           if (response.data.success && response.status !== 203) {
-            console.log('this 4', response.data)
+            // console.log('this 4', response.data)
 
             setRowData(response.data.userList);
             setTotalcount(response.data.totalCount);
