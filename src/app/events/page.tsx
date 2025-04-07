@@ -24,6 +24,7 @@ interface Event {
 interface EventsApiResponse {
   events: Event[];
   success: boolean;
+  totalRecords:number;
 }
 
 const Events = () => {
@@ -33,15 +34,7 @@ const Events = () => {
   const itemsPerPage = 10;
 
  
-    useEffect(() => {
-      async function fetchfirstData(){
-        const responseall = await fetch(`${apiURL}/common/events?limit=100000000000`); 
-        const dataall = await responseall.json();
-   
-        setTotalPages(Math.ceil(dataall.events.length / itemsPerPage));
-      }
-      fetchfirstData();
-    }, []);
+    
 
     const handlePageChange = (newPage: number) => {
       if (newPage > 0 && newPage <= totalPages) {
@@ -56,6 +49,8 @@ const Events = () => {
         const data: EventsApiResponse = await response.json();
         
         if (data && data.success) {
+        setTotalPages(Math.ceil(data.totalRecords / itemsPerPage));
+
           setEvents(data.events);
         } else {
           console.error('Failed to fetch events:', data);
