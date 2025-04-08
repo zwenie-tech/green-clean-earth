@@ -57,7 +57,7 @@ export default function Footer() {
                 <img
                   src={`${imageURL}${ads[currentImage].ad_image}`}
                   alt="Sliding images"
-                  className="shadow-xl w-full mx-6 rounded-2xl"
+                  className="shadow-xl w-full rounded-2xl"
                   style={{ objectFit: 'cover' }}
                 />
               </a>
