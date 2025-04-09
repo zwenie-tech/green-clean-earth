@@ -78,7 +78,7 @@ const Events = () => {
                   <h1 className='font-bold m-44'>No events available</h1>
                 </center>
               ) : (
-                events.slice().reverse().map((event) => {
+                events.map((event) => {
                   return (
                     <div key={event.id} className='flex flex-col gap-2 my-2 md:my-4 mx-auto p-4 max-w-screen-xl bg-light-gray rounded-lg shadow-md'>
                       <h2 className='text-xl font-bold'>{event.event_heading}</h2>

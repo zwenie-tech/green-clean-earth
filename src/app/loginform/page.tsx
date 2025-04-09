@@ -35,8 +35,9 @@ const coordinatorSchema = z.object({
 
 const LoginForm = () => {
   const [isUserLogin, setIsUserLogin] = useState(true);
-  const [isSubmitBtnDisabled, setIsSubmitBtnDisabled] = useState(true); // State for submit button
-  const [isSubmitUserBtnDisabled, setIsSubmitUserBtnDisabled] = useState(true); // State for submit button
+  const [isSubmitBtnDisabled, setIsSubmitBtnDisabled] = useState(true);
+  const [isSubmitUserBtnDisabled, setIsSubmitUserBtnDisabled] = useState(true);
+
   const userForm = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
   });
@@ -45,21 +46,17 @@ const LoginForm = () => {
     resolver: zodResolver(coordinatorSchema),
   });
 
-  // Use watch to track the form values
   const userWatch = userForm.watch();
   const coordinatorWatch = coordinatorForm.watch();
 
   useEffect(() => {
-    // Check if both username and password are filled for the user form
     const isUserFormFilled = userWatch.mobile && userWatch.password;
-
-    setIsSubmitUserBtnDisabled(!isUserFormFilled); // Disable/enable submit button
+    setIsSubmitUserBtnDisabled(!isUserFormFilled);
   }, [userWatch]);
 
   useEffect(() => {
-    // Check if both username and password are filled for the coordinator form
     const isCoordinatorFormFilled = coordinatorWatch.username && coordinatorWatch.password;
-    setIsSubmitBtnDisabled(!isCoordinatorFormFilled); // Disable/enable submit button
+    setIsSubmitBtnDisabled(!isCoordinatorFormFilled);
   }, [coordinatorWatch]);
 
   const { toast } = useToast();
@@ -80,31 +77,17 @@ const LoginForm = () => {
         body: JSON.stringify(apidata),
       });
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
+      if (!response.ok) throw new Error("Network response was not ok");
 
       const result = await response.json();
-
-      const id = result.data.id;
-      const token = result.data.token;
-      const refcode = result.data.refferalCode;
-      const uname = result.data.userName;
-      const groupId = result.data.groupId;
-      const groupName = result.data.groupName;
-      const cordinatorName = result.data.cordinatorName;
-      const groupType = result.data.groupType;
-
+      const { id, token, refferalCode, userName, groupId, groupName, cordinatorName, groupType } = result.data;
 
       if (id) {
-        toast({
-          title: "Account logged in.",
-          description: "Successfully logged in.",
-        });
+        toast({ title: "Account logged in.", description: "Successfully logged in." });
         Cookies.set("token", token, { expires: 1 });
         Cookies.set("login_type", "user", { expires: 1 });
-        Cookies.set("user_refcode", refcode, { expires: 1 });
-        Cookies.set("name", uname, { expires: 1 });
+        Cookies.set("user_refcode", refferalCode, { expires: 1 });
+        Cookies.set("name", userName, { expires: 1 });
         Cookies.set("groupId", groupId, { expires: 1 });
         Cookies.set("groupName", groupName, { expires: 1 });
         Cookies.set("cordinatorName", cordinatorName, { expires: 1 });
@@ -125,47 +108,30 @@ const LoginForm = () => {
 
   async function onCoordinatorSubmit(values: z.infer<typeof coordinatorSchema>) {
     try {
-      const response = await fetch(
-        `${apiURL}/coordinator/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username: values.username,
-            password: values.password
-          }),
-        }
-      );
+      const response = await fetch(`${apiURL}/coordinator/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: values.username,
+          password: values.password
+        }),
+      });
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
+      if (!response.ok) throw new Error("Network response was not ok");
 
       const result = await response.json();
-
-      const refcode = result.data.referral_code;
-
-      const id = result.data.id;
-      const gname = result.data.gp_name;
-      const gid = result.data.groupId;
-
-      const token = result.data.token;
+      const { referral_code, id, gp_name, groupId, token } = result.data;
 
       if (id) {
-        toast({
-          title: "Account logged in.",
-          description: "Successfully logged in.",
-        });
+        toast({ title: "Account logged in.", description: "Successfully logged in." });
         Cookies.set('token', token, { expires: 1 });
-        Cookies.set("cord_refcode", refcode, { expires: 1 });
+        Cookies.set("cord_refcode", referral_code, { expires: 1 });
         Cookies.set("login_type", "coordinator", { expires: 1 });
         Cookies.set("coid", id, { expires: 1 });
-        Cookies.set("gname", gname, { expires: 1 });
-        Cookies.set("cogid", gid, { expires: 1 });
+        Cookies.set("gname", gp_name, { expires: 1 });
+        Cookies.set("cogid", groupId, { expires: 1 });
 
-        router.push(`/dashboard?id=${id}&gid=${gid}`);
+        router.push(`/dashboard?id=${id}&gid=${groupId}`);
       }
 
     } catch (error) {
@@ -188,9 +154,8 @@ const LoginForm = () => {
           backgroundPosition: 'right',
           borderRadius: '20px',
         }}>
-        <div className="w-full lg:w-2/3 flex hidden lg:block">
-        </div>
-        <div className="w-full lg:w-1/3 rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700 flex items-center justify-center" style={{ backgroundColor: '#E4EBF7' }} >
+        <div className="w-full lg:w-2/3 flex hidden lg:block"></div>
+        <div className="w-full lg:w-1/3 rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700 flex items-center justify-center" style={{ backgroundColor: '#E4EBF7' }}>
           <Container>
             <Row className="justify-content-end">
               <Col md={4} className="p-2 rounded shadow opacity-80" style={{ borderRadius: '20px' }}>
@@ -208,6 +173,8 @@ const LoginForm = () => {
                     Coordinator
                   </button>
                 </div>
+
+                {/* User Form */}
                 {isUserLogin && (
                   <Form {...userForm}>
                     <form noValidate onSubmit={userForm.handleSubmit(onUserSubmit)} className="space-y-8">
@@ -216,19 +183,16 @@ const LoginForm = () => {
                         name="mobile"
                         render={({ field }) => (
                           <FormItem>
-                            <div className="flex justify-center mx-5" style={{ marginLeft: '10%', marginRight: '10%' }}>
+                            <div className="flex justify-center mx-5">
                               <FormControl className="shadow-xl rounded-md border-0">
                                 <Input
                                   type="tel"
                                   placeholder="Mobile"
                                   className="bg-white text-black"
-                                  style={{ backgroundColor: '#FFFFFF', opacity: 1 }}
                                   {...field}
-                                  pattern="[0-9]*"
                                 />
                               </FormControl>
                             </div>
-                            <FormDescription />
                             <FormMessage />
                           </FormItem>
                         )}
@@ -238,18 +202,24 @@ const LoginForm = () => {
                         name="password"
                         render={({ field }) => (
                           <FormItem>
-                            <div className="flex justify-center mx-5" style={{ marginLeft: '10%', marginRight: '10%' }}>
+                            <div className="flex justify-center mx-5">
                               <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
                                 <Input type="password" placeholder="Password" className="bg-white text-black" {...field} />
                               </FormControl>
                             </div>
-                            <FormDescription />
                             <FormMessage />
                           </FormItem>
                         )}
                       />
                       <div className="flex justify-center w-full">
-                        <Button type="submit" style={{ width: '50%' }} className="bg-green-950 items-center">Submit</Button>
+                        <Button
+                          type="submit"
+                          disabled={isSubmitUserBtnDisabled}
+                          style={{ width: '50%' }}
+                          className={`items-center transition-colors duration-300 ${isSubmitUserBtnDisabled ? 'bg-green-800' : 'bg-[#3C6E1F]'}`}
+                        >
+                          Submit
+                        </Button>
                       </div>
                       <div className="flex justify-center w-full mt-4">
                         <a href="/forgot-password-user" className="text-primary">Forgot your password?</a>
@@ -257,26 +227,26 @@ const LoginForm = () => {
                     </form>
                   </Form>
                 )}
+
+                {/* Coordinator Form */}
                 {!isUserLogin && (
                   <Form {...coordinatorForm}>
-                    <form noValidate onSubmit={coordinatorForm.handleSubmit(onCoordinatorSubmit)} className="space-y-8" >
+                    <form noValidate onSubmit={coordinatorForm.handleSubmit(onCoordinatorSubmit)} className="space-y-8">
                       <FormField
                         control={coordinatorForm.control}
                         name="username"
                         render={({ field }) => (
                           <FormItem>
-                            <div className="flex justify-center mx-5" style={{ marginLeft: '10%', marginRight: '10%' }}>
+                            <div className="flex justify-center mx-5">
                               <FormControl className="shadow-xl rounded-md border-0">
                                 <Input
                                   type="text"
                                   placeholder="Username"
                                   className="bg-white text-black"
-                                  style={{ backgroundColor: '#FFFFFF', opacity: 1 }}
                                   {...field}
                                 />
                               </FormControl>
                             </div>
-                            <FormDescription />
                             <FormMessage />
                           </FormItem>
                         )}
@@ -286,18 +256,24 @@ const LoginForm = () => {
                         name="password"
                         render={({ field }) => (
                           <FormItem>
-                            <div className="flex justify-center mx-5" style={{ marginLeft: '10%', marginRight: '10%' }}>
+                            <div className="flex justify-center mx-5">
                               <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
                                 <Input type="password" placeholder="Password" className="bg-white text-black" {...field} />
                               </FormControl>
                             </div>
-                            <FormDescription />
                             <FormMessage />
                           </FormItem>
                         )}
                       />
                       <div className="flex justify-center w-full">
-                        <Button type="submit" style={{ width: '50%' }} className="bg-green-950 items-center">Submit</Button>
+                        <Button
+                          type="submit"
+                          disabled={isSubmitBtnDisabled}
+                          style={{ width: '50%' }}
+                          className={`items-center transition-colors duration-300 ${isSubmitBtnDisabled ? 'bg-green-800' : 'bg-[#3C6E1F]'}`}
+                        >
+                          Submit
+                        </Button>
                       </div>
                       <div className="flex justify-center w-full mt-4">
                         <a href="/forgot-password-coordinator" className="text-primary">Forgot your password?</a>
