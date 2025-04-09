@@ -460,7 +460,7 @@ const cards = [
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4" style={{ justifyItems: 'center' }}>
         {events.map((card, index) => (
           <div key={index} className="bg-light-gray p-4 shadow-md" style={{ borderRadius: '9px', maxWidth: '400px' }}>
-            <Image src={card.image_link} alt={`Card Image ${index + 1}`} width={500} height={300} className="rounded-lg" />
+            <Image src={card.image_link} alt={`Card Image ${index + 1}`} width={500} height={300} className="rounded-lg h-[300px] w-full object-cover" />
             <div className="flex justify-between items-center mt-4">
               <div className="flex items-center">
                 <FaCalendarAlt className="text-gray-500" />
