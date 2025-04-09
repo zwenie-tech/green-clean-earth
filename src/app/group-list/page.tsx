@@ -223,7 +223,7 @@ const GroupList = () => {
         if (data.success) {
           setTotalPages(Math.ceil(data.totalRecords / itemsPerPage));
           setTotalCount(data.totalRecords);
-          console.log(data)
+          // console.log(data)
           setGroups(data.groupList);
         }
       }
@@ -597,9 +597,9 @@ const GroupList = () => {
           const result = await response.json();
           setGroups(result.groupList);
 
-          console.log('part 2',)
+          // console.log('part 2',)
 
-          console.log(result)
+          // console.log(result)
           setTotalCount(result.totalRecords);
           setTotalPages(Math.ceil(result.totalRecords / itemsPerPage));
 
@@ -640,7 +640,7 @@ const GroupList = () => {
           },
         }
       );
-      console.log('part3')
+      // console.log('part3')
       setGrpName(response.data.groupList);
     } catch (error) {
       console.error("Error fetching category:", error);
@@ -1506,8 +1506,8 @@ const GroupList = () => {
                   <td className="py-3 px-6 text-left">{group.gp_id}</td>
                   <a href={`/group-page?gname=${group.gp_name}&gid=${group.gp_id}&uc=${group.upload_count}&cordinator=${group.co_ord_name}&groupType=${group.group_type}`}><td className="py-3 px-6 text-left">{group.gp_name}</td></a>
                   <td className="py-3 px-6 text-left">{group.co_ord_name}</td>
-                  <td className="py-3 px-6 text-left">{group.upload_count}</td>
-                  <td className="py-3 px-6 text-left">{group.activity_count}</td>
+                  <td className="py-3 px-6 text-left"><a href={`/group-page?gname=${group.gp_name}&gid=${group.gp_id}&uc=${group.upload_count}&cordinator=${group.co_ord_name}&groupType=${group.group_type}&up=t`}>{group.upload_count}</a></td>
+                  <td className="py-3 px-6 text-left"><a href={`/group-page?gname=${group.gp_name}&gid=${group.gp_id}&uc=${group.upload_count}&cordinator=${group.co_ord_name}&groupType=${group.group_type}&up=f`}>{group.activity_count}</a></td>
                   <td className="py-3 px-6 text-left">{group.dis_name}</td>
                   <td className="py-3 px-6 text-left">{group.st_name}</td>
                   <td className="py-3 px-6 text-left">{group.cntry_name}</td>

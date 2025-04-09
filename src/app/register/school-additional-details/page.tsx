@@ -351,7 +351,7 @@ const MultiSelectZodForm = () => {
     const selectedClubIds = clubOptions
       .filter((club) => data.value.includes(club.name))
       .map((club) => club.id);
-console.log()
+// console.log()
     const apidata = {
       groupId: parseInt(groupId!),
       clubs: selectedClubIds.toString(),

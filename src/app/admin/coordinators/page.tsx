@@ -231,7 +231,7 @@ const AdminGrid = () => {
           setRowData(response.data.cordinatorList);
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
           setTotalcount(response.data.totalCount);
-          console.log(response.data)
+          // console.log(response.data)
 
 
         }

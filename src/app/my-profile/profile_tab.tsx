@@ -58,7 +58,7 @@ export default function ProfileTab({ token }: any) {
     async function fetchData() {
       if (user_id && token) {
         const data = await fetchUserData(user_id, token);
-        console.log(data.user)
+        // console.log(data.user)
         if (data.user) {
           // const { us_name, us_address, us_mobile, us_email, us_district, us_city,cntry_name  } = data.user[0];
           const {

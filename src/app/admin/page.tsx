@@ -210,7 +210,7 @@ const GridExample = () => {
 
            
 
-            console.log('part1', data);  // Log the formatted data
+            // console.log('part1', data);  // Log the formatted data
 
             setRowData(data);  // Set the updated data to state
 

@@ -311,7 +311,7 @@ const ActivityList = () => {
           }
           try {
             const result = await response.json();
-            console.log(result.activity)
+            // console.log(result.activity)
             setTotalPages(Math.ceil(result.total / itemsPerPage));
             setTotalCount(result.total);
             setActivityList(result.activity);
@@ -368,7 +368,7 @@ const ActivityList = () => {
           acc[category.activity_category_id] = category.activity_category;
           return acc;
         }, {});
-        console.log(categoriesData)
+        // console.log(categoriesData)
 
         setActCategories(categoriesData);
         setCategories(categoriesMap);
@@ -736,7 +736,7 @@ const ActivityList = () => {
     selectIcdsProject ? dataWithIds.projectId = icdsProject.find((item) => item.project_name === selectIcdsProject)?.project_id || null : null;
     selectMission ? dataWithIds.chapterId = missionChapter.find((item) => item.chapter_name === selectMission)?.chapter_id || null : null;
     selectZone ? dataWithIds.zoneId = missionZone.find((item) => item.zone_name === selectZone)?.zone_id || null : null;
-    console.log(dataWithIds)
+    // console.log(dataWithIds)
     setFilterData(dataWithIds);
 
 
@@ -1475,8 +1475,8 @@ const ActivityList = () => {
       <div className="flex justify-center font-bold my-4">
         <p>Total Count: {totalCount}</p>
       </div>
-      <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
-      <div className="container mx-auto p-6">
+      <div className="mx-5 md:mx-9 lg:mx-16">
+        <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white border-gray-200 rounded-t-lg">
             <thead>

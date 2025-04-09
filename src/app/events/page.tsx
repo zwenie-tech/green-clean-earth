@@ -6,6 +6,7 @@ import PageTitle from '@/components/sm/pageTitle';
 import GceBadge from '@/components/gceBadge';
 import Footer from '@/components/footer';
 import { apiURL } from '../requestsapi/request';
+import PaginationComponent from '../PageComponent';
 
 
 // Define the interface for a single event
@@ -23,6 +24,7 @@ interface Event {
 interface EventsApiResponse {
   events: Event[];
   success: boolean;
+  totalRecords:number;
 }
 
 const Events = () => {
@@ -32,15 +34,7 @@ const Events = () => {
   const itemsPerPage = 10;
 
  
-    useEffect(() => {
-      async function fetchfirstData(){
-        const responseall = await fetch(`${apiURL}/common/events?limit=100000000000`); 
-        const dataall = await responseall.json();
-   
-        setTotalPages(Math.ceil(dataall.events.length / itemsPerPage));
-      }
-      fetchfirstData();
-    }, []);
+    
 
     const handlePageChange = (newPage: number) => {
       if (newPage > 0 && newPage <= totalPages) {
@@ -55,6 +49,8 @@ const Events = () => {
         const data: EventsApiResponse = await response.json();
         
         if (data && data.success) {
+        setTotalPages(Math.ceil(data.totalRecords / itemsPerPage));
+
           setEvents(data.events);
         } else {
           console.error('Failed to fetch events:', data);
@@ -112,30 +108,10 @@ const Events = () => {
           </div>
         </div>
       </div>
+      
       <div className="flex justify-center items-center space-x-2 my-4">
-        <button
-        className={currentPage === 1 ? 
-          "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
-        : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-        }
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-        <span className="text-xl">{currentPage}</span>
-        <button
-          className={currentPage === totalPages ? 
-            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
-          : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-          }
-          onClick={() => {
-            handlePageChange(currentPage + 1) 
-          }}
-          disabled={currentPage === totalPages}
-        >
-          Next
-        </button>
+      <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+        
       </div>
       <GceBadge />
       <Footer />

@@ -19,7 +19,7 @@ import { useRouter } from "next/navigation";
 import { apiURL } from "@/app/requestsapi/request";
 import { useToast } from "@/components/ui/use-toast";
 import { Container, Row, Col } from "react-bootstrap";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // User login schema
 const userSchema = z.object({
@@ -35,6 +35,8 @@ const coordinatorSchema = z.object({
 
 const LoginForm = () => {
   const [isUserLogin, setIsUserLogin] = useState(true);
+  const [isSubmitBtnDisabled, setIsSubmitBtnDisabled] = useState(true); // State for submit button
+  const [isSubmitUserBtnDisabled, setIsSubmitUserBtnDisabled] = useState(true); // State for submit button
   const userForm = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
   });
@@ -43,8 +45,22 @@ const LoginForm = () => {
     resolver: zodResolver(coordinatorSchema),
   });
 
-  // Determine the background color based on the state
-  const parentBgColor = isUserLogin ? '#E4EBF7' : '#FEFAEC'; 
+  // Use watch to track the form values
+  const userWatch = userForm.watch();
+  const coordinatorWatch = coordinatorForm.watch();
+
+  useEffect(() => {
+    // Check if both username and password are filled for the user form
+    const isUserFormFilled = userWatch.mobile && userWatch.password;
+
+    setIsSubmitUserBtnDisabled(!isUserFormFilled); // Disable/enable submit button
+  }, [userWatch]);
+
+  useEffect(() => {
+    // Check if both username and password are filled for the coordinator form
+    const isCoordinatorFormFilled = coordinatorWatch.username && coordinatorWatch.password;
+    setIsSubmitBtnDisabled(!isCoordinatorFormFilled); // Disable/enable submit button
+  }, [coordinatorWatch]);
 
   const { toast } = useToast();
   const router = useRouter();
@@ -69,7 +85,6 @@ const LoginForm = () => {
       }
 
       const result = await response.json();
-      
 
       const id = result.data.id;
       const token = result.data.token;
@@ -79,9 +94,8 @@ const LoginForm = () => {
       const groupName = result.data.groupName;
       const cordinatorName = result.data.cordinatorName;
       const groupType = result.data.groupType;
-      
 
-      
+
       if (id) {
         toast({
           title: "Account logged in.",
@@ -96,7 +110,7 @@ const LoginForm = () => {
         Cookies.set("cordinatorName", cordinatorName, { expires: 1 });
         Cookies.set("groupType", groupType, { expires: 1 });
         Cookies.set("userId", id, { expires: 1 });
-        
+
         router.replace("/user-dash-home?id=" + id);
       }
     } catch (error) {
@@ -130,7 +144,6 @@ const LoginForm = () => {
       }
 
       const result = await response.json();
-    
 
       const refcode = result.data.referral_code;
 
@@ -139,7 +152,7 @@ const LoginForm = () => {
       const gid = result.data.groupId;
 
       const token = result.data.token;
-      
+
       if (id) {
         toast({
           title: "Account logged in.",
@@ -151,8 +164,6 @@ const LoginForm = () => {
         Cookies.set("coid", id, { expires: 1 });
         Cookies.set("gname", gname, { expires: 1 });
         Cookies.set("cogid", gid, { expires: 1 });
-        
-
 
         router.push(`/dashboard?id=${id}&gid=${gid}`);
       }
@@ -179,32 +190,24 @@ const LoginForm = () => {
         }}>
         <div className="w-full lg:w-2/3 flex hidden lg:block">
         </div>
-  <div className="w-full lg:w-1/3 rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700 flex items-center justify-center" style={{ backgroundColor: parentBgColor }} >
+        <div className="w-full lg:w-1/3 rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700 flex items-center justify-center" style={{ backgroundColor: '#E4EBF7' }} >
           <Container>
             <Row className="justify-content-end">
               <Col md={4} className="p-2 rounded shadow opacity-80" style={{ borderRadius: '20px' }}>
-              <div className="flex flex-row bg-transparent rounded mb-5 justify-center items-center w-3/4 mx-auto gap-2">
-          <button
-            onClick={() => setIsUserLogin(true)}
-            className={`w-2/5 text-center rounded-2xl font-bold bg-[#E4EBF7] py-3 text-http://localhost:3000[#3C6E1F] hover:bg-primary/15 border-2 ${
-              isUserLogin
-                ? 'shadow-lg border-[#3C6E1F]' // Apply shadow and border color when active
-                : 'border-transparent bg-transparent' // No shadow and border when inactive
-            }`}
-          >
-            User
-          </button>
-          <button
-            onClick={() => setIsUserLogin(false)}
-            className={`w-3/5 text-center rounded-2xl font-bold bg-transparent py-3 text-[#3C6E1F] hover:bg-primary/15 border-2 ${
-              !isUserLogin
-                ? 'shadow-lg border-[#3C6E1F]' // Apply shadow and border color when active
-                : 'border-transparent bg-transparent' // No shadow and border when inactive
-            }`}
-          >
-            Coordinator
-          </button>
-        </div>
+                <div className="flex flex-row bg-transparent rounded mb-5 justify-center items-center w-3/4 mx-auto gap-2">
+                  <button
+                    onClick={() => setIsUserLogin(true)}
+                    className={`w-2/5 text-center rounded-2xl font-bold bg-[#E4EBF7] py-3 text-[#3C6E1F] hover:bg-primary/15 border-2 ${isUserLogin ? 'shadow-lg border-[#3C6E1F]' : 'border-transparent bg-transparent'}`}
+                  >
+                    User
+                  </button>
+                  <button
+                    onClick={() => setIsUserLogin(false)}
+                    className={`w-3/5 text-center rounded-2xl font-bold bg-transparent py-3 text-[#3C6E1F] hover:bg-primary/15 border-2 ${!isUserLogin ? 'shadow-lg border-[#3C6E1F]' : 'border-transparent bg-transparent'}`}
+                  >
+                    Coordinator
+                  </button>
+                </div>
                 {isUserLogin && (
                   <Form {...userForm}>
                     <form noValidate onSubmit={userForm.handleSubmit(onUserSubmit)} className="space-y-8">
@@ -251,9 +254,6 @@ const LoginForm = () => {
                       <div className="flex justify-center w-full mt-4">
                         <a href="/forgot-password-user" className="text-primary">Forgot your password?</a>
                       </div>
-                      {/* <div className="flex justify-center w-full mt-4">
-                        <Button type="button" className="shadow-xl bg-white text-green-600">Register</Button>
-                      </div> */}
                     </form>
                   </Form>
                 )}

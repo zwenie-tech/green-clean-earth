@@ -77,6 +77,7 @@ interface CoordinatorDetails {
   name?: string;
   contact?: string;
   profession?: string;
+  email?: string;
 }
 
 interface SchoolDetails {
@@ -334,6 +335,7 @@ const DetailsEdit: React.FC = () => {
             name: data.groupDetails[0].co_ord_name,
             contact: data.groupDetails[0].co_ord_contact,
             profession: data.groupDetails[0].co_profession,
+            email: data.groupDetails[0].co_email_id
           });
           setadditionalmode(data.groupDetails[0].gp_cat_id);
           const formset = {
@@ -612,8 +614,8 @@ const DetailsEdit: React.FC = () => {
       name: coordinatorDetails.name,
       number: coordinatorDetails.contact,
       profession: coordinatorDetails.profession,
+      emailId : coordinatorDetails.email,
     };
-    
     try {
       const response = await fetch(`${apiURL}/coordinator/updateCoordinator`, {
         method: "POST",
@@ -1175,6 +1177,24 @@ const DetailsEdit: React.FC = () => {
                       setCoordinatorDetails({
                         ...coordinatorDetails,
                         contact: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="mb-3 flex justify-between gap-3">
+                  <label htmlFor="contact" className="text-lg w-1/3">
+                    Coordinator Email
+                  </label>
+                  <input
+                    type="text"
+                    className="h-8 shadow-lg rounded-sm w-2/3"
+                    id="contact"
+                    value={coordinatorDetails.email || ""}
+                    disabled={!iscoordinatorEditing}
+                    onChange={(e) =>
+                      setCoordinatorDetails({
+                        ...coordinatorDetails,
+                        email: e.target.value,
                       })
                     }
                   />
