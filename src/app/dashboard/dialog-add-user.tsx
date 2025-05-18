@@ -31,21 +31,33 @@ function DialogAddUserfn() {
   const referral_code = Cookies.get("cord_refcode");
   const id = searchParams.get("id");
   const message = `
- 
-🥦ഗ്രീൻ ക്ലീൻ കേരള  ഹരിത  മത്സരങ്ങളിൽ  പങ്കെടുക്കാൻ ..........
-🥦താഴെക്കൊടുത്ത ലിങ്കിൽ ക്ലിക്ക് ചെയ്തു  രജിസ്റ്റർ ചെയ്തതിനുശേഷം യൂസർ നെയ്മും പാസ്സ്‌വേർഡും  ക്രിയേറ്റ് ചെയ്തു  സബ്മിറ്റ് ചെയ്യുക.
+  *അപ്‌ലോഡർ രജിസ്ട്രേഷൻ*
+🥦
+*ഗ്രീൻ ക്ലീൻ കേരള സുസ്ഥിരവികസന ഹരിത മത്സരങ്ങളിൽ പങ്കെടുക്കുവാൻ....*
+🥦
+ താഴെക്കൊടുത്ത വീഡിയോ കാണുക
+👇🏼
+ലിങ്ക് video
+👆🏼
+ അതിനുശേഷം
+ താഴെക്കൊടുത്ത ലിങ്കിൽ ക്ലിക്ക് ചെയ്തു  വീഡിയോയിൽ പറഞ്ഞത് പ്രകാരം  
+ പ്രവർത്തിക്കുക
 👇🏼
 ${baseURL}/user-register?id=${parseInt(id!)}&ref=${referral_code}
-🥦
+👆🏼
+
  സംശയങ്ങൾക്ക്
 🥦
-9645 9645 92
-🥦
 Web: www.GreenCleanEarth.org 
-Youtube /fb/insta: Green Clean Kerala
+
 Whatsapp/Telegram : 9645 9645 92
-Mail: GreenCleanKerala@gmail.Com
-Follow the link to join GreenCleanEarth mission.
+
+Mail: GreenCleanKerala@gmail.com.
+
+Youtube /fb/insta: Green Clean Kerala
+
+🥦
+ വാർത്തകളും റിസൽ ട്ടുകളും അറിയുവാൻ ചാനലും പേജും  സബ്സ്ക്രൈബ്- ഫോളോ  ചെയ്യുക
 `;
 
   const [isCopied, setIsCopied] = useState(false);
@@ -83,12 +95,21 @@ Follow the link to join GreenCleanEarth mission.
             <DialogDescription></DialogDescription>
           </DialogHeader>
           <div>
-            <p className="font-semibold">
-              ഗ്രീൻ ക്ലീൻ കേരള ഹരിത മത്സരങ്ങളിൽ പങ്കെടുക്കാൻ
-            </p>
-            <p className="">
-              താഴെക്കൊടുത്ത ലിങ്കിൽ ക്ലിക്ക് ചെയ്തു രജിസ്റ്റർ ചെയ്തതിനുശേഷം യൂസർ
-              നെയ്മും പാസ്സ്‌വേർഡും ക്രിയേറ്റ് ചെയ്തു സബ്മിറ്റ് ചെയ്യുക. 👇🏼
+            <p className="text-base">
+            <b>അപ്‌ലോഡർ രജിസ്ട്രേഷൻ</b>
+            <br></br>
+            🥦
+            <b>ഗ്രീൻ ക്ലീൻ കേരള സുസ്ഥിരവികസന ഹരിത മത്സരങ്ങളിൽ പങ്കെടുക്കുവാൻ....</b>
+            🥦
+            <br></br>
+            താഴെക്കൊടുത്ത വീഡിയോ കാണുക
+            👇🏼<br></br>
+            ലിങ്ക് video
+            <br></br>👆🏼<br></br>
+            അതിനുശേഷം
+            താഴെക്കൊടുത്ത ലിങ്കിൽ ക്ലിക്ക് ചെയ്തു  വീഡിയോയിൽ പറഞ്ഞത് പ്രകാരം  
+            പ്രവർത്തിക്കുക
+            👇🏼
             </p>
             <Link
               href={`/user-register?id=${id}&ref=${referral_code}`}
@@ -97,36 +118,38 @@ Follow the link to join GreenCleanEarth mission.
               {baseURL}/user-register?id={parseInt(id!)}&ref={referral_code}
             </Link>
             <p className="py-2">
-              🥦 സംശയങ്ങൾക്ക്
-              <br />
-              🥦 9645 9645 92
-              <br />
-              🥦 Web: www.GreenCleanEarth.org
-              <br />
-              🥦 Youtube /fb/insta: Green Clean Kerala
-              <br />
-              🥦 Whatsapp/Telegram : 9645 9645 92
-              <br />
-              🥦 Mail: GreenCleanKerala@gmail.Com
-              <br />
-              🥦 Follow the link to join GreenCleanEarth mission.
+            👆🏼<br></br>
+
+            സംശയങ്ങൾക്ക്
+            🥦<br></br>
+            Web: www.GreenCleanEarth.org <br></br>
+
+            Whatsapp/Telegram : 9645 9645 92<br></br>
+
+            Mail: GreenCleanKerala@gmail.com.<br></br>
+
+            Youtube /fb/insta: Green Clean Kerala<br></br>
+
+            🥦
+            വാർത്തകളും റിസൽ ട്ടുകളും അറിയുവാൻ ചാനലും പേജും  സബ്സ്ക്രൈബ്- ഫോളോ  ചെയ്യുക
             </p>
           </div>
         </div>
         <div className="p-2 border-t">
-          <Button
-            onClick={() => copyToClipboard(message)}
-            className="bg-green-600 hover:bg-green-800 rounded-full w-16 h-12 flex items-center justify-center ml-auto"
-          >
-            {isCopied ? (
-              <span className="text-xs">Copied!</span>
-            ) : (
-              <span className="text-xs">
-                <Copy className="h-5 w-10" />
-                Copy
-              </span>
-            )}
-          </Button>
+        <Button
+  onClick={() => copyToClipboard(message)}
+  className="bg-green-600 hover:bg-green-800 rounded-full w-20 h-12 flex items-center justify-center ml-auto gap-1"
+>
+  {isCopied ? (
+    <span className="text-xs">Copied!</span>
+  ) : (
+    <>
+      <Copy className="h-4 w-4" />
+      <span className="text-xs">Copy</span>
+    </>
+  )}
+</Button>
+
         </div>
       </DialogContent>
     </Dialog>

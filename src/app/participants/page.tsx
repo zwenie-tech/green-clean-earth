@@ -1621,7 +1621,7 @@ const ParticipateList = () => {
                         >
                           <img
                             src={`${imageURL}${p.up_file}`}
-                            style={{ height: '100px', width: '110px' }}
+                            style={{ height: '100px', width: '110px', objectFit: 'cover' }}
                             alt="Tree"
                           // onError={(e) => {
                           //   e.currentTarget.src = '/path/to/fallback/image.jpg';

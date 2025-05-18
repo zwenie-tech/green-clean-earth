@@ -250,7 +250,7 @@ const Item: React.FC = () => {
               <div className="text-sm">{treeDetails.up_tree_name}</div>
             </div>
             <div className="flex ml-2 mt-2 gap-2 items-center">
-              <div className="text-sm pl-5">Uploader name:</div>
+              <div className="text-sm pl-5">Group name:</div>
               <div className="text-sm flex items-center gap-1">
                 <a 
                   href={`/group-page?gname=${treeDetails.gp_name}&gid=${treeDetails.gp_id}&uc=${0}&cordinator=${treeDetails.co_ord_name}&groupType=${treeDetails.group_type}`} 
