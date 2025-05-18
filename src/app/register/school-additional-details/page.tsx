@@ -33,8 +33,8 @@ import axios from "axios";
 import Cookies from 'js-cookie';
 
 const formSchema = z.object({
-  value: z.array(z.string()).nonempty("Please select at least one club"),
-  no_of_students: z.coerce.number(),
+  // value: z.array(z.string()).nonempty("Please select at least one club"),
+  // no_of_students: z.coerce.number(),
   total_classes: z.coerce.number().gte(1).lte(999),
   // list_of_classes: z.string(),
   category: z.string().nonempty("Please select a category"),
@@ -181,8 +181,8 @@ const MultiSelectZodForm = () => {
 
   const multiForm = useForm({
     defaultValues: {
-      value: [],
-      no_of_students: '',
+      // value: [],
+      // no_of_students: '',
       total_classes: '',
       schooltype: '',
       edudistrict: '',
@@ -203,17 +203,17 @@ const MultiSelectZodForm = () => {
   // Wrap useSearchParams in Suspense
   const searchParams = useSearchParams();
 
-  useEffect(() => {
-    const fetchClubs = async () => {
-      try {
-        const data = await fetchClubData();
-        setClubOptions(data.clubs);
-      } catch (error) {
-        console.error("Error fetching clubs:", error);
-      }
-    };
-    fetchClubs();
-  }, []);
+  // useEffect(() => {
+  //   const fetchClubs = async () => {
+  //     try {
+  //       const data = await fetchClubData();
+  //       setClubOptions(data.clubs);
+  //     } catch (error) {
+  //       console.error("Error fetching clubs:", error);
+  //     }
+  //   };
+  //   fetchClubs();
+  // }, []);
 
   useEffect(() => {
     const handleCbse = async () => {
@@ -348,15 +348,15 @@ const MultiSelectZodForm = () => {
     const groupId = searchParams.get("group_id");
     const pno = searchParams.get("pno");
 
-    const selectedClubIds = clubOptions
-      .filter((club) => data.value.includes(club.name))
-      .map((club) => club.id);
+    // const selectedClubIds = clubOptions
+    //   .filter((club) => data.value.includes(club.name))
+    //   .map((club) => club.id);
 // console.log()
     const apidata = {
       groupId: parseInt(groupId!),
-      clubs: selectedClubIds.toString(),
+      // clubs: selectedClubIds.toString(),
       // list_of_classes: data.list_of_classes.toString(),
-      no_of_students: parseInt(data.no_of_students),
+      // no_of_students: parseInt(data.no_of_students),
       phoneNUmber: parseInt(pno!),
       subCategoryId: categoryOptions.find((item) => item.gp_cat_name === data.category)?.gp_cat_id,
       schoolTypeId: schoolType.find((item) => item.type_name === data.schooltype)?.id,
@@ -422,7 +422,7 @@ const MultiSelectZodForm = () => {
                 onSubmit={multiForm.handleSubmit(onSubmit)}
                 className="space-y-3 grid gap-3 w-full"
               >
-                <FormField
+                {/* <FormField
                   control={multiForm.control}
                   name="value"
                   render={({ field }) => (
@@ -452,7 +452,7 @@ const MultiSelectZodForm = () => {
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                /> */}
                 <FormField
                   control={multiForm.control}
                   name="category"
@@ -770,7 +770,7 @@ const MultiSelectZodForm = () => {
                 {/* malayalam mission fields end here */}
 
 
-                <FormField
+                {/* <FormField
                   control={multiForm.control}
                   name="no_of_students"
                   render={({ field }) => (
@@ -783,7 +783,7 @@ const MultiSelectZodForm = () => {
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                /> */}
 
             {/* <FormField
               control={multiForm.control}
