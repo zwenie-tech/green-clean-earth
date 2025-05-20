@@ -30,7 +30,7 @@ const NavigationBar = () => {
     { href: "/home", label: "Home" },
     { href: "/project", label: "Projects" },
     { href: "/competition", label: "Competition" },
-    { href: "/register", label: "Register" },
+    { href: "/notification", label: "Register" },
     { href: "/loginform", label: "Login" },
     { href: "/events", label: "Events & News" },
     { href: "/get-plant", label: "Get Plant" },
