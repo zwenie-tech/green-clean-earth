@@ -113,7 +113,7 @@ export default function Register() {
   const router = useRouter()
 
   const searchParams = useSearchParams();
-  const refcode = searchParams.get("refferalCode");
+  const refcode = searchParams.get("ref");
 
   const { toast } = useToast()
   const form = useForm<z.infer<typeof formSchema>>({

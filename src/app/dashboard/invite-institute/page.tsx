@@ -170,7 +170,7 @@ const Invite: React.FC = () => {
             താഴെക്കൊടുത്ത ലിങ്കിൽ ക്ലിക്ക് ചെയ്തു വീഡിയോയിൽ പറഞ്ഞത് പ്രകാരം  
             മറ്റു അധ്യാപകർക്കും വിദ്യാർത്ഥികൾ വെബ്സൈറ്റിൽ നിന്നും ലഭിക്കുന്ന പുതിയ ലിങ്ക് അയച്ചു കൊടുക്കുക)
             <br></br>👇🏼<br></br>
-            <strong><a className='text-green-600' href={`${baseURL}/register`}>{`${baseURL}/register`}</a></strong>
+            <strong><a className='text-green-600' href={`${baseURL}/register?ref=${user_ref}`}>{`${baseURL}/register?ref=${user_ref}`}</a></strong>
             <br></br>Use referral code <strong>{user_ref}</strong> while registration.<br></br>
 
 
