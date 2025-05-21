@@ -15,7 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { cn } from "@/lib/utils"
 
 import { Check, ChevronsUpDown } from "lucide-react"
@@ -106,13 +106,21 @@ export default function Register() {
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [selectedState, setSelectedState] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("");
+
   Cookies.remove('token');
   Cookies.remove('name');
+
+  const router = useRouter()
+
+  const searchParams = useSearchParams();
+  const refcode = searchParams.get("ref");
+
   const { toast } = useToast()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       wardNo: "",
+      refferalCode: refcode != null ? refcode!.toString() : ''
     },
   })
 
@@ -171,7 +179,7 @@ export default function Register() {
     fetchLsgdData();
   }, [selectedCorp, corporation]);
 
-  const router = useRouter()
+
 
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -180,8 +188,8 @@ export default function Register() {
     const corp_id = corporation.find((item) => item.cop_name === values.corporation)?.cop_id.toString();
     const dis_id = districts.find((item) => item.dis_name === values.district)?.dis_id
     const st_id = states.find((item) => item.st_name === values.state)?.st_id
-    dis_id ? Cookies.set("dis_id", dis_id, { expires: 1 }): '';
-    st_id ? Cookies.set("st_id", st_id, { expires: 1 }): '';
+    dis_id ? Cookies.set("dis_id", dis_id, { expires: 1 }) : '';
+    st_id ? Cookies.set("st_id", st_id, { expires: 1 }) : '';
 
     const dataWithIds = {
       ...values,
@@ -196,7 +204,7 @@ export default function Register() {
       corporation: corp_id || '0',
       wardNo: parseInt(values.wardNo!) || 0,
       refferalCode: values.refferalCode,
-      emailId:values.email
+      emailId: values.email
     };
 
     try {
@@ -208,6 +216,16 @@ export default function Register() {
         body: JSON.stringify(dataWithIds),
       });
 
+      if (response.status === 409) {
+        const errorData = await response.json();
+        toast({
+          variant: "destructive",
+          title: "Login failed!",
+          description: errorData.message || "Unauthorized access.",
+        });
+        return;
+      }
+      
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -242,9 +260,9 @@ export default function Register() {
     <section className="bg-green-50 dark:bg-gray-900">
       {/* <NavigationBar /> */}
       <NavigationBar />
-      
+
       <h1 className="text-xl mt-6 mb-3 font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white text-center">
-      Create a Group Account
+        Create a Group Account
       </h1>
       <div className="mt-3 container mx-auto p-4 flex flex-col lg:flex-row  items-stretch">
         <div className="w-full lg:w-1/4 flex items-center justify-center">
@@ -257,7 +275,7 @@ export default function Register() {
         {/*form.......... */}
         <div className="w-full lg:w-2/4 bg-white rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700 flex items-center justify-center border-2">
           <div className="p-6 w-full">
-          <Form {...form}>
+            <Form {...form}>
               <form noValidate onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 <FormField
                   control={form.control}
@@ -266,7 +284,7 @@ export default function Register() {
                     <FormItem>
                       <FormLabel>Group</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
+                        <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Choose a group" />
                           </SelectTrigger>
@@ -495,9 +513,9 @@ export default function Register() {
                               <SelectItem key={lsg.lsg_id} value={lsg.lsg_name}>
                                 {lsg.lsg_name}
                               </SelectItem>
-                            )): <SelectItem key={1} value={'lsg'}>
-                            Choose a LSG
-                          </SelectItem>}
+                            )) : <SelectItem key={1} value={'lsg'}>
+                              Choose a LSG
+                            </SelectItem>}
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -507,36 +525,36 @@ export default function Register() {
                 )}
                 {selectedState === 'Kerala' && (
                   <FormField
-                  control={form.control}
-                  name="wardNo"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Ward Number</FormLabel>
-                      <FormControl>
-                        <Input type="number" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                  
+                    control={form.control}
+                    name="wardNo"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Ward Number</FormLabel>
+                        <FormControl>
+                          <Input type="number" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
                 )}
                 {selectedCountry != 'India' && (
+                  <FormField
+                    control={form.control}
+                    name="city"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>City / Province</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
                 <FormField
-                  control={form.control}
-                  name="city"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>City / Province</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )}
-              <FormField
                   control={form.control}
                   name="refferalCode"
                   render={({ field }) => (
@@ -590,10 +608,10 @@ export default function Register() {
                   )}
                 />
                 <div className="flex justify-center">
-            <Button type="submit" className="w-1/3 bg-primary">
-              Submit
-            </Button>
-          </div>
+                  <Button type="submit" className="w-1/3 bg-primary">
+                    Submit
+                  </Button>
+                </div>
               </form>
             </Form>
           </div>

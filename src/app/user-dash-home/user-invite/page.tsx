@@ -149,7 +149,7 @@ const UserInvite: React.FC = () => {
           <div className="fixed inset-0 bg-black opacity-50"></div>
           <div className="bg-white rounded-lg shadow-lg p-6 z-10 w-full max-w-md mx-auto">
             <h2 className="text-xl font-bold mb-4">Invite Coordinator</h2>
-            <p >Follow this link <strong><a className='text-green-600' href={`${baseURL}/register`}>{`${baseURL}/register`}</a></strong> to be the part of Green Clean Earth movement.  Use refferel code <strong>{user_ref}</strong> while registration.</p>
+            <p >Follow this link <strong><a className='text-green-600' href={`${baseURL}/register?ref=${user_ref}`}>{`${baseURL}/register?ref=${user_ref}`}</a></strong> to be the part of Green Clean Earth movement.  Use refferel code <strong>{user_ref}</strong> while registration.</p>
             <div className="flex justify-end mt-4">
   <button
     className="bg-gray-600 text-white py-2 px-4 rounded mr-2"
