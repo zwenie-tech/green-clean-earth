@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input"
 import axios from 'axios';
 import { ArrowDown, ArrowUp, Trash2, LinkIcon, ExternalLink } from 'lucide-react';
 import PaginationComponent from '../PageComponent';
+import { toast } from '@/components/ui/use-toast';
 interface Acivitylist {
   personal_activity_id: number,
   login_id: number,
@@ -304,11 +305,12 @@ const ActivityList = () => {
               "Content-Type": "application/json",
             }
           });
-
-          if (!response.ok) {
-
-            throw new Error("Network response was not ok");
-          }
+if (!response.ok) {
+        // Attempt to extract error message from response body
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Network response was not ok");
+      }
+         
           try {
             const result = await response.json();
             // console.log(result.activity)
@@ -318,9 +320,14 @@ const ActivityList = () => {
           } catch {
             setActivityList([]);
           }
-        } catch (error) {
-          console.error("Error:", error);
-        }
+        } catch (error:any) {
+      toast({
+        variant: "destructive",
+        title: "Oops, Something went wrong!",
+        description: error.message || "Please try again...",
+      });
+      console.error("Error:", error);
+    }
       }
     }
     fetchfirstData();
@@ -514,8 +521,10 @@ const ActivityList = () => {
 
 
           if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
+        // Attempt to extract error message from response body
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Network response was not ok");
+      }
           try {
             const result = await response.json();
             setTotalPages(Math.ceil(result.total / itemsPerPage));
@@ -528,9 +537,14 @@ const ActivityList = () => {
             setTotalPages(1);
             setActivityList([]);
           }
-        } catch (error) {
-          console.error("Error:", error);
-        }
+        } catch (error:any) {
+      toast({
+        variant: "destructive",
+        title: "Oops, Something went wrong!",
+        description: error.message || "Please try again...",
+      });
+      console.error("Error:", error);
+    }
       }
     };
     onDataSubmit();

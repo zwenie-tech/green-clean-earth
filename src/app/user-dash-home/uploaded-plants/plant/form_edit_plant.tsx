@@ -272,11 +272,11 @@ export function FormEditPlant() {
       } else {
         throw new Error(result.message || "Failed to edit the form");
       }
-    } catch (error) {
+    } catch (error:any) {
       toast({
         variant: "destructive",
         title: "Oops, Something went wrong!",
-        description: "Please try again...",
+        description: error.message || "Please try again...",
       });
       console.error("Error:", error);
     }

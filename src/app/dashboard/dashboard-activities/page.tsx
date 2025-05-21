@@ -73,8 +73,10 @@ const DashboardActivity = () => {
         });
 
         if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
+        // Attempt to extract error message from response body
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Network response was not ok");
+      }
 
         const data = await response.json();
        

@@ -112,8 +112,11 @@ export const UploadButton = ({
         body: formData,
       });
 
-      if (!response.ok) throw new Error(await response.text());
-
+      if (!response.ok) {
+        // Attempt to extract error message from response body
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Network response was not ok");
+      }
       const result = await response.json();
       if (result.success) {
         toast({
@@ -127,13 +130,14 @@ export const UploadButton = ({
             window.location.reload();
           }, 1800);
       }
-    } catch (error) {
+    } catch (error:any) {
       toast({
         variant: "destructive",
-        title: "Upload Failed",
-        description: error instanceof Error ? error.message : "Please try again",
+        title: "Oops, Something went wrong!",
+        description: error.message || "Please try again...",
       });
-    } finally {
+      console.error("Error:", error);
+    }finally {
       setIsUploading(false);
     }
   };

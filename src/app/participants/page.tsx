@@ -12,6 +12,7 @@ import axios from 'axios';
 import Link from "next/link";
 import PaginationComponent from '../PageComponent';
 import { Label } from '@radix-ui/react-label';
+import { toast } from '@/components/ui/use-toast';
 
 
 interface Participant {
@@ -299,10 +300,11 @@ const ParticipateList = () => {
             }
           });
 
-          if (!response.ok) {
-
-            throw new Error("Network response was not ok");
-          }
+         if (!response.ok) {
+        // Attempt to extract error message from response body
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Network response was not ok");
+      }
           try {
             const result = await response.json();
             setTotalCount(result.total)
@@ -313,9 +315,14 @@ const ParticipateList = () => {
             setTotalPages(1);
             setParticipantList([]);
           }
-        } catch (error) {
-          console.error("Error:", error);
-        }
+        } catch (error:any) {
+      toast({
+        variant: "destructive",
+        title: "Oops, Something went wrong!",
+        description: error.message || "Please try again...",
+      });
+      console.error("Error:", error);
+    }
       }
     }
     fetchInitialData();

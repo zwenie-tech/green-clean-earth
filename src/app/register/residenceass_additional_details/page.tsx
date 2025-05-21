@@ -67,8 +67,10 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
     });
 
     if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
+        // Attempt to extract error message from response body
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Network response was not ok");
+      }
 
     const result = await response.json();
     if (result) {
@@ -78,14 +80,14 @@ const onSubmit = async (values: z.infer<typeof formSchema>) => {
       })
       router.push("/loginform");
     }
-  } catch (error) {
-    toast({
-      variant: "destructive",
-      title: "Oops,Something went wrong !",
-      description: "Please try again...",
-    })
-    console.error("Error:", error);
-  }
+  } catch (error:any) {
+      toast({
+        variant: "destructive",
+        title: "Oops, Something went wrong!",
+        description: error.message || "Please try again...",
+      });
+      console.error("Error:", error);
+    }
 };
 
   return (

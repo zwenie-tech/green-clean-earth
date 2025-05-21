@@ -219,7 +219,9 @@ const UploadButton = ({ id, isEdit }: any) => {
         body: formData,
       });
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        // Attempt to extract error message from response body
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Network response was not ok");
       }
 
       const result = await response.json();
@@ -234,11 +236,11 @@ const UploadButton = ({ id, isEdit }: any) => {
         window.history.back();
       }, 1800);
 
-    } catch (error) {
+    } catch (error:any) {
       toast({
         variant: "destructive",
         title: "Oops, Something went wrong!",
-        description: "Please try again...",
+        description: error.message || "Please try again...",
       });
       console.error("Error:", error);
     }
