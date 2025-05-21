@@ -216,6 +216,16 @@ export default function Register() {
         body: JSON.stringify(dataWithIds),
       });
 
+      if (response.status === 409) {
+        const errorData = await response.json();
+        toast({
+          variant: "destructive",
+          title: "Login failed!",
+          description: errorData.message || "Unauthorized access.",
+        });
+        return;
+      }
+      
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
