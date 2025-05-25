@@ -19,7 +19,7 @@ const Invite: React.FC = () => {
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const router = useRouter();
   const token = Cookies.get('token');
-  const user_ref = Cookies.get('cord_refcode');
+  const ref_code = Cookies.get('cord_refcode');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 10;
@@ -170,8 +170,8 @@ const Invite: React.FC = () => {
             താഴെക്കൊടുത്ത ലിങ്കിൽ ക്ലിക്ക് ചെയ്തു വീഡിയോയിൽ പറഞ്ഞത് പ്രകാരം  
             മറ്റു അധ്യാപകർക്കും വിദ്യാർത്ഥികൾ വെബ്സൈറ്റിൽ നിന്നും ലഭിക്കുന്ന പുതിയ ലിങ്ക് അയച്ചു കൊടുക്കുക)
             <br></br>👇🏼<br></br>
-            <strong><a className='text-green-600' href={`${baseURL}/register?ref=${user_ref}`}>{`${baseURL}/register?ref=${user_ref}`}</a></strong>
-            <br></br>Use referral code <strong>{user_ref}</strong> while registration.<br></br>
+            <strong><a className='text-green-600' href={`${baseURL}register?ref=${ref_code}`}>{`${baseURL}register?ref=${ref_code}`}</a></strong>
+            <br></br>Use referral code <strong>{ref_code}</strong> while registration.<br></br>
 
 
             <br></br>സംശയങ്ങൾക്ക്
@@ -213,10 +213,10 @@ const Invite: React.FC = () => {
 👇🏼
 
 
- ${baseURL}/register 
+ ${baseURL}register?ref=${ref_code}
 
 👆🏼
- Use referral code ${user_ref} while registration.
+ Use referral code ${ref_code} while registration.
 
 
 
