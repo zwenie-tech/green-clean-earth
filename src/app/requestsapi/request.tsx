@@ -1,3 +1,4 @@
+import { toast } from "@/components/ui/use-toast";
 
 export const imageURL = process.env.NEXT_PUBLIC_IMAGE_URL
 export const baseURL = process.env.NEXT_PUBLIC_BASE_URL
@@ -65,8 +66,10 @@ export const fetchUserData = async (user_id :any, token:any) => {
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+        // Attempt to extract error message from response body
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Network response was not ok");
+      }
 
         // Check if the response has content before parsing
         const text = await response.text();
@@ -78,9 +81,13 @@ export const fetchUserData = async (user_id :any, token:any) => {
         // Attempt to parse the JSON content
         const data = JSON.parse(text);
         return data;
-    } catch (error) {
-        console.error('Error fetching activity data:', error);
-        throw error; // Rethrow the error to handle it further up the call stack if needed
+    } catch (error:any) {
+      toast({
+        variant: "destructive",
+        title: "Oops, Something went wrong!",
+        description: error.message || "Please try again...",
+      });
+      console.error("Error:", error);
     }
 };
 
@@ -97,16 +104,22 @@ export const fetchPlantsData = async (token : string) => {
     });
 
     if (!response.ok) {
-      throw new Error(`Error fetching plants: ${response.statusText}`);
-    }
+        // Attempt to extract error message from response body
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Network response was not ok");
+      }
 
     const plantData = await response.json();
     return plantData;
 
-  } catch (error) {
-    console.error("Error fetching plants:", error);
-    return error;
-  }
+  } catch (error:any) {
+      toast({
+        variant: "destructive",
+        title: "Oops, Something went wrong!",
+        description: error.message || "Please try again...",
+      });
+      console.error("Error:", error);
+    }
 }
 
 
@@ -118,15 +131,21 @@ export const fetchClubData = async () => {
       });
   
       if (!response.ok) {
-        throw new Error(`Error fetching plants: ${response.statusText}`);
+        // Attempt to extract error message from response body
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Network response was not ok");
       }
   
       const clubsData = await response.json();
       return clubsData;
   
-    } catch (error) {
-      console.error("Error fetching plants:", error);
-      return error;
+    } catch (error:any) {
+      toast({
+        variant: "destructive",
+        title: "Oops, Something went wrong!",
+        description: error.message || "Please try again...",
+      });
+      console.error("Error:", error);
     }
   }
 

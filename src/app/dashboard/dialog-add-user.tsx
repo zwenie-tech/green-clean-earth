@@ -43,7 +43,7 @@ function DialogAddUserfn() {
  താഴെക്കൊടുത്ത ലിങ്കിൽ ക്ലിക്ക് ചെയ്തു  വീഡിയോയിൽ പറഞ്ഞത് പ്രകാരം  
  പ്രവർത്തിക്കുക
 👇🏼
-${baseURL}/user-register?id=${parseInt(id!)}&ref=${referral_code}
+${baseURL}user-register?id=${parseInt(id!)}&ref=${referral_code}
 👆🏼
 
  സംശയങ്ങൾക്ക്
@@ -115,7 +115,7 @@ Youtube /fb/insta: Green Clean Kerala
               href={`/user-register?id=${id}&ref=${referral_code}`}
               className="text-green-600 text-base"
             >
-              {baseURL}/user-register?id={parseInt(id!)}&ref={referral_code}
+              {baseURL}user-register?id={parseInt(id!)}&ref={referral_code}
             </Link>
             <p className="py-2">
             👆🏼<br></br>
