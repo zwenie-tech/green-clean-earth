@@ -96,7 +96,7 @@ const DashboardActivity = () => {
       <NavigationBar />
       <div className='relative flex p-4'>
         <div className='absolute left-1/2 transform -translate-x-1/2 w-full md:w-auto mt-3'>
-          <h1 className='text-xl mb-3 text-left md:text-center md:text-xl font-bold'>Dashboard</h1>
+          {/* <h1 className='text-xl mb-3 text-left md:text-center md:text-xl font-bold'>Dashboard</h1> */}
         </div>
         <div className='ml-auto'>
           <button 

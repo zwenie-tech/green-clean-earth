@@ -4,7 +4,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -12,6 +11,7 @@ import {
 import { Upload } from "lucide-react";
 import { FormUploadActivities } from "@/app/user-dash-home/my-activities/form_upload_activities";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
 
 export function DialogUploadActivities() {
   return (
@@ -27,18 +27,25 @@ export function DialogUploadActivities() {
           </div>
         </div>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-2xl ">
+
+      <DialogContent className="sm:max-w-2xl"> {/* Added w-[calc(100%-2rem)] */}
         <DialogHeader>
           <DialogTitle>Upload Activities</DialogTitle>
           <DialogDescription>{/* Provide details here */}</DialogDescription>
         </DialogHeader>
 
-        <ScrollArea className="h-full w-full">
+        <ScrollArea className="h-full w-full max-h-[calc(100vh-200px)]">
           <FormUploadActivities />
         </ScrollArea>
-        <DialogFooter>
-          {/* <Button type="submit" className="bg-primary hover:bg-primary/85">Submit</Button> */}
-        </DialogFooter>
+
+        {/* Submit Button - Only shown if your form needs it */}
+        {/* <Button 
+          type="submit" 
+          form="upload-activities-form"
+          className="w-full mt-4"
+        >
+          Submit
+        </Button> */}
       </DialogContent>
     </Dialog>
   );

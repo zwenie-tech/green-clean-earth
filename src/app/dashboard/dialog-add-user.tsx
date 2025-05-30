@@ -31,7 +31,7 @@ function DialogAddUserfn() {
   const referral_code = Cookies.get("cord_refcode");
   const id = searchParams.get("id");
   const message = `
-  *അപ്‌ലോഡർ രജിസ്ട്രേഷൻ*
+  *യൂസർ രജിസ്ട്രേഷൻ*
 🥦
 *ഗ്രീൻ ക്ലീൻ കേരള സുസ്ഥിരവികസന ഹരിത മത്സരങ്ങളിൽ പങ്കെടുക്കുവാൻ....*
 🥦
@@ -88,7 +88,9 @@ Youtube /fb/insta: Green Clean Kerala
           <div className="p-4 text-xl">Invite Users</div>
         </label>
       </DialogTrigger>
-      <DialogContent className="max-w-[calc(100%-2rem)] sm:max-w-[425px] mx-auto my-4 p-0 flex flex-col">
+      <DialogContent
+  className="max-w-[calc(100%-2rem)] sm:max-w-[425px] mx-auto p-0 flex flex-col max-h-[80vh] overflow-y-auto rounded-xl"
+>
         <div className="flex-grow overflow-y-auto p-6">
           <DialogHeader>
             <DialogTitle>Add members</DialogTitle>
@@ -96,7 +98,7 @@ Youtube /fb/insta: Green Clean Kerala
           </DialogHeader>
           <div>
             <p className="text-base">
-            <b>അപ്‌ലോഡർ രജിസ്ട്രേഷൻ</b>
+            <b>യൂസർ രജിസ്ട്രേഷൻ</b>
             <br></br>
             🥦
             <b>ഗ്രീൻ ക്ലീൻ കേരള സുസ്ഥിരവികസന ഹരിത മത്സരങ്ങളിൽ പങ്കെടുക്കുവാൻ....</b>

@@ -198,7 +198,7 @@ export function FormUploadActivities() {
       <form
         noValidate
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6"
+        className="space-y-6 px-4 pb-20 md:pb-0"
       >
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <FormField
@@ -330,81 +330,21 @@ export function FormUploadActivities() {
               </FormItem>
             )}
           />
-          {/* <div className={cn("flex md:flex-row w-[100%] gap-4 flex-col")}>
-                <div className="flex w-[100%] gap-2 flex-col my-4">
-                <FormLabel>Upload Image</FormLabel>
-                <span className="text-xs text-gray-400"></span>
-                <div className={`flex w-[100%] gap-4 p-4 rounded border border-neutral-200 flex-col items-center md:flex-col md:justify-between md:items-center`}>
-                  <div className={`flex  md:flex-[1] h-[fit-content] md:p-4 md:justify-between md:flex-row`}>
-                    {selectedImage ? (
-                      <div className="md:max-w-[200px]">
-                        <img
-                          src={URL.createObjectURL(selectedImage)}
-                          alt="Selected"
-                        />
-                      </div>
-                    ) : (
-                      <div className="inline-flex items-center justify-between">
-                        <div className="p-3 bg-slate-200  justify-center items-center flex">
-                          <BsImages size={56} />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-        
-                  <FormField
-                    control={form.control}
-                    name="activityThumbnail"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Button size="lg" type="button" className="bg-green-100 hover:bg-green-300 border-2 border-green-600 text-green-600">
-                          <input
-                            type="file"
-                            className="hidden"
-                            id="fileInput"
-                            accept="image/*"
-                            onBlur={field.onBlur}
-                            name={field.name}
-                            onChange={async (e) => {
-                              const files = e.target.files;
-                              if (files && files[0]) {
-                                const validFiles = await validateAndResizeImage(files);
-                                field.onChange(validFiles);
-                                setSelectedImage(validFiles[0] || null);
-                              }
-                            }}
-                            ref={field.ref}
-                          />
-                            <label
-                              htmlFor="fileInput"
-                              className="text-neutral-90  rounded-md cursor-pointer inline-flex items-center"
-                            >
-                              <BsPaperclip />
-                              <span className="whitespace-nowrap">
-                                Select Image
-                              </span>
-                            </label>
-                          </Button>
-                        </FormControl>
-        
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
-            </div> */}
         </div>
-        <div>
-      {isLoading ? (
-        <div className="loader float-end">Loading...</div> // Show loader when isLoading is true
-      ) : (
-        <Button type="submit" className="bg-primary float-end">
-          Submit
-        </Button>
-      )}
-    </div>
+        <div className="fixed bottom-4 left-4 right-4 md:static md:float-end md:mt-4">
+          {isLoading ? (
+            <div className="loader w-full text-center py-2 bg-background rounded-md">
+              Loading...
+            </div>
+          ) : (
+            <Button 
+              type="submit" 
+              className="w-full bg-primary shadow-lg md:w-auto md:shadow-none"
+            >
+              Submit
+            </Button>
+          )}
+        </div>
         
       </form>
     </Form>

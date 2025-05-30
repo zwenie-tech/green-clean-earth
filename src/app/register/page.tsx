@@ -562,9 +562,9 @@ export default function Register() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Referal Code</FormLabel>
-                      <p className="text-xs">(Enter the Referal Code received from your Promoter. If not received contact +919645964592)</p>
+                      {/* <p className="text-xs">(Enter the Referal Code received from your Promoter. If not received contact +919645964592)</p> */}
                       <FormControl>
-                        <Input {...field} required />
+                        <Input {...field} required readOnly/>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
