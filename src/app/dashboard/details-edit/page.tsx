@@ -835,6 +835,13 @@ const DetailsEdit: React.FC = () => {
     <>
       <NavigationBar />
       <div className="container w-full justify-center mt-6">
+      <p className="text-lg font-semibold mt-2 text-center">Our team</p>
+                <p className="text-center">
+                  താങ്കളുടെ സ്ഥാപനത്തിൽ ഈ പദ്ധതി യിൽ താങ്കളോടൊപ്പം ഉള്ള
+                  സഹപ്രവർത്തകരുടെ വിവരങ്ങൾ ഇവിടെ നൽകുക
+                </p>
+      </div>
+      <div className="container w-full justify-center mt-6">
         <div className="md:flex gap-6">
           {/* Form 1 */}
           <Form {...form}>
