@@ -490,7 +490,7 @@ function UserRegisterForm() {
                     <FormItem>
                       <FormLabel>Referral Code</FormLabel>
                       <FormControl>
-                        <Input placeholder="Referral Code" {...field} />
+                        <Input readOnly placeholder="Referral Code" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

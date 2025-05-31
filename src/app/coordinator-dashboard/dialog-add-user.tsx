@@ -23,7 +23,7 @@ export function DialogAddUser() {
   const id = searchParams.get("id");
   const referral_code = "user" + id!.toString();
   const message = `
-  *അപ്‌ലോഡർ രജിസ്ട്രേഷൻ*
+  *യൂസർ രജിസ്ട്രേഷൻ*
 🥦
 *ഗ്രീൻ ക്ലീൻ കേരള സുസ്ഥിരവികസന ഹരിത മത്സരങ്ങളിൽ പങ്കെടുക്കുവാൻ....*
 🥦
@@ -86,7 +86,7 @@ Youtube /fb/insta: Green Clean Kerala
           </DialogHeader>
           <div>
             <p className="text-base">
-            <b>അപ്‌ലോഡർ രജിസ്ട്രേഷൻ</b>
+            <b>യൂസർ രജിസ്ട്രേഷൻ</b>
             🥦
             <b>ഗ്രീൻ ക്ലീൻ കേരള സുസ്ഥിരവികസന ഹരിത മത്സരങ്ങളിൽ പങ്കെടുക്കുവാൻ....*</b>
             🥦

@@ -82,7 +82,7 @@ const Invite: React.FC = () => {
       <NavigationBar />
       <div className='relative flex flex-col md:flex-row md:justify-between p-4'>
         <div className='md:absolute md:left-1/2 md:transform md:-translate-x-1/2 w-full md:w-auto mt-6 mb-3'>
-          <h1 className='text-xl m-2 text-left md:text-center md:text-xl font-bold'>Dashboard</h1>
+          {/* <h1 className='text-xl m-2 text-left md:text-center md:text-xl font-bold'>Dashboard</h1> */}
         </div>
         <div className='ml-auto md:mr-0 md:mt-0 mt-4'>
           <button
@@ -96,6 +96,19 @@ const Invite: React.FC = () => {
       </div>
       <div className='text-center'>
         <h1 className='text-3xl mt-2 font-bold'>Invite Institution</h1>
+        <div className="container w-full justify-center mt-6">
+        {/* <p className="text-lg font-semibold mt-2">
+          Invite Other institutions
+        </p> */}
+        <p className="">
+          താങ്കളുടെ പരിചയക്കാരായ മറ്റു സ്ഥാപനങ്ങളിലെ സുഹൃത്തുക്കളെ ഈ
+          മത്സരത്തിലേക്ക് ഇൻവൈറ്റ് ചെയ്യുക. അവർ നേടുന്ന പോയിന്റുകൾ പ്രമോട്ടർ
+          എന്ന നിലയിൽ താങ്കളുടെ അക്കൗണ്ടിൽ പരിഗണിക്കുന്നതാണ്. അതിന് Invite
+          Other institutions എന്ന് ബട്ടൺ ക്ലിക്ക് ചെയ്ത് മെസ്സേജ് അവർക്ക്
+          അയച്ചു കൊടുക്കുക.
+        </p>
+        </div>
+        
       </div>
       <div className="container mx-auto p-6">
         <div className="overflow-x-auto">

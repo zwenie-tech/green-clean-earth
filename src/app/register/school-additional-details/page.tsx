@@ -183,7 +183,7 @@ const MultiSelectZodForm = () => {
     defaultValues: {
       // value: [],
       // no_of_students: '',
-      total_classes: '',
+      // total_classes: '',
       schooltype: '',
       edudistrict: '',
       edusubdistrict: '',
@@ -802,7 +802,7 @@ const MultiSelectZodForm = () => {
               )}
             /> */}
             
-            <FormField
+            {/* <FormField
               control={multiForm.control}
               name="total_classes"
               render={({ field }) => (
@@ -815,7 +815,7 @@ const MultiSelectZodForm = () => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
             
             <div className="flex justify-center">
               <Button type="submit" className="w-1/3 bg-primary">

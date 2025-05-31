@@ -8,7 +8,7 @@ const Notification = () => {
     <>
       <NavigationBar />
 
-      <div className="flex flex-col lg:flex-row w-full justify-center text-justify pl-6 pt-8">
+      <div className="flex flex-col lg:flex-row w-full justify-center text-justify px-6 pt-8">
         <div className="hidden lg:block lg:h-[270px] lg:w-[300px] relative">
           <img
             src="/images/joinnow1.jpeg"
@@ -17,7 +17,7 @@ const Notification = () => {
           />
         </div>
         <div
-          className="w-full lg:w-1/2 lg:h-[270px] pl-6 flex flex-col justify-center"
+          className="w-full lg:w-1/2 lg:h-[270px] px-6 flex flex-col justify-center"
           style={{ boxSizing: "border-box" }}
         >
           <h2 className="text-lg font-bold mb-2 text-primary">ഗ്രീൻ ക്ളീൻ കേരള</h2>
