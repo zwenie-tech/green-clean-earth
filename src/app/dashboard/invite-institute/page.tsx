@@ -153,106 +153,83 @@ const Invite: React.FC = () => {
       <Footer />
 
       {showDialog && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
-          <div className="fixed inset-0 bg-black opacity-50"></div>
-          <div className="bg-white rounded-lg shadow-lg p-6 z-10 w-full max-w-md mx-auto">
-            <h2 className="text-xl font-bold mb-4">Invite Coordinator</h2>
-            <p><b>കോഡിനേറ്റർ രജിസ്ട്രേഷൻ</b><br></br>
-            🥦
-            <b>ഗ്രീൻ ക്ലീൻ കേരള സുസ്ഥിരവികസന ഹരിത മത്സരങ്ങളിൽ പങ്കെടുക്കുവാൻ....</b>
-            👇🏼<br></br>
-            ( വിദ്യാലയത്തിലെ അധ്യാപക കോഡിനേറ്റർ പൂരിപ്പിക്കേണ്ടത്. ഒരു വിദ്യാലയത്തിൽ നിന്നും ഒരു കോഡിനേറ്റർ മാത്രം പൂരിപ്പിച്ചാൽ മതി.
-            താഴെക്കൊടുത്ത വീഡിയോ കാണുക<br></br>
-            👇🏼<br></br>
-            ലിങ്ക് video
-            <br></br>👆🏼<br></br>
-            അതിനുശേഷം
-            താഴെക്കൊടുത്ത ലിങ്കിൽ ക്ലിക്ക് ചെയ്തു വീഡിയോയിൽ പറഞ്ഞത് പ്രകാരം  
-            മറ്റു അധ്യാപകർക്കും വിദ്യാർത്ഥികൾ വെബ്സൈറ്റിൽ നിന്നും ലഭിക്കുന്ന പുതിയ ലിങ്ക് അയച്ചു കൊടുക്കുക)
-            <br></br>👇🏼<br></br>
-            <strong><a className='text-green-600' href={`${baseURL}register?ref=${ref_code}`}>{`${baseURL}register?ref=${ref_code}`}</a></strong>
-            <br></br>Use referral code <strong>{ref_code}</strong> while registration.<br></br>
+  <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black opacity-50"></div>
+    <div className="bg-white rounded-lg shadow-lg p-6 z-10 w-full max-w-md mx-auto">
+      <h2 className="text-xl font-bold mb-4">Invite Coordinator</h2>
+      <div className="max-h-96 overflow-y-auto">
+        <p>
+          <b>കോഡിനേറ്റർ രജിസ്ട്രേഷൻ</b><br />
+          🥦
+          <b>ഗ്രീൻ ക്ലീൻ കേരള സുസ്ഥിരവികസന ഹരിത മത്സരങ്ങളിൽ പങ്കെടുക്കുവാൻ....</b>
+          👇🏼<br />
+          ( വിദ്യാലയത്തിലെ അധ്യാപക കോഡിനേറ്റർ പൂരിപ്പിക്കേണ്ടത്. ഒരു വിദ്യാലയത്തിൽ നിന്നും ഒരു കോഡിനേറ്റർ മാത്രം പൂരിപ്പിച്ചാൽ മതി.
+          താഴെക്കൊടുത്ത വീഡിയോ കാണുക<br />
+          👇🏼<br />
+          ലിങ്ക് video
+          <br />👆🏼<br />
+          അതിനുശേഷം
+          താഴെക്കൊടുത്ത ലിങ്കിൽ ക്ലിക്ക് ചെയ്തു വീഡിയോയിൽ പറഞ്ഞത് പ്രകാരം  
+          മറ്റു അധ്യാപകർക്കും വിദ്യാർത്ഥികൾ വെബ്സൈറ്റിൽ നിന്നും ലഭിക്കുന്ന പുതിയ ലിങ്ക് അയച്ചു കൊടുക്കുക)
+          <br />👇🏼<br />
+          <strong><a className='text-green-600' href={`${baseURL}register?ref=${ref_code}`}>{`${baseURL}register?ref=${ref_code}`}</a></strong>
+          <br />Use referral code <strong>{ref_code}</strong> while registration.<br />
+          <br />സംശയങ്ങൾക്ക്
+          🥦<br />
+          Web: www.GreenCleanEarth.org <br />
+          Whatsapp/Telegram : 9645 9645 92<br />
+          Mail: GreenCleanKerala@gmail.com.<br />
+          Youtube /fb/insta: Green Clean Kerala<br />
+          🥦
+          വാർത്തകളും റിസൽ ട്ടുകളും അറിയുവാൻ ചാനലും പേജും സബ്സ്ക്രൈബ്- ഫോളോ ചെയ്യുക
+        </p>
+      </div>
+      <div className="flex justify-end mt-4">
+        <button
+          className="bg-gray-600 text-white py-2 px-4 rounded mr-2"
+          onClick={() => {
+            navigator.clipboard.writeText(`
+              *കോഡിനേറ്റർ രജിസ്ട്രേഷൻ*
+              🥦
+              *ഗ്രീൻ ക്ലീൻ കേരള സുസ്ഥിരവികസന ഹരിത മത്സരങ്ങളിൽ പങ്കെടുക്കുവാൻ....*
+              👇🏼
+              ( വിദ്യാലയത്തിലെ അധ്യാപക കോഡിനേറ്റർ പൂരിപ്പിക്കേണ്ടത്. ഒരു വിദ്യാലയത്തിൽ നിന്നും ഒരു കോഡിനേറ്റർ മാത്രം പൂരിപ്പിച്ചാൽ മതി.
+              താഴെക്കൊടുത്ത വീഡിയോ കാണുക
+              👇🏼
+              ലിങ്ക് video
+              👆🏼
+              അതിനുശേഷം
+              താഴെക്കൊടുത്ത ലിങ്കിൽ ക്ലിക്ക് ചെയ്തു വീഡിയോയിൽ പറഞ്ഞത് പ്രകാരം  
+              മറ്റ് അധ്യാപകർക്കും വിദ്യാർത്ഥികൾ വെബ്സൈറ്റിൽ നിന്നും ലഭിക്കുന്ന പുതിയ ലിങ്ക് അയച്ചു കൊടുക്കുക)
+              👇🏼
+              ${baseURL}register?ref=${ref_code}
+              👆🏼
+              Use referral code ${ref_code} while registration.
+              സംശയങ്ങൾക്ക്
+              🥦
+              Web: www.GreenCleanEarth.org
+              Whatsapp/Telegram : 9645 9645 92
+              Mail: GreenCleanKerala@gmail.com.
+              Youtube /fb/insta: Green Clean Kerala
+              🥦
+              വാർത്തകളും റിസൽ ട്ടുകളും അറിയുവാൻ ചാനലും പേജും സബ്സ്ക്രൈബ്- ഫോളോ ചെയ്യുക
+            `);
+            setCopy(true);
+          }}
+        >
+          {copy ? "Copied!" : "Copy"} 
+        </button>
+        <button
+          className="bg-green-600 text-white py-2 px-4 rounded"
+          onClick={() => setShowDialog(false)}
+        >
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+)}
 
-
-            <br></br>സംശയങ്ങൾക്ക്
-            🥦<br></br>
-            Web: www.GreenCleanEarth.org <br></br>
-
-            Whatsapp/Telegram : 9645 9645 92<br></br>
-
-            Mail: GreenCleanKerala@gmail.com.<br></br>
-
-            Youtube /fb/insta: Green Clean Kerala<br></br>
-
-            🥦
-            വാർത്തകളും റിസൽ ട്ടുകളും അറിയുവാൻ ചാനലും പേജും സബ്സ്ക്രൈബ്- ഫോളോ ചെയ്യുക
-
-
-</p>
-            <div className="flex justify-end mt-4">
-          
-              <button
-                className="bg-gray-600 text-white py-2 px-4 rounded mr-2"
-                onClick={() => {
-                  navigator.clipboard.writeText(`
-
-
-
-*കോഡിനേറ്റർ രജിസ്ട്രേഷൻ*
-🥦
-*ഗ്രീൻ ക്ലീൻ കേരള സുസ്ഥിരവികസന ഹരിത മത്സരങ്ങളിൽ പങ്കെടുക്കുവാൻ....*
-👇🏼
-( വിദ്യാലയത്തിലെ അധ്യാപക കോഡിനേറ്റർ പൂരിപ്പിക്കേണ്ടത്. ഒരു വിദ്യാലയത്തിൽ നിന്നും ഒരു കോഡിനേറ്റർ മാത്രം പൂരിപ്പിച്ചാൽ മതി.
- താഴെക്കൊടുത്ത വീഡിയോ കാണുക
-👇🏼
-ലിങ്ക് video
-👆🏼
- അതിനുശേഷം
- താഴെക്കൊടുത്ത ലിങ്കിൽ ക്ലിക്ക് ചെയ്തു വീഡിയോയിൽ പറഞ്ഞത് പ്രകാരം  
- മറ്റു അധ്യാപകർക്കും വിദ്യാർത്ഥികൾ വെബ്സൈറ്റിൽ നിന്നും ലഭിക്കുന്ന പുതിയ ലിങ്ക് അയച്ചു കൊടുക്കുക)
-👇🏼
-
-
- ${baseURL}register?ref=${ref_code}
-
-👆🏼
- Use referral code ${ref_code} while registration.
-
-
-
-
-
- സംശയങ്ങൾക്ക്
-🥦
-Web: www.GreenCleanEarth.org 
-
-Whatsapp/Telegram : 9645 9645 92
-
-Mail: GreenCleanKerala@gmail.com.
-
-Youtube /fb/insta: Green Clean Kerala
-
-🥦
- വാർത്തകളും റിസൽ ട്ടുകളും അറിയുവാൻ ചാനലും പേജും സബ്സ്ക്രൈബ്- ഫോളോ ചെയ്യുക
-
-
-
-`);
-                  setCopy(true);
-                }}
-              >
-               {copy ? "Copied!" : "Copy"} 
-              </button>
-              <button
-                className="bg-green-600 text-white py-2 px-4 rounded"
-                onClick={() => setShowDialog(false)}
-              >
-                OK
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };
