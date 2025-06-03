@@ -1563,7 +1563,7 @@ const GridExample = () => {
 
       <div className="flex items-center mb-3 space-x-2">
         <label htmlFor="groupFilter" className="text-sm font-medium">
-          Source :
+          Club :
         </label>
         <select
           id="groupFilter"
@@ -1571,7 +1571,7 @@ const GridExample = () => {
           onChange={handleFilterClub}
           className="border border-gray-300 rounded p-1"
         >
-          <option value="">Select Source Name</option>
+          <option value="">Select Club Name</option>
 
           {clubs.map((c) => (
             <option key={c.id} value={c.name}>

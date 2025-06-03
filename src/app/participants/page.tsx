@@ -1526,7 +1526,7 @@ const ParticipateList = () => {
                     onChange={handleFilterClub}
                     className="w-full p-2 border border-black rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
                   >
-                    <option value="">Select Source Name</option>
+                    <option value="">Select Club Name</option>
 
                     {clubs.map((c) => (
                       <option key={c.id} value={c.name}>
