@@ -13,7 +13,7 @@ import "./ag-grid-theme-builder.css";
 import { useRouter } from "next/navigation";
 import React, { StrictMode, useCallback, useEffect, useMemo, useState } from "react";
 import axios from "axios";
-import { apiURL } from "../requestsapi/request";
+import { apiURL, fetchClubData } from "../requestsapi/request";
 import Cookies from 'js-cookie';
 import * as XLSX from 'xlsx';
 import PaginationComponent from "./PageComponent";
@@ -86,6 +86,10 @@ type GrpName = {
   gp_id: string;
   gp_name: string;
 }
+interface Club {
+  id: string;
+  name: string;
+}
 const GridExample = () => {
   const router = useRouter();
   const [rowData, setRowData] = useState([]);
@@ -140,12 +144,26 @@ const GridExample = () => {
   const [filterdata, setFilterData] = useState({});
   const itemsPerPage = 10;
 
+  const [clubs, setClubs] = useState<Club[]>([]);
+  const [club, setClub] = useState("");
+
   useEffect(() => {
     if (!token) {
       router.push("/admin/login");
     }
   }, [token, router]);
 
+  useEffect(() => {
+    const fetchClubs = async () => {
+      try {
+        const data = await fetchClubData();
+        setClubs(data.clubs);
+      } catch (error) {
+        console.error("Error fetching clubs:", error);
+      }
+    };
+    fetchClubs();
+  }, []);
 
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
     // { field: "slno", headerName: "Sl No" },
@@ -153,14 +171,16 @@ const GridExample = () => {
     { field: "up_name", headerName: "Uploader name", width: 150 },
     { field: "up_planter", headerName: "Planter name", width: 140 },
     { field: "up_tree_name", headerName: "Tree name", width: 140 },
-    { field: "up_date", headerName: "Date", width: 140 ,
+    {
+      field: "up_date", headerName: "Date", width: 140,
       valueFormatter: (params) => {
-      const date = new Date(params.value);
-      const day = String(date.getDate()).padStart(2, '0');
-      const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-      const year = date.getFullYear();
-      return `${day}-${month}-${year}`;
-  }},
+        const date = new Date(params.value);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+      }
+    },
     { field: "gp_name", headerName: "Group name", width: 140 },
     { field: "co_ord_name", headerName: "Coordinator name", width: 180 },
     { field: "group_type", headerName: "Group type", width: 120 },
@@ -208,7 +228,7 @@ const GridExample = () => {
             setTotalcount(response.data.totalCount);
             const data = response.data.Uploads;
 
-           
+
 
             // console.log('part1', data);  // Log the formatted data
 
@@ -794,6 +814,14 @@ const GridExample = () => {
     }
   };
 
+  const handleFilterClub = (e: any) => {
+
+    if (e.target.value != "") {
+      setClub(e.target.value);
+      // fetchFilteredGrpName(e.target.value);
+      // setCurrentPage(1); // Reset to first page
+    }
+  };
 
   const handleFilterGrpName = (e: any) => {
 
@@ -930,6 +958,7 @@ const GridExample = () => {
     async function fetchFilterData() {
 
       const payload = {
+        sourceId: club != "" ? parseInt(clubs.find((item) => item.name === club)?.id!) : null,
 
         countryId: countries.find((item) => item.cntry_name === selectedCntry)?.cntry_id,
         stateId: states.find((item) => item.st_name === selectedState)?.st_id,
@@ -975,7 +1004,7 @@ const GridExample = () => {
       }
     }
     fetchFilterData();
-  }, [category, corporation, countries, currentPage, districts, eduDistrict, eduSubDistrict, grouptype, grpName, icdsBlock, icdsProject, lsgd, missionChapter, missionZone, sahodaya, schoolType, selectIcdsBlock, selectIcdsProject, selectMission, selectSahodaya, selectZone, selectedCntry, selectedCorp, selectedDistrict, selectedLsgd, selectedState, selectedSubCategory, selectedWard, selectedgrpName, selectedschoolType, selecteduDistrict, selecteduSubDistrict, states, subcategoryOptions, token]);
+  }, [category, club, clubs, corporation, countries, currentPage, districts, eduDistrict, eduSubDistrict, grouptype, grpName, icdsBlock, icdsProject, lsgd, missionChapter, missionZone, sahodaya, schoolType, selectIcdsBlock, selectIcdsProject, selectMission, selectSahodaya, selectZone, selectedCntry, selectedCorp, selectedDistrict, selectedLsgd, selectedState, selectedSubCategory, selectedWard, selectedgrpName, selectedschoolType, selecteduDistrict, selecteduSubDistrict, states, subcategoryOptions, token]);
 
 
   return (
@@ -1525,6 +1554,28 @@ const GridExample = () => {
           {grpName.map((c) => (
             <option key={c.gp_id} value={c.gp_name}>
               {c.gp_name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+
+
+      <div className="flex items-center mb-3 space-x-2">
+        <label htmlFor="groupFilter" className="text-sm font-medium">
+          Source :
+        </label>
+        <select
+          id="groupFilter"
+          value={club}
+          onChange={handleFilterClub}
+          className="border border-gray-300 rounded p-1"
+        >
+          <option value="">Select Source Name</option>
+
+          {clubs.map((c) => (
+            <option key={c.id} value={c.name}>
+              {c.name}
             </option>
           ))}
         </select>
