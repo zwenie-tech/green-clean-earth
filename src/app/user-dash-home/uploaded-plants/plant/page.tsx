@@ -68,6 +68,7 @@ const Plant = ({ searchParams }: any) => {
       const result: ApiResponse = await response.json();
       if (result.success) {
         const selectedPlant = result.Uploads.find(p => p.up_id === parseInt(searchParams.tree));
+        console.log(selectedPlant)
         if (selectedPlant) {
           const {up_id,cntry_name,st_name,city,dis_name,cop_name,lsg_name,up_ward,source_name,up_landmark_details}:any = selectedPlant;
           Cookies.set('treeId', up_id.toString(), { expires: 1 });
@@ -220,6 +221,10 @@ const Plant = ({ searchParams }: any) => {
               <div className='flex flex-col gap-1'>
                 <p className='text-sm text-dark-text'>Ward</p>
                 <p>{plant.up_ward}</p>
+              </div>
+              <div className='flex flex-col gap-1'>
+                <p className='text-sm text-dark-text'>Source</p>
+                <p>{plant.source_name}</p>
               </div>
             </div>
           </div>

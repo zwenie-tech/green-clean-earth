@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import NavigationBar from '@/components/navigationBar';
 import Footer from '@/components/footer';
 import { useForm } from "react-hook-form";
-import { apiURL, imageURL } from '@/app/requestsapi/request';
+import { apiURL, fetchClubData, imageURL } from '@/app/requestsapi/request';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
@@ -33,7 +33,7 @@ interface Participant {
   cop_name: string,
   lsg_name: string,
   gp_id: number,
-  group_type:string;
+  group_type: string;
   co_ord_name: string;
 }
 
@@ -109,7 +109,10 @@ interface MissionZone {
   zone_name: string;
 }
 
-
+interface Club {
+  id: string;
+  name: string;
+}
 const ParticipateList = () => {
   const [participantlist, setParticipantList] = useState<Participant[]>([]);
   const [countries, setCountries] = useState<Country[]>([]);
@@ -152,6 +155,10 @@ const ParticipateList = () => {
   const [selectedLsgd, setSelectedLsgd] = useState("");
   const [selectedGrpType, setSelectedGrpType] = useState("new");
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
+
+  const [clubs, setClubs] = useState<Club[]>([]);
+  const [club, setClub] = useState("");
+
   const [wardNo, setWardNo] = useState("");
   const [totalCount, setTotalCount] = useState("");
   const [coName, setConame] = useState("");
@@ -182,6 +189,7 @@ const ParticipateList = () => {
   });
   const form = useForm({
     defaultValues: {
+      club:'',
       grptype: '',
       grpid: '',
       subCategory: '',
@@ -202,6 +210,18 @@ const ParticipateList = () => {
       fourupload: false,
     },
   });
+
+  useEffect(() => {
+    const fetchClubs = async () => {
+      try {
+        const data = await fetchClubData();
+        setClubs(data.clubs);
+      } catch (error) {
+        console.error("Error fetching clubs:", error);
+      }
+    };
+    fetchClubs();
+  }, []);
 
   useEffect(() => {
     const fetchClass = async () => {
@@ -300,29 +320,29 @@ const ParticipateList = () => {
             }
           });
 
-         if (!response.ok) {
-        // Attempt to extract error message from response body
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Network response was not ok");
-      }
+          if (!response.ok) {
+            // Attempt to extract error message from response body
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Network response was not ok");
+          }
           try {
             const result = await response.json();
             setTotalCount(result.total)
             setTotalPages(Math.ceil(result.total / itemsPerPage));
-            // console.log('part 1')
+            
             setParticipantList(result.Uploads);
           } catch {
             setTotalPages(1);
             setParticipantList([]);
           }
-        } catch (error:any) {
-      toast({
-        variant: "destructive",
-        title: "Oops, Something went wrong!",
-        description: error.message || "Please try again...",
-      });
-      console.error("Error:", error);
-    }
+        } catch (error: any) {
+          toast({
+            variant: "destructive",
+            title: "Oops, Something went wrong!",
+            description: error.message || "Please try again...",
+          });
+          console.error("Error:", error);
+        }
       }
     }
     fetchInitialData();
@@ -483,8 +503,6 @@ const ParticipateList = () => {
 
   useEffect(() => {
     const onDataSubmit = async () => {
-
-
       try {
         // Fetch paginated data based on current page
         const response = await fetch(`${apiURL}/uploads/filter?page=${currentPage}&limit=${itemsPerPage}`, {
@@ -499,9 +517,7 @@ const ParticipateList = () => {
         }
         const result = await response.json();
         setParticipantList(result.Uploads);
-        // console.log('part 2',)
-
-        // console.log(result)
+        
         setTotalCount(result.total);
         setTotalPages(Math.ceil(result.total / itemsPerPage));
 
@@ -565,6 +581,9 @@ const ParticipateList = () => {
     data.treeNumber !== "" ? dataWithIds.treeNumber = parseInt(data.treeNumber) : '';
     data.coname !== "" ? dataWithIds.name = data.coname : '';
     data.phoneNumber !== "" ? dataWithIds.phoneNumber = data.phoneNumber : '';
+    club != "" ? dataWithIds.sourceId = parseInt(clubs.find((item) => item.name === club)?.id!) : null;
+
+
 
 
     if (selectedGrpType !== "") {
@@ -606,6 +625,15 @@ const ParticipateList = () => {
     setFilterData(dataWithIds);
 
 
+  };
+
+  const handleFilterClub = (e: any) => {
+
+    if (e.target.value != "") {
+      setClub(e.target.value);
+      // fetchFilteredGrpName(e.target.value);
+      // setCurrentPage(1); // Reset to first page
+    }
   };
 
   const handleFilterGrpName = (e: any) => {
@@ -1486,6 +1514,23 @@ const ParticipateList = () => {
                     {grpName.map((c) => (
                       <option key={c.gp_id} value={c.gp_name}>
                         {c.gp_name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {/* ----------------source--------------------------    */}
+                <div className="w-full sm:col-span-2 md:col-span-1">
+                  <select
+                    id="club"
+                    value={club}
+                    onChange={handleFilterClub}
+                    className="w-full p-2 border border-black rounded-md bg-white focus:border-2 focus:border-[#3C6E1F]"
+                  >
+                    <option value="">Select Source Name</option>
+
+                    {clubs.map((c) => (
+                      <option key={c.id} value={c.name}>
+                        {c.name}
                       </option>
                     ))}
                   </select>
