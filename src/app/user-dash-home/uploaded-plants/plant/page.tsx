@@ -223,7 +223,7 @@ const Plant = ({ searchParams }: any) => {
                 <p>{plant.up_ward}</p>
               </div>
               <div className='flex flex-col gap-1'>
-                <p className='text-sm text-dark-text'>Source</p>
+                <p className='text-sm text-dark-text'>Club</p>
                 <p>{plant.source_name}</p>
               </div>
             </div>
