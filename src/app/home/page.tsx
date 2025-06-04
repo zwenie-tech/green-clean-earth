@@ -88,14 +88,27 @@ const cards = [
     paragraph: 'ഹരിതപുരസ്കാരം സമ്മാനപദ്ധതി രണ്ടാം നറുക്ക്ർടുപ്പ് (തളിർ)വിജയി സ്മിത.CP ക്കുള്ള സ്വർണ്ണ നാണയം ബഹു കൊയിലാണ്ടി MLA K ദാസനിൽ നിന്നും പിതാവ് ഏറ്റ് വാങ്ങുന്നു.ബഹു. തൊഴിൽ, എക്സൈസ് വകുപ്പ് മന്ത്രി TP രാമകൃഷ്ണൻ, മുൻ കുടുംബശ്രീ ജില്ലാ മിഷൻ കോഡിനേറ്റർ സൈദ് അക്ബർ ബാദ്ഷഖാൻ, ജിസം ഫൗണ്ടേഷൻ ചീഫ് പേട്രൺ ശോഭീന്ദ്രൻ മാസ്റ്റർ, കുടുംബശ്രീ അസിസ്റ്റന്റ് കോർഡിനേറ്റർ നാസർ ബാബു, ജിസം ഫൗണ്ടേഷൻ എക്സിക്കുട്ടീവ് ഡയറക്ടർ മുഹമ്മദ് ഇഖ്ബാൽ.കെ എന്നിവർ സമീപം. 2016 ഡിസംബർ 31. കൊയിലാണ്ടി കൊല്ലം',
   },
 ];
-  const handleNext = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-  };
+
+const [fade, setFade] = useState(false);
+
+const handleNext = () => {
+  setFade(true);
+  setTimeout(() => {
+    setCurrentImageIndex(prev =>
+      prev === images.length - 1 ? 0 : prev + 1
+    );
+    setFade(false);
+  }, 300);
+};
 
   const handlePrev = () => {
-    setCurrentImageIndex((prevIndex) =>
-      prevIndex === 0 ? images.length - 1 : prevIndex - 1
-    );
+    setFade(true);
+    setTimeout(() => {
+      setCurrentImageIndex(prev =>
+        prev === 0 ? images.length - 1 : prev - 1
+      );
+      setFade(false);
+    }, 300);
   };
 
 
@@ -191,52 +204,85 @@ const cards = [
     setIsOpen7(!isOpen7);
   };
   
+  
   return (
     <div className="body">
       <NavigationBar />
-      <div className="relative w-full h-full overflow-hidden">
-        <img
-          src={images[currentImageIndex]}
-          alt="Sliding Image"
-          className="w-full h-full object-contain md:object-cover"
-        />
+      <div className="relative w-full h-full overflow-hidden bg-black/5">
+        <div
+          key={currentImageIndex}
+          className="w-full h-full transition-transform duration-700 ease-in-out"
+          style={{
+            animation: 'slideIn 0.5s ease-out',
+          }}
+        >
+          <img
+            src={images[currentImageIndex]}
+            alt="Sliding Image"
+            loading="eager"
+            decoding="async"
+            className="w-full h-full object-contain md:object-cover" // ← no rounded
+          />
+        </div>
+
+        {/* Previous Button — hidden on mobile */}
         <button
           onClick={handlePrev}
-          className="absolute inset-y-0 left-4 flex items-center justify-center p-2 rounded-full shadow-lg focus:outline-none"
+          aria-label="Previous"
+          className="hidden md:flex absolute top-1/2 left-4 z-10 -translate-y-1/2 bg-white/20 hover:bg-white/40 backdrop-blur-md text-white p-3 rounded-lg shadow-md transition-all duration-300 hover:scale-110 focus:outline-none"
         >
-        <svg
-           className="h-10 w-10 text-white"
-           fill="none"
-           viewBox="0 0 24 24"
-           stroke="currentColor"
-        >
-       <path
-         strokeLinecap="round"
-         strokeLinejoin="round"
-         strokeWidth="2"
-         d="M15 19l-7-7 7-7"
-       />
-        </svg>
-        </button>
-        <button
-          onClick={handleNext}
-          className="absolute inset-y-0 right-4 flex items-center justify-center p-2 rounded-full shadow-lg focus:outline-none"
-        >
+         
           <svg
-            className="h-10 w-10 text-white"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+            className="h-6 w-6 rotate-180"
+            fill="currentColor"
+            viewBox="0 0 20 20"
           >
             <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M9 5l7 7-7 7"
+              fillRule="evenodd"
+              d="M12.293 15.707a1 1 0 010-1.414L15.586 11H4a1 1 0 110-2h11.586l-3.293-3.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z"
+              clipRule="evenodd"
             />
           </svg>
         </button>
+
+        {/* Next Button — hidden on mobile */}
+        <button
+          onClick={handleNext}
+          aria-label="Next"
+          className="hidden md:flex absolute top-1/2 right-4 z-10 -translate-y-1/2 bg-white/20 hover:bg-white/40 backdrop-blur-md text-white p-3 rounded-lg shadow-md transition-all duration-300 hover:scale-110 focus:outline-none"
+        >
+          <svg
+            className="h-6 w-6"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fillRule="evenodd"
+              d="M12.293 15.707a1 1 0 010-1.414L15.586 11H4a1 1 0 110-2h11.586l-3.293-3.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </button>
+
+        {/* Inline keyframes */}
+        <style>
+          {`
+            @keyframes slideIn {
+              from {
+                transform: translateX(100%);
+                opacity: 0.3;
+              }
+              to {
+                transform: translateX(0%);
+                opacity: 1;
+              }
+            }
+          `}
+        </style>
       </div>
+
+
+
       <div className="container mx-auto p-0">
         <div className="grid gap-0 grid-cols-1 md:grid-cols-3">   
           {/* Box 1 */}
@@ -275,130 +321,268 @@ const cards = [
         </div>
       </div>
      <div className="container mx-auto p-0">
-       {/* container 1 */}
-        <div onClick={toggleOpen1} className={`p-4 my-4 mt-6 shadow-md rounded-lg ${isOpen1 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
-        <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold " style={{color:'#3C6E1F'}}>ഒരുകോടി വൃക്ഷത്തൈ സെൽഫികളുമായി കേരളം UNEP യിലേക്ക്...</h2>
-          <button className="text-xl">
-            {isOpen1 ? <FaChevronUp /> : <FaChevronDown />}
-          </button>
-        </div>
-        {isOpen1 && (
-          <>
-            <hr className="my-1" />
-            <p className="mt-2 text-justify">
-            ലോക  മലയാളികൾ  ചേർന്ന് ഇങ്ങനെ  ഒരു കോടി വൃക്ഷത്തൈകൾ സംരക്ഷിച്ച്, അതിൻറെ  ഓരോ മൂന്ന് മാസത്തെയും  വളർച്ച പ്രകടമാവുന്ന  ഫോട്ടോയും  മറ്റു വിവരങ്ങളും വെബ്സൈറ്റിൽ പ്രസിദ്ധീകരിച്ച് UNEP (United Nations Environmental Program) യിലേക്ക് സമർപ്പിക്കുവാനും  സുസ്ഥിര  വികസിത  കേരളം  എന്ന  മഹത്തായ  ലക്ഷ്യം  സാക്ഷാൽക്കരിക്കുവാനുള്ള   പ്രവർത്തനങ്ങൾ  നടത്തുവാനും  ഈ പദ്ധതിയിലൂടെ  ലക്ഷ്യമിടുന്നു.
-            </p>
-          </>
-        )}
-           </div>
+          {/* container 1 */}
+          <div
+              onClick={toggleOpen1}
+              className={`p-4 my-4 mt-6 shadow-md rounded-lg transition-all duration-500 ease-in-out ${
+                isOpen1 ? 'bg-light-green' : 'bg-light-gray'
+              }`}
+              style={{ boxSizing: 'border-box' }}
+            >
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold" style={{ color: '#3C6E1F' }}>
+                  ഒരുകോടി വൃക്ഷത്തൈ സെൽഫികളുമായി കേരളം UNEP യിലേക്ക്...
+                </h2>
+                <button className="text-xl">
+                  {isOpen1 ? <FaChevronUp /> : <FaChevronDown />}
+                </button>
+              </div>
+
+              {/* Animated content */}
+              <div
+                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                  isOpen1 ? 'max-h-96 opacity-100 mt-2' : 'max-h-0 opacity-0'
+                }`}
+              >
+                <hr className="my-1" />
+                <p className="mt-2 text-justify">
+                  ലോക  മലയാളികൾ  ചേർന്ന് ഇങ്ങനെ  ഒരു കോടി വൃക്ഷത്തൈകൾ സംരക്ഷിച്ച്, അതിൻറെ  ഓരോ മൂന്ന് മാസത്തെയും  വളർച്ച പ്രകടമാവുന്ന  ഫോട്ടോയും  മറ്റു വിവരങ്ങളും വെബ്സൈറ്റിൽ പ്രസിദ്ധീകരിച്ച് UNEP (United Nations Environmental Program) യിലേക്ക് സമർപ്പിക്കുവാനും  സുസ്ഥിര  വികസിത  കേരളം  എന്ന  മഹത്തായ  ലക്ഷ്യം  സാക്ഷാൽക്കരിക്കുവാനുള്ള   പ്രവർത്തനങ്ങൾ  നടത്തുവാനും  ഈ പദ്ധതിയിലൂടെ  ലക്ഷ്യമിടുന്നു.
+                </p>
+              </div>
+          </div>
+
            {/* container 2 */}
-          <div onClick={toggleOpen2} className={`p-4 my-4 shadow-md rounded-lg ${isOpen2 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
-        <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold " style={{color:'#3C6E1F'}}>ആയിരം കോടി രൂപയുടെ സുസ്ഥിര വികസിത പ്രൊജക്റ്റ്  തയ്യാറാക്കൽ</h2>
-          <button className="text-xl">
-            {isOpen2 ? <FaChevronUp /> : <FaChevronDown />}
-          </button>
-        </div>
-        {isOpen2 && (
-          <>
-            <hr className="my-1" />
-            <p className="mt-2 text-justify">
-            ഒരു കോടി വൃക്ഷത്തൈ സെൽഫികൾ UNEP ലേക്ക് സമർപ്പിക്കുന്നതൊടൊപ്പം  കേരളം സുസ്ഥിര വികസിതവും സമ്പൂർണ്ണ മാലിന്യമുക്തവും ഹരിതാഭവും ആക്കുവാനുള്ള പ്രവർത്തനം നടത്താൻ ആയിരം കോടി രൂപയുടെ  ഗ്രീൻ ക്ലീൻ എസ്റ്റിമേറ്റ് തയ്യാറാക്കി , അതാത്  തദ്ദേശ  സ്വയംഭരണ  സ്ഥാപനങ്ങളും കേരള സർക്കാറും  മുഖേന  കേന്ദ്രസർക്കാർ ,UNEP, എന്നിവക്ക് സമർപ്പിക്കുന്നതാണ്. മത്സരത്തിൽ  പങ്കെടുക്കുന്നവർ  അവരുടെ  അധീനതയിലുള്ള   പ്രദേശങ്ങളിൽ  നടപ്പിലാക്കാൻ  കഴിയുന്ന പ്രദേശിക  പദ്ധതികളാണ്  തയ്യാറാക്കേണ്ടത്. 20  % തുക  ഗുണഭോക്താവും , 20  % അതാത്  തദ്ദേശ  സ്വയംഭരണ  സ്ഥാപനങ്ങളും  20  % കേരള സർക്കാരും 20  %  കേന്ദ്ര സർക്കാറും  20  % UNEP യും  നൽകുന്ന  വിധത്തിലാണ്  പദ്ധതി  വിഭാവനം  ചെയ്യുന്നത് .
-            </p>
-          </>
-        )}
+           <div
+              onClick={toggleOpen2}
+              className={`p-4 my-4 shadow-md rounded-lg transition-all duration-500 ease-in-out ${
+                isOpen2 ? 'bg-light-green' : 'bg-light-gray'
+              }`}
+              style={{ boxSizing: 'border-box' }}
+            >
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold" style={{ color: '#3C6E1F' }}>
+                  ആയിരം കോടി രൂപയുടെ സുസ്ഥിര വികസിത പ്രൊജക്റ്റ് തയ്യാറാക്കൽ
+                </h2>
+                <button className="text-xl">
+                  {isOpen2 ? <FaChevronUp /> : <FaChevronDown />}
+                </button>
+              </div>
+
+              {/* Animated content */}
+              <div
+                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                  isOpen2 ? 'max-h-[1000px] opacity-100 mt-2' : 'max-h-0 opacity-0'
+                }`}
+              >
+                <hr className="my-1" />
+                <p className="mt-2 text-justify">
+                  ഒരു കോടി വൃക്ഷത്തൈ സെൽഫികൾ UNEP ലേക്ക് സമർപ്പിക്കുന്നതൊടൊപ്പം കേരളം
+                  സുസ്ഥിര വികസിതവും സമ്പൂർണ്ണ മാലിന്യമുക്തവും ഹരിതാഭവും ആക്കുവാനുള്ള പ്രവർത്തനം
+                  നടത്താൻ ആയിരം കോടി രൂപയുടെ ഗ്രീൻ ക്ലീൻ എസ്റ്റിമേറ്റ് തയ്യാറാക്കി , അതാത്
+                  തദ്ദേശ സ്വയംഭരണ സ്ഥാപനങ്ങളും കേരള സർക്കാറും മുഖേന കേന്ദ്രസർക്കാർ, UNEP, എന്നിവക്ക്
+                  സമർപ്പിക്കുന്നതാണ്. മത്സരത്തിൽ പങ്കെടുക്കുന്നവർ അവരുടെ അധീനതയിലുള്ള
+                  പ്രദേശങ്ങളിൽ നടപ്പിലാക്കാൻ കഴിയുന്ന പ്രദേശിക പദ്ധതികളാണ് തയ്യാറാക്കേണ്ടത്.
+                  20% തുക ഗുണഭോക്താവും, 20% അതാത് തദ്ദേശ സ്വയംഭരണ സ്ഥാപനങ്ങളും 20% കേരള
+                  സർക്കാരും 20% കേന്ദ്ര സർക്കാറും 20% UNEP യും നൽകുന്ന വിധത്തിലാണ് പദ്ധതി വിഭാവനം
+                  ചെയ്യുന്നത്.
+                </p>
+              </div>
            </div>
+
            {/* container 3 */}
-           <div onClick={toggleOpen3} className={`p-4 my-4 shadow-md rounded-lg ${isOpen3 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
-        <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold " style={{color:'#3C6E1F'}}>ഐക്യരാഷ്ട്രസഭ 17 സുസ്ഥിര വികസനം ലക്ഷ്യങ്ങൾ (Sustainable Development Goals)</h2>
-          <button className="text-xl">
-            {isOpen3 ? <FaChevronUp /> : <FaChevronDown />}
-          </button>
-        </div>
-        {isOpen3 && (
-          <>
-            <hr className="my-1" />
-            <p className="mt-2 text-justify">
+           <div
+              onClick={toggleOpen3}
+              className={`p-4 my-4 shadow-md rounded-lg transition-all duration-500 ease-in-out ${
+                isOpen3 ? 'bg-light-green' : 'bg-light-gray'
+              }`}
+              style={{ boxSizing: 'border-box' }}
+            >
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold" style={{ color: '#3C6E1F' }}>
+                  ഐക്യരാഷ്ട്രസഭ 17 സുസ്ഥിര വികസനം ലക്ഷ്യങ്ങൾ (Sustainable Development Goals)
+                </h2>
+                <button className="text-xl">
+                  {isOpen3 ? <FaChevronUp /> : <FaChevronDown />}
+                </button>
+              </div>
+
+              {/* Animated collapsible content */}
+              <div
+                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                  isOpen3 ? 'max-h-[1000px] opacity-100 mt-2' : 'max-h-0 opacity-0'
+                }`}
+              >
+                <hr className="my-1" />
+                <p className="mt-2 text-justify">
             ഇതോടൊപ്പം  ഐക്യരാഷ്ട്രസഭ വിഭാവനം  ചെയ്ത 17 സുസ്ഥിര വികസന  ലക്ഷ്യങ്ങൾ  കേരളത്തിൽ  പ്രാവർത്തികമാക്കാനുള്ള  പ്രചാരണ  പ്രവർത്തനങ്ങളും  നടത്താൻ   ഉദ്ദേശിക്കുന്നു .
 
 1) ദാരിദ്യ്ര നിർമ്മാർജ്ജനം , 2) വിശപ്പില്ലാതാക്കൽ, 3) നല്ല ആരോഗ്യവും ക്ഷേമവും, 4) ഗുണമേന്മയുള്ള വിദ്യാഭ്യാസം, 5) ലിംഗസമത്വം, 6) ശുദ്ധമായ വെള്ളവും പൊതുശുചിത്വം, 7) താങ്ങാവുന്നതും ശുദ്ധവുമായ ഊർജ്ജം, 8) മാന്യമായ തൊഴിലും സാമ്പത്തിക വളർച്ചയും 9) വ്യവസായം, നവീകരണം, അടിസ്ഥാനസൗകര്യങ്ങൾ, 10) അസമത്വം ലഘൂകരിക്കൽ, 11) സുസ്ഥിര നഗരങ്ങളും സമൂഹങ്ങളും, 12) ഉത്തരവാദിത്ത ഉപഭോഗവും ഉത്പാദനവും, 13) കാലാവസ്ഥാ വ്യതിയാനം, 14) ജലത്തിനടിയിലെ ജീവൻ, 15) കരയിലെ ജീവൻ, 16) സമാധാനം, നീതി, ശക്തമായ നിയമസ്ഥാപനങ്ങൾ, 17) ലക്ഷ്യങ്ങൾ കൈവരിക്കാനുള്ള പങ്കാളിത്തം.  എന്നിവയാണ് ഐക്യരാഷ്ട്രസഭ വിഭാവനം  ചെയ്ത 17 സുസ്ഥിര വികസന  ലക്ഷ്യങ്ങൾ.
             </p>
-          </>
-        )}
+              </div>
            </div>
+
            {/* container 4 */}
-           <div onClick={toggleOpen4} className={`p-4 my-4 shadow-md rounded-lg ${isOpen4 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
-        <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold " style={{color:'#3C6E1F'}}>ഹരിത മത്സരങ്ങൾ</h2>
-          <button className="text-xl">
-            {isOpen4 ? <FaChevronUp /> : <FaChevronDown />}
-          </button>
-        </div>
-        {isOpen4 && (
-          <>
-            <hr className="my-1" />
-            <p className="mt-2 text-justify">
-            വിദ്യാർഥികൾക്കും, അദ്ധ്യാപകർക്കും ,  പൊതുജനങ്ങൾക്കുമായി വിവിധ ഹരിത മത്സരങ്ങൾ സംഘടിപ്പിച്ച് വിജയികൾക്ക് പുരസ്കാരങ്ങളും സമ്മാനങ്ങളും നൽകുന്നു.  KG, LP, UP, HS, HSS, CLG, GENERAL എന്നീ വിഭാഗങ്ങളിൽ,  വിദ്യാഭ്യാസ  ഉപ ജില്ലാ തലം, വിദ്യാഭ്യാസ ജില്ലാതലം, ജില്ലാ തലം,സംസ്ഥാന തലം,  എന്നിവയിൽ മികച്ച പ്രകടനം നടത്തുന്നവർക്ക് പ്രത്യേക പുരസ്കാരങ്ങളും സമ്മാനങ്ങളും ഉണ്ടായിരിക്കുന്നതാണ്.
-            </p>
-          </>
-        )}
+           <div
+            onClick={toggleOpen4}
+            className={`p-4 my-4 shadow-md rounded-lg transition-all duration-500 ease-in-out ${
+              isOpen4 ? 'bg-light-green' : 'bg-light-gray'
+            }`}
+            style={{ boxSizing: 'border-box' }}
+          >
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-bold" style={{ color: '#3C6E1F' }}>
+                ഹരിത മത്സരങ്ങൾ
+              </h2>
+              <button className="text-xl">
+                {isOpen4 ? <FaChevronUp /> : <FaChevronDown />}
+              </button>
+            </div>
+
+            {/* Animated collapsible content */}
+            <div
+              className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                isOpen4 ? 'max-h-[1000px] opacity-100 mt-2' : 'max-h-0 opacity-0'
+              }`}
+            >
+              <hr className="my-1" />
+              <p className="mt-2 text-justify">
+                വിദ്യാർഥികൾക്കും, അദ്ധ്യാപകർക്കും, പൊതുജനങ്ങൾക്കുമായി വിവിധ ഹരിത മത്സറങ്ങൾ
+                സംഘടിപ്പിച്ച് വിജയികൾക്ക് പുരസ്കാരങ്ങളും സമ്മാനങ്ങളും നൽകുന്നു.
+              </p>
+              <p className="mt-2 text-justify">
+                KG, LP, UP, HS, HSS, CLG, GENERAL എന്നീ വിഭാഗങ്ങളിൽ, വിദ്യാഭ്യാസ ഉപജില്ലാ തലം,
+                വിദ്യാഭ്യാസ ജില്ലാതലം, ജില്ലാ തലം, സംസ്ഥാന തലം എന്നിവയിൽ മികച്ച പ്രകടനം
+                നടത്തുന്നവർക്ക് പ്രത്യേക പുരസ്കാരങ്ങളും സമ്മാനങ്ങളും ഉണ്ടായിരിക്കുന്നതാണ്.
+              </p>
+            </div>
            </div>
+
            {/* container 5 */}
-           <div onClick={toggleOpen5} className={`p-4 my-4 shadow-md rounded-lg ${isOpen5 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
-        <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold" style={{color:'#3C6E1F'}}>ഗ്രീനിങ് കോഴിക്കോട് - 2023-24</h2>
-          <button className="text-xl">
-            {isOpen5 ? <FaChevronUp /> : <FaChevronDown />}
-          </button>
-        </div>
-        {isOpen5 && (
-          <>
-            <hr className="my-1" />
-            <p className="mt-2 text-justify">
-            കോഴിക്കോട് ജില്ലയെ സമ്പൂർണ്ണ മാലിന്യ മുക്തവും ഹരിതാഭവും വേണ്ടി കോഴിക്കോട് ജില്ലാ പഞ്ചായത്ത് സോയിൽ കൺസർവേഷൻ ഡിപ്പാർട്മെൻറ് മുഖേനെ ഗ്രീൻ ക്ലീൻ കേരള മിഷൻറെ സഹകരണത്തോടെ നടപ്പാക്കുന്ന പദ്ധതിയാണ് ഗ്രീനിങ് കോഴിക്കോട് . ഹരിത കേരള മിഷൻ, ശുചിത്വ മിഷൻ , കുടുംബശ്രീ, അഗ്രിക്കൾച്ചറൽ ഡിപ്പാർമെൻറ് , സോഷ്യൽ ഫോറെസ്റ്ററി,ബയോ ഡൈവേഴ്‌സിറ്റി ബോർഡ് , വിവിധ തദ്ദേശ സ്വയം ഭരണസ്ഥാപനങ്ങൾ എന്നിവ മുഖേനെ സർക്കാർ നടപ്പാക്കുന്ന പദ്ധതികൾ കൂടുതൽ ജനകീയമാക്കാൻ ഗ്രീൻ ക്ലീൻ കേരള മിഷന്റെ സഹകരണത്തോടെ വിവിധ ഹരിത മത്സരങ്ങൾ സംഘടിപ്പിക്കുകയും , വിജയികൾക്ക് ഗ്രീൻ ക്ലീൻ കേരള മിഷൻ സമ്മാനങ്ങൾ നൽകുകയും ചെയ്യുന്നു..
-            </p>
-          </>
-        )}
+           <div
+              onClick={toggleOpen5}
+              className={`p-4 my-4 shadow-md rounded-lg transition-all duration-500 ease-in-out ${
+                isOpen5 ? 'bg-light-green' : 'bg-light-gray'
+              }`}
+              style={{ boxSizing: 'border-box' }}
+            >
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold" style={{ color: '#3C6E1F' }}>
+                  ഗ്രീനിങ് കോഴിക്കോട് - 2023-24
+                </h2>
+                <button className="text-xl">
+                  {isOpen5 ? <FaChevronUp /> : <FaChevronDown />}
+                </button>
+              </div>
+
+              {/* Animated collapsible content */}
+              <div
+                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                  isOpen5 ? 'max-h-[1000px] opacity-100 mt-2' : 'max-h-0 opacity-0'
+                }`}
+              >
+                <hr className="my-1" />
+                <p className="mt-2 text-justify">
+                  കോഴിക്കോട് ജില്ലയെ സമ്പൂർണ്ണ മാലിന്യമുക്തവും ഹരിതാഭവും ആക്കുന്നതിനായുള്ള പദ്ധതിയാണ് 
+                  <strong> ഗ്രീനിങ് കോഴിക്കോട്</strong>. ഇത് ജില്ലാ പഞ്ചായത്ത്, സോയിൽ കൺസർവേഷൻ ഡിപ്പാർട്മെൻറ്, 
+                  ഹരിതകേരള മിഷൻ, ശുചിത്വ മിഷൻ, കുടുംബശ്രീ, അഗ്രിക്കൾച്ചറൽ ഡിപ്പാർട്മെൻറ്, സോഷ്യൽ ഫോറസ്റ്ററി, 
+                  ബയോഡൈവേഴ്‌സിറ്റി ബോർഡ് എന്നിവയുടെ സഹകരണത്തോടെ നടപ്പാക്കുന്നു.
+                </p>
+                <p className="mt-2 text-justify">
+                  ഈ പദ്ധതിയുടെ ഭാഗമായി, സർക്കാർ നടപ്പിലാക്കുന്ന വിവിധ ഹരിത പദ്ധതികളെ ജനകീയമാക്കുന്നതിന് 
+                  <strong> ഗ്രീൻ ക്ലീൻ കേരള മിഷന്റെ </strong> സഹകരണത്തോടെ ഹരിത മത്സരങ്ങൾ സംഘടിപ്പിക്കുകയും, വിജയികൾക്ക് 
+                  സമ്മാനങ്ങളും വിതരണം ചെയ്യുകയും ചെയ്യുന്നു.
+                </p>
+              </div>
            </div>
+
            {/* container 6 */}
-           <div onClick={toggleOpen6} className={`p-4  my-4 shadow-md rounded-lg ${isOpen6 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
-        <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold " style={{color:'#3C6E1F'}}>ഗ്രീൻ ക്ലീൻ കേരള മിഷൻ</h2>
-          <button className="text-xl">
-            {isOpen6 ? <FaChevronUp /> : <FaChevronDown />}
-          </button>
-        </div>
-        {isOpen6 && (
-          <>
-            <hr className="my-1" />
-            <p className="mt-2 text-justify">
-            കോഴിക്കോട് ജില്ലയിലെ Forestry Club,ICDS, NSS, SPC, SCOUT & GUIDE, JRC, SAVE, Green Clean Earth Movement Foundation (GCEM Fondation), തുടങ്ങിയവയുടെ കൂട്ടായ്മയാണ് ഗ്രീൻ ക്ലീൻ കേരള മിഷൻ .കോഴിക്കോട് ജില്ലാ പഞ്ചായത്ത് സോയിൽ കൺസർവേഷൻ ഡിപ്പാർട്മെൻറ് , ഹരിത കേരള മിഷൻ, ശുചിത്വ മിഷൻ , കുടുംബശ്രീ, അഗ്രിക്കൾച്ചറൽ ഡിപ്പാർമെൻറ് , സോഷ്യൽ ഫോറെസ്റ്ററി,ബയോ ഡൈവേഴ്‌സിറ്റി ബോർഡ് , വിവിധ തദ്ദേശ സ്വയം ഭരണസ്ഥാപനങ്ങൾ എന്നിവയുടെ സഹകരണത്തോടെയാണ് പദ്ധതികൾ ആവിഷ്‌കരിക്കുന്നത് . വിദ്യാർഥികളിലൂടെ ഹരിത ശുചിത്വ ബോധം സമൂഹത്തിൽ വ്യാപിപ്പിക്കുവാൻ വേണ്ടി വിവിധ ഹരിത മത്സരങ്ങൾ സംഘടിപ്പിച്ച് വിജയികൾക്ക് സമ്മാനങ്ങൾ നൽകുന്നു
-            </p>
-          </>
-        )}
-           </div>
-       
+           <div
+            onClick={toggleOpen6}
+            className={`p-4 my-4 shadow-md rounded-lg transition-all duration-500 ease-in-out ${
+              isOpen6 ? 'bg-light-green' : 'bg-light-gray'
+            }`}
+            style={{ boxSizing: 'border-box' }}
+          >
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-bold" style={{ color: '#3C6E1F' }}>
+                ഗ്രീൻ ക്ലീൻ കേരള മിഷൻ
+              </h2>
+              <button className="text-xl">
+                {isOpen6 ? <FaChevronUp /> : <FaChevronDown />}
+              </button>
+            </div>
+
+            {/* Animated collapsible content */}
+            <div
+              className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                isOpen6 ? 'max-h-[1000px] opacity-100 mt-2' : 'max-h-0 opacity-0'
+              }`}
+            >
+              <hr className="my-1" />
+              <p className="mt-2 text-justify">
+                കോഴിക്കോട് ജില്ലയിലെ <strong>Forestry Club</strong>, <strong>ICDS</strong>, <strong>NSS</strong>,
+                <strong> SPC</strong>, <strong>SCOUT & GUIDE</strong>, <strong>JRC</strong>, <strong>SAVE</strong>, 
+                <strong> Green Clean Earth Movement Foundation (GCEM Foundation)</strong> എന്നിവയുടെ കൂട്ടായ്മയാണ് 
+                <strong> ഗ്രീൻ ക്ലീൻ കേരള മിഷൻ</strong>.
+              </p>
+              <p className="mt-2 text-justify">
+                <strong>കോഴിക്കോട് ജില്ലാ പഞ്ചായത്ത്</strong>, <strong>സോയിൽ കൺസർവേഷൻ ഡിപ്പാർട്മെൻറ്</strong>, 
+                <strong> ഹരിത കേരള മിഷൻ</strong>, <strong>ശുചിത്വ മിഷൻ</strong>, <strong>കുടുംബശ്രീ</strong>, 
+                <strong>അഗ്രിക്കൾച്ചറൽ ഡിപ്പാർട്മെൻറ്</strong>, <strong>സോഷ്യൽ ഫോറെസ്റ്ററി</strong>, 
+                <strong>ബയോഡൈവേഴ്‌സിറ്റി ബോർഡ്</strong>, <strong>തദ്ദേശ സ്വയംഭരണ സ്ഥാപനങ്ങൾ</strong> എന്നിവയുടെ 
+                സഹകരണത്തോടെയാണ് പദ്ധതികൾ ആവിഷ്‌കരിക്കുന്നത്.
+              </p>
+              <p className="mt-2 text-justify">
+                വിദ്യാർത്ഥികളിലൂടെ ഹരിത-ശുചിത്വ ബോധം സമൂഹത്തിൽ വ്യാപിപ്പിക്കാനായി വിവിധ 
+                <strong> ഹരിത മത്സരങ്ങൾ</strong> സംഘടിപ്പിച്ച് വിജയികൾക്ക് <strong>സമ്മാനങ്ങൾ</strong> നൽകുന്നു.
+              </p>
+            </div>
+          </div>
+
            {/* container 7 */}
-           <div onClick={toggleOpen7} className={`p-4  my-4 shadow-md rounded-lg ${isOpen7 ? 'bg-light-green' : 'bg-light-gray'}`} style={{ boxSizing: 'border-box' }}>
-        <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold " style={{color:'#3C6E1F'}}>നാഴികക്കല്ലുകൾ -ഗ്രീൻ ക്ലീൻ കേരള -വൃക്ഷത്തൈ പരിപാലന മത്സരം</h2>
-          <button className="text-xl">
-            {isOpen7 ? <FaChevronUp /> : <FaChevronDown />}
-          </button>
-        </div>
-        {isOpen7 && (
-          <>
-            <hr className="my-1" />
-            <p className="mt-2 text-justify">
-            Conducted by Green Clean Kerala Mission- A confederation of Green Clean Eearth Movement(GCEM) Foundation, Forestry Club, NSS, SPC, Scout & Guide, JRC & SAVE.
-       In Association with Kozhikkode jilla panchayath Soil Conservation Department, Agricultural Department, Haritha Keralam Mission, Social forestry, Kudumbashree & ICDS.
-       Supported by indian Oil Corporation and myG, VKC,tecQ, Aqua garden, Mall of garden, AGRI SUPER MARKET, KISAN EXCEL, a2z4home.
-            </p>
-          </>
-        )}
-           </div>
+           <div
+            onClick={toggleOpen7}
+            className={`p-4 my-4 shadow-md rounded-lg transition-all duration-500 ease-in-out ${
+              isOpen7 ? 'bg-light-green' : 'bg-light-gray'
+            }`}
+            style={{ boxSizing: 'border-box' }}
+          >
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-bold" style={{ color: '#3C6E1F' }}>
+                നാഴികക്കല്ലുകൾ - ഗ്രീൻ ക്ലീൻ കേരള - വൃക്ഷത്തൈ പരിപാലന മത്സരം
+              </h2>
+              <button className="text-xl">
+                {isOpen7 ? <FaChevronUp /> : <FaChevronDown />}
+              </button>
+            </div>
+
+            {/* Collapsible content */}
+            <div
+              className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                isOpen7 ? 'max-h-[1000px] opacity-100 mt-2' : 'max-h-0 opacity-0'
+              }`}
+            >
+              <hr className="my-1" />
+              <p className="mt-2 text-justify">
+                Conducted by <strong>Green Clean Kerala Mission</strong> — a confederation of 
+                <strong> Green Clean Earth Movement (GCEM) Foundation</strong>, 
+                <strong> Forestry Club</strong>, <strong>NSS</strong>, <strong>SPC</strong>, 
+                <strong> Scout & Guide</strong>, <strong>JRC</strong>, and <strong>SAVE</strong>.
+              </p>
+              <p className="mt-2 text-justify">
+                Organized in association with <strong>Kozhikode Jilla Panchayath Soil Conservation Department</strong>, 
+                <strong> Agricultural Department</strong>, <strong>Haritha Keralam Mission</strong>, 
+                <strong>Social Forestry</strong>, <strong>Kudumbashree</strong>, and <strong>ICDS</strong>.
+              </p>
+              <p className="mt-2 text-justify">
+                Supported by <strong>Indian Oil Corporation</strong>, <strong>myG</strong>, 
+                <strong>VKC</strong>, <strong>tecQ</strong>, <strong>Aqua Garden</strong>, 
+                <strong>Mall of Garden</strong>, <strong>AGRI Super Market</strong>, 
+                <strong>Kisan Excel</strong>, and <strong>a2z4home</strong>.
+              </p>
+            </div>
+          </div>
+
      </div>
     {/*textSlide */}
   <div className="container mx-auto p-0 relative w-full">

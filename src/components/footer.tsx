@@ -93,6 +93,7 @@ export default function Footer() {
             <p>Green Clean Earth Movement. All rights reserved</p>
             <p>A GCEM Foundation Compaing for Save Earth</p>
             <p>Supported By www.a2z4home.com. Online Green Architectural Directory</p>
+            <p>Developed and maintained by ZWENIE Tech.</p>
           </div>
         </div>
       </div>

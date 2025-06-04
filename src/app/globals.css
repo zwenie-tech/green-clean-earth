@@ -57,3 +57,20 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .animate-slide-in {
+    animation: slide-in 0.4s ease-out;
+  }
+
+  @keyframes slide-in {
+    from {
+      transform: translateX(100%);
+      opacity: 0.5;
+    }
+    to {
+      transform: translateX(0%);
+      opacity: 1;
+    }
+  }
+}
