@@ -179,21 +179,29 @@ const Invite: React.FC = () => {
                 ( വിദ്യാലയത്തിലെ അധ്യാപക കോഡിനേറ്റർ പൂരിപ്പിക്കേണ്ടത്. ഒരു വിദ്യാലയത്തിൽ നിന്നും ഒരു കോഡിനേറ്റർ മാത്രം പൂരിപ്പിച്ചാൽ മതി.
                 താഴെക്കൊടുത്ത വീഡിയോ കാണുക<br />
                 👇🏼<br />
-                ലിങ്ക് video
+                <strong>
+                  <a className="text-green-600" href="https://youtu.be/Bg5X3utFxuA">
+                    Watch Video
+                  </a>
+                </strong>
+
                 <br />👆🏼<br />
                 അതിനുശേഷം
                 താഴെക്കൊടുത്ത ലിങ്കിൽ ക്ലിക്ക് ചെയ്തു വീഡിയോയിൽ പറഞ്ഞത് പ്രകാരം
                 മറ്റു അധ്യാപകർക്കും വിദ്യാർത്ഥികൾ വെബ്സൈറ്റിൽ നിന്നും ലഭിക്കുന്ന പുതിയ ലിങ്ക് അയച്ചു കൊടുക്കുക)
                 <br />👇🏼<br />
                 <strong><a className='text-green-600' href={`${baseURL}register?ref=${ref_code}`}>{`${baseURL}register?ref=${ref_code}`}</a></strong>
+                <br/>👆🏼<br/>
                 <br />Use referral code <strong>{ref_code}</strong> while registration.<br />
                 <br />സംശയങ്ങൾക്ക്
-                🥦<br />
+                <br/>
+                🥦
+                <br />
                 Web: www.GreenCleanEarth.org <br />
                 Whatsapp/Telegram : 9645 9645 92<br />
                 Mail: GreenCleanKerala@gmail.com.<br />
                 Youtube /fb/insta: Green Clean Kerala<br />
-                🥦
+                🥦<br />
                 വാർത്തകളും റിസൽ ട്ടുകളും അറിയുവാൻ ചാനലും പേജും സബ്സ്ക്രൈബ്- ഫോളോ ചെയ്യുക
               </p>
             </div>
@@ -209,7 +217,7 @@ const Invite: React.FC = () => {
               ( വിദ്യാലയത്തിലെ അധ്യാപക കോഡിനേറ്റർ പൂരിപ്പിക്കേണ്ടത്. ഒരു വിദ്യാലയത്തിൽ നിന്നും ഒരു കോഡിനേറ്റർ മാത്രം പൂരിപ്പിച്ചാൽ മതി.
               താഴെക്കൊടുത്ത വീഡിയോ കാണുക
               👇🏼
-              ലിങ്ക് video
+              https://youtu.be/Bg5X3utFxuA
               👆🏼
               അതിനുശേഷം
               താഴെക്കൊടുത്ത ലിങ്കിൽ ക്ലിക്ക് ചെയ്തു വീഡിയോയിൽ പറഞ്ഞത് പ്രകാരം  

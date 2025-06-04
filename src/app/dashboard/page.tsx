@@ -66,10 +66,6 @@ const Dashboard = () => {
       </div>
       <div className="mx-auto p-6 max-w-screen-lg text-justify my-2">
         <div className="">
-          <p className="">
-            വിജയാശംസകൾ. താങ്കളെയും സ്ഥാപനത്തെയും ഉയരങ്ങളിൽ എത്തിക്കുവാൻ ഈ
-            പദ്ധതിയിലൂടെ സാധ്യമാകട്ടെ എന്ന് ആശംസിക്കുന്നു.
-          </p>
           <p className="text-lg font-semibold mt-2">താങ്കൾ ചെയ്യേണ്ടത്.</p>
           <p className="">
             സ്ഥാപനത്തിലെ മുഴുവൻ മെമ്പർമാരെയും മത്സരത്തിൽ പങ്കെടുപ്പിക്കുവാൻ
@@ -159,6 +155,10 @@ const Dashboard = () => {
             <div className="p-4 text-xl">നറുക്കെടുപ്പ്</div>
           </label>
         </div>
+        <p className="m-12 text-xl text-center">
+            വിജയാശംസകൾ. താങ്കളെയും സ്ഥാപനത്തെയും ഉയരങ്ങളിൽ എത്തിക്കുവാൻ ഈ
+            പദ്ധതിയിലൂടെ സാധ്യമാകട്ടെ എന്ന് ആശംസിക്കുന്നു.
+          </p>
       </div>
       <Footer />
     </div>

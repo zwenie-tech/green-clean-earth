@@ -37,7 +37,7 @@ function DialogAddUserfn() {
 🥦
  താഴെക്കൊടുത്ത വീഡിയോ കാണുക
 👇🏼
-ലിങ്ക് video
+https://youtube.com/shorts/gwujCEDAvck?feature=share
 👆🏼
  അതിനുശേഷം
  താഴെക്കൊടുത്ത ലിങ്കിൽ ക്ലിക്ക് ചെയ്തു  വീഡിയോയിൽ പറഞ്ഞത് പ്രകാരം  
@@ -102,16 +102,19 @@ Youtube /fb/insta: Green Clean Kerala
             <br></br>
             🥦
             <b>ഗ്രീൻ ക്ലീൻ കേരള സുസ്ഥിരവികസന ഹരിത മത്സരങ്ങളിൽ പങ്കെടുക്കുവാൻ....</b>
-            🥦
-            <br></br>
+            <br></br>🥦
             താഴെക്കൊടുത്ത വീഡിയോ കാണുക
-            👇🏼<br></br>
-            ലിങ്ക് video
+            <br></br>👇🏼<br></br>
+            <strong>
+                  <a className="text-green-600" href="https://youtube.com/shorts/gwujCEDAvck?feature=share">
+                    Watch Video
+                  </a>
+                </strong>
             <br></br>👆🏼<br></br>
             അതിനുശേഷം
             താഴെക്കൊടുത്ത ലിങ്കിൽ ക്ലിക്ക് ചെയ്തു  വീഡിയോയിൽ പറഞ്ഞത് പ്രകാരം  
             പ്രവർത്തിക്കുക
-            👇🏼
+            <br></br>👇🏼
             </p>
             <Link
               href={`/user-register?id=${id}&ref=${referral_code}`}
@@ -123,7 +126,7 @@ Youtube /fb/insta: Green Clean Kerala
             👆🏼<br></br>
 
             സംശയങ്ങൾക്ക്
-            🥦<br></br>
+            <br></br>🥦<br></br>
             Web: www.GreenCleanEarth.org <br></br>
 
             Whatsapp/Telegram : 9645 9645 92<br></br>
@@ -132,7 +135,7 @@ Youtube /fb/insta: Green Clean Kerala
 
             Youtube /fb/insta: Green Clean Kerala<br></br>
 
-            🥦
+            🥦 <br></br>
             വാർത്തകളും റിസൽ ട്ടുകളും അറിയുവാൻ ചാനലും പേജും  സബ്സ്ക്രൈബ്- ഫോളോ  ചെയ്യുക
             </p>
           </div>
