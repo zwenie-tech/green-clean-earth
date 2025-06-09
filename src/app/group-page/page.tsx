@@ -60,8 +60,8 @@ const ButtonDisplayFn: React.FC = () => {
   const [currentPageUp, setCurrentPageUp] = useState(1);
   const [totalPagesAct, setTotalPagesAct] = useState(1);
   const [totalPagesUp, setTotalPagesUp] = useState(1);
-  const [upcount, setUpCount] = useState(1);
-  const [actcount, setActCount] = useState(1);
+  const [upcount, setUpCount] = useState(0);
+  const [actcount, setActCount] = useState(0);
   const itemsPerPage = 10;
   const router = useRouter()
   

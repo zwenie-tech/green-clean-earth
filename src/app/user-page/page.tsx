@@ -56,8 +56,8 @@ const ButtonDisplayFn = () => {
   const [currentPageUp, setCurrentPageUp] = useState(1);
   const [totalPagesAct, setTotalPagesAct] = useState(1);
   const [totalPagesUp, setTotalPagesUp] = useState(1);
-  const [totalCountUp, setTotalCountUp] = useState("");
-  const [totalCountAct, setTotalCountAct] = useState("");
+  const [totalCountUp, setTotalCountUp] = useState("0");
+  const [totalCountAct, setTotalCountAct] = useState("0");
   const itemsPerPage = 10;
 
 
