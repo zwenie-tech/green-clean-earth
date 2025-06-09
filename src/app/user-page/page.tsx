@@ -5,6 +5,7 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { apiURL, imageURL } from '../requestsapi/request';
 import { useSearchParams } from 'next/navigation';
 import { ExternalLink, LinkIcon } from 'lucide-react';
+import PaginationComponent from "../PageComponent";
 
 interface Upload {
   up_id: number;
@@ -70,11 +71,11 @@ const ButtonDisplayFn = () => {
     }
   }
   const handlePageChangeUp = (newPage: number) => {
-    if (newPage > 0 && newPage <= totalPagesAct) {
-
+    if (newPage > 0 && newPage <= totalPagesUp) {
       setCurrentPageUp(newPage);
     }
   }
+  
 
   useEffect(() => {
     const uid = parseInt(userid!);
@@ -199,7 +200,7 @@ const ButtonDisplayFn = () => {
               ))}
             </div>
 
-            <div className="flex justify-center items-center space-x-2 my-4">
+            {/* <div className="flex justify-center items-center space-x-2 my-4">
               <button
                 className={
                   currentPageUp === 1
@@ -225,7 +226,14 @@ const ButtonDisplayFn = () => {
               >
                 Next
               </button>
-            </div>
+            </div> */}
+
+<PaginationComponent
+  currentPage={currentPageUp}
+  totalPages={totalPagesUp}
+  onPageChange={handlePageChangeUp}
+/>
+
           </div>
         )}
 
@@ -281,7 +289,7 @@ const ButtonDisplayFn = () => {
                 </tbody>
               </table>
             </div>
-            <div className="flex justify-center items-center space-x-2 my-4">
+            {/* <div className="flex justify-center items-center space-x-2 my-4">
               <button
                 className={currentPageAct === 1 ?
                   "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
@@ -305,7 +313,14 @@ const ButtonDisplayFn = () => {
               >
                 Next
               </button>
-            </div>
+            </div> */}
+
+            <PaginationComponent
+              currentPage={currentPageAct}
+              totalPages={totalPagesAct}
+              onPageChange={handlePageChangeAct}
+            />
+
           </div>
         )}
       </div>
