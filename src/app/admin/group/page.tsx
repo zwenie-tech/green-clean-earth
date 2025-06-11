@@ -226,7 +226,6 @@ const AdminGrid = () => {
     async function fetchdata() {
       if (token && Object.keys(filterdata).length === 0) {
 
-
         const response = await axios.post(`${apiURL}/admin/adminGroupList?page=${currentPage}&limit=${itemsPerPage}`, {}, {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -1503,7 +1502,7 @@ const AdminGrid = () => {
 
           {grpName.map((c) => (
             <option key={c.gp_id} value={c.gp_name}>
-              {c.gp_name}
+              {c.gp_id} - {c.gp_name}
             </option>
           ))}
         </select>

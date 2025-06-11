@@ -643,7 +643,7 @@ export function EditGrpTypeForm() {
     const club = Cookies.get("club");
     const multiForm = useForm({
         defaultValues: {
-            value: club?.split(',').map(item => item.trim())!,
+            value: [],
             //   value: club?.split(',').map(item => item.trim())!,
 
         },
