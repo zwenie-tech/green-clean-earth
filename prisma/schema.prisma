@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model tbl_group_category {
+  gp_cat_id   Int    @id
+  gp_cat_name String @db.VarChar(500)
+}
+
+model tbl_group_code {
+  gp_id          Int     @id
+  gp_name        String  @db.VarChar(500)
+  gp_code        String  @db.VarChar(200)
+  gp_code_slug   String? @db.VarChar(500)
+  gp_cat_id      Int
+  gp_cover_photo String? @db.Text
+  dis_id         Int?
+  cop_id         Int?
+  lsg_id         Int?
+}
+
+model tbl_group_coordinators {
+  co_ord_id         Int      @id
+  gp_id             Int
+  co_ord_name       String   @db.Text
+  co_ord_photo      String   @db.Text
+  co_ord_tree_no    Int
+  co_ord_contact    String   @db.Text
+  co_ord_created_on DateTime @default(now()) @db.Timestamp(0)
+}
+
+model tbl_uploads {
+  up_id               Int      @id
+  up_reg_id           Int
+  up_name             String   @db.VarChar(200)
+  up_planter          String   @db.VarChar(200)
+  up_district         Int
+  up_corporation      Int
+  up_lsgd             String   @db.VarChar(200)
+  up_ward             String   @db.VarChar(50)
+  source_id           Int?
+  up_landmark_details String?  @db.VarChar(100)
+  up_tree_name        String?  @db.VarChar(100)
+  up_other_tree_name  String   @db.VarChar(200)
+  up_gp_cat_id        Int
+  up_group_type       Int
+  up_group_id         Int
+  up_group_code       String   @db.VarChar(100)
+  up_coupon_number    String   @db.VarChar(100)
+  up_date             DateTime @default(now()) @db.Timestamp(0)
+  up_file             String?  @db.VarChar(200)
+  up_file_time        String   @db.VarChar(15)
+  up_file_2           String?  @db.VarChar(100)
+  up_file_2_time      String   @db.VarChar(15)
+  up_file_3           String?  @db.VarChar(100)
+  up_file_3_time      String   @db.VarChar(15)
+  up_file_4           String?  @db.VarChar(100)
+  up_file_4_time      String   @db.VarChar(15)
+}
+
+model tbl_user {
+  us_id                  Int      @id
+  us_name                String   @db.VarChar(200)
+  us_name_slug           String?  @db.VarChar(200)
+  us_photo               String?  @db.Text
+  us_profile_description String?  @db.Text
+  us_email               String   @db.VarChar(200)
+  us_mobile              String   @db.VarChar(200)
+  us_country             String   @db.VarChar(200)
+  us_state               String   @db.VarChar(200)
+  us_district            String   @db.VarChar(200)
+  us_corporation         Int?
+  us_lsgd                Int?
+  us_ward                Int?
+  us_address             String   @db.VarChar(500)
+  us_gender              String   @db.VarChar(50)
+  us_password            String   @db.VarChar(200)
+  us_role                Int      @default(1)
+  created_on             DateTime @default(now()) @db.Timestamp(0)
+}

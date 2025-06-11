@@ -1,0 +1,386 @@
+"use client"
+import React, { Suspense, useEffect, useState } from 'react';
+import PageTitle from '@/components/sm/pageTitle';
+import { apiURL, imageURL } from '@/app/requestsapi/request';
+import { useSearchParams } from 'next/navigation';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Link } from 'lucide-react';
+
+interface TreeDetails {
+  up_id: number;
+  up_name: string;
+  up_planter: string;
+  up_tree_name: string;
+  up_file: string | null;
+  up_file_2: string | null;
+  up_file_3: string | null;
+  up_file_4: string | null;
+  up_district: string | null;
+  up_lsgd: string | null;
+  up_ward: string | null;
+  up_landmark_details: string | null;
+  source_name: string | null;
+  gp_name: string | null;
+  cntry_name: string | null;
+  st_name: string | null;
+  dis_name: string | null;
+  cop_name: string | null;
+  lsg_name: string | null;
+  type_name: string;
+  gp_cat_name: string;
+  edu_district: string;
+  edu_sub_district_name: string;
+  sahodaya_name: string;
+  block_name: string;
+  project_name: string;
+  chapter_name: string;
+  zone_name: string;
+  group_type: string;
+  gp_id: number;
+  co_ord_name:string;
+  up_reg_id: number;
+  up_date: string;
+  up_file_2_time: string;
+  up_file_3_time: string;
+  up_file_4_time: string;
+    
+}
+interface Participant {
+  id : number;
+}
+
+
+
+const Item: React.FC = () => {
+  const [treeDetails, setTreeDetails] = useState<TreeDetails | null>(null);
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+  useEffect(() => {
+    const fetchTreeDetails = async () => {
+      const response = await fetch(`${apiURL}/uploads/treeDetails/${id}`);
+      const data = await response.json();
+      if (data.success) {
+        // console.log(data)
+        setTreeDetails(data.treeDetails[0]);
+      }
+    };
+
+    fetchTreeDetails();
+  }, [id]);
+
+  if (!treeDetails) {
+    return <div>Loading...</div>;
+  }
+
+  function formatDateString(dateString: string): string {
+    // Create a new Date object from the given string
+    const currentDate = new Date(dateString);
+
+    // Format the time
+    let hours: number = currentDate.getHours();
+    let minutes: number = currentDate.getMinutes();
+    let seconds: number = currentDate.getSeconds();
+    let ampm: string = hours >= 12 ? 'PM' : 'AM';
+
+    // Convert to 12-hour format and handle edge cases
+    hours = hours % 12;
+    hours = hours === 0 ? 12 : hours; // Handle midnight (0) as 12
+
+    // Ensure minutes and seconds are formatted correctly as strings for display
+    const formattedMinutes: string = minutes < 10 ? '0' + minutes : minutes.toString(); 
+    const formattedSeconds: string = seconds < 10 ? '0' + seconds : seconds.toString(); 
+
+    // Get the formatted time and date
+    const formattedTime = `${hours}:${formattedMinutes}:${formattedSeconds} ${ampm}`;
+    const formattedDate = currentDate.toISOString().split('T')[0]; // Get the date in YYYY-MM-DD format
+
+    // Return the formatted date and time
+    return `${formattedDate} ${formattedTime}`;
+}
+
+
+
+  
+  return (
+    <>
+      <PageTitle title={`Tree number: ${treeDetails.up_id}`} />
+      <div className="rounded-lg shadow-lg max-w-screen-xl mx-auto">
+        <div className="rounded-lg border">
+          <div className='flex flex-col flex-wrap md:flex-row gap-3 p-4 overflow-hidden justify-center'>
+            {treeDetails.up_file ? (
+                // <img src={`${imageURL}${treeDetails.up_file}`} className='object-cover h-80 w-60' alt='Image'/>
+                <Dialog>
+                <DialogTrigger>
+                <div className=''>
+                  <img 
+                    src={`${imageURL}${treeDetails.up_file}`} 
+                    alt='' 
+                    className='object-cover h-80 w-60'
+                  />
+                </div>
+                <caption className='inline'>{formatDateString(treeDetails.up_date)}</caption>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Image</DialogTitle>
+                    {/* <DialogDescription></DialogDescription> */}
+                  </DialogHeader>
+                  <img 
+                    src={`${imageURL}${treeDetails.up_file}`} 
+                    alt='' 
+                    className='w-full h-full object-cover'
+                  />
+                </DialogContent>
+              </Dialog>
+            ):
+              <div className="h-80 w-60 bg-light-gray grid place-content-center">To be Uploaded</div>
+            }
+            
+            {treeDetails.up_file_2 ? (
+              <Dialog>
+                <DialogTrigger>
+                <div className=''>
+                  <img 
+                    src={`${imageURL}${treeDetails.up_file_2}`} 
+                    alt='' 
+                    className='object-cover h-80 w-60'
+                  />
+                <caption className='inline'>{formatDateString(treeDetails.up_file_2_time)}</caption>
+                </div>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Image</DialogTitle>
+                    {/* <DialogDescription></DialogDescription> */}
+                  </DialogHeader>
+                  <img 
+                    src={`${imageURL}${treeDetails.up_file_2}`} 
+                    alt='' 
+                    className='w-full h-full object-cover'
+                  />
+                </DialogContent>
+              </Dialog>
+            ):
+              <div className="h-80 w-60 bg-light-gray grid place-content-center">To be Uploaded</div>
+            }
+
+            {treeDetails.up_file_3 ? (
+                <Dialog>
+                <DialogTrigger>
+                <div className=''>
+                  <img 
+                    src={`${imageURL}${treeDetails.up_file_3}`} 
+                    alt='' 
+                    className='object-cover h-80 w-60'
+                  />
+                </div>
+                <caption className='inline'>{formatDateString(treeDetails.up_file_3_time)}</caption>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Image</DialogTitle>
+                    {/* <DialogDescription></DialogDescription> */}
+                  </DialogHeader>
+                  <img 
+                    src={`${imageURL}${treeDetails.up_file_3}`} 
+                    alt='' 
+                    className='w-full h-full object-cover'
+                  />
+                </DialogContent>
+              </Dialog>
+            ):
+              <div className="h-80 w-60 bg-light-gray grid place-content-center">To be Uploaded</div>
+            }
+
+            {treeDetails.up_file_4 ? (
+                <Dialog>
+                <DialogTrigger>
+                <div className=''>
+                  <img 
+                    src={`${imageURL}${treeDetails.up_file_4}`} 
+                    alt='' 
+                    className='object-cover h-80 w-60'
+                  />
+                <caption className='inline'>{formatDateString(treeDetails.up_file_4_time)}</caption>
+                </div>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Image</DialogTitle>
+                    {/* <DialogDescription></DialogDescription> */}
+                  </DialogHeader>
+                  <img 
+                    src={`${imageURL}${treeDetails.up_file_4}`} 
+                    alt='' 
+                    className='w-full h-full object-cover'
+                  />
+                </DialogContent>
+              </Dialog>
+            ):
+              <div className="h-80 w-60 bg-light-gray grid place-content-center">To be Uploaded</div>
+            }
+          </div>
+          <hr className="my-2" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 md:p-6 rounded-3xl">
+            <div className="flex ml-2 mt-2 gap-2">
+              <div className="text-sm pl-5 mb-2">Planter name: </div>
+              <div className="text-sm">{treeDetails.up_planter}</div>
+            </div>
+            <div className="flex ml-2 mt-2 gap-2 items-center">
+              <div className="text-sm pl-5">Uploader name:</div>
+              <div className="text-sm flex items-center gap-1">
+                <a 
+                  href={`/user-page?u=${treeDetails.up_name}&id=${treeDetails.up_reg_id}`} 
+                  className="text-blue-500 hover:underline flex items-center gap-1"
+                >
+                  {treeDetails.up_name}
+                  <Link size={16} className="text-blue-600" />
+                </a>
+              </div>
+            </div>
+            <div className="flex ml-2 mt-2 gap-2">
+              <div className="text-sm pl-5 mb-2">Tree name: </div>
+              <div className="text-sm">{treeDetails.up_tree_name}</div>
+            </div>
+            <div className="flex ml-2 mt-2 gap-2 items-center">
+              <div className="text-sm pl-5">Group name:</div>
+              <div className="text-sm flex items-center gap-1">
+                <a 
+                  href={`/group-page?gname=${treeDetails.gp_name}&gid=${treeDetails.gp_id}&uc=${0}&cordinator=${treeDetails.co_ord_name}&groupType=${treeDetails.group_type}`} 
+                  className="text-blue-500 hover:underline flex items-center gap-1"
+                >
+                  {treeDetails.gp_name}
+                  <Link size={16} className="text-blue-600" />
+                </a>
+              </div>
+            </div>
+            <div className="flex ml-2 mt-2 gap-2">
+              <div className="text-sm pl-5 mb-2">Country: </div>
+              <div className="text-sm">{treeDetails.cntry_name || 'N/A'}</div>
+            </div>
+            <div className="flex ml-2 mt-2 gap-2">
+              <div className="text-sm pl-5 mb-2">State: </div>
+              <div className="text-sm">{treeDetails.st_name || 'N/A'}</div>
+            </div>
+            <div className="flex ml-2 mt-2 gap-2">
+              <div className="text-sm pl-5 mb-2">District: </div>
+              <div className="text-sm">{treeDetails.dis_name || 'N/A'}</div>
+            </div>
+            <div className="flex ml-2 mt-2 gap-2">
+              <div className="text-sm pl-5 mb-2">Block: </div>
+              <div className="text-sm">{treeDetails.cop_name || 'N/A'}</div>
+            </div>
+            <div className="flex ml-2 mt-2 gap-2">
+              <div className="text-sm pl-5 mb-2">LSGD: </div>
+              <div className="text-sm">{treeDetails.lsg_name || 'N/A'}</div>
+            </div>
+            <div className="flex ml-2 mt-2 gap-2">
+              <div className="text-sm pl-5 mb-2">Ward Name: </div>
+              <div className="text-sm">{treeDetails.up_ward || 'N/A'}</div>
+            </div>
+            {/* <div className="flex ml-2 mt-2 gap-2">
+              <div className="text-sm pl-5 mb-2">Coupon Number: </div>
+              <div className="text-sm">....</div>
+            </div>
+            <div className="flex ml-2 mt-2 gap-2">
+              <div className="text-sm pl-5 mb-2">Tree Scientific Name: </div>
+              <div className="text-sm">....</div>
+            </div> */}
+            <div className="flex ml-2 mt-2 gap-2">
+              <div className="text-sm pl-5 mb-2">Landmark: </div>
+              <div className="text-sm">{treeDetails.up_landmark_details || 'N/A'}</div>
+            </div>
+            <div className="flex ml-2 mt-2 gap-2">
+              <div className="text-sm pl-5 mb-2">Plant Source: </div>
+              <div className="text-sm">{treeDetails.source_name || 'N/A'}</div>
+            </div>
+            
+            <div className="flex ml-2 mt-2 gap-2">
+            <div className="text-sm pl-5 mb-2">School Type: </div>
+            <div className="text-sm">{treeDetails.type_name || 'N/A'}</div>
+          </div>
+            
+          {treeDetails.gp_cat_name && treeDetails.type_name ?
+           <div className="flex ml-2 mt-2 gap-2">
+           <div className="text-sm pl-5 mb-2">School Category:</div>
+           <div className="text-sm">{treeDetails.gp_cat_name || 'N/A'}</div>
+         </div>
+           
+            : ''}
+          {treeDetails.edu_district && treeDetails.type_name ?
+          <div className="flex ml-2 mt-2 gap-2">
+          <div className="text-sm pl-5 mb-2">Educational District:</div>
+          <div className="text-sm">{treeDetails.edu_district}</div>
+        </div>
+          
+            
+            : ''}
+          {treeDetails.edu_sub_district_name && treeDetails.type_name  ?
+           <div className="flex ml-2 mt-2 gap-2">
+           <div className="text-sm pl-5 mb-2">Educational Subdistrict:</div>
+           <div className="text-sm">{treeDetails.edu_sub_district_name}</div>
+         </div>
+            
+            : ''}
+          {treeDetails.sahodaya_name && treeDetails.type_name ?
+          <div className="flex ml-2 mt-2 gap-2">
+          <div className="text-sm pl-5 mb-2">Sahodaya:</div>
+          <div className="text-sm">{treeDetails.sahodaya_name}</div>
+        </div>
+           
+            
+            : ''}
+          {treeDetails.block_name && treeDetails.type_name ?
+           <div className="flex ml-2 mt-2 gap-2">
+           <div className="text-sm pl-5 mb-2">Block:</div>
+           <div className="text-sm">{treeDetails.block_name}</div>
+         </div>
+            
+            : ''}
+          {treeDetails.project_name && treeDetails.type_name ?
+          <div className="flex ml-2 mt-2 gap-2">
+          <div className="text-sm pl-5 mb-2">Project:</div>
+          <div className="text-sm">{treeDetails.project_name}</div>
+        </div>
+           
+            : ''}
+          {treeDetails.chapter_name && treeDetails.type_name ?
+            <div className="flex ml-2 mt-2 gap-2">
+            <div className="text-sm pl-5 mb-2">Chapter:</div>
+            <div className="text-sm">{treeDetails.chapter_name}</div>
+          </div>
+             
+           
+            : ''}
+          {treeDetails.zone_name && treeDetails.type_name ?
+           <div className="flex ml-2 mt-2 gap-2">
+           <div className="text-sm pl-5 mb-2">Zone:</div>
+           <div className="text-sm">{treeDetails.zone_name}</div>
+         </div>
+            
+          
+           
+            : ''}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+
+
+export default function Itemfn() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Item />
+    </Suspense>
+  );
+}
