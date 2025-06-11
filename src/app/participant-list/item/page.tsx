@@ -50,7 +50,8 @@ interface TreeDetails {
   up_file_2_time: string;
   up_file_3_time: string;
   up_file_4_time: string;
-    
+  us_name: string; 
+  up_cord_id: number;
 }
 interface Participant {
   id : number;
@@ -301,7 +302,22 @@ const Item: React.FC = () => {
               <div className="text-sm pl-5 mb-2">Plant Source: </div>
               <div className="text-sm">{treeDetails.source_name || 'N/A'}</div>
             </div>
-            
+            <div className="flex ml-2 mt-2 gap-2">
+              <div className="text-sm pl-5 mb-2">Username: </div>
+              <div className="text-sm">{treeDetails.us_name || 'N/A'}</div>
+            </div>
+            <div className="flex ml-2 mt-2 gap-2">
+              <div className="text-sm pl-5 mb-2">User Id: </div>
+              <div className="text-sm">{treeDetails.up_reg_id || 'N/A'}</div>
+            </div>
+            <div className="flex ml-2 mt-2 gap-2">
+              <div className="text-sm pl-5 mb-2">Cordinator Name: </div>
+              <div className="text-sm">{treeDetails.co_ord_name || 'N/A'}</div>
+            </div>
+            <div className="flex ml-2 mt-2 gap-2">
+              <div className="text-sm pl-5 mb-2">Cordinator Id: </div>
+              <div className="text-sm">{treeDetails.up_cord_id || 'N/A'}</div>
+            </div>
             <div className="flex ml-2 mt-2 gap-2">
             <div className="text-sm pl-5 mb-2">School Type: </div>
             <div className="text-sm">{treeDetails.type_name || 'N/A'}</div>

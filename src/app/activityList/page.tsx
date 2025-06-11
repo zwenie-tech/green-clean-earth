@@ -1470,7 +1470,7 @@ if (!response.ok) {
 
                     {grpName.map((c) => (
                       <option key={c.gp_id} value={c.gp_name}>
-                        {c.gp_name}
+                        {c.gp_id} - {c.gp_name}
                       </option>
                     ))}
                   </select>
@@ -1580,7 +1580,7 @@ if (!response.ok) {
                     )}
                   </div>
                 </th>
-                <th className="py-3 px-6 text-left rounded-tr-lg">Remarks</th>
+                <th className="py-3 px-6 text-left rounded-tr-lg">Value</th>
 
                 {/* <th className="py-3 px-6 text-left">Participant Name</th>
                 <th className="py-3 px-6 text-left">Chest Number</th>
@@ -1689,7 +1689,7 @@ if (!response.ok) {
                       <td className="py-3 px-6 text-left">{activity.personal_activity_id}</td>
                       <td className="py-3 px-6 text-left">{activity.login_id}</td>
                       <td className="py-3 px-6 text-left ">{activity.earnings}</td>
-                      <td className="py-3 px-6 text-left">{activity.activity_views} Views, {activity.activity_likes} Likes</td>
+                      <td className="py-3 px-6 text-left">{activity.activity_value}</td>
                     </tr>
                   </>
                 ))
