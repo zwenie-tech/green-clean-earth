@@ -1017,9 +1017,9 @@ const GridExample = () => {
         Export To Excel
       </button>
       <div className="flex flex-wrap gap-4 justify-center">
-        <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
+        <div className="flex flex-col w-full m-3">
           <label>User Id</label>
-          <div className="flex mb-3">
+          <div className="flex ">
             <input
               className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
               value={uploaderid}
@@ -1034,9 +1034,9 @@ const GridExample = () => {
             </button>
           </div>
         </div>
-        <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
+        <div className="flex flex-col w-full m-3">
           <label>Tree No</label>
-          <div className="flex mb-3">
+          <div className="flex ">
             <input
               className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
               value={treeno}
@@ -1051,9 +1051,9 @@ const GridExample = () => {
             </button>
           </div>
         </div>
-        <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
+        <div className="flex flex-col w-full m-3">
           <label>Uploader Name</label>
-          <div className="flex mb-3">
+          <div className="flex ">
             <input
               className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
               value={uploader}
@@ -1067,9 +1067,9 @@ const GridExample = () => {
             </button>
           </div>
         </div>
-        <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
+        <div className="flex flex-col w-full m-3">
           <label>Planter Name</label>
-          <div className="flex mb-3">
+          <div className="flex ">
             <input
               className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
               value={planter}
@@ -1083,9 +1083,9 @@ const GridExample = () => {
             </button>
           </div>
         </div>
-        <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
+        <div className="flex flex-col w-full m-3 ">
           <label>Coordinator Name</label>
-          <div className="flex mb-3">
+          <div className="flex ">
             <input
               className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
               value={coordinator}
@@ -1101,9 +1101,9 @@ const GridExample = () => {
         </div>
       </div>
       {/* country section  */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mr-5">
         {/* Country Field */}
-        <div className="flex flex-col mb-3 w-full">
+        <div className="flex flex-col m-3 w-full">
           <label htmlFor="groupFilter" className="text-sm font-medium">
             Country:
           </label>
@@ -1124,7 +1124,7 @@ const GridExample = () => {
 
         {/* State Field (Visible if selected country is India) */}
         {selectedCntry === "India" && (
-          <div className="flex flex-col mb-3 w-full">
+          <div className="flex flex-col m-3 w-full">
             <label htmlFor="stateFilter" className="text-sm font-medium">
               State:
             </label>
@@ -1146,7 +1146,7 @@ const GridExample = () => {
 
         {/* District Field (Visible if selected state is Kerala) */}
         {selectedState === "Kerala" && (
-          <div className="flex flex-col mb-3 w-full">
+          <div className="flex flex-col m-3 w-full">
             <label htmlFor="districtFilter" className="text-sm font-medium">
               District:
             </label>
@@ -1168,7 +1168,7 @@ const GridExample = () => {
 
         {/* Corporation Field (Visible if a district is selected) */}
         {selectedDistrict && (
-          <div className="flex flex-col mb-3 w-full">
+          <div className="flex flex-col m-3 w-full">
             <label htmlFor="corpFilter" className="text-sm font-medium">
               Block:
             </label>
@@ -1190,7 +1190,7 @@ const GridExample = () => {
 
         {/* Lsgd Field (Visible if a corporation is selected) */}
         {selectedDistrict && (
-          <div className="flex flex-col mb-3 w-full">
+          <div className="flex flex-col m-3 w-full">
             <label htmlFor="lsgdFilter" className="text-sm font-medium">
               Lsgd:
             </label>
@@ -1212,7 +1212,7 @@ const GridExample = () => {
 
         {/* Ward Field (Visible if an Lsgd is selected) */}
         {selectedDistrict && (
-          <div className="flex flex-col mb-3 w-full">
+          <div className="flex flex-col m-3 w-full">
             <label className="text-sm font-medium">Ward No</label>
             <div className="flex space-x-2">
               <input
@@ -1232,7 +1232,7 @@ const GridExample = () => {
       </div>
 
 
-      <div className="flex items-center mb-3 space-x-2">
+      <div className="flex items-center m-3 space-x-2">
         <label htmlFor="groupFilter" className="text-sm font-medium">
           Group Type:
         </label>
@@ -1254,7 +1254,7 @@ const GridExample = () => {
       </div>
       {grouptype === 'Educational Institution' && (
         <>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               School Type:
             </label>
@@ -1275,7 +1275,7 @@ const GridExample = () => {
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               School Category:
             </label>
@@ -1299,7 +1299,7 @@ const GridExample = () => {
       {/* CBSE  */}
       {selectedschoolType === 'CBSE' && selectedSubCategory !== 'College' && grouptype === 'Educational Institution' && (
         <>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Sahodaya State:
             </label>
@@ -1319,7 +1319,7 @@ const GridExample = () => {
 
             </select>
           </div>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Sahodaya:
             </label>
@@ -1343,7 +1343,7 @@ const GridExample = () => {
       {/* GENERAL EDUCATION  */}
       {(selectedschoolType === 'General Education' && selectedSubCategory !== 'College') && grouptype === 'Educational Institution' && (
         <>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               District:
             </label>
@@ -1364,7 +1364,7 @@ const GridExample = () => {
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Education District:
             </label>
@@ -1385,7 +1385,7 @@ const GridExample = () => {
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Education Sub District:
             </label>
@@ -1410,7 +1410,7 @@ const GridExample = () => {
       {/* ICDS  */}
       {selectedschoolType === 'ICDS' && selectedSubCategory !== 'College' && grouptype === 'Educational Institution' && (
         <>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               District:
             </label>
@@ -1431,7 +1431,7 @@ const GridExample = () => {
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Icds Block :
             </label>
@@ -1453,7 +1453,7 @@ const GridExample = () => {
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Icds Project :
             </label>
@@ -1477,7 +1477,7 @@ const GridExample = () => {
       {/* MALAYALAM MISSION  */}
       {selectedSubCategory !== 'College' && selectedschoolType === 'Malayalam Mission' && grouptype === 'Educational Institution' && (
         <>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Mission Area :
             </label>
@@ -1498,7 +1498,7 @@ const GridExample = () => {
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Mission Chapter :
             </label>
@@ -1518,7 +1518,7 @@ const GridExample = () => {
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Mission Zone :
             </label>
@@ -1539,7 +1539,7 @@ const GridExample = () => {
           </div>
         </>)}
 
-      <div className="flex items-center mb-3 space-x-2">
+      <div className="flex items-center m-3 space-x-2">
         <label htmlFor="groupFilter" className="text-sm font-medium">
           Group Name :
         </label>
@@ -1547,7 +1547,7 @@ const GridExample = () => {
           id="groupFilter"
           value={selectedgrpName}
           onChange={handleFilterGrpName}
-          className="border border-gray-300 rounded p-1"
+          className="border border-gray-300 rounded p-1 w-full sm:w-48 md:w-64 lg:w-80"
         >
           <option value="">Select Group Name</option>
 
@@ -1561,7 +1561,7 @@ const GridExample = () => {
 
 
 
-      <div className="flex items-center mb-3 space-x-2">
+      <div className="flex items-center m-3 space-x-2">
         <label htmlFor="groupFilter" className="text-sm font-medium">
           Club :
         </label>

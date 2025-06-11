@@ -143,25 +143,26 @@ const AdminGrid = () => {
   }, [token, router]);
 
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
-    { field: "us_id", headerName: "User Id", width:100 },
-    { field: "us_name", headerName: "Name", width:100  },
-    { field: "us_email", headerName: "Email", width:100  },
-    { field: "us_mobile", headerName: "Mobile", width:100  },
-    { field: "cntry_name", headerName: "Country", width:100  },
-    { field: "st_name", headerName: "State", width:100  },
-    { field: "dis_name", headerName: "District", width:100  },
-    { field: "us_address", headerName: "Address", width:120  },
-    { field: "created_on", headerName: "Registered date", width:160 ,
+    { field: "us_id", headerName: "User Id", width: 100 },
+    { field: "us_name", headerName: "Name", width: 100 },
+    { field: "us_email", headerName: "Email", width: 100 },
+    { field: "us_mobile", headerName: "Mobile", width: 100 },
+    { field: "cntry_name", headerName: "Country", width: 100 },
+    { field: "st_name", headerName: "State", width: 100 },
+    { field: "dis_name", headerName: "District", width: 100 },
+    { field: "us_address", headerName: "Address", width: 120 },
+    {
+      field: "created_on", headerName: "Registered date", width: 160,
       valueFormatter: (params) => {
         const date = new Date(params.value);
         const day = String(date.getDate()).padStart(2, '0');
         const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
         const year = date.getFullYear();
         return `${day}-${month}-${year}`;
-    }
-     },
-    { field: "gp_name", headerName: "Group name", width:140  },
-    { field: "co_ord_name", headerName: "Coordinator name", width:180  },
+      }
+    },
+    { field: "gp_name", headerName: "Group name", width: 140 },
+    { field: "co_ord_name", headerName: "Coordinator name", width: 180 },
   ]);
 
   const defaultColDef = useMemo(() => {
@@ -513,7 +514,7 @@ const AdminGrid = () => {
     setCurrentPage(1); // Reset to first page
   };
 
-  
+
 
 
   useEffect(() => {
@@ -658,7 +659,7 @@ const AdminGrid = () => {
     }
   };
 
-  
+
 
 
   const handleFilterEDistrict = (e: any) => {
@@ -690,7 +691,7 @@ const AdminGrid = () => {
     }
   };
 
-  
+
 
 
   const handleFilterIcdsBlock = (e: any) => {
@@ -714,7 +715,7 @@ const AdminGrid = () => {
     }
   };
 
- 
+
 
   const handleFilterMissionArea = (e: any) => {
 
@@ -746,7 +747,7 @@ const AdminGrid = () => {
     }
   };
 
- 
+
   const handleFilterGrpName = (e: any) => {
 
     if (e.target.value != "") {
@@ -771,7 +772,7 @@ const AdminGrid = () => {
           },
         }
       );
-      
+
       setGrpName(response.data.groupList);
     } catch (error) {
       console.error("Error fetching category:", error);
@@ -810,7 +811,7 @@ const AdminGrid = () => {
         zoneId: zoneid
       };
 
-     
+
 
       try {
         // Clear group name to empty array before fetching
@@ -827,7 +828,7 @@ const AdminGrid = () => {
         );
 
         const GroupList = response.data.groupList;
-        
+
         setGrpName(GroupList);
       } catch (error) {
         console.error("Error fetching group names:", error);
@@ -876,13 +877,13 @@ const AdminGrid = () => {
   ]);
 
 
-  
+
 
   useEffect(() => {
     async function fetchFilterData() {
 
       const payload = {
-        
+
         countryId: countries.find((item) => item.cntry_name === selectedCntry)?.cntry_id,
         stateId: states.find((item) => item.st_name === selectedState)?.st_id,
         districtId: districts.find((item) => item.dis_name === selectedDistrict)?.dis_id,
@@ -918,7 +919,7 @@ const AdminGrid = () => {
           setTotalcount(response.data.totalCount);
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
 
-          
+
         } else {
           setRowData([]);
           setTotalcount("0");
@@ -941,76 +942,76 @@ const AdminGrid = () => {
       </button>
 
       <div className="flex flex-wrap gap-4 justify-center">
-      <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
-        <label>User Id</label>
-        <div className="flex mb-3">
-          <input
-            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
-            value={userid}
-            onChange={(e) => setUserid(e.target.value)} // Update the state directly
-          />
-          <button
-            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-            onClick={() => handleFilterId(userid)}
-          >
-            Search
-          </button>
+        <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
+          <label>User Id</label>
+          <div className="flex mb-3">
+            <input
+              className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+              value={userid}
+              onChange={(e) => setUserid(e.target.value)} // Update the state directly
+            />
+            <button
+              className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+              onClick={() => handleFilterId(userid)}
+            >
+              Search
+            </button>
+          </div>
         </div>
-      </div>
-      <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
-        <label>Coordinator Name</label>
-        <div className="flex mb-3">
-          <input
-            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
-            value={coordinator}
-            onChange={(e) => setCoordinator(e.target.value)} // Update the state directly
-          />
-          <button
-            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-            onClick={() => handleFilterCoordName(coordinator)}
-          >
-            Search
-          </button>
+        <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
+          <label>Coordinator Name</label>
+          <div className="flex mb-3">
+            <input
+              className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+              value={coordinator}
+              onChange={(e) => setCoordinator(e.target.value)} // Update the state directly
+            />
+            <button
+              className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+              onClick={() => handleFilterCoordName(coordinator)}
+            >
+              Search
+            </button>
+          </div>
         </div>
-      </div>
-      <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
-        <label>Email</label>
-        <div className="flex mb-3">
-          <input
-            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
-            value={email}
-            onChange={(e) => setEmail(e.target.value)} // Update the state directly
-          />
-          <button
-            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-            onClick={() => handleFilterEmail(email)}
-          >
-            Search
-          </button>
+        <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
+          <label>Email</label>
+          <div className="flex mb-3">
+            <input
+              className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+              value={email}
+              onChange={(e) => setEmail(e.target.value)} // Update the state directly
+            />
+            <button
+              className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+              onClick={() => handleFilterEmail(email)}
+            >
+              Search
+            </button>
+          </div>
         </div>
-      </div>
 
-      <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
-        <label>Mobile</label>
-        <div className="flex mb-3">
-          <input
-            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
-            value={mobile}
-            onChange={(e) => setMobile(e.target.value)} // Update the state directly
-          />
-          <button
-            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-            onClick={() => handleFilterMobile(mobile)}
-          >
-            Search
-          </button>
+        <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
+          <label>Mobile</label>
+          <div className="flex mb-3">
+            <input
+              className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+              value={mobile}
+              onChange={(e) => setMobile(e.target.value)} // Update the state directly
+            />
+            <button
+              className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+              onClick={() => handleFilterMobile(mobile)}
+            >
+              Search
+            </button>
+          </div>
         </div>
-      </div>
       </div>
 
 
       {/* country section  */}
-      <div className="flex items-center mb-3 space-x-2">
+      <div className="flex items-center m-3 space-x-2">
         <label htmlFor="groupFilter" className="text-sm font-medium">
           Country:
         </label>
@@ -1018,7 +1019,7 @@ const AdminGrid = () => {
           id="groupFilter"
           value={selectedCntry}
           onChange={handleFilterChangeCntry}
-          className="border border-gray-300 rounded p-1"
+          className="border border-gray-300 rounded p-1 w-full sm:w-48 md:w-64 lg:w-80"
         >
           <option value="">Choose Country</option>
           {countries.map((country) => (
@@ -1031,7 +1032,7 @@ const AdminGrid = () => {
 
       {selectedCntry == "India" ?
         <>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               State:
             </label>
@@ -1052,7 +1053,7 @@ const AdminGrid = () => {
 
           {selectedState == "Kerala" ?
             <>
-              <div className="flex items-center mb-3 space-x-2">
+              <div className="flex items-center m-3 space-x-2">
                 <label htmlFor="groupFilter" className="text-sm font-medium">
                   District:
                 </label>
@@ -1073,9 +1074,9 @@ const AdminGrid = () => {
 
               {selectedDistrict != "" ?
                 <>
-                  <div className="flex items-center mb-3 space-x-2">
+                  <div className="flex items-center m-3 space-x-2">
                     <label htmlFor="groupFilter" className="text-sm font-medium">
-                    Block:
+                      Block:
                     </label>
                     <select
                       id="groupFilter"
@@ -1094,7 +1095,7 @@ const AdminGrid = () => {
 
                   {selectedDistrict != "" ?
 
-                    <><div className="flex items-center mb-3 space-x-2">
+                    <><div className="flex items-center m-3 space-x-2">
                       <label htmlFor="groupFilter" className="text-sm font-medium">
                         Lsgd:
                       </label>
@@ -1113,7 +1114,7 @@ const AdminGrid = () => {
                       </select>
                     </div><div>
                         <label>Ward No</label>
-                        <div className="flex mb-3">
+                        <div className="flex m-3">
                           <input
                             className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
                             value={selectedWard}
@@ -1132,7 +1133,7 @@ const AdminGrid = () => {
             </> : ''}
         </> : ''}
 
-      <div className="flex items-center mb-3 space-x-2">
+      <div className="flex items-center m-3 space-x-2">
         <label htmlFor="groupFilter" className="text-sm font-medium">
           Group Type:
         </label>
@@ -1154,7 +1155,7 @@ const AdminGrid = () => {
       </div>
       {grouptype === 'Educational Institution' && (
         <>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               School Type:
             </label>
@@ -1175,7 +1176,7 @@ const AdminGrid = () => {
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               School Category:
             </label>
@@ -1199,7 +1200,7 @@ const AdminGrid = () => {
       {/* CBSE  */}
       {selectedschoolType === 'CBSE' && selectedSubCategory !== 'College' && grouptype === 'Educational Institution' && (
         <>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Sahodaya State:
             </label>
@@ -1219,7 +1220,7 @@ const AdminGrid = () => {
 
             </select>
           </div>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Sahodaya:
             </label>
@@ -1243,7 +1244,7 @@ const AdminGrid = () => {
       {/* GENERAL EDUCATION  */}
       {(selectedschoolType === 'General Education' && selectedSubCategory !== 'College') && grouptype === 'Educational Institution' && (
         <>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               District:
             </label>
@@ -1264,7 +1265,7 @@ const AdminGrid = () => {
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Education District:
             </label>
@@ -1285,7 +1286,7 @@ const AdminGrid = () => {
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Education Sub District:
             </label>
@@ -1310,7 +1311,7 @@ const AdminGrid = () => {
       {/* ICDS  */}
       {selectedschoolType === 'ICDS' && selectedSubCategory !== 'College' && grouptype === 'Educational Institution' && (
         <>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               District:
             </label>
@@ -1331,7 +1332,7 @@ const AdminGrid = () => {
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Icds Block :
             </label>
@@ -1353,7 +1354,7 @@ const AdminGrid = () => {
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Icds Project :
             </label>
@@ -1377,7 +1378,7 @@ const AdminGrid = () => {
       {/* MALAYALAM MISSION  */}
       {selectedSubCategory !== 'College' && selectedschoolType === 'Malayalam Mission' && grouptype === 'Educational Institution' && (
         <>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Mission Area :
             </label>
@@ -1398,7 +1399,7 @@ const AdminGrid = () => {
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Mission Chapter :
             </label>
@@ -1418,7 +1419,7 @@ const AdminGrid = () => {
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Mission Zone :
             </label>
@@ -1439,7 +1440,7 @@ const AdminGrid = () => {
           </div>
         </>)}
 
-      <div className="flex items-center mb-3 space-x-2">
+      <div className="flex items-center m-3 space-x-2">
         <label htmlFor="groupFilter" className="text-sm font-medium">
           Group Name :
         </label>
@@ -1447,7 +1448,7 @@ const AdminGrid = () => {
           id="groupFilter"
           value={selectedgrpName}
           onChange={handleFilterGrpName}
-          className="border border-gray-300 rounded p-1"
+          className="border border-gray-300 rounded p-1 w-full sm:w-48 md:w-64 lg:w-80"
         >
           <option value="">Select Group Name</option>
 
@@ -1461,14 +1462,14 @@ const AdminGrid = () => {
       <div className="flex items-center justify-center font-bold">Total Count : {totalcount}</div>
 
       <div className={"ag-theme-quartz"} style={{ height: 500 }}>
-      <AgGridReact
+        <AgGridReact
           rowData={rowData}
           columnDefs={[
             {
               headerName: "SL No", // Column header
               valueGetter: (params) => {
                 const itemsPerPage = 10; // Number of items per page
-                
+
                 const startIndex = (currentPage - 1) * itemsPerPage; // Calculate the start index for pagination
                 // Calculate the serial number
                 return startIndex + params.node!.rowIndex! + 1;

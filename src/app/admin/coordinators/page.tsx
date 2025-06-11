@@ -1001,7 +1001,7 @@ setTotalcount("0");
       {/* country section  */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
   {/* Country Field */}
-  <div className="flex flex-col mb-3">
+  <div className="flex flex-col m-3">
     <label htmlFor="countryFilter" className="text-sm font-medium">
       Country:
     </label>
@@ -1022,7 +1022,7 @@ setTotalcount("0");
 
   {/* State Field (Visible if selected country is India) */}
   {selectedCntry === "India" && (
-    <div className="flex flex-col mb-3">
+    <div className="flex flex-col m-3">
       <label htmlFor="stateFilter" className="text-sm font-medium">
         State:
       </label>
@@ -1044,7 +1044,7 @@ setTotalcount("0");
 
   {/* District Field (Visible if selected state is Kerala) */}
   {selectedState === "Kerala" && (
-    <div className="flex flex-col mb-3">
+    <div className="flex flex-col m-3">
       <label htmlFor="districtFilter" className="text-sm font-medium">
         District:
       </label>
@@ -1066,7 +1066,7 @@ setTotalcount("0");
 
   {/* Corporation Field (Visible if a district is selected) */}
   {selectedDistrict && (
-    <div className="flex flex-col mb-3">
+    <div className="flex flex-col m-3">
       <label htmlFor="corpFilter" className="text-sm font-medium">
       Block:
       </label>
@@ -1088,7 +1088,7 @@ setTotalcount("0");
 
   {/* Lsgd Field (Visible if a corporation is selected) */}
   {selectedDistrict && (
-    <div className="flex flex-col mb-3">
+    <div className="flex flex-col m-3">
       <label htmlFor="lsgdFilter" className="text-sm font-medium">
         Lsgd:
       </label>
@@ -1110,7 +1110,7 @@ setTotalcount("0");
 
   {/* Ward Field (Visible if an Lsgd is selected) */}
   {selectedDistrict && (
-    <div className="flex flex-col mb-3">
+    <div className="flex flex-col m-3">
       <label className="text-sm font-medium">Ward No</label>
       <div className="flex space-x-2">
         <input
@@ -1130,7 +1130,7 @@ setTotalcount("0");
 </div>
 
       {/* group type  */}
-      <div className="flex items-center mb-3 space-x-2">
+      <div className="flex items-center m-3 space-x-2">
         <label htmlFor="groupFilter" className="text-sm font-medium">
           Group Type:
         </label>
@@ -1152,7 +1152,7 @@ setTotalcount("0");
       </div>
       {grouptype === 'Educational Institution' && (
         <>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               School Type:
             </label>
@@ -1173,7 +1173,7 @@ setTotalcount("0");
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               School Category:
             </label>
@@ -1197,7 +1197,7 @@ setTotalcount("0");
       {/* CBSE  */}
       {selectedschoolType === 'CBSE' && selectedSubCategory !== 'College' && grouptype === 'Educational Institution' && (
         <>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Sahodaya State:
             </label>
@@ -1217,7 +1217,7 @@ setTotalcount("0");
 
             </select>
           </div>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Sahodaya:
             </label>
@@ -1241,7 +1241,7 @@ setTotalcount("0");
       {/* GENERAL EDUCATION  */}
       {(selectedschoolType === 'General Education' && selectedSubCategory !== 'College') && grouptype === 'Educational Institution' && (
         <>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               District:
             </label>
@@ -1262,7 +1262,7 @@ setTotalcount("0");
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Education District:
             </label>
@@ -1283,7 +1283,7 @@ setTotalcount("0");
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Education Sub District:
             </label>
@@ -1308,7 +1308,7 @@ setTotalcount("0");
       {/* ICDS  */}
       {selectedschoolType === 'ICDS' && selectedSubCategory !== 'College' && grouptype === 'Educational Institution' && (
         <>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               District:
             </label>
@@ -1329,7 +1329,7 @@ setTotalcount("0");
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Icds Block :
             </label>
@@ -1351,7 +1351,7 @@ setTotalcount("0");
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Icds Project :
             </label>
@@ -1375,7 +1375,7 @@ setTotalcount("0");
       {/* MALAYALAM MISSION  */}
       {selectedSubCategory !== 'College' && selectedschoolType === 'Malayalam Mission' && grouptype === 'Educational Institution' && (
         <>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Mission Area :
             </label>
@@ -1396,7 +1396,7 @@ setTotalcount("0");
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Mission Chapter :
             </label>
@@ -1416,7 +1416,7 @@ setTotalcount("0");
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Mission Zone :
             </label>
@@ -1436,7 +1436,7 @@ setTotalcount("0");
             </select>
           </div>
         </>)}
-      <div className="flex items-center mb-3 space-x-2">
+      <div className="flex items-center m-3 space-x-2">
         <label htmlFor="groupFilter" className="text-sm font-medium">
           Group Name :
         </label>
@@ -1444,7 +1444,7 @@ setTotalcount("0");
           id="groupFilter"
           value={selectedgrpName}
           onChange={handleFilterGrpName}
-          className="border border-gray-300 rounded p-1"
+          className="border border-gray-300 rounded p-1 w-full sm:w-48 md:w-64 lg:w-80"
         >
           <option value="">Select Group Name</option>
 

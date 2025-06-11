@@ -143,36 +143,37 @@ const AdminGrid = () => {
     }
   }, [token, router]);
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
-    { field: "gp_id", headerName: "Group Id" ,width:120},
-    { field: "gp_name", headerName: "Group name" ,width:140 },
-    { field: "co_ord_name", headerName: "Coordinator name",width:180 },
-    { field: "co_ord_contact", headerName: "Phone Number",width:160},
-    { field: "co_ord_id", headerName: "Cordinator Id",width:140},
-    { field: "group_type", headerName: "Group type" ,width:140 },
-    { field: "co_ord_created_on", headerName: "Created On" ,width:140,
+    { field: "gp_id", headerName: "Group Id", width: 120 },
+    { field: "gp_name", headerName: "Group name", width: 140 },
+    { field: "co_ord_name", headerName: "Coordinator name", width: 180 },
+    { field: "co_ord_contact", headerName: "Phone Number", width: 160 },
+    { field: "co_ord_id", headerName: "Cordinator Id", width: 140 },
+    { field: "group_type", headerName: "Group type", width: 140 },
+    {
+      field: "co_ord_created_on", headerName: "Created On", width: 140,
       valueFormatter: (params) => {
         const date = new Date(params.value);
         const day = String(date.getDate()).padStart(2, '0');
         const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
         const year = date.getFullYear();
         return `${day}-${month}-${year}`;
-    } 
-     },
-    { field: "upload_count", headerName: "Upload count" ,width:140 },
-    { field: "activity_count", headerName: "Activity count" ,width:140 },
-    { field: "earnings", headerName: "Earnings" ,width:120},
-    { field: "type_name", headerName: "School type" ,width:140 },
-    { field: "gp_cat_name", headerName: "School category" ,width:160 },
-    { field: "edu_district", headerName: "Edu district",width:140 },
-    { field: "edu_sub_district_name", headerName: "Edu sub district" ,width:160 },
-    { field: "sahodaya_name", headerName: "Sahodaya"  ,width:120},
-    { field: "block_name", headerName: "Block" ,width:100 },
-    { field: "project_name", headerName: "Project" ,width:100 },
-    { field: "chapter_name", headerName: "Chapter" ,width:100 },
-    { field: "zone_name", headerName: "Zone" ,width:100 },
-    { field: "cntry_name", headerName: "Country" ,width:100 },
-    { field: "st_name", headerName: "State" ,width:100 },
-    { field: "gp_referral_name", headerName: "Referral Name" ,width:180 },
+      }
+    },
+    { field: "upload_count", headerName: "Upload count", width: 140 },
+    { field: "activity_count", headerName: "Activity count", width: 140 },
+    { field: "earnings", headerName: "Earnings", width: 120 },
+    { field: "type_name", headerName: "School type", width: 140 },
+    { field: "gp_cat_name", headerName: "School category", width: 160 },
+    { field: "edu_district", headerName: "Edu district", width: 140 },
+    { field: "edu_sub_district_name", headerName: "Edu sub district", width: 160 },
+    { field: "sahodaya_name", headerName: "Sahodaya", width: 120 },
+    { field: "block_name", headerName: "Block", width: 100 },
+    { field: "project_name", headerName: "Project", width: 100 },
+    { field: "chapter_name", headerName: "Chapter", width: 100 },
+    { field: "zone_name", headerName: "Zone", width: 100 },
+    { field: "cntry_name", headerName: "Country", width: 100 },
+    { field: "st_name", headerName: "State", width: 100 },
+    { field: "gp_referral_name", headerName: "Referral Name", width: 180 },
   ]);
 
   const defaultColDef = useMemo(() => {
@@ -353,7 +354,7 @@ const AdminGrid = () => {
             setRowData(response.data.groupList);
           } else {
             setRowData([]);
-  setTotalcount("0");
+            setTotalcount("0");
 
           }
         } catch (error) {
@@ -528,7 +529,7 @@ const AdminGrid = () => {
           setRowData(response.data.groupList);
         } else {
           setRowData([]);
-  setTotalcount("0");
+          setTotalcount("0");
 
         }
       } catch (error) {
@@ -552,7 +553,7 @@ const AdminGrid = () => {
       try {
         if (response.data.success && response.status !== 203) {
 
-          setTotalPages(response.data.totalCount/ itemsPerPage);
+          setTotalPages(response.data.totalCount / itemsPerPage);
           setTotalcount(response.data.totalCount);
 
           setRowData(response.data.groupList);
@@ -651,7 +652,7 @@ const AdminGrid = () => {
 
 
 
- 
+
 
 
 
@@ -666,7 +667,7 @@ const AdminGrid = () => {
     }
   };
 
- 
+
 
   const handleFilterSchoolType = (e: any) => {
 
@@ -680,7 +681,7 @@ const AdminGrid = () => {
     }
   };
 
-  
+
   const handleFilterSchoolCategory = (e: any) => {
 
     if (e.target.value != "") {
@@ -690,7 +691,7 @@ const AdminGrid = () => {
     }
   };
 
-  
+
 
   const handleFilterSahodayaState = (e: any) => {
 
@@ -709,7 +710,7 @@ const AdminGrid = () => {
     }
   };
 
-  
+
 
   const handleFilterEDistrict = (e: any) => {
 
@@ -738,7 +739,7 @@ const AdminGrid = () => {
     }
   };
 
-  
+
 
   const handleFilterIcdsBlock = (e: any) => {
 
@@ -758,7 +759,7 @@ const AdminGrid = () => {
     }
   };
 
-  
+
   const handleFilterMissionArea = (e: any) => {
 
     if (e.target.value != "") {
@@ -785,7 +786,7 @@ const AdminGrid = () => {
     }
   };
 
-  
+
 
   const handleFilterGrpName = (e: any) => {
 
@@ -811,7 +812,7 @@ const AdminGrid = () => {
           },
         }
       );
-      
+
       setGrpName(response.data.groupList);
     } catch (error) {
       console.error("Error fetching category:", error);
@@ -850,7 +851,7 @@ const AdminGrid = () => {
         zoneId: zoneid
       };
 
-     
+
 
       try {
         // Clear group name to empty array before fetching
@@ -867,7 +868,7 @@ const AdminGrid = () => {
         );
 
         const GroupList = response.data.groupList;
-        
+
         setGrpName(GroupList);
       } catch (error) {
         console.error("Error fetching group names:", error);
@@ -916,14 +917,14 @@ const AdminGrid = () => {
   ]);
 
 
-  
+
 
 
   useEffect(() => {
     async function fetchFilterData() {
 
       const payload = {
-        
+
         countryId: countries.find((item) => item.cntry_name === selectedCntry)?.cntry_id,
         stateId: states.find((item) => item.st_name === selectedState)?.st_id,
         districtId: districts.find((item) => item.dis_name === selectedDistrict)?.dis_id,
@@ -959,7 +960,7 @@ const AdminGrid = () => {
           setTotalcount(response.data.totalCount);
           setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
 
-          
+
         } else {
           setRowData([]);
           setTotalcount("0");
@@ -975,45 +976,45 @@ const AdminGrid = () => {
   return (
     <div className=" bg-slate-100">
       <button
-          className= "text-white m-3 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-          
-          onClick={handleExportToExcel}
-        >
-          Export To Excel
-        </button>
-        <div className="grid grid-cols-1 lg:grid-cols-2  gap-1 md:gap-4 justify-center">
-      <div className="flex flex-col w-full">
-        <label>Group Id</label>
-        <div className="flex mb-3">
-          <input
-            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
-            value={grpid}
-            onChange={(e) => setGrpid(e.target.value)} // Update the state directly
-          />
-          <button
-            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-            onClick={() => handleFilterId(grpid)}
-          >
-            Search
-          </button>
+        className="text-white m-3 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+
+        onClick={handleExportToExcel}
+      >
+        Export To Excel
+      </button>
+      <div className="grid grid-cols-1 lg:grid-cols-2  gap-1 md:gap-4 justify-center">
+        <div className="flex flex-col w-full m-3">
+          <label>Group Id</label>
+          <div className="flex ">
+            <input
+              className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+              value={grpid}
+              onChange={(e) => setGrpid(e.target.value)} // Update the state directly
+            />
+            <button
+              className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+              onClick={() => handleFilterId(grpid)}
+            >
+              Search
+            </button>
+          </div>
         </div>
-      </div>
-      <div className="flex flex-col w-full">
-        <label>Group Name</label>
-        <div className="flex mb-3">
-          <input
-            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
-            value={grpname}
-            onChange={(e) => setGrpname(e.target.value)} // Update the state directly
-          />
-          <button
-            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-            onClick={() => handleFiltergrpname(grpname)}
-          >
-            Search
-          </button>
+        <div className="flex flex-col w-full m-3">
+          <label>Group Name</label>
+          <div className="flex">
+            <input
+              className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+              value={grpname}
+              onChange={(e) => setGrpname(e.target.value)} // Update the state directly
+            />
+            <button
+              className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+              onClick={() => handleFiltergrpname(grpname)}
+            >
+              Search
+            </button>
+          </div>
         </div>
-      </div>
       </div>
       {/* <div>
         <label>Email</label>
@@ -1050,17 +1051,17 @@ const AdminGrid = () => {
       </div> */}
 
       {/* country section  */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mr-5">
         {/* Country Field */}
-        <div className="flex flex-col mb-3 w-full">
-          <label htmlFor="groupFilter" className="text-sm font-medium">
+        <div className="flex flex-col sm:flex-row sm:items-center m-3 w-full sm:space-x-4">
+          <label htmlFor="groupFilter" className="text-sm font-medium mb-1 sm:mb-0 sm:w-auto">
             Country:
           </label>
           <select
             id="groupFilter"
             value={selectedCntry}
             onChange={handleFilterChangeCntry}
-            className="border border-gray-300 rounded p-1 w-full"
+            className="border border-gray-300 rounded p-1 w-full sm:w-48 md:w-64 lg:w-80"
           >
             <option value="">Choose Country</option>
             {countries.map((country) => (
@@ -1071,9 +1072,10 @@ const AdminGrid = () => {
           </select>
         </div>
 
+
         {/* State Field (Visible if selected country is India) */}
         {selectedCntry === "India" && (
-          <div className="flex flex-col mb-3 w-full">
+          <div className="flex flex-col m-3 w-full">
             <label htmlFor="stateFilter" className="text-sm font-medium">
               State:
             </label>
@@ -1095,7 +1097,7 @@ const AdminGrid = () => {
 
         {/* District Field (Visible if selected state is Kerala) */}
         {selectedState === "Kerala" && (
-          <div className="flex flex-col mb-3 w-full">
+          <div className="flex flex-col m-3 w-full">
             <label htmlFor="districtFilter" className="text-sm font-medium">
               District:
             </label>
@@ -1117,9 +1119,9 @@ const AdminGrid = () => {
 
         {/* Corporation Field (Visible if a district is selected) */}
         {selectedDistrict && (
-          <div className="flex flex-col mb-3 w-full">
+          <div className="flex flex-col m-3 w-full">
             <label htmlFor="corpFilter" className="text-sm font-medium">
-            Block:
+              Block:
             </label>
             <select
               id="corpFilter"
@@ -1139,7 +1141,7 @@ const AdminGrid = () => {
 
         {/* Lsgd Field (Visible if a corporation is selected) */}
         {selectedDistrict && (
-          <div className="flex flex-col mb-3 w-full">
+          <div className="flex flex-col m-3 w-full">
             <label htmlFor="lsgdFilter" className="text-sm font-medium">
               Lsgd:
             </label>
@@ -1161,7 +1163,7 @@ const AdminGrid = () => {
 
         {/* Ward Field (Visible if an Lsgd is selected) */}
         {selectedDistrict && (
-          <div className="flex flex-col mb-3 w-full">
+          <div className="flex flex-col m-3 w-full">
             <label className="text-sm font-medium">Ward No</label>
             <div className="flex space-x-2">
               <input
@@ -1181,7 +1183,7 @@ const AdminGrid = () => {
       </div>
 
       {/* group type  */}
-      <div className="flex items-center mb-3 space-x-2">
+      <div className="flex items-center m-3 space-x-2">
         <label htmlFor="groupFilter" className="text-sm font-medium">
           Group Type:
         </label>
@@ -1203,7 +1205,7 @@ const AdminGrid = () => {
       </div>
       {grouptype === 'Educational Institution' && (
         <>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               School Type:
             </label>
@@ -1224,7 +1226,7 @@ const AdminGrid = () => {
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               School Category:
             </label>
@@ -1248,7 +1250,7 @@ const AdminGrid = () => {
       {/* CBSE  */}
       {selectedschoolType === 'CBSE' && selectedSubCategory !== 'College' && grouptype === 'SEducational Institution' && (
         <>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Sahodaya State:
             </label>
@@ -1268,7 +1270,7 @@ const AdminGrid = () => {
 
             </select>
           </div>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Sahodaya:
             </label>
@@ -1292,7 +1294,7 @@ const AdminGrid = () => {
       {/* GENERAL EDUCATION  */}
       {(selectedschoolType === 'General Education' && selectedSubCategory !== 'College') && grouptype === 'Educational Institution' && (
         <>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               District:
             </label>
@@ -1313,7 +1315,7 @@ const AdminGrid = () => {
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Education District:
             </label>
@@ -1334,7 +1336,7 @@ const AdminGrid = () => {
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Education Sub District:
             </label>
@@ -1359,7 +1361,7 @@ const AdminGrid = () => {
       {/* ICDS  */}
       {selectedschoolType === 'ICDS' && selectedSubCategory !== 'College' && grouptype === 'Educational Institution' && (
         <>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               District:
             </label>
@@ -1380,7 +1382,7 @@ const AdminGrid = () => {
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Icds Block :
             </label>
@@ -1402,7 +1404,7 @@ const AdminGrid = () => {
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Icds Project :
             </label>
@@ -1426,7 +1428,7 @@ const AdminGrid = () => {
       {/* MALAYALAM MISSION  */}
       {selectedSubCategory !== 'College' && selectedschoolType === 'Malayalam Mission' && grouptype === 'Educational Institution' && (
         <>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Mission Area :
             </label>
@@ -1447,7 +1449,7 @@ const AdminGrid = () => {
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Mission Chapter :
             </label>
@@ -1467,7 +1469,7 @@ const AdminGrid = () => {
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Mission Zone :
             </label>
@@ -1488,7 +1490,7 @@ const AdminGrid = () => {
           </div>
         </>)}
 
-      <div className="flex items-center mb-3 space-x-2">
+      <div className="flex items-center m-3 space-x-2">
         <label htmlFor="groupFilter" className="text-sm font-medium">
           Group Name :
         </label>
@@ -1496,8 +1498,9 @@ const AdminGrid = () => {
           id="groupFilter"
           value={selectedgrpName}
           onChange={handleFilterGrpName}
-          className="border border-gray-300 rounded p-1"
+          className="border border-gray-300 rounded p-1 w-full sm:w-48 md:w-64 lg:w-80"
         >
+
           <option value="">Select Group Name</option>
 
           {grpName.map((c) => (
@@ -1512,14 +1515,14 @@ const AdminGrid = () => {
 
 
       <div className={"ag-theme-quartz"} style={{ height: 520 }}>
-      <AgGridReact
+        <AgGridReact
           rowData={rowData}
           columnDefs={[
             {
               headerName: "SL No", // Column header
               valueGetter: (params) => {
                 const itemsPerPage = 10; // Number of items per page
-                
+
                 const startIndex = (currentPage - 1) * itemsPerPage; // Calculate the start index for pagination
                 // Calculate the serial number
                 return startIndex + params.node!.rowIndex! + 1;
@@ -1543,7 +1546,7 @@ const AdminGrid = () => {
       </div>
       <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
 
-    
+
 
     </div>
   );

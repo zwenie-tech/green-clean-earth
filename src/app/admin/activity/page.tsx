@@ -1111,7 +1111,7 @@ const AdminGrid = () => {
         </div>
       </div>
 
-      <div className="mb-4 flex items-center">
+      <div className="mb-4 flex items-center ml-3">
         <input
           type="checkbox"
           id="hasEarning"
@@ -1157,7 +1157,7 @@ const AdminGrid = () => {
         </div>
       </div> */}
       {/* country section  */}
-      <div className="flex items-center mb-3 space-x-2">
+      <div className="flex items-center m-3 space-x-2">
         <label htmlFor="groupFilter" className="text-sm font-medium">
           Activity Category:
         </label>
@@ -1177,7 +1177,7 @@ const AdminGrid = () => {
       </div>
 
       {/* country section  */}
-      <div className="flex items-center mb-3 space-x-2">
+      <div className="flex items-center m-3 space-x-2">
         <label htmlFor="groupFilter" className="text-sm font-medium">
           Country:
         </label>
@@ -1185,7 +1185,7 @@ const AdminGrid = () => {
           id="groupFilter"
           value={selectedCntry}
           onChange={handleFilterChangeCntry}
-          className="border border-gray-300 rounded p-1"
+          className="border border-gray-300 rounded p-1 w-full sm:w-48 md:w-64 lg:w-80"
         >
           <option value="">Choose Country</option>
           {countries.map((country) => (
@@ -1198,7 +1198,7 @@ const AdminGrid = () => {
 
       {selectedCntry == "India" ?
         <>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               State:
             </label>
@@ -1219,7 +1219,7 @@ const AdminGrid = () => {
 
           {selectedState == "Kerala" ?
             <>
-              <div className="flex items-center mb-3 space-x-2">
+              <div className="flex items-center m-3 space-x-2">
                 <label htmlFor="groupFilter" className="text-sm font-medium">
                   District:
                 </label>
@@ -1240,7 +1240,7 @@ const AdminGrid = () => {
 
               {selectedDistrict != "" ?
                 <>
-                  <div className="flex items-center mb-3 space-x-2">
+                  <div className="flex items-center m-3 space-x-2">
                     <label htmlFor="groupFilter" className="text-sm font-medium">
                       Block:
                     </label>
@@ -1261,7 +1261,7 @@ const AdminGrid = () => {
 
                   {selectedDistrict != "" ?
 
-                    <><div className="flex items-center mb-3 space-x-2">
+                    <><div className="flex items-center m-3 space-x-2">
                       <label htmlFor="groupFilter" className="text-sm font-medium">
                         Lsgd:
                       </label>
@@ -1280,7 +1280,7 @@ const AdminGrid = () => {
                       </select>
                     </div><div>
                         <label>Ward No</label>
-                        <div className="flex mb-3">
+                        <div className="flex m-3">
                           <input
                             className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
                             value={selectedWard}
@@ -1299,7 +1299,7 @@ const AdminGrid = () => {
             </> : ''}
         </> : ''}
       {/* group type  */}
-      <div className="flex items-center mb-3 space-x-2">
+      <div className="flex items-center m-3 space-x-2">
         <label htmlFor="groupFilter" className="text-sm font-medium">
           Group Type:
         </label>
@@ -1321,7 +1321,7 @@ const AdminGrid = () => {
       </div>
       {selectedSubCategory !== 'College' && grouptype === 'Educational Institution' && (
         <>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               School Type:
             </label>
@@ -1342,7 +1342,7 @@ const AdminGrid = () => {
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               School Category:
             </label>
@@ -1366,7 +1366,7 @@ const AdminGrid = () => {
       {/* CBSE  */}
       {selectedschoolType === 'CBSE' && selectedSubCategory !== 'College' && grouptype === 'Educational Institution' && (
         <>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Sahodaya State:
             </label>
@@ -1386,7 +1386,7 @@ const AdminGrid = () => {
 
             </select>
           </div>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Sahodaya:
             </label>
@@ -1410,7 +1410,7 @@ const AdminGrid = () => {
       {/* GENERAL EDUCATION  */}
       {(selectedschoolType === 'General Education' && selectedSubCategory !== 'College') && grouptype === 'Educational Institution' && (
         <>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               District:
             </label>
@@ -1431,7 +1431,7 @@ const AdminGrid = () => {
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Education District:
             </label>
@@ -1452,7 +1452,7 @@ const AdminGrid = () => {
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Education Sub District:
             </label>
@@ -1477,7 +1477,7 @@ const AdminGrid = () => {
       {/* ICDS  */}
       {selectedschoolType === 'ICDS' && selectedSubCategory !== 'College' && grouptype === 'Educational Institution' && (
         <>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               District:
             </label>
@@ -1498,7 +1498,7 @@ const AdminGrid = () => {
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Icds Block :
             </label>
@@ -1520,7 +1520,7 @@ const AdminGrid = () => {
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Icds Project :
             </label>
@@ -1544,7 +1544,7 @@ const AdminGrid = () => {
       {/* MALAYALAM MISSION  */}
       {selectedSubCategory !== 'College' && selectedschoolType === 'Malayalam Mission' && grouptype === 'Educational Institution' && (
         <>
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Mission Area :
             </label>
@@ -1565,7 +1565,7 @@ const AdminGrid = () => {
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Mission Chapter :
             </label>
@@ -1585,7 +1585,7 @@ const AdminGrid = () => {
             </select>
           </div>
 
-          <div className="flex items-center mb-3 space-x-2">
+          <div className="flex items-center m-3 space-x-2">
             <label htmlFor="groupFilter" className="text-sm font-medium">
               Mission Zone :
             </label>
@@ -1606,7 +1606,7 @@ const AdminGrid = () => {
           </div>
         </>)}
 
-      <div className="flex items-center mb-3 space-x-2">
+      <div className="flex items-center m-3 space-x-2">
         <label htmlFor="groupFilter" className="text-sm font-medium">
           Group Name :
         </label>
@@ -1614,7 +1614,7 @@ const AdminGrid = () => {
           id="groupFilter"
           value={selectedgrpName}
           onChange={handleFilterGrpName}
-          className="border border-gray-300 rounded p-1"
+          className="border border-gray-300 rounded p-1 w-full sm:w-48 md:w-64 lg:w-80"
         >
           <option value="">Select Group Name</option>
 
