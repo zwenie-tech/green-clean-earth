@@ -59,6 +59,10 @@ const ButtonDisplayFn = () => {
   const [totalPagesUp, setTotalPagesUp] = useState(1);
   const [totalCountUp, setTotalCountUp] = useState("0");
   const [totalCountAct, setTotalCountAct] = useState("0");
+  const [coordinatorName, setCoordinatorName] = useState("");
+  const [coordinatorId, setCoordinatorId] = useState<number | null>(null);
+  const [groupName, setGroupName] = useState("");
+  const [groupId, setGroupId] = useState<number | null>(null);
   const itemsPerPage = 10;
 
 
@@ -107,6 +111,13 @@ const ButtonDisplayFn = () => {
       .then(data => {
         if (data.success) {
           // console.log(data)
+          if (data.details && data.details.length > 0) {
+            setCoordinatorName(data.details[0].co_ord_name);
+            setCoordinatorId(data.details[0].us_cord_id);
+            setGroupName(data.details[0].gp_name);
+            setGroupId(data.details[0].gp_id);
+          }
+
           setTotalPagesAct(Math.ceil(data.activity_count / itemsPerPage));
           setTotalCountAct(data.activity_count)
 
@@ -129,12 +140,16 @@ const ButtonDisplayFn = () => {
       <NavigationBar />
       <div className='w-full flex flex-col items-center gap-4 mt-6'>
         <div className='w-full flex justify-between items-center gap-3 '>
-          <p className='text-right font-bold w-1/2'>User Name:</p>
-          <p className='w-1/2 font-bold'>{username}</p>
+          <p className='text-right font-bold w-1/2'>User Name / User Id:</p>
+          <p className='w-1/2 font-bold'>{username} / {userid}</p>
         </div>
         <div className='w-full flex justify-between items-center gap-3 '>
-          <p className='text-right font-bold w-1/2'>User Id:</p>
-          <p className='w-1/2 font-bold'>{userid}</p>
+          <p className='text-right font-bold w-1/2'>Group Name / Group Id:</p>
+          <p className='w-1/2 font-bold'>{groupName} / {groupId}</p>
+        </div>
+        <div className='w-full flex justify-between items-center gap-3 '>
+          <p className='text-right font-bold w-1/2'>Cordinator Name / Cordinator Id:</p>
+          <p className='w-1/2 font-bold'>{coordinatorName} / {coordinatorId}</p>
         </div>
         <div className='w-full flex justify-between items-center gap-3 '>
           <p className='text-right font-bold w-1/2'>Upload Count:</p>
@@ -252,7 +267,6 @@ const ButtonDisplayFn = () => {
                     <th className="py-3 px-6 text-left">Name of Activity</th>
                     <th className="py-3 px-6 text-left">Activity Id</th>
                     <th className="py-3 px-6 text-left">User Id</th>
-                    <th className="py-3 px-6 text-left">Earning</th>
                     <th className="py-3 px-6 text-left rounded-tr-lg">Remarks</th>
                   </tr>
                 </thead>
@@ -282,7 +296,6 @@ const ButtonDisplayFn = () => {
                         </a>
                       </td>                      <td className="py-3 px-6 text-left">{activity.personal_activity_id}</td>
                       <td className="py-3 px-6 text-left">{activity.login_id}</td>
-                      <td className="py-3 px-6 text-left">{activity.earnings || 'N/A'}</td>
                       <td className="py-3 px-6 text-left">{activity.activity_views} Views, {activity.activity_likes} Likes</td>
                     </tr>
                   ))}

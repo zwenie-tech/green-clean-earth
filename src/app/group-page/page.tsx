@@ -62,6 +62,7 @@ const ButtonDisplayFn: React.FC = () => {
   const [totalPagesUp, setTotalPagesUp] = useState(1);
   const [upcount, setUpCount] = useState(0);
   const [actcount, setActCount] = useState(0);
+  const [cordinatorId, setCordinatorId] = useState(0);
   const itemsPerPage = 10;
   const router = useRouter()
   
@@ -96,6 +97,7 @@ const ButtonDisplayFn: React.FC = () => {
       const data = await response.json();
       if (data.success) {
         // console.log(data)
+        setCordinatorId(data.cordinator_id);
         setGroupActivities(data.groupActivities);
         setActCount(data.activity_count);
         setTotalPagesAct(Math.ceil(data.activity_count / itemsPerPage));
@@ -142,16 +144,12 @@ const ButtonDisplayFn: React.FC = () => {
       <NavigationBar />
       <div className="w-full flex flex-col items-center gap-4 mt-6">
         <div className="w-full flex justify-between items-center gap-3 ">
-          <p className="text-right font-bold w-1/2">Group Name:</p>
-          <p className="w-1/2 font-bold">{grpname}</p>
+          <p className="text-right font-bold w-1/2">Group Name / Group Id:</p>
+          <p className="w-1/2 font-bold">{grpname} / {grpid}</p>
         </div>
         <div className="w-full flex justify-between items-center gap-3 ">
-          <p className="text-right font-bold w-1/2">Group Id:</p>
-          <p className="w-1/2 font-bold">{grpid}</p>
-        </div>
-        <div className="w-full flex justify-between items-center gap-3 ">
-          <p className="text-right font-bold w-1/2">Coordinator Name:</p>
-          <p className="w-1/2 font-bold">{cordinatorName}</p>
+          <p className="text-right font-bold w-1/2">Coordinator Name / Coordinator Id:</p>
+          <p className="w-1/2 font-bold">{cordinatorName} / {cordinatorId}</p>
         </div>
         <div className="w-full flex justify-between items-center gap-3 ">
           <p className="text-right font-bold w-1/2">Group Type:</p>

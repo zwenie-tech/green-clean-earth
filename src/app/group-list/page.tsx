@@ -25,7 +25,8 @@ interface Group {
   co_ord_name: string;
   group_type:string;
   st_name:string;
-  cntry_name:string
+  cntry_name:string;
+  co_ord_id: number;
 }
 
 interface ApiResponse {
@@ -523,10 +524,6 @@ const GroupList = () => {
     fetchLsgdData();
   }, [selectedCountry, selectedState, selectedCorp, corporation]);
 
-
-
-
-
   const onSubmit = async (data: any) => {
     const dataWithIds: any = {};
     // treeNo !== "" ? dataWithIds.treeNumber = parseInt(treeNo) : '';
@@ -739,7 +736,77 @@ const GroupList = () => {
       </div> */}
       {/* <p className='ml-7 mt-4 p-3'>ഇപ്പോൾ മത്സരത്തിൽ പങ്കെടുക്കുന്ന സ്ഥാപനങ്ങളുടെ GROUP CODE ചുവടെ ചേർക്കുന്നു</p> */}
 
-      {/* Search by Country Wise */}
+
+      <div className="flex justify-center font-bold my-4">
+        <p>Total Count: {totalCount}</p>
+      </div>
+      <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+
+      {/* Table */}
+      <div className="container mx-auto p-6">
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white border-gray-200 rounded-t-lg">
+            <thead>
+              <tr className="bg-gray-200 text-gray-600 uppercase text-sm">
+                <th className="py-3 px-2 text-left w-16 rounded-tl-lg">Sl. No</th>
+                <th className="py-3 px-2 text-left">Group Id</th>
+                <th className="py-3 px-2 text-left"><span className="">Group Name</span> {orderdir1 === "DESC" ? <span className={orderfield === "gp_name" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("ASC", "gp_name")}><ArrowUp className='inline-block' /></span>
+                  : <span className={orderfield === "gp_name" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("DESC", "gp_name")}><ArrowDown className='inline-block' /></span>}</th>
+                
+                <th className="py-3 px-2 text-left">Cordinator Name</th>            
+                <th className="py-3 px-2 text-left">Cordinator Id</th>        
+                <th className="py-3 px-2 text-left whitespace-nowrap">
+                  <span className="inline-flex items-center gap-1">
+                    Upload Count
+                    {orderdir2 === "DESC" ? 
+                      <span className={orderfield === "upload_count" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("ASC", "upload_count")}><ArrowUp /></span>
+                    :
+                      <span className={orderfield === "upload_count" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("DESC", "upload_count")}><ArrowDown /></span>
+                    }
+                  </span>
+                </th>
+
+                <th className="py-3 px-2 text-left whitespace-nowrap">
+                  <span className="inline-flex items-center gap-1">
+                    Activity Count
+                    {orderdir3 === "DESC" ?
+                      <span className={orderfield === "activity_count" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("ASC", "activity_count")}><ArrowUp /></span>
+                    : 
+                      <span className={orderfield === "activity_count" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("DESC", "activity_count")}><ArrowDown /></span>
+                    }
+                  </span>
+                </th>
+                <th className="py-3 px-2 text-left">District</th>
+                <th className="py-3 px-2 text-left">State</th>
+                <th className="py-3 px-2 text-left rounded-tr-lg">Country</th>
+              </tr>
+            </thead>
+            <tbody>
+              {groups.map((group, index) => (
+                <tr key={group.gp_id} className="border border-gray-200 hover:bg-gray-100">
+                  <td className="py-3 px-6 text-left">{startIndex + index + 1}</td>
+                  <td className="py-3 px-6 text-left">{group.gp_id}</td>
+                  <a href={`/group-page?gname=${group.gp_name}&gid=${group.gp_id}&uc=${group.upload_count}&cordinator=${group.co_ord_name}&groupType=${group.group_type}`}><td className="py-3 px-6 text-left">{group.gp_name}</td></a>
+                  <td className="py-3 px-6 text-left">{group.co_ord_name}</td>
+                  <td className="py-3 px-6 text-left">{group.co_ord_id}</td>
+                  <td className="py-3 px-6 text-left"><a href={`/group-page?gname=${group.gp_name}&gid=${group.gp_id}&uc=${group.upload_count}&cordinator=${group.co_ord_name}&groupType=${group.group_type}&up=t`}>{group.upload_count}</a></td>
+                  <td className="py-3 px-6 text-left"><a href={`/group-page?gname=${group.gp_name}&gid=${group.gp_id}&uc=${group.upload_count}&cordinator=${group.co_ord_name}&groupType=${group.group_type}&up=f`}>{group.activity_count}</a></td>
+                  <td className="py-3 px-6 text-left">{group.dis_name}</td>
+                  <td className="py-3 px-6 text-left">{group.st_name}</td>
+                  <td className="py-3 px-6 text-left">{group.cntry_name}</td>
+                </tr>
+              ))}
+              {!groups || groups.length <= 0 && (
+                <tr>
+                  <td colSpan={6} className="py-3 px-6 text-center">No participants data available</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+            {/* Search by Country Wise */}
       <div className='search1 mb-5'>
         <h1 className='text-lg text-center m-3'>Search by Country Wise</h1>
         <div className="mx-5 md:mx-9 lg:mx-16 border-2 border-gray-300 shadow-lg bg-gray-100 rounded-lg p-4">
@@ -1456,73 +1523,6 @@ const GroupList = () => {
           </Form>
         </div>
       </div>
-      <div className="flex justify-center font-bold my-4">
-        <p>Total Count: {totalCount}</p>
-      </div>
-      <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
-
-      {/* Table */}
-      <div className="container mx-auto p-6">
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border-gray-200 rounded-t-lg">
-            <thead>
-              <tr className="bg-gray-200 text-gray-600 uppercase text-sm">
-                <th className="py-3 px-2 text-left w-16 rounded-tl-lg">Sl. No</th>
-                <th className="py-3 px-2 text-left">Group Id</th>
-                <th className="py-3 px-2 text-left"><span className="">Group Name</span> {orderdir1 === "DESC" ? <span className={orderfield === "gp_name" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("ASC", "gp_name")}><ArrowUp className='inline-block' /></span>
-                  : <span className={orderfield === "gp_name" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("DESC", "gp_name")}><ArrowDown className='inline-block' /></span>}</th>
-                
-                <th className="py-3 px-2 text-left">Cordinator Name</th>              
-                <th className="py-3 px-2 text-left whitespace-nowrap">
-                  <span className="inline-flex items-center gap-1">
-                    Upload Count
-                    {orderdir2 === "DESC" ? 
-                      <span className={orderfield === "upload_count" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("ASC", "upload_count")}><ArrowUp /></span>
-                    :
-                      <span className={orderfield === "upload_count" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("DESC", "upload_count")}><ArrowDown /></span>
-                    }
-                  </span>
-                </th>
-
-                <th className="py-3 px-2 text-left whitespace-nowrap">
-                  <span className="inline-flex items-center gap-1">
-                    Activity Count
-                    {orderdir3 === "DESC" ?
-                      <span className={orderfield === "activity_count" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("ASC", "activity_count")}><ArrowUp /></span>
-                    : 
-                      <span className={orderfield === "activity_count" ? 'text-green-600' : 'text-gray-400'} onClick={() => sort("DESC", "activity_count")}><ArrowDown /></span>
-                    }
-                  </span>
-                </th>
-                <th className="py-3 px-2 text-left">District</th>
-                <th className="py-3 px-2 text-left">State</th>
-                <th className="py-3 px-2 text-left">Country</th>
-              </tr>
-            </thead>
-            <tbody>
-              {groups.map((group, index) => (
-                <tr key={group.gp_id} className="border border-gray-200 hover:bg-gray-100">
-                  <td className="py-3 px-6 text-left">{startIndex + index + 1}</td>
-                  <td className="py-3 px-6 text-left">{group.gp_id}</td>
-                  <a href={`/group-page?gname=${group.gp_name}&gid=${group.gp_id}&uc=${group.upload_count}&cordinator=${group.co_ord_name}&groupType=${group.group_type}`}><td className="py-3 px-6 text-left">{group.gp_name}</td></a>
-                  <td className="py-3 px-6 text-left">{group.co_ord_name}</td>
-                  <td className="py-3 px-6 text-left"><a href={`/group-page?gname=${group.gp_name}&gid=${group.gp_id}&uc=${group.upload_count}&cordinator=${group.co_ord_name}&groupType=${group.group_type}&up=t`}>{group.upload_count}</a></td>
-                  <td className="py-3 px-6 text-left"><a href={`/group-page?gname=${group.gp_name}&gid=${group.gp_id}&uc=${group.upload_count}&cordinator=${group.co_ord_name}&groupType=${group.group_type}&up=f`}>{group.activity_count}</a></td>
-                  <td className="py-3 px-6 text-left">{group.dis_name}</td>
-                  <td className="py-3 px-6 text-left">{group.st_name}</td>
-                  <td className="py-3 px-6 text-left">{group.cntry_name}</td>
-                </tr>
-              ))}
-              {!groups || groups.length <= 0 && (
-                <tr>
-                  <td colSpan={6} className="py-3 px-6 text-center">No participants data available</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
       {/* <div className="flex justify-center items-center space-x-2 my-4">
         <button
         className={currentPage === 1 ? 

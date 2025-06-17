@@ -31,6 +31,7 @@ interface Acivitylist {
   gp_id: number,
   group_type: string,
   co_ord_name: string,
+  co_ord_id: number,
 }
 
 type Country = {
@@ -760,10 +761,260 @@ if (!response.ok) {
     <>
       <NavigationBar />
       <div className='relative flex justify-center p-4'>
-        <h1 className='text-3xl text-center mt-2 font-bold'>Activities</h1>
+        <h1 className='text-3xl text-center mt-2 font-bold'>Activity List</h1>
       </div>
 
-      {/* Search by Person Wise */}
+      <div className="flex justify-center font-bold my-4">
+        <p>Total Count: {totalCount}</p>
+      </div>
+      <div className="mx-5 md:mx-9 lg:mx-16">
+        <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white border-gray-200 rounded-t-lg">
+            <thead>
+              <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                <th className="py-3 px-6 text-left w-16 bd-2 rounded-tl-lg">SL .No</th>
+                <th className="py-3 px-6 text-left flex items-center gap-2">
+                  Group Name
+                  {orderdir1 === "DESC" ? (
+                    <span
+                      onClick={() => sort("ASC", "gp_name")}
+                      className={orderfield === "gp_name" ? "text-green-600" : "text-gray-400"}
+                    >
+                      <ArrowUp />
+                    </span>
+                  ) : (
+                    <span
+                      onClick={() => sort("DESC", "gp_name")}
+                      className={orderfield === "gp_name" ? "text-green-600" : "text-gray-400"}
+                    >
+                      <ArrowDown />
+                    </span>
+                  )}
+                </th>
+                <th className="py-3 px-6 text-left">Group Id</th>
+                <th className="py-3 px-6 text-left">Cordinator Name</th>
+                <th className="py-3 px-6 text-left">Cordinator Id</th>
+                <th className="py-3 px-6 text-left">User Name</th>
+                <th className="py-3 px-6 text-left">Chest Number</th>
+                {/* <th className="py-3 px-6 text-left">
+                  <div className="flex items-center gap-2">
+                    Upload Date
+                    {orderdir2 === "DESC" ? (
+                      <span
+                        className={orderfield === "activity_on" ? "text-green-600" : "text-gray-400"}
+                        onClick={() => sort("ASC", "activity_on")}
+                      >
+                        <ArrowUp />
+                      </span>
+                    ) : (
+                      <span
+                        className={orderfield === "activity_on" ? "text-green-600" : "text-gray-400"}
+                        onClick={() => sort("DESC", "activity_on")}
+                      >
+                        <ArrowDown />
+                      </span>
+                    )}
+                  </div>
+                </th> */}
+                <th className="py-3 px-6 text-left">Category</th>
+                <th className="py-3 px-6 text-left w-5">Name of Activity</th>
+                {/* <th className="py-3 px-6 text-left">
+                  <div className="flex items-center gap-2">
+                    Value
+                    {orderdir4 === "DESC" ? (
+                      <span
+                        className={orderfield === "activity_value" ? "text-green-600" : "text-gray-400"}
+                        onClick={() => sort("ASC", "activity_value")}
+                      >
+                        <ArrowUp />
+                      </span>
+                    ) : (
+                      <span
+                        className={orderfield === "activity_value" ? "text-green-600" : "text-gray-400"}
+                        onClick={() => sort("DESC", "activity_value")}
+                      >
+                        <ArrowDown />
+                      </span>
+                    )}
+                  </div>
+                </th> */}
+                <th className="py-3 px-6 text-left">Activity Id</th>
+                <th className="py-3 px-6 text-left">User Id</th>
+                {/* <th className="py-3 px-6 text-left">
+                  <div className="flex items-center gap-2">
+                    Earnings
+                    {orderdir3 === "DESC" ? (
+                      <span
+                        className={orderfield === "earnings" ? "text-green-600" : "text-gray-400"}
+                        onClick={() => sort("ASC", "earnings")}
+                      >
+                        <ArrowUp />
+                      </span>
+                    ) : (
+                      <span
+                        className={orderfield === "earnings" ? "text-green-600" : "text-gray-400"}
+                        onClick={() => sort("DESC", "earnings")}
+                      >
+                        <ArrowDown />
+                      </span>
+                    )}
+                  </div>
+                </th> */}
+                <th className="py-3 px-6 text-left rounded-tr-lg">Value</th>
+
+                {/* <th className="py-3 px-6 text-left">Participant Name</th>
+                <th className="py-3 px-6 text-left">Chest Number</th>
+                <th className="py-3 px-6 text-left flex items-center gap-2">
+                  Group Name
+                  {orderdir1 === "DESC" ? (
+                    <span
+                      onClick={() => sort("ASC", "gp_name")}
+                      className={orderfield === "gp_name" ? "text-green-600" : "text-gray-400"}
+                    >
+                      <ArrowUp />
+                    </span>
+                  ) : (
+                    <span
+                      onClick={() => sort("DESC", "gp_name")}
+                      className={orderfield === "gp_name" ? "text-green-600" : "text-gray-400"}
+                    >
+                      <ArrowDown />
+                    </span>
+                  )}
+                </th>
+                <th className="py-3 px-6 text-left">
+                  <div className="flex items-center gap-2">
+                    Upload Date
+                    {orderdir2 === "DESC" ? (
+                      <span
+                        className={orderfield === "activity_on" ? "text-green-600" : "text-gray-400"}
+                        onClick={() => sort("ASC", "activity_on")}
+                      >
+                        <ArrowUp />
+                      </span>
+                    ) : (
+                      <span
+                        className={orderfield === "activity_on" ? "text-green-600" : "text-gray-400"}
+                        onClick={() => sort("DESC", "activity_on")}
+                      >
+                        <ArrowDown />
+                      </span>
+                    )}
+                  </div>
+                </th>
+                <th className="py-3 px-6 text-left">Name of Art - Brief Description</th>
+                <th className="py-3 px-6 text-left">Category</th>
+                <th className="py-3 px-6 text-left">Views and Likes</th>
+                <th className="py-3 px-6 text-left">
+                  <div className="flex items-center gap-2">
+                    Earnings
+                    {orderdir3 === "DESC" ? (
+                      <span
+                        className={orderfield === "earnings" ? "text-green-600" : "text-gray-400"}
+                        onClick={() => sort("ASC", "earnings")}
+                      >
+                        <ArrowUp />
+                      </span>
+                    ) : (
+                      <span
+                        className={orderfield === "earnings" ? "text-green-600" : "text-gray-400"}
+                        onClick={() => sort("DESC", "earnings")}
+                      >
+                        <ArrowDown />
+                      </span>
+                    )}
+                  </div>
+                </th> */}
+                </tr>
+            </thead>
+            <tbody>
+              {activitylist && activitylist.length > 0 ? (
+                activitylist.map((activity, index) => (
+                  <>
+                    <tr key={activity.personal_activity_id} className="border border-gray-200 hover:bg-gray-100">
+
+                      <td className="py-3 px-6 text-left">{startIndex + index + 1}</td>
+                      <td className="py-3 px-6 text-left">
+                        <a 
+                          href={`/group-page?gname=${activity.gp_name}&gid=${activity.gp_id}&uc=${0}&cordinator=${activity.co_ord_name}&groupType=${activity.group_type}`} 
+                          className="text-black hover:underline flex items-center gap-1"
+                        >
+                          {activity.gp_name}
+                          <LinkIcon size={16} className="text-blue-600" />
+                        </a>
+                      </td>
+                      <td className="py-3 px-6 text-left">{activity.gp_id}</td>
+                      <td className="py-3 px-6 text-left">{activity.co_ord_name}</td>
+                      <td className="py-3 px-6 text-left">{activity.co_ord_id}</td>
+                      <td className="py-3 px-6 text-left">
+                        <a 
+                          href={`/user-page?u=${activity.us_name}&id=${activity.login_id}`} 
+                          className="text-black hover:underline flex items-center gap-1"
+                        >
+                          {activity.us_name}
+                          <LinkIcon size={16} className="text-blue-600" />
+                        </a>
+                      </td>
+                      <td className="py-3 px-6 text-left">{activity.activity_description}</td>
+                      <td className="py-3 px-6 text-left">{activity.activity_category}</td>
+                      {/* <td className="py-3 px-6 text-left">{activity.activity_on.split("T")[0].split('-').reverse().join('-')}</td> */}
+                      <td className="py-3 px-6 text-left">
+                        <a 
+                          href={activity.activity_social_media_link} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="text-black hover:underline flex items-center gap-1"
+                        >
+                          {activity.activity_title}
+                          <ExternalLink size={16} className="text-blue-600" />
+                        </a>
+                      </td>
+                      <td className="py-3 px-6 text-left">{activity.personal_activity_id}</td>
+                      <td className="py-3 px-6 text-left">{activity.login_id}</td>
+                      <td className="py-3 px-6 text-left">{activity.activity_value}</td>
+                    </tr>
+                  </>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={6} className="py-3 px-6 text-center">No participants data available</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} /> */}
+      {/* {totalPages &&
+      } */}
+      {/* <div className="flex justify-center items-center space-x-2 my-4">
+        <button
+        className={currentPage === 1 ? 
+          "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
+        : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+        }
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        <span className="text-xl">{currentPage}</span>
+        <button
+          className={currentPage === totalPages ? 
+            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
+          : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+          }
+          onClick={() => {
+            handlePageChange(currentPage + 1) 
+          }}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
+      </div> */}
+            {/* Search by Person Wise */}
       <div className='search1'>
         <h1 className='text-lg text-center m-3'>Search by Person Wise</h1>
         <div className="mx-5 md:mx-9 lg:mx-16 border-2 border-gray-300 shadow-lg flex bg-gray-100 rounded-lg justify-center items-cente">
@@ -1485,252 +1736,6 @@ if (!response.ok) {
           </Form>
         </div>
       </div>
-
-      <div className="flex justify-center font-bold my-4">
-        <p>Total Count: {totalCount}</p>
-      </div>
-      <div className="mx-5 md:mx-9 lg:mx-16">
-        <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border-gray-200 rounded-t-lg">
-            <thead>
-              <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                <th className="py-3 px-6 text-left w-16 bd-2 rounded-tl-lg">SL .No</th>
-                <th className="py-3 px-6 text-left flex items-center gap-2">
-                  Group Name
-                  {orderdir1 === "DESC" ? (
-                    <span
-                      onClick={() => sort("ASC", "gp_name")}
-                      className={orderfield === "gp_name" ? "text-green-600" : "text-gray-400"}
-                    >
-                      <ArrowUp />
-                    </span>
-                  ) : (
-                    <span
-                      onClick={() => sort("DESC", "gp_name")}
-                      className={orderfield === "gp_name" ? "text-green-600" : "text-gray-400"}
-                    >
-                      <ArrowDown />
-                    </span>
-                  )}
-                </th>
-                <th className="py-3 px-6 text-left">User Name</th>
-                <th className="py-3 px-6 text-left">Chest Number</th>
-                {/* <th className="py-3 px-6 text-left">
-                  <div className="flex items-center gap-2">
-                    Upload Date
-                    {orderdir2 === "DESC" ? (
-                      <span
-                        className={orderfield === "activity_on" ? "text-green-600" : "text-gray-400"}
-                        onClick={() => sort("ASC", "activity_on")}
-                      >
-                        <ArrowUp />
-                      </span>
-                    ) : (
-                      <span
-                        className={orderfield === "activity_on" ? "text-green-600" : "text-gray-400"}
-                        onClick={() => sort("DESC", "activity_on")}
-                      >
-                        <ArrowDown />
-                      </span>
-                    )}
-                  </div>
-                </th> */}
-                <th className="py-3 px-6 text-left">Category</th>
-                <th className="py-3 px-6 text-left w-5">Name of Activity</th>
-                {/* <th className="py-3 px-6 text-left">
-                  <div className="flex items-center gap-2">
-                    Value
-                    {orderdir4 === "DESC" ? (
-                      <span
-                        className={orderfield === "activity_value" ? "text-green-600" : "text-gray-400"}
-                        onClick={() => sort("ASC", "activity_value")}
-                      >
-                        <ArrowUp />
-                      </span>
-                    ) : (
-                      <span
-                        className={orderfield === "activity_value" ? "text-green-600" : "text-gray-400"}
-                        onClick={() => sort("DESC", "activity_value")}
-                      >
-                        <ArrowDown />
-                      </span>
-                    )}
-                  </div>
-                </th> */}
-                <th className="py-3 px-6 text-left">Activity Id</th>
-                <th className="py-3 px-6 text-left">User Id</th>
-                <th className="py-3 px-6 text-left">
-                  <div className="flex items-center gap-2">
-                    Earnings
-                    {orderdir3 === "DESC" ? (
-                      <span
-                        className={orderfield === "earnings" ? "text-green-600" : "text-gray-400"}
-                        onClick={() => sort("ASC", "earnings")}
-                      >
-                        <ArrowUp />
-                      </span>
-                    ) : (
-                      <span
-                        className={orderfield === "earnings" ? "text-green-600" : "text-gray-400"}
-                        onClick={() => sort("DESC", "earnings")}
-                      >
-                        <ArrowDown />
-                      </span>
-                    )}
-                  </div>
-                </th>
-                <th className="py-3 px-6 text-left rounded-tr-lg">Value</th>
-
-                {/* <th className="py-3 px-6 text-left">Participant Name</th>
-                <th className="py-3 px-6 text-left">Chest Number</th>
-                <th className="py-3 px-6 text-left flex items-center gap-2">
-                  Group Name
-                  {orderdir1 === "DESC" ? (
-                    <span
-                      onClick={() => sort("ASC", "gp_name")}
-                      className={orderfield === "gp_name" ? "text-green-600" : "text-gray-400"}
-                    >
-                      <ArrowUp />
-                    </span>
-                  ) : (
-                    <span
-                      onClick={() => sort("DESC", "gp_name")}
-                      className={orderfield === "gp_name" ? "text-green-600" : "text-gray-400"}
-                    >
-                      <ArrowDown />
-                    </span>
-                  )}
-                </th>
-                <th className="py-3 px-6 text-left">
-                  <div className="flex items-center gap-2">
-                    Upload Date
-                    {orderdir2 === "DESC" ? (
-                      <span
-                        className={orderfield === "activity_on" ? "text-green-600" : "text-gray-400"}
-                        onClick={() => sort("ASC", "activity_on")}
-                      >
-                        <ArrowUp />
-                      </span>
-                    ) : (
-                      <span
-                        className={orderfield === "activity_on" ? "text-green-600" : "text-gray-400"}
-                        onClick={() => sort("DESC", "activity_on")}
-                      >
-                        <ArrowDown />
-                      </span>
-                    )}
-                  </div>
-                </th>
-                <th className="py-3 px-6 text-left">Name of Art - Brief Description</th>
-                <th className="py-3 px-6 text-left">Category</th>
-                <th className="py-3 px-6 text-left">Views and Likes</th>
-                <th className="py-3 px-6 text-left">
-                  <div className="flex items-center gap-2">
-                    Earnings
-                    {orderdir3 === "DESC" ? (
-                      <span
-                        className={orderfield === "earnings" ? "text-green-600" : "text-gray-400"}
-                        onClick={() => sort("ASC", "earnings")}
-                      >
-                        <ArrowUp />
-                      </span>
-                    ) : (
-                      <span
-                        className={orderfield === "earnings" ? "text-green-600" : "text-gray-400"}
-                        onClick={() => sort("DESC", "earnings")}
-                      >
-                        <ArrowDown />
-                      </span>
-                    )}
-                  </div>
-                </th> */}
-                </tr>
-            </thead>
-            <tbody>
-              {activitylist && activitylist.length > 0 ? (
-                activitylist.map((activity, index) => (
-                  <>
-                    <tr key={activity.personal_activity_id} className="border border-gray-200 hover:bg-gray-100">
-
-                      <td className="py-3 px-6 text-left">{startIndex + index + 1}</td>
-                      <td className="py-3 px-6 text-left">
-                        <a 
-                          href={`/group-page?gname=${activity.gp_name}&gid=${activity.gp_id}&uc=${0}&cordinator=${activity.co_ord_name}&groupType=${activity.group_type}`} 
-                          className="text-black hover:underline flex items-center gap-1"
-                        >
-                          {activity.gp_name}
-                          <LinkIcon size={16} className="text-blue-600" />
-                        </a>
-                      </td>
-                      <td className="py-3 px-6 text-left">
-                        <a 
-                          href={`/user-page?u=${activity.us_name}&id=${activity.login_id}`} 
-                          className="text-black hover:underline flex items-center gap-1"
-                        >
-                          {activity.us_name}
-                          <LinkIcon size={16} className="text-blue-600" />
-                        </a>
-                      </td>
-                      <td className="py-3 px-6 text-left">{activity.activity_description}</td>
-                      <td className="py-3 px-6 text-left">{activity.activity_category}</td>
-                      {/* <td className="py-3 px-6 text-left">{activity.activity_on.split("T")[0].split('-').reverse().join('-')}</td> */}
-                      <td className="py-3 px-6 text-left">
-                        <a 
-                          href={activity.activity_social_media_link} 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                          className="text-black hover:underline flex items-center gap-1"
-                        >
-                          {activity.activity_title}
-                          <ExternalLink size={16} className="text-blue-600" />
-                        </a>
-                      </td>
-                      <td className="py-3 px-6 text-left">{activity.personal_activity_id}</td>
-                      <td className="py-3 px-6 text-left">{activity.login_id}</td>
-                      <td className="py-3 px-6 text-left ">{activity.earnings}</td>
-                      <td className="py-3 px-6 text-left">{activity.activity_value}</td>
-                    </tr>
-                  </>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={6} className="py-3 px-6 text-center">No participants data available</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} /> */}
-      {/* {totalPages &&
-      } */}
-      {/* <div className="flex justify-center items-center space-x-2 my-4">
-        <button
-        className={currentPage === 1 ? 
-          "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
-        : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-        }
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-        <span className="text-xl">{currentPage}</span>
-        <button
-          className={currentPage === totalPages ? 
-            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg" 
-          : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-          }
-          onClick={() => {
-            handlePageChange(currentPage + 1) 
-          }}
-          disabled={currentPage === totalPages}
-        >
-          Next
-        </button>
-      </div> */}
       <Footer />
     </>
   );
