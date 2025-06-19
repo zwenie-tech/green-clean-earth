@@ -984,7 +984,7 @@ const GroupList = () => {
                 )}
 
                 {/* Ward Number Input */}
-                {selectedState === 'Kerala' && (
+                {/* {selectedState === 'Kerala' && (
                   <FormField
                     control={formCountry.control}
                     name="wardNo"
@@ -997,7 +997,7 @@ const GroupList = () => {
                       </FormItem>
                     )}
                   />
-                )}
+                )} */}
 
                 {/* Submit Button
           <div className="col-span-full flex justify-center"> */}

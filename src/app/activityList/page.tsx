@@ -1244,7 +1244,7 @@ if (!response.ok) {
                     )}
                   />
                 )}
-                {selectedState === 'Kerala' && (
+                {/* {selectedState === 'Kerala' && (
                   <FormField
                     control={formCountry.control}
                     name="wardNo"
@@ -1258,7 +1258,7 @@ if (!response.ok) {
                     )}
                   />
 
-                )}
+                )} */}
                 {selectedCountry != 'India' && (
                   <FormField
                     control={formCountry.control}

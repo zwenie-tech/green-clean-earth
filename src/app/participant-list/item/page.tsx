@@ -282,10 +282,10 @@ const Item: React.FC = () => {
               <div className="text-sm pl-5 mb-2">LSGD: </div>
               <div className="text-sm">{treeDetails.lsg_name || 'N/A'}</div>
             </div>
-            <div className="flex ml-2 mt-2 gap-2">
+            {/* <div className="flex ml-2 mt-2 gap-2">
               <div className="text-sm pl-5 mb-2">Ward Name: </div>
               <div className="text-sm">{treeDetails.up_ward || 'N/A'}</div>
-            </div>
+            </div> */}
             {/* <div className="flex ml-2 mt-2 gap-2">
               <div className="text-sm pl-5 mb-2">Coupon Number: </div>
               <div className="text-sm">....</div>
