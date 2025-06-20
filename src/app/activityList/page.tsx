@@ -774,6 +774,12 @@ if (!response.ok) {
             <thead>
               <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                 <th className="py-3 px-6 text-left w-16 bd-2 rounded-tl-lg">SL .No</th>
+                <th className="py-3 px-6 text-left w-5">Name of Activity</th>
+                <th className="py-3 px-6 text-left">Category</th>
+                <th className="py-3 px-6 text-left">Chest Number</th>
+                <th className="py-3 px-6 text-left">User Name</th>
+                <th className="py-3 px-6 text-left">User Id</th>
+                <th className="py-3 px-6 text-left">Activity Id</th>
                 <th className="py-3 px-6 text-left flex items-center gap-2">
                   Group Name
                   {orderdir1 === "DESC" ? (
@@ -795,8 +801,6 @@ if (!response.ok) {
                 <th className="py-3 px-6 text-left">Group Id</th>
                 <th className="py-3 px-6 text-left">Cordinator Name</th>
                 <th className="py-3 px-6 text-left">Cordinator Id</th>
-                <th className="py-3 px-6 text-left">User Name</th>
-                <th className="py-3 px-6 text-left">Chest Number</th>
                 {/* <th className="py-3 px-6 text-left">
                   <div className="flex items-center gap-2">
                     Upload Date
@@ -817,8 +821,6 @@ if (!response.ok) {
                     )}
                   </div>
                 </th> */}
-                <th className="py-3 px-6 text-left">Category</th>
-                <th className="py-3 px-6 text-left w-5">Name of Activity</th>
                 {/* <th className="py-3 px-6 text-left">
                   <div className="flex items-center gap-2">
                     Value
@@ -839,8 +841,6 @@ if (!response.ok) {
                     )}
                   </div>
                 </th> */}
-                <th className="py-3 px-6 text-left">Activity Id</th>
-                <th className="py-3 px-6 text-left">User Id</th>
                 {/* <th className="py-3 px-6 text-left">
                   <div className="flex items-center gap-2">
                     Earnings
@@ -937,6 +937,30 @@ if (!response.ok) {
                       <td className="py-3 px-6 text-left">{startIndex + index + 1}</td>
                       <td className="py-3 px-6 text-left">
                         <a 
+                          href={activity.activity_social_media_link} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="text-black hover:underline flex items-center gap-1"
+                        >
+                          {activity.activity_title}
+                          <ExternalLink size={16} className="text-blue-600" />
+                        </a>
+                      </td>
+                      <td className="py-3 px-6 text-left">{activity.activity_category}</td>
+                      <td className="py-3 px-6 text-left">{activity.activity_description}</td>
+                      <td className="py-3 px-6 text-left">
+                        <a 
+                          href={`/user-page?u=${activity.us_name}&id=${activity.login_id}`} 
+                          className="text-black hover:underline flex items-center gap-1"
+                        >
+                          {activity.us_name}
+                          <LinkIcon size={16} className="text-blue-600" />
+                        </a>
+                      </td>
+                      <td className="py-3 px-6 text-left">{activity.login_id}</td>
+                      <td className="py-3 px-6 text-left">{activity.personal_activity_id}</td>
+                      <td className="py-3 px-6 text-left">
+                        <a 
                           href={`/group-page?gname=${activity.gp_name}&gid=${activity.gp_id}&uc=${0}&cordinator=${activity.co_ord_name}&groupType=${activity.group_type}`} 
                           className="text-black hover:underline flex items-center gap-1"
                         >
@@ -947,31 +971,6 @@ if (!response.ok) {
                       <td className="py-3 px-6 text-left">{activity.gp_id}</td>
                       <td className="py-3 px-6 text-left">{activity.co_ord_name}</td>
                       <td className="py-3 px-6 text-left">{activity.co_ord_id}</td>
-                      <td className="py-3 px-6 text-left">
-                        <a 
-                          href={`/user-page?u=${activity.us_name}&id=${activity.login_id}`} 
-                          className="text-black hover:underline flex items-center gap-1"
-                        >
-                          {activity.us_name}
-                          <LinkIcon size={16} className="text-blue-600" />
-                        </a>
-                      </td>
-                      <td className="py-3 px-6 text-left">{activity.activity_description}</td>
-                      <td className="py-3 px-6 text-left">{activity.activity_category}</td>
-                      {/* <td className="py-3 px-6 text-left">{activity.activity_on.split("T")[0].split('-').reverse().join('-')}</td> */}
-                      <td className="py-3 px-6 text-left">
-                        <a 
-                          href={activity.activity_social_media_link} 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                          className="text-black hover:underline flex items-center gap-1"
-                        >
-                          {activity.activity_title}
-                          <ExternalLink size={16} className="text-blue-600" />
-                        </a>
-                      </td>
-                      <td className="py-3 px-6 text-left">{activity.personal_activity_id}</td>
-                      <td className="py-3 px-6 text-left">{activity.login_id}</td>
                       <td className="py-3 px-6 text-left">{activity.activity_value}</td>
                     </tr>
                   </>
