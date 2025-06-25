@@ -1451,7 +1451,7 @@ export function Uploadform() {
                   name="landmark"
                   render={({ field }) => (
                     <FormItem className="mb-4">
-                      <FormLabel>Landmark </FormLabel>
+                      <FormLabel>Landmark/Geo Cordinate</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>

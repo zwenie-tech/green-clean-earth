@@ -295,7 +295,7 @@ const Item: React.FC = () => {
               <div className="text-sm">....</div>
             </div> */}
             <div className="flex ml-2 mt-2 gap-2">
-              <div className="text-sm pl-5 mb-2">Landmark: </div>
+              <div className="text-sm pl-5 mb-2">Landmark/Geo Cordinate: </div>
               <div className="text-sm">{treeDetails.up_landmark_details || 'N/A'}</div>
             </div>
             <div className="flex ml-2 mt-2 gap-2">

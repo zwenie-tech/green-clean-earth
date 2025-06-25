@@ -507,7 +507,7 @@ export function FormEditPlant() {
         name="landmark"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Landmark</FormLabel>
+            <FormLabel>Landmark/Geo Cordinate</FormLabel>
             <FormControl>
               <Input type="text" {...field} required/>
             </FormControl>

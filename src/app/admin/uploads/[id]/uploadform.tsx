@@ -602,7 +602,7 @@ export function Uploadform() {
                 </div>
 
                 <div className="mb-4">
-                  <label className="form-label">Landmark</label>
+                  <label className="form-label">Landmark/Geo Cordinate</label>
                   <input
                     className="block w-full px-3 py-2 border border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 sm:text-sm"
 

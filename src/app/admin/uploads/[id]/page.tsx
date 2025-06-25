@@ -276,7 +276,7 @@ function Page() {
             : ''}
           {uploadData[0].up_landmark_details ?
             <div className="">
-              <p className="text-sm text-gray-500">Landmark</p>
+              <p className="text-sm text-gray-500">Landmark/Geo Cordinate</p>
               <p className="text-base">{uploadData[0].up_landmark_details}</p>
             </div>
             : ''}
