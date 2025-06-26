@@ -119,6 +119,15 @@ function formatTime(isoString: string) {
   return `${hour}:${minutes} ${parseInt(hours) >= 12 ? 'PM' : 'AM'}`;
 }
 
+function isThreeMonthsOld(isoString: string | null): boolean {
+  if (!isoString) return false;
+  const uploadDate = new Date(isoString);
+  const currentDate = new Date();
+  const diffInMs = currentDate.getTime() - uploadDate.getTime();
+  const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+  return diffInDays >= 90; // ~3 months
+}
+
 
 const MyUploadedPlants = () => {
   const [data, setData] = useState<PlantData[]>([]);
@@ -186,80 +195,93 @@ const MyUploadedPlants = () => {
     });
   };
 
-  const renderImageCell = (plant: PlantData, imageNumber: number) => {
-    const imageKey = getPlantImageKey(imageNumber);
-    const timeKey = getPlantTimeKey(imageNumber);
+ const renderImageCell = (plant: PlantData, imageNumber: number) => {
+  const imageKey = getPlantImageKey(imageNumber);
+  const timeKey = getPlantTimeKey(imageNumber);
 
-    const imageValue = plant[imageKey] as string | null;
-    const timeValue = plant[timeKey] as string | null;
-    const editKey = `image${imageNumber}` as keyof EditState;
-    const isEdit = editStates[plant.up_id]?.[editKey];
+  const imageValue = plant[imageKey] as string | null;
+  const timeValue = plant[timeKey] as string | null;
+  const editKey = `image${imageNumber}` as keyof EditState;
+  const isEdit = editStates[plant.up_id]?.[editKey];
 
-    // Check if previous image exists (for images 2-4)
-    if (imageNumber > 1) {
-      const prevImageKey = getPlantImageKey(imageNumber - 1);
-      if (!plant[prevImageKey]) {
-        return <div className='bg-slate-200 w-full h-full'></div>;
-      }
+  // Check if previous image exists (for images 2-4)
+  if (imageNumber > 1) {
+    const prevImageKey = getPlantImageKey(imageNumber - 1);
+    const prevTimeKey = getPlantTimeKey(imageNumber - 1);
+    const prevTimeValue = plant[prevTimeKey] as string | null;
+
+    if (!plant[prevImageKey]) {
+      return <div className='bg-slate-200 w-full h-full'></div>; // Show gray box if previous image doesn't exist
     }
 
-    return (
-      <div className='w-full'>
-        {imageValue ? (
-          <div className='flex flex-col items-center'>
-            <div className="relative aspect-square w-full max-w-[120px] sm:max-w-[150px]">
+    if (!isThreeMonthsOld(prevTimeValue)) {
+      return (
+        <div className='text-xs text-center text-gray-500'>
+          <p>Upload not available</p>
+          <p className='text-[10px]'>(3 months not completed)</p>
+        </div>
+      );
+    }
+  }
+
+  return (
+    <div className='w-full'>
+      {imageValue ? (
+        <div className='flex flex-col items-center'>
+          <div className="relative aspect-square w-full max-w-[120px] sm:max-w-[150px]">
+            <img
+              src={`${imageURL}${imageValue}`}
+              alt={`Plant image ${imageNumber}`}
+              className='absolute h-full w-full object-cover rounded'
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = '/images/placeholder.png';
+              }}
+            />
+            {plant.is_challenged == 1 && (
               <img
-                src={`${imageURL}${imageValue}`}
-                alt={`Plant image ${imageNumber}`}
-                className='absolute h-full w-full object-cover rounded'
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = '/images/placeholder.png';
-                }}
+                className="absolute top-0 left-0 w-full h-full object-contain z-10"
+                src="/images/chellenge.png"
+                alt="Challenged"
               />
-              {plant.is_challenged == 1 && (
-                <img
-                  className="absolute top-0 left-0 w-full h-full object-contain z-10"
-                  src="/images/chellenge.png"
-                  alt="Challenged"
-                />
-              )}
-            </div>
-
-            <div className='mt-2 text-center text-xs sm:text-sm'>
-              <p>Uploaded on</p>
-              <p>{timeValue ? `${formatDate(timeValue)}` : "N/A"}</p>
-              <p>{timeValue ? `${formatTime(timeValue)}` : ""}</p>
-            </div>
-
-            {isEdit ? (
-              <MemoizedUploadButton
-                imageNo={imageNumber}
-                treeNo={plant.up_id}
-                isEdit={true}
-                onComplete={() => toggleEditState(plant.up_id, imageNumber)}
-              />
-            ) : (
-              <button
-                className='text-primary underline text-xs sm:text-sm mt-1'
-                onClick={() => toggleEditState(plant.up_id, imageNumber)}
-              >
-                Edit
-              </button>
             )}
           </div>
-        ) : (
-          <div className='flex justify-center'>
+
+          <div className='mt-2 text-center text-xs sm:text-sm'>
+            <p>Uploaded on</p>
+            <p>{timeValue ? `${formatDate(timeValue)}` : "N/A"}</p>
+            <p>{timeValue ? `${formatTime(timeValue)}` : ""}</p>
+          </div>
+
+          {isEdit ? (
             <MemoizedUploadButton
               imageNo={imageNumber}
               treeNo={plant.up_id}
-              isEdit={false}
-              onComplete={() => { }}
+              isEdit={true}
+              onComplete={() => toggleEditState(plant.up_id, imageNumber)}
             />
-          </div>
-        )}
-      </div>
-    );
-  };
+          ) : (
+            <button
+              className='text-primary underline text-xs sm:text-sm mt-1'
+              onClick={() => toggleEditState(plant.up_id, imageNumber)}
+            >
+              Edit
+            </button>
+          )}
+        </div>
+      ) : (
+        <div className='flex justify-center'>
+          <MemoizedUploadButton
+            imageNo={imageNumber}
+            treeNo={plant.up_id}
+            isEdit={false}
+            onComplete={() => { }}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
 
   return (
     <main className='min-h-screen flex flex-col'>

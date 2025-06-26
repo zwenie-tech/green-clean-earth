@@ -299,7 +299,7 @@ const Item: React.FC = () => {
               <div className="text-sm">{treeDetails.up_landmark_details || 'N/A'}</div>
             </div>
             <div className="flex ml-2 mt-2 gap-2">
-              <div className="text-sm pl-5 mb-2">Plant Source: </div>
+              <div className="text-sm pl-5 mb-2">Club: </div>
               <div className="text-sm">{treeDetails.source_name || 'N/A'}</div>
             </div>
             <div className="flex ml-2 mt-2 gap-2">
