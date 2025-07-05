@@ -641,14 +641,19 @@ export function EditGrpTypeForm() {
     }, [token, Id, eduDistrict]);
 
     const club = Cookies.get("club");
-    const multiForm = useForm({
-        defaultValues: {
-            value: club?.split(',').map(item => item.trim())!,
-            //   value: club?.split(',').map(item => item.trim())!,
-
-        },
+    const multiForm = useForm<{ value: string[] }>({
+    defaultValues: {
+        value: [],
+    },
     });
 
+    useEffect(() => {
+    if (club) {
+        const prefill = club.split(',').map((item) => item.trim());
+        multiForm.reset({ value: prefill });
+        setSelectClub(prefill); // If you want to sync local state too
+    }
+    }, [club]);
 
     async function onSubmit(event: any) {
         event.preventDefault();
@@ -889,7 +894,7 @@ export function EditGrpTypeForm() {
                         className=""
                     >
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                        <div className="flex flex-col gap-4">
 
                             {/* <div>
                 <label>List of Classes</label>
@@ -1252,7 +1257,7 @@ export function EditGrpTypeForm() {
                                 </>)}
                             {grouptype === 'Educational Institution' && (
                                 <div className="flex items-center mb-3 space-x-2">
-                                    <label className="text-sm font-medium">Number of students:</label>
+                                    <label className="text-sm font-medium">No of students:</label>
                                     <div className="flex mb-3">
                                         <input
                                             className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
