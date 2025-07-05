@@ -158,15 +158,15 @@ const ButtonDisplayFn: React.FC = () => {
           <p className="w-1/2 font-bold">{groupType}</p>
         </div>
         <div className="w-full flex justify-between items-center gap-3 ">
-          <p className="text-right font-bold w-1/2">Upload count:</p>
+          <p className="text-right font-bold w-1/2">Upload Count:</p>
           <p className="w-1/2 font-bold">{upcount}</p>
         </div>
         <div className="w-full flex justify-between items-center gap-3 ">
-          <p className="text-right font-bold w-1/2">Activity count:</p>
+          <p className="text-right font-bold w-1/2">Activity Count:</p>
           <p className="w-1/2 font-bold">{actcount}</p>
         </div>
         <div className="w-full flex justify-between items-center gap-3 ">
-          <p className="text-right font-bold w-1/2">Referal count:</p>
+          <p className="text-right font-bold w-1/2">User Count:</p>
           <p className="w-1/2 font-bold">{usercount}</p>
         </div>
       </div>
