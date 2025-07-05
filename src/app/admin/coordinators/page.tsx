@@ -16,6 +16,7 @@ import Cookies from 'js-cookie';
 import * as XLSX from 'xlsx';
 import PaginationComponent from "../PageComponent";
 
+
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 interface Country {
   cntry_id: number;
@@ -169,7 +170,7 @@ const AdminGrid = () => {
     { field: "lsg_name", headerName: "LSGD",width:100 },
     { field: "gp_ward_no", headerName: "Ward",width:100 },
     { field: "gp_name", headerName: "Group Name",width:140 },
-    { field: "gp_refferal_name", headerName: "Referral Name",width:160 },
+    { field: "gp_referral_name", headerName: "Referral Name",width:160 },
     { field: "refferal_count", headerName: "Refferal Count", width: 180}
   ]);
 

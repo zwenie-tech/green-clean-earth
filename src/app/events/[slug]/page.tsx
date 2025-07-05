@@ -30,6 +30,7 @@ const Events = () => {
   const [event, setEvent] = useState<Event | null>(null);
   const [showPopup, setShowPopup] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -107,7 +108,12 @@ const Events = () => {
         <PageTitle title='Events and News' />
         <div className='flex flex-col items-center gap-2 mx-4 my-4 md:mx-24 px-4 py-6 rounded-md bg-light-gray'>
           <h2 className='text-2xl font-semibold'>{event.event_heading}</h2>
-          <img src={event.image_link} alt={event.event_heading} className="h-52 w-80 bg-primary" />
+          <img
+          src={event.image_link}
+          alt={event.event_heading}
+          className="h-52 w-80 bg-primary cursor-pointer rounded"
+          onClick={() => setIsOpen(true)}
+        />
           <div className="flex gap-6 py-2">
             <p className='text-left md:text-left'>{new Date(event.created_time).toLocaleDateString()}</p>
             <button onClick={handleShare} className="flex gap-2 text-primary">
@@ -119,6 +125,20 @@ const Events = () => {
         </div>
       </div>
 
+       {isOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
+          onClick={() => setIsOpen(false)}
+        >
+          <img
+            src={event.image_link}
+            alt={event.event_heading}
+            className="max-w-full max-h-[90vh] object-contain rounded shadow-xl"
+            onClick={(e) => e.stopPropagation()} // prevent modal from closing when clicking image
+          />
+        </div>
+      )}
+      
       {/* Share fallback popup */}
       {showPopup && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">

@@ -235,8 +235,8 @@ export default function Register() {
       const result = await response.json();
       const { group_id } = result;
       toast({
-        title: "Registeration Successful! .",
-        description: "We've created your account for you.Please fill further details.",
+        title: "Please fill additional details! .",
+        description: "Please fill further details.",
       })
 
 

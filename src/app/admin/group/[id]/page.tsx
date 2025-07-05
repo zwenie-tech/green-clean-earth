@@ -37,6 +37,9 @@ interface UploadData {
   gp_ward_no:string;
   total_members: string;
   gp_location:string
+  no_of_students: number;
+  club_names: string;
+  list_of_classes: string;
 }
 
 function Page() {
@@ -225,8 +228,30 @@ function Page() {
               <p className="text-base">{uploadData[0].gp_location}</p>
             </div>
             : ''}
-       
-      
+          {uploadData[0].no_of_students ?
+            <div className="">
+              <p className="text-sm text-gray-500">No. of Students</p>
+              <p className="text-base">{uploadData[0].no_of_students}</p>
+            </div>
+            : ''}
+          {uploadData[0].list_of_classes?
+            <div className="">
+              <p className="text-sm text-gray-500">No. of Classes</p>
+              <p className="text-base">{uploadData[0].list_of_classes}</p>
+            </div>
+            : ''}
+          {uploadData[0].club_names ?
+            <div className="">
+              <p className="text-sm text-gray-500">Clubs</p>
+              <p className="text-base">{uploadData[0].club_names}</p>
+            </div>
+            : ''}
+          {uploadData[0].gp_cat_name ?
+            <div className="">
+              <p className="text-sm text-gray-500">Category</p>
+              <p className="text-base">{uploadData[0].gp_cat_name}</p>
+            </div>
+            : ''}
       </div>:''}
     </div>
   );

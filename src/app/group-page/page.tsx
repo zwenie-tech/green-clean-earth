@@ -62,6 +62,7 @@ const ButtonDisplayFn: React.FC = () => {
   const [totalPagesUp, setTotalPagesUp] = useState(1);
   const [upcount, setUpCount] = useState(0);
   const [actcount, setActCount] = useState(0);
+  const [usercount, setUserCount] = useState(0);
   const [cordinatorId, setCordinatorId] = useState(0);
   const itemsPerPage = 10;
   const router = useRouter()
@@ -123,6 +124,7 @@ const ButtonDisplayFn: React.FC = () => {
         // console.log(data)
         setGroupUploads(data.groupUploads);
         setUpCount(data.upload_count);
+        setUserCount(data.user_count);
         setTotalPagesUp(Math.ceil(data.upload_count / itemsPerPage));
       }
     } catch (error) {
@@ -162,6 +164,10 @@ const ButtonDisplayFn: React.FC = () => {
         <div className="w-full flex justify-between items-center gap-3 ">
           <p className="text-right font-bold w-1/2">Activity count:</p>
           <p className="w-1/2 font-bold">{actcount}</p>
+        </div>
+        <div className="w-full flex justify-between items-center gap-3 ">
+          <p className="text-right font-bold w-1/2">Referal count:</p>
+          <p className="w-1/2 font-bold">{usercount}</p>
         </div>
       </div>
       <hr className="h-1 bg-gray-300 border-0 mt-4 w-3/4 justify-center items-center mx-auto" />

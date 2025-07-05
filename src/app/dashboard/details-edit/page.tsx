@@ -133,7 +133,7 @@ interface Club {
 const formSchoolSchema = z.object({
   value: z.array(z.string()).nonempty("Please select at least one club"),
   no_of_students: z.coerce.number(),
-  list_of_classes: z.string().min(3).max(255),
+  list_of_classes: z.string().max(255),
   sub_category: z.string().min(3).max(255)
 });
 
@@ -886,7 +886,7 @@ const DetailsEdit: React.FC = () => {
                 name="group_type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Category</FormLabel>
+                    <FormLabel>Group type</FormLabel>
                     <Select
                       onValueChange={(value) => handleSelectChange('group_type', value)}
                       defaultValue={field.value}
@@ -1246,7 +1246,7 @@ const DetailsEdit: React.FC = () => {
                 >
                   <div className="flex items-center mb-3 gap-5">
                     <h2 className="mb-0 text-left text-xl font-bold">
-                      Additional details
+                      Other details
                     </h2>
                     <button
                       type="button"
@@ -1322,7 +1322,7 @@ const DetailsEdit: React.FC = () => {
                         name="list_of_classes"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>List of classes</FormLabel>
+                            <FormLabel>No. of Classes</FormLabel>
                             <FormControl className="shadow-xl rounded-md px-4 py-1 border-0">
                               <Input
                                 placeholder=""
