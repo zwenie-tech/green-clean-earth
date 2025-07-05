@@ -161,7 +161,7 @@ export function FormUploadActivities() {
     formData.append("name", values.name);
     formData.append("category", category ? category : "");
     formData.append("subCategory", values.sub_category);
-    formData.append("address", values.address?.toString():'');
+    formData.append("address", values.address? values.address.toString():'');
     formData.append("activityTitle", values.activity_title);
     formData.append("shortDesc", values.short_desc);
     formData.append("socialMediaLink", values.social_link);
