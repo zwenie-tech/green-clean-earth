@@ -1,0 +1,1498 @@
+"use client";
+
+import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
+import {
+  ColDef,
+  ModuleRegistry,
+  RowClickedEvent,
+} from "@ag-grid-community/core";
+import { AgGridReact } from "@ag-grid-community/react";
+import "@/app/admin/ag-grid-theme-builder.css"
+import { useRouter } from "next/navigation";
+import React, { StrictMode, useCallback, useEffect, useMemo, useState } from "react";
+import axios from "axios";
+import { apiURL } from "@/app/requestsapi/request";
+import Cookies from 'js-cookie';
+import * as XLSX from 'xlsx';
+import PaginationComponent from "../PageComponent";
+
+ModuleRegistry.registerModules([ClientSideRowModelModule]);
+interface Country {
+  cntry_id: number;
+  cntry_name: string;
+}
+interface State {
+  st_id: number;
+  st_name: string;
+}
+
+interface District {
+  dis_id: number;
+  dis_name: string;
+}
+type Corp = {
+  cop_id: string;
+  cop_name: string;
+}
+interface Lsgd {
+  lsg_id: number;
+  lsg_name: string;
+}
+type Category = {
+  id: string;
+  group_type: string;
+}
+interface SchoolType {
+  id: string;
+  type_name: string;
+}
+interface EduDistrict {
+  edu_district_id: string;
+  edu_district: string;
+}
+interface EduSubDistrict {
+  edu_sub_district_id: string;
+  edu_sub_district_name: string;
+}
+interface SubCategory {
+  gp_cat_id: string;
+  gp_cat_name: string;
+}
+interface Sahodaya {
+  sahodaya_id: string;
+  sahodaya_name: string;
+}
+interface IcdsBlock {
+  icds_block_id: string;
+  block_name: string;
+}
+interface IcdsProject {
+  project_id: string;
+  project_name: string;
+}
+interface MissionChapter {
+  chapter_id: string;
+  chapter_name: string;
+}
+interface MissionZone {
+  zone_id: string;
+  zone_name: string;
+}
+type GrpName = {
+  gp_id: string;
+  gp_name: string;
+}
+const AdminGrid = () => {
+  const router = useRouter();
+  const [rowData, setRowData] = useState([]);
+  const token = Cookies.get("adtoken");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const [totalcount, setTotalcount] = useState("");
+  const [countries, setCountries] = useState<Country[]>([]);
+  const [states, setStates] = useState<State[]>([]);
+  const [districts, setDistricts] = useState<District[]>([]);
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [selectedState, setSelectedState] = useState("");
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [selectedCntry, setSelectedCntry] = useState("");
+  const [selectedCorp, setSelectedCorp] = useState("");
+  const [selectedLsgd, setSelectedLsgd] = useState("");
+  const [selectedWard, setSelectedWard] = useState("");
+  const [lsgd, setLsgd] = useState<Lsgd[]>([]);
+  const [corporation, setCorporation] = useState<Corp[]>([]);
+  const [coordinator, setCoordinator] = useState("");
+  const [email, setEmail] = useState("");
+  const [coordid, setCoordid] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [grouptype, setGroupType] = useState("");
+  const [selectedschoolType, setSelectedSchoolType] = useState("");
+  const [category, setCategory] = useState<Category[]>([]);
+  const [schoolType, setSchoolType] = useState<SchoolType[]>([]);
+  const [selectedDistrictGrp, setSelectedDistrictGrp] = useState("");
+  const [eduDistrict, setEduDistrict] = useState<EduDistrict[]>([]);
+  const [eduSubDistrict, setEduSubDistrict] = useState<EduSubDistrict[]>([]);
+  const [selectedCountryGrp, setSelectedCountryGrp] = useState("");
+  const [selectedStateGrp, setSelectedStateGrp] = useState("");
+  const [selectedSubCategory, setSelectedSubCategory] = useState("");
+  const [subcategoryOptions, setSubCategoryOptions] = useState<SubCategory[]>([]);
+  const [selectSahodaya, setSelectSahodaya] = useState('');
+  const [sahodaya, setSahodaya] = useState<Sahodaya[]>([]);
+  const [icdsBlock, setIcdsBlock] = useState<IcdsBlock[]>([]);
+  const [missionChapter, setMissionChapter] = useState<MissionChapter[]>([]);
+  const [selectMissionarea, setSelectMissionarea] = useState('');
+  const [selecteduDistrict, setSelecteduDistrict] = useState('');
+  const [selecteduSubDistrict, setSelecteduSubDistrict] = useState('');
+  const [selectIcdsBlock, setSelectIcdsBlock] = useState('');
+  const [selectIcdsProject, setSelectIcdsProject] = useState('');
+  const [missionZone, setMissionZone] = useState<MissionZone[]>([]);
+  const [icdsProject, setIcdsProject] = useState<IcdsProject[]>([]);
+  const [selectMission, setSelectedMission] = useState('');
+  const [selectZone, setSelectedZone] = useState('');
+  const [selectedgrpName, setSelectedGrpName] = useState("");
+  const [grpName, setGrpName] = useState<GrpName[]>([]);
+  const itemsPerPage = 10;
+  const [filterdata, setFilterData] = useState({});
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage > 0 && newPage <= totalPages) {
+
+      setCurrentPage(newPage);
+    }
+  }
+  useEffect(() => {
+    if (!token) {
+      router.push("/admin/login");
+    }
+  }, [token, router]);
+
+  const [columnDefs, setColumnDefs] = useState<ColDef[]>([
+    { field: "co_ord_id", headerName: "Coordinator Id",width:150},
+    { field: "gp_id", headerName: "Group Id", width:100},
+    { field: "co_ord_name", headerName: "Name",width:100 },
+    { field: "co_email_id", headerName: "Email" ,width:100},
+    { field: "co_username", headerName: "Username",width:120 },
+    { field: "co_ord_created_on", headerName: "Created On",width:140,
+      valueFormatter: (params) => {
+      const date = new Date(params.value);
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+      const year = date.getFullYear();
+      return `${day}-${month}-${year}`;
+  } },
+    { field: "group_type", headerName: "Group",width:100 },
+    { field: "cntry_name", headerName: "Country",width:100 },
+    { field: "st_name", headerName: "State",width:100 },
+    { field: "dis_name", headerName: "District",width:100 },
+    { field: "cop_name", headerName: "Cooperation",width:130 },
+    { field: "lsg_name", headerName: "LSGD",width:100 },
+    { field: "gp_ward_no", headerName: "Ward",width:100 },
+    { field: "gp_name", headerName: "Group Name",width:140 },
+    { field: "gp_refferal_name", headerName: "Referral Name",width:160 },
+    { field: "refferal_count", headerName: "Refferal Count", width: 180}
+  ]);
+
+  const defaultColDef = useMemo(() => {
+    return {
+      // filter: "agTextColumnFilter",
+      floatingFilter: false,
+    };
+  }, []);
+
+  const onRowClicked = (event: RowClickedEvent) => {
+
+    const id = event.data.co_ord_id;
+    router.push(`coordinators/${id}`);
+  };
+
+  const handleExportToExcel = async () => {
+    try {
+      const response = await axios.post(`${apiURL}/admin/adminCordinatorsList`, {
+        "isExcel": true
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      if (response.data.success && response.status != 203) {
+        // Convert response zoneList into Excel
+        const datalist = response.data.cordinatorList
+
+        // Create a worksheet from the zoneList data
+        const worksheet = XLSX.utils.json_to_sheet(datalist);
+
+        // Create a new workbook and append the worksheet
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
+
+        // Export the workbook to Excel
+        XLSX.writeFile(workbook, 'data.xlsx');
+      } else {
+        console.error("Failed to export data");
+      }
+    } catch (error) {
+      console.error("Error during exporting:", error);
+    }
+  };
+  useEffect(() => {
+    async function fetchdata() {
+      if (token && Object.keys(filterdata).length === 0) {
+
+        const response = await axios.post(`${apiURL}/admin/adminCordinatorsList?page=${currentPage}&limit=${itemsPerPage}`, {}, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+
+
+        if (response.data.success && response.status != 203) {
+          setRowData(response.data.cordinatorList);
+          setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
+          setTotalcount(response.data.totalCount);
+          // console.log(response.data)
+
+
+        }
+      }
+    };
+    fetchdata();
+  }, [currentPage, filterdata, token]);
+
+  useEffect(() => {
+    async function fetchData() {
+
+      const countryResponse = await fetch(`${apiURL}/country`);
+      const countryData = await countryResponse.json();
+      setCountries(countryData.country);
+
+
+      const stateResponse = await fetch(`${apiURL}/state`);
+      const stateData = await stateResponse.json();
+      setStates(stateData.state);
+
+      const districtResponse = await fetch(`${apiURL}/district`);
+      const districtData = await districtResponse.json();
+      setDistricts(districtData.district);
+
+    }
+    fetchData();
+  }, [selectedCountry]);
+
+  useEffect(() => {
+    async function fetchCorpData() {
+      if (selectedCntry === "India" && selectedState === "Kerala" && selectedDistrict) {
+        const dist_id = districts.find((item) => item.dis_name === selectedDistrict)?.dis_id;
+        const corpResponse = await fetch(`${apiURL}/corporation/${dist_id}`);
+        const corpData = await corpResponse.json();
+        setCorporation(corpData.corporation);
+      } else {
+        setCorporation([]);
+      }
+    }
+    fetchCorpData();
+  }, [selectedCntry, selectedState, selectedDistrict, districts]);
+
+  useEffect(() => {
+    async function fetchLsgdData() {
+      if (selectedCntry === "India" && selectedState === "Kerala" && selectedCorp) {
+        const corp_id = corporation.find((item) => item.cop_name === selectedCorp)?.cop_id;
+        const lsgResponse = await fetch(`${apiURL}/lsg/${corp_id}`);
+        const lsgData = await lsgResponse.json();
+        setLsgd(lsgData.lsg);
+      } else {
+        setLsgd([]);
+      }
+      // setSelectedLsgd("");
+      // setWardNo("");
+    }
+    fetchLsgdData();
+  }, [selectedCntry, selectedState, selectedCorp, corporation]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const categoryResponse = await fetch(`${apiURL}/category`);
+      const categoryData = await categoryResponse.json();
+
+      setCategory(categoryData.category);
+    }
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchClass = async () => {
+      try {
+        const responsetype = await axios.get(`${apiURL}/schoolType`);
+        setSchoolType(responsetype.data.schoolType);
+        const dis_id = districts.find((item) => item.dis_name === selectedDistrictGrp)?.dis_id;
+
+        const responseedudistrict = dis_id ? await axios.get(`${apiURL}/eduDistrict/${dis_id}`) : null;
+        responseedudistrict ? setEduDistrict(responseedudistrict.data.eduDistrict) : '';
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchClass();
+  }, [districts, selectedDistrictGrp]);
+
+  useEffect(() => {
+    const fetchCategory = async () => {
+      try {
+        const response = await axios.get(`${apiURL}/schoolCategory`);
+
+        setSubCategoryOptions(response.data.subCategory);
+      } catch (error) {
+        console.error("Error fetching category:", error);
+      }
+    };
+    fetchCategory();
+  }, []);
+  useEffect(() => {
+    const handleCbse = async () => {
+      if (selectedschoolType === 'CBSE' && selectedStateGrp) {
+        try {
+          const st_id = states.find((item) => item.st_name === selectedStateGrp)?.st_id;
+          const response = await axios.get(`${apiURL}/sahodaya/${st_id}`);
+          setSahodaya(response.data.sahodayaList);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
+      if (selectedschoolType === 'ICDS' && selectedDistrictGrp) {
+
+        try {
+          const dis_id = districts.find((item) => item.dis_name === selectedDistrictGrp)?.dis_id;
+
+
+          const response = await axios.get(`${apiURL}/icdsBlock/${dis_id}`);
+
+          setIcdsBlock(response.data.icdsBlockList);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+
+      }
+      if (selectedschoolType === 'Malayalam Mission' && selectMissionarea) {
+
+        try {
+          const response = await axios.get(`${apiURL}/malayalamMissionChapter/${selectMissionarea}`);
+          setMissionChapter(response.data.chapterList);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+
+      }
+    };
+    handleCbse();
+  }, [districts, selectedschoolType, states, selectMissionarea, selectedStateGrp, selectedDistrictGrp]);
+
+  const handleIcds = async (e: any) => {
+    try {
+      const icdsid = icdsBlock.find((item) => item.block_name === e)?.icds_block_id
+      const response = await axios.get(`${apiURL}/icdsProject/${icdsid}`);
+      setIcdsProject(response.data.icdsProjectList);
+
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+  const handleChapter = async (e: any) => {
+    try {
+      const chapterid = missionChapter.find((item) => item.chapter_name === e)?.chapter_id
+      const response = await axios.get(`${apiURL}/malayalamMissionZone/${chapterid}`);
+      setMissionZone(response.data.zoneList);
+
+
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+
+  const handleEduDistrict = async (e: any) => {
+    try {
+      const eduid = eduDistrict.find((item) => item.edu_district === e)?.edu_district_id
+      const responseedusubdistrict = await axios.get(`${apiURL}/eduSubDistrict/${eduid}`);
+      setEduSubDistrict(responseedusubdistrict.data.eduSubDistrict);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+
+  const handleFilterCoordName = (e: any) => {
+
+    if (e != "") {
+      fetchFilteredCoordName(e);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+  const handleFilterEmail = (e: any) => {
+
+    if (e != "") {
+
+      fetchFilteredEmail(e);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+  const handleFilterId = (e: any) => {
+
+    if (e != "") {
+
+      fetchFilteredId(e);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+  const handleFilterMobile = (e: any) => {
+
+    if (e != "") {
+
+      fetchFilteredMobile(e);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+  const handleFilterChangeCntry = (e: any) => {
+
+
+    setSelectedCntry(e.target.value); // Update dropdown value
+    // fetchFilteredCntry(e.target.value);
+    setCurrentPage(1); // Reset to first page
+  };
+
+  const handleFilterChangeState = (e: any) => {
+
+
+    setSelectedState(e.target.value); // Update dropdown value
+    // fetchFilteredState(e.target.value);
+    setCurrentPage(1); // Reset to first page
+  };
+
+  const handleFilterChangeDistrict = (e: any) => {
+
+
+    setSelectedDistrict(e.target.value); // Update dropdown value
+    // fetchFilteredDistrict(e.target.value);
+    setCurrentPage(1); // Reset to first page
+  };
+
+  const handleFilterChangeCorp = (e: any) => {
+
+
+    setSelectedCorp(e.target.value); // Update dropdown value
+    // fetchFilteredCorp(e.target.value);
+    setCurrentPage(1); // Reset to first page
+  };
+
+  const handleFilterChangeLsgd = (e: any) => {
+
+
+    setSelectedLsgd(e.target.value); // Update dropdown value
+    // fetchFilteredLsgd(e.target.value);
+    setCurrentPage(1); // Reset to first page
+  };
+  const handleFilterChangeWard = (e: any) => {
+
+
+    setSelectedWard(e); // Update dropdown value
+    // fetchFilteredWard(e);
+    setCurrentPage(1); // Reset to first page
+  };
+
+
+
+  
+
+  const fetchFilteredCoordName = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminCordinatorsList`,
+        { cordinatorName: value },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+
+          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
+          setTotalcount(response.data.cordinatorList.length);
+
+          setRowData(response.data.cordinatorList);
+        } else {
+          setRowData([]);
+setTotalcount("0");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+  const fetchFilteredEmail = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminCordinatorsList`,
+        { emailId: value },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+
+
+
+
+          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
+          setTotalcount(response.data.cordinatorList.length);
+
+          setRowData(response.data.cordinatorList);
+        } else {
+          setRowData([]);
+setTotalcount("0");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+  const fetchFilteredId = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminCordinatorsList`,
+        { cordinatorId: parseInt(value) },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+
+
+          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
+          setTotalcount(response.data.cordinatorList.length);
+
+          setRowData(response.data.cordinatorList);
+        } else {
+          setRowData([]);
+setTotalcount("0");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+  const fetchFilteredMobile = async (value: string) => {
+    if (token) {
+      const response = await axios.post(
+        `${apiURL}/admin/adminCordinatorsList`,
+        { mobile: value },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+
+
+          setTotalPages(Math.ceil(response.data.cordinatorList.length / itemsPerPage));
+          setTotalcount(response.data.cordinatorList.length);
+
+          setRowData(response.data.cordinatorList);
+        } else {
+          setRowData([]);
+setTotalcount("0");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+
+  const handleFilterGrpType = (e: any) => {
+
+    if (e != "") {
+      setGroupType(e.target.value);
+      // fetchFilteredGrpType(e.target.value);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+ 
+  const handleFilterSchoolType = (e: any) => {
+
+    if (e.target.value != "") {
+      setSelectedSchoolType(e.target.value);
+      e.target.value === 'CBSE' ? setSelectedCountryGrp('India') : ''
+      e.target.value === 'General Education' || 'ICDS' ? setSelectedCountryGrp('India') : ''
+      e.target.value === 'General Education' || 'ICDS' ? setSelectedStateGrp('Kerala') : ''
+      // fetchFilteredSchoolType(e.target.value);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+ 
+
+  const handleFilterSchoolCategory = (e: any) => {
+
+    if (e.target.value != "") {
+      setSelectedSubCategory(e.target.value);
+      // fetchFilteredSchoolCategory(e.target.value);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+ 
+
+  const handleFilterSahodayaState = (e: any) => {
+
+    if (e.target.value != "") {
+      setSelectedStateGrp(e.target.value);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+  const handleFilterSahodaya = (e: any) => {
+
+    if (e.target.value != "") {
+      setSelectSahodaya(e.target.value);
+      // fetchFilteredSahodaya(e.target.value);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+  
+
+
+  const handleFilterEDistrict = (e: any) => {
+
+    if (e.target.value != "") {
+      setSelectedDistrictGrp(e.target.value);
+      // fetchFilteredSahodaya(e.target.value);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+  const handleFilterEduDistrict = (e: any) => {
+
+    if (e.target.value != "") {
+      setSelecteduDistrict(e.target.value);
+      handleEduDistrict(e.target.value);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+  const handleFilterEduSubDistrict = (e: any) => {
+
+    if (e.target.value != "") {
+      setSelecteduSubDistrict(e.target.value);
+      // fetchFilteredEduSubDistrict(e.target.value);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+  
+
+
+  const handleFilterIcdsBlock = (e: any) => {
+
+    if (e.target.value != "") {
+      setSelectIcdsBlock(e.target.value);
+      handleIcds(e.target.value);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+  const handleFilterIcdsProject = (e: any) => {
+
+    if (e.target.value != "") {
+      setSelectIcdsProject(e.target.value);
+      // fetchFilteredIcdsProject(e.target.value);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+  
+
+  const handleFilterMissionArea = (e: any) => {
+
+    if (e.target.value != "") {
+      setSelectMissionarea(e.target.value);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+  const handleFilterMissionChapter = (e: any) => {
+
+    if (e.target.value != "") {
+      setSelectedMission(e.target.value);
+      handleChapter(e.target.value);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+  const handleFilterMissionZone = (e: any) => {
+
+    if (e.target.value != "") {
+      setSelectedZone(e.target.value);
+      // fetchFilteredMissionZone(e.target.value);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+  
+
+
+  const handleFilterGrpName = (e: any) => {
+
+    if (e.target.value != "") {
+      setSelectedGrpName(e.target.value);
+      // fetchFilteredGrpName(e.target.value);
+      setCurrentPage(1); // Reset to first page
+    }
+  };
+
+
+  const fetchgrpname = useCallback(async () => {
+    try {
+      // Clear group name to empty array before fetching
+      setGrpName([]);
+
+      const response = await axios.post(
+        `${apiURL}/common/groupName/`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      
+      setGrpName(response.data.groupList);
+    } catch (error) {
+      console.error("Error fetching category:", error);
+    }
+  }, []); // Empty dependency array ensures this only runs once
+
+  // Call fetchgrpname only once when the component mounts
+  useEffect(() => {
+    fetchgrpname();
+  }, [fetchgrpname]);
+
+  // Define handleGrpName using useCallback to memoize it
+  const handleGrpName = useCallback(async () => {
+    if (grouptype) {
+      const groupId = category.find((item) => item.group_type === grouptype)?.id;
+      const subcatid = subcategoryOptions.find((item) => item.gp_cat_name === selectedSubCategory)?.gp_cat_id;
+      const schooltypeid = schoolType.find((item) => item.type_name === selectedschoolType)?.id;
+      const sahodayaid = sahodaya.find((item) => item.sahodaya_name === selectSahodaya)?.sahodaya_id;
+      const edudistid = eduDistrict.find((item) => item.edu_district === selecteduDistrict)?.edu_district_id;
+      const edusubid = eduSubDistrict.find((item) => item.edu_sub_district_name === selecteduSubDistrict)?.edu_sub_district_id;
+      const blockid = icdsBlock.find((item) => item.block_name === selectIcdsBlock)?.icds_block_id;
+      const projectid = icdsProject.find((item) => item.project_name === selectIcdsProject)?.project_id;
+      const chapterid = missionChapter.find((item) => item.chapter_name === selectMission)?.chapter_id;
+      const zoneid = missionZone.find((item) => item.zone_name === selectZone)?.zone_id;
+
+      const apidata = {
+        groupTypeId: groupId,
+        subCategoryId: subcatid,
+        schoolTypeId: schooltypeid,
+        eduDistrictId: edudistid,
+        eduSubDistrictId: edusubid,
+        sahodayaId: sahodayaid,
+        blockId: blockid,
+        projectId: projectid,
+        chapterId: chapterid,
+        zoneId: zoneid
+      };
+
+     
+
+      try {
+        // Clear group name to empty array before fetching
+        setGrpName([]);
+
+        const response = await axios.post(
+          `${apiURL}/common/groupName/`,
+          apidata,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const GroupList = response.data.groupList;
+        
+        setGrpName(GroupList);
+      } catch (error) {
+        console.error("Error fetching group names:", error);
+      }
+    }
+  }, [
+    grouptype,
+    category,
+    subcategoryOptions,
+    schoolType,
+    sahodaya,
+    eduDistrict,
+    eduSubDistrict,
+    icdsBlock,
+    icdsProject,
+    missionChapter,
+    missionZone,
+    selectedSubCategory,
+    selectedschoolType,
+    selectSahodaya,
+    selecteduDistrict,
+    selecteduSubDistrict,
+    selectIcdsBlock,
+    selectIcdsProject,
+    selectMission,
+    selectZone
+  ]);
+
+  // Trigger handleGrpName whenever dependencies change
+  useEffect(() => {
+    if (grouptype) {
+      handleGrpName();
+    }
+  }, [
+    grouptype,
+    selectedSubCategory,
+    selectedschoolType,
+    selectSahodaya,
+    selecteduDistrict,
+    selecteduSubDistrict,
+    selectIcdsBlock,
+    selectIcdsProject,
+    selectMission,
+    selectZone,
+    handleGrpName
+  ]);
+
+
+  
+
+  useEffect(() => {
+    async function fetchFilterData() {
+
+      const payload = {
+        
+        countryId: countries.find((item) => item.cntry_name === selectedCntry)?.cntry_id,
+        stateId: states.find((item) => item.st_name === selectedState)?.st_id,
+        districtId: districts.find((item) => item.dis_name === selectedDistrict)?.dis_id,
+        corporationId: corporation.find((item) => item.cop_name === selectedCorp)?.cop_id,
+        lsgdId: lsgd.find((item) => item.lsg_name === selectedLsgd)?.lsg_id,
+        wardNo: parseInt(selectedWard),
+        groupTypeId: category.find((item) => item.group_type === grouptype)?.id,
+        schoolTypeId: schoolType.find((item) => item.type_name === selectedschoolType)?.id,
+        subCategoryId: subcategoryOptions.find((item) => item.gp_cat_name === selectedSubCategory)?.gp_cat_id,
+        sahodayaId: sahodaya.find((item) => item.sahodaya_name === selectSahodaya)?.sahodaya_id,
+        eduDistrictId: eduDistrict.find((item) => item.edu_district === selecteduDistrict)?.edu_district_id,
+        eduSubDistrictId: eduSubDistrict.find((item) => item.edu_sub_district_name === selecteduSubDistrict)?.edu_sub_district_id,
+        blockId: icdsBlock.find((item) => item.block_name === selectIcdsBlock)?.icds_block_id,
+        projectId: icdsProject.find((item) => item.project_name === selectIcdsProject)?.project_id,
+        chapterId: missionChapter.find((item) => item.chapter_name === selectMission)?.chapter_id,
+        zoneId: missionZone.find((item) => item.zone_name === selectZone)?.zone_id,
+        groupId: grpName.find((item) => item.gp_name === selectedgrpName)?.gp_id,
+      }
+      setFilterData(payload);
+      const response = await axios.post(
+        `${apiURL}/admin/adminCordinatorsList?page=${currentPage}&limit=${itemsPerPage}`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      try {
+        if (response.data.success && response.status !== 203) {
+          setRowData(response.data.cordinatorList);
+          setTotalcount(response.data.totalCount);
+          setTotalPages(Math.ceil(response.data.totalCount / itemsPerPage));
+
+          
+        } else {
+          setRowData([]);
+          setTotalcount("0");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+    fetchFilterData();
+  }, [category, corporation, countries, currentPage, districts, eduDistrict, eduSubDistrict, grouptype, grpName, icdsBlock, icdsProject, lsgd, missionChapter, missionZone, sahodaya, schoolType, selectIcdsBlock, selectIcdsProject, selectMission, selectSahodaya, selectZone, selectedCntry, selectedCorp, selectedDistrict, selectedLsgd, selectedState, selectedSubCategory, selectedWard, selectedgrpName, selectedschoolType, selecteduDistrict, selecteduSubDistrict, states, subcategoryOptions, token]);
+
+
+  return (
+    <div className=" bg-slate-100">
+      <button
+        className="text-white m-3 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+
+        onClick={handleExportToExcel}
+      >
+        Export To Excel
+      </button>
+      <div className="flex flex-wrap gap-4 justify-center">
+        <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
+        <label>Coordinator Id</label>
+        <div className="flex mb-3">
+          <input
+            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+            value={coordid}
+            onChange={(e) => setCoordid(e.target.value)} // Update the state directly
+          />
+          <button
+            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+            onClick={() => handleFilterId(coordid)}
+          >
+            Search
+          </button>
+        </div>
+      </div>
+      <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
+        <label>Coordinator Name</label>
+        <div className="flex mb-3">
+          <input
+            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+            value={coordinator}
+            onChange={(e) => setCoordinator(e.target.value)} // Update the state directly
+          />
+          <button
+            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+            onClick={() => handleFilterCoordName(coordinator)}
+          >
+            Search
+          </button>
+        </div>
+      </div>
+      <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
+        <label>Email</label>
+        <div className="flex mb-3">
+          <input
+            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+            value={email}
+            onChange={(e) => setEmail(e.target.value)} // Update the state directly
+          />
+          <button
+            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+            onClick={() => handleFilterEmail(email)}
+          >
+            Search
+          </button>
+        </div>
+      </div>
+      <div className="flex flex-col w-full sm:w-[48%] lg:w-[32%] max-w-[300px]">
+        <label>Mobile</label>
+        <div className="flex mb-3">
+          <input
+            className="border px-2 h-10 text-sm border-gray-950 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 "
+            value={mobile}
+            onChange={(e) => setMobile(e.target.value)} // Update the state directly
+          />
+          <button
+            className="text-white ml-2 text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+            onClick={() => handleFilterMobile(mobile)}
+          >
+            Search
+          </button>
+        </div>
+      </div>
+    </div>
+      {/* country section  */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  {/* Country Field */}
+  <div className="flex flex-col m-3">
+    <label htmlFor="countryFilter" className="text-sm font-medium">
+      Country:
+    </label>
+    <select
+      id="countryFilter"
+      value={selectedCntry}
+      onChange={handleFilterChangeCntry}
+      className="border border-gray-300 rounded p-1 w-full"
+    >
+      <option value="">Choose Country</option>
+      {countries.map((country) => (
+        <option key={country.cntry_id} value={country.cntry_name}>
+          {country.cntry_name}
+        </option>
+      ))}
+    </select>
+  </div>
+
+  {/* State Field (Visible if selected country is India) */}
+  {selectedCntry === "India" && (
+    <div className="flex flex-col m-3">
+      <label htmlFor="stateFilter" className="text-sm font-medium">
+        State:
+      </label>
+      <select
+        id="stateFilter"
+        value={selectedState}
+        onChange={handleFilterChangeState}
+        className="border border-gray-300 rounded p-1 w-full"
+      >
+        <option value="">Choose State</option>
+        {states.map((state) => (
+          <option key={state.st_id} value={state.st_name}>
+            {state.st_name}
+          </option>
+        ))}
+      </select>
+    </div>
+  )}
+
+  {/* District Field (Visible if selected state is Kerala) */}
+  {selectedState === "Kerala" && (
+    <div className="flex flex-col m-3">
+      <label htmlFor="districtFilter" className="text-sm font-medium">
+        District:
+      </label>
+      <select
+        id="districtFilter"
+        value={selectedDistrict}
+        onChange={handleFilterChangeDistrict}
+        className="border border-gray-300 rounded p-1 w-full"
+      >
+        <option value="">Choose District</option>
+        {districts.map((district) => (
+          <option key={district.dis_id} value={district.dis_name}>
+            {district.dis_name}
+          </option>
+        ))}
+      </select>
+    </div>
+  )}
+
+  {/* Corporation Field (Visible if a district is selected) */}
+  {selectedDistrict && (
+    <div className="flex flex-col m-3">
+      <label htmlFor="corpFilter" className="text-sm font-medium">
+      Block:
+      </label>
+      <select
+        id="corpFilter"
+        value={selectedCorp}
+        onChange={handleFilterChangeCorp}
+        className="border border-gray-300 rounded p-1 w-full"
+      >
+        <option value="">Choose Block</option>
+        {corporation.map((corp) => (
+          <option key={corp.cop_id} value={corp.cop_name}>
+            {corp.cop_name}
+          </option>
+        ))}
+      </select>
+    </div>
+  )}
+
+  {/* Lsgd Field (Visible if a corporation is selected) */}
+  {selectedDistrict && (
+    <div className="flex flex-col m-3">
+      <label htmlFor="lsgdFilter" className="text-sm font-medium">
+        Lsgd:
+      </label>
+      <select
+        id="lsgdFilter"
+        value={selectedLsgd}
+        onChange={handleFilterChangeLsgd}
+        className="border border-gray-300 rounded p-1 w-full"
+      >
+        <option value="">Choose Lsgd</option>
+        {lsgd && lsgd.map((lsg) => (
+          <option key={lsg.lsg_id} value={lsg.lsg_name}>
+            {lsg.lsg_name}
+          </option>
+        ))}
+      </select>
+    </div>
+  )}
+
+  {/* Ward Field (Visible if an Lsgd is selected) */}
+  {selectedDistrict && (
+    <div className="flex flex-col m-3">
+      <label className="text-sm font-medium">Ward No</label>
+      <div className="flex space-x-2">
+        <input
+          className="border px-2 h-10 text-sm border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-700 focus:border-green-700 w-full"
+          value={selectedWard}
+          onChange={(e) => setSelectedWard(e.target.value)}
+        />
+        {/* <button
+          className="text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
+          onClick={() => handleFilterChangeWard(selectedWard)}
+        >
+          Search
+        </button> */}
+      </div>
+    </div>
+  )}
+</div>
+
+      {/* group type  */}
+      <div className="flex items-center m-3 space-x-2">
+        <label htmlFor="groupFilter" className="text-sm font-medium">
+          Group Type:
+        </label>
+        <select
+          id="groupFilter"
+          value={grouptype}
+          onChange={handleFilterGrpType}
+          className="border border-gray-300 rounded p-1"
+        >
+          <option value="">Choose Group Type</option>
+
+          {category.map((c, i) => (
+            <option key={c.id} value={c.group_type}>
+              {c.group_type}
+            </option>
+          ))}
+
+        </select>
+      </div>
+      {grouptype === 'Educational Institution' && (
+        <>
+          <div className="flex items-center m-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              School Type:
+            </label>
+            <select
+              id="groupFilter"
+              value={selectedschoolType}
+              onChange={handleFilterSchoolType}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose School Type</option>
+
+              {schoolType.map((s) => (
+                <option key={s.id} value={s.type_name}>
+                  {s.type_name}
+                </option>
+              ))}
+
+            </select>
+          </div>
+
+          <div className="flex items-center m-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              School Category:
+            </label>
+            <select
+              id="groupFilter"
+              value={selectedSubCategory}
+              onChange={handleFilterSchoolCategory}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose School Category</option>
+
+              {subcategoryOptions.map((category) => (
+                <option key={category.gp_cat_id} value={category.gp_cat_name}>
+                  {category.gp_cat_name}
+                </option>
+              ))}
+
+            </select>
+          </div>
+        </>)}
+      {/* CBSE  */}
+      {selectedschoolType === 'CBSE' && selectedSubCategory !== 'College' && grouptype === 'Educational Institution' && (
+        <>
+          <div className="flex items-center m-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              Sahodaya State:
+            </label>
+            <select
+              id="groupFilter"
+              value={selectedStateGrp}
+              onChange={handleFilterSahodayaState}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose Sahodaya State</option>
+
+              {states.map((state) => (
+                <option key={state.st_id} value={state.st_name}>
+                  {state.st_name}
+                </option>
+              ))}
+
+            </select>
+          </div>
+          <div className="flex items-center m-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              Sahodaya:
+            </label>
+            <select
+              id="groupFilter"
+              value={selectSahodaya}
+              onChange={handleFilterSahodaya}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose Sahodaya</option>
+
+              {sahodaya && sahodaya.map((s) => (
+                <option key={s.sahodaya_id} value={s.sahodaya_name}>
+                  {s.sahodaya_name}
+                </option>
+              ))}
+
+            </select>
+          </div>
+        </>)}
+      {/* GENERAL EDUCATION  */}
+      {(selectedschoolType === 'General Education' && selectedSubCategory !== 'College') && grouptype === 'Educational Institution' && (
+        <>
+          <div className="flex items-center m-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              District:
+            </label>
+            <select
+              id="groupFilter"
+              value={selectedDistrictGrp}
+              onChange={handleFilterEDistrict}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose District</option>
+
+              {districts.map((district) => (
+                <option key={district.dis_id} value={district.dis_name}>
+                  {district.dis_name}
+                </option>
+              ))}
+
+            </select>
+          </div>
+
+          <div className="flex items-center m-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              Education District:
+            </label>
+            <select
+              id="groupFilter"
+              value={selecteduDistrict}
+              onChange={handleFilterEduDistrict}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose Education District</option>
+
+              {eduDistrict && eduDistrict.map((e) => (
+                <option key={e.edu_district_id} value={e.edu_district}>
+                  {e.edu_district}
+                </option>
+              ))}
+
+            </select>
+          </div>
+
+          <div className="flex items-center m-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              Education Sub District:
+            </label>
+            <select
+              id="groupFilter"
+              value={selecteduSubDistrict}
+              onChange={handleFilterEduSubDistrict}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose Education Sub District</option>
+
+              {eduSubDistrict && eduSubDistrict.map((e) => (
+                <option key={e.edu_sub_district_id} value={e.edu_sub_district_name}>
+                  {e.edu_sub_district_name}
+                </option>
+              ))}
+
+            </select>
+          </div>
+        </>)}
+
+      {/* ICDS  */}
+      {selectedschoolType === 'ICDS' && selectedSubCategory !== 'College' && grouptype === 'Educational Institution' && (
+        <>
+          <div className="flex items-center m-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              District:
+            </label>
+            <select
+              id="groupFilter"
+              value={selectedDistrictGrp}
+              onChange={handleFilterEDistrict}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose District</option>
+
+              {districts.map((district) => (
+                <option key={district.dis_id} value={district.dis_name}>
+                  {district.dis_name}
+                </option>
+              ))}
+
+            </select>
+          </div>
+
+          <div className="flex items-center m-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              Icds Block :
+            </label>
+            <select
+              id="groupFilter"
+              value={selectIcdsBlock}
+              onChange={handleFilterIcdsBlock}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose Icds Block</option>
+
+              {icdsBlock && icdsBlock.map((e) => (
+                <option key={e.icds_block_id} value={e.block_name}>
+                  {e.block_name}
+                </option>
+              ))}
+
+
+            </select>
+          </div>
+
+          <div className="flex items-center m-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              Icds Project :
+            </label>
+            <select
+              id="groupFilter"
+              value={selectIcdsProject}
+              onChange={handleFilterIcdsProject}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose Icds Project</option>
+
+              {icdsProject && icdsProject.map((e) => (
+                <option key={e.project_id} value={e.project_name}>
+                  {e.project_name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </>)}
+
+      {/* MALAYALAM MISSION  */}
+      {selectedSubCategory !== 'College' && selectedschoolType === 'Malayalam Mission' && grouptype === 'Educational Institution' && (
+        <>
+          <div className="flex items-center m-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              Mission Area :
+            </label>
+            <select
+              id="groupFilter"
+              value={selectMissionarea}
+              onChange={handleFilterMissionArea}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose Mission Area</option>
+
+              <option key='1' value="1">
+                Global
+              </option>
+              <option key='2' value="2">
+                India
+              </option>
+            </select>
+          </div>
+
+          <div className="flex items-center m-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              Mission Chapter :
+            </label>
+            <select
+              id="groupFilter"
+              value={selectMission}
+              onChange={handleFilterMissionChapter}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose Mission Chapter</option>
+
+              {missionChapter && missionChapter.map((e) => (
+                <option key={e.chapter_id} value={e.chapter_name}>
+                  {e.chapter_name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex items-center m-3 space-x-2">
+            <label htmlFor="groupFilter" className="text-sm font-medium">
+              Mission Zone :
+            </label>
+            <select
+              id="groupFilter"
+              value={selectZone}
+              onChange={handleFilterMissionZone}
+              className="border border-gray-300 rounded p-1"
+            >
+              <option value="">Choose Mission Zone</option>
+
+              {missionZone && missionZone.map((e) => (
+                <option key={e.zone_id} value={e.zone_name}>
+                  {e.zone_name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </>)}
+        <div className="flex items-center m-3 space-x-2">
+          <label htmlFor="groupFilter" className="text-sm font-medium whitespace-nowrap">
+            Group Name:
+          </label>
+          <select
+            id="groupFilter"
+            value={selectedgrpName}
+            onChange={handleFilterGrpName}
+            className="border border-gray-300 rounded p-1 w-full sm:w-48 md:w-64 lg:w-80"
+          >
+            <option value="">Select Group Name</option>
+
+            {grpName.map((c) => (
+              <option key={c.gp_id} value={c.gp_name}>
+                {c.gp_id} - {c.gp_name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+      <div className="flex items-center justify-center font-bold">Total Count : {totalcount}</div>
+
+      <div className={"ag-theme-quartz"} style={{ height: 530 }}>
+      <AgGridReact
+          rowData={rowData}
+          columnDefs={[
+            {
+              headerName: "SL No", // Column header
+              valueGetter: (params) => {
+                const itemsPerPage = 10; // Number of items per page
+                
+                const startIndex = (currentPage - 1) * itemsPerPage; // Calculate the start index for pagination
+                // Calculate the serial number
+                return startIndex + params.node!.rowIndex! + 1;
+              },
+              width: 70, // Optional: Adjust the width of the serial number column
+              suppressMenu: true, // Optional: Hide the column menu
+              sortable: false, // Optional: Disable sorting for the serial number column
+              filter: false, // Optional: Disable filtering for the serial number column
+              pinned: "left", // Optional: Pin the serial number column to the left (optional)
+            },
+            ...columnDefs, // Other columns (e.g., from your `columnDefs` array)
+          ]}
+          defaultColDef={defaultColDef}
+          onRowClicked={onRowClicked}
+          rowSelection="multiple"
+          suppressRowClickSelection={true}
+          pagination={false}
+        // paginationPageSize={10}
+        // paginationPageSizeSelector={[10, 25, 50]}
+        />
+      </div>
+      <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+
+     
+    </div>
+  );
+};
+export default AdminGrid;
