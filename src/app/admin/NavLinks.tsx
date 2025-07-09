@@ -14,6 +14,7 @@ const links = [
   { name: "Manage Uploads", href: "/admin" },
   { name: "Manage Users", href: "/admin/users" },
   { name: "Manage Coordinators", href: "/admin/coordinators" },
+  { name: "Manage Approvals", href: "/admin/unapproved"},
   { name: "Manage Group", href: "/admin/group" },
   { name: "Manage Activity", href: "/admin/activity" },
   { name: "Manage Activity Category", href: "/admin/activity-category" },

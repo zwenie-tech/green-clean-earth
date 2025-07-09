@@ -96,7 +96,6 @@ const LoginForm = () => {
         Cookies.set("cordinatorName", cordinatorName, { expires: 1 });
         Cookies.set("groupType", groupType, { expires: 1 });
         Cookies.set("userId", id, { expires: 1 });
-
         router.replace("/user-dash-home?id=" + id);
         console.log(response)
       }
@@ -137,7 +136,7 @@ const LoginForm = () => {
         Cookies.set("coid", id, { expires: 1 });
         Cookies.set("gname", gp_name, { expires: 1 });
         Cookies.set("cogid", groupId, { expires: 1 });
-
+        Cookies.set("IsApproved", result.approved, { expires: 1 });
         router.push(`/dashboard?id=${id}&gid=${groupId}`);
       }
 
