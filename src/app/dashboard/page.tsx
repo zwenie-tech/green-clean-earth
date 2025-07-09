@@ -12,7 +12,7 @@ const Dashboard = () => {
   const token = Cookies.get("token");
   const gname = Cookies.get("gname");
   const cordId = Cookies.get("coid");
-  const isApproved = Cookies.get("isApproved") === "true"; // ✅ convert string to boolean
+  const isApproved = Cookies.get("IsApproved") === "true"; // ✅ convert string to boolean
 
   if (!token) {
     router.push("/loginform");
