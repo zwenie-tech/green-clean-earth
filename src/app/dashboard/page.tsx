@@ -155,7 +155,8 @@ const Dashboard = () => {
       {/* Optional fallback if not approved */}
       {!isApproved && (
         <div className="text-center my-10 text-xl font-semibold text-red-600">
-          Waiting for admin approval to access the dashboard.
+          <div>Waiting for admin approval to access the dashboard.</div>
+          <div>Please contact +919645964592</div>
         </div>
       )}
 
