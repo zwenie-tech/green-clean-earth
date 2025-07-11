@@ -6,10 +6,12 @@ import { EditForm } from "./edit-form";
 import Cookies from 'js-cookie';
 import axios from "axios";
 import { apiURL } from "@/app/requestsapi/request";
+import { Link } from 'lucide-react';
 
 interface UserData {
   us_name: string;
   us_email: string;
+  us_id: number;
   us_mobile: string;
   cntry_name: string;
   st_name: string;
@@ -24,6 +26,8 @@ interface UserData {
   us_province: string;
   co_ord_name: string;
   gp_name: string;
+  gp_id: number;
+  group_type: string;
 }
 
 
@@ -115,7 +119,13 @@ function Page() {
       <div className="grid gap-4 md:gap-6 grid-cols-1 md:grid-cols-3 p-2 md:p-5 md:border md:shadow-md md:rounded-lg">
         <div className="">
           <p className="text-sm text-gray-500">Name</p>
-          <p className="text-base">{userData[0].us_name}</p>
+          <a 
+            href={`/user-page?u=${userData[0].us_name}&id=${userData[0].us_id}`} 
+            className="text-blue-500 hover:underline flex items-center gap-1"
+          >
+            {userData[0].us_name}
+            <Link size={16} className="text-blue-600" />
+          </a>
         </div>
         <div className="">
           <p className="text-sm text-gray-500">Email</p>
@@ -186,7 +196,13 @@ function Page() {
         </div>
         <div className="">
           <p className="text-sm text-gray-500">Group Name</p>
-          <p className="text-base">{userData[0].gp_name}</p>
+           <a 
+              href={`/group-page?gname=${userData[0].gp_name}&gid=${userData[0].gp_id}&uc=${0}&cordinator=${userData[0].co_ord_name}&groupType=${userData[0].group_type}`} 
+              className="text-blue-500 hover:underline flex items-center gap-1"
+            >
+              {userData[0].gp_name}
+              <Link size={16} className="text-blue-600" />
+            </a>
         </div>
       </div>
       :''

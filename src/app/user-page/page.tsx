@@ -6,6 +6,9 @@ import { apiURL, imageURL } from '../requestsapi/request';
 import { useSearchParams } from 'next/navigation';
 import { ExternalLink, LinkIcon } from 'lucide-react';
 import PaginationComponent from "../PageComponent";
+import Link from "next/link";
+import Cookies from "js-cookie";
+import axios from "axios";
 
 interface Upload {
   up_id: number;
@@ -64,9 +67,35 @@ const ButtonDisplayFn = () => {
   const [groupName, setGroupName] = useState("");
   const [groupId, setGroupId] = useState<number | null>(null);
   const itemsPerPage = 10;
+  const token = Cookies.get("token");
 
+  function formatDate(isoString: string) {
+    const date = new Date(isoString);
+    const day = String(date.getUTCDate()).padStart(2, '0');
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const year = date.getUTCFullYear();
+    return `${day}/${month}/${year}`;
+  }
 
+  function formatTime(isoString: string) {
+    const date = new Date(isoString);
+    let hours = String(date.getUTCHours()).padStart(2, '0');
+    const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+    let hour = parseInt(hours) % 12;
+    const formattedTime = `${hour}:${minutes} ${parseInt(hours) >= 12 ? 'PM' : 'AM'}`;
+    return formattedTime;
+  }
   
+  async function handleChallenge(treeno: number) {
+    if(token!=null){
+      try {
+        const response = await axios.post(`${apiURL}/uploads/markChallenged`, { treeNumber:treeno });
+      } catch (error) {
+        console.error("Error challenging tree:", error);
+      }
+      location.reload();
+    }
+  }
 
   const handlePageChangeAct = (newPage: number) => {
     if (newPage > 0 && newPage <= totalPagesAct) {
@@ -183,35 +212,69 @@ const ButtonDisplayFn = () => {
         {activeButton === 'upload' && (
           <div className="container mx-auto p-4">
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {uploads.map((upload) => (
-                <div
-                  key={upload.up_id}
-                  className="relative flex flex-col items-center p-4 border border-gray-200 rounded-lg"
-                  style={{ boxShadow: '0px 4px 10px 3px #00000040' }}
+                <div key={upload.up_id} className="participant-item relative group">
+              {/* Conditional image for challenged status */}
+              {upload.is_challenged == 1 && (
+                <img
+                  className="absolute top-1/3 left-1/2  transform -translate-x-1/2  w-28 h-18 object-cover z-10"
+                  src="/images/chellenge.png"
+                  alt="Challenged"
+                />
+              )}
+              <div className="rounded-lg shadow-lg border  hover:shadow-2xl hover:border-gray-400 h-full flex flex-col">
+                <Link
+                  href={{
+                    pathname: 'participant-list/item',
+                    query: { id: upload.up_id },
+                  }}
                 >
-                  <div className="w-full relative">
-                    {/* Challenge image on top */}
-                    {upload.is_challenged == 1 && (
-                      <img
-                        className="absolute top-0 left-0 transform translate-x-1/2 w-28 h-18 object-cover z-10"
-                        src="/images/chellenge.png"
-                        alt="Challenged"
-                      />
-                    )}
-                    {/* Main image */}
-                    <a href={`/participant-list/item?id=${upload.up_id}`}><img
-                      src={`${imageURL}${upload.up_file}`}
-                      alt={upload.up_tree_name}
-                      className="w-full h-auto object-cover rounded-lg"
-                      style={{ height: '250px' }}
-                    /></a>
+                  <img
+                    className="w-full h-80 object-cover rounded-tl-lg rounded-tr-lg"
+                    src={`${imageURL}${upload.up_file}`}
+                    //src="/images/image1.jpeg"
+                    alt="Image"
+                  />
+                  <div className="flex justify-center mt-2 gap-1">
+                    <div className="text-md text-center font-bold">Tree number:</div>
+                    <div className="text-md font-bold">{upload.up_id}</div>
                   </div>
-                  <div className="w-full pt-3 md:pl-4">
-                    <p>Plant name: {upload.up_tree_name}</p>
-                    <p>Uploaded No.: {upload.up_id}</p>
+                  <div className="flex justify-center mt-2 text-sm text-gray-500 gap-2">
+                    <div className="text-md">{formatDate(upload.up_date)}</div>
+                    <div className="text-md">{formatTime(upload.up_date)}</div>
                   </div>
+                </Link>
+                <hr className="my-2" />
+                <div className="flex-grow flex flex-col gap-3 justify-normal p-4">
+                  <div className="">
+                    {/* <div className="text-sm text-left pl-8" style={{width:'45%'}}>Uploader name:</div>                  */}
+                    <div className="text-base font-bold text-center">{upload.up_name}</div>
+                  </div>
+                  <div className="flex gap-3 justify-center">
+                    {/* <div className="text-sm" style={{width:'45%'}}>Group name:</div>                  */}
+                    <div className="text-sm text-center">{upload.gp_name}</div>
+                  </div>
+                  {upload.is_challenged == 1 ? (
+                    <div className="flex m-auto">
+                      <div className="text-sm py-2 text-center text-primary">This image has been challenged</div>
+                    </div>
+                  ) : token!=null ? (
+                    <div className="flex justify-center">
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault(); // Prevent the default link behavior
+                          handleChallenge(upload.up_id);
+                        }}
+                        className="bg-primary m-1 text-white text-sm py-1 px-2 rounded hidden group-hover:block mx-auto"
+                      >
+                        Challenge
+                      </button>
+                    </div>
+                  ):''}
                 </div>
+              </div>
+            </div>
               ))}
             </div>
 

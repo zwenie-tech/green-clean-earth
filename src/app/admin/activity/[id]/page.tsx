@@ -7,6 +7,7 @@ import Cookies from 'js-cookie';
 import axios from "axios";
 import { apiURL } from "@/app/requestsapi/request";
 import { DeleteBtn } from "./deletebtn";
+import { Link } from 'lucide-react';
 
 
 interface ActivityData {
@@ -48,6 +49,7 @@ interface ActivityData {
   activity_category:string;
   activity_sub_category:string;
   earnings: string;
+  gp_id: number;
 }
 
 function ActivityLabel() {
@@ -192,7 +194,13 @@ function ActivityLabel() {
          {userData[0].gp_name ?
         <div className="">
           <p className="text-sm text-gray-500">Group Name</p>
-          <p className="text-base">{userData[0].gp_name}</p>
+          <a 
+                href={`/group-page?gname=${userData[0].gp_name}&gid=${userData[0].gp_id}&uc=${0}&cordinator=${userData[0].co_ord_name}&groupType=${userData[0].group_type}`} 
+                className="text-blue-500 hover:underline flex items-center gap-1"
+              >
+                {userData[0].gp_name}
+                <Link size={16} className="text-blue-600" />
+              </a>
         </div>
         :''}
          {userData[0].group_type ?

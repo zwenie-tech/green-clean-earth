@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import { BsImages, BsPaperclip } from "react-icons/bs";
 import DeleteBtn from "./deletebtn";
+import { Link } from 'lucide-react';
 
 interface UploadData {
   up_file: string;
@@ -47,6 +48,7 @@ interface UploadData {
   chapter_name: string;
   zone_name: string;
   city: string;
+  gp_id: number;
 }
 
 function Page() {
@@ -229,7 +231,13 @@ function Page() {
           {uploadData[0].us_name ?
             <div className="">
               <p className="text-sm text-gray-500">Uploader Name</p>
-              <p className="text-base">{uploadData[0].us_name}</p>
+               <a 
+                                href={`/user-page?u=${uploadData[0].us_name}&id=${uploadData[0].us_id}`} 
+                                className="text-blue-500 hover:underline flex items-center gap-1"
+                              >
+                                {uploadData[0].us_name}
+                                <Link size={16} className="text-blue-600" />
+                              </a>
             </div>
             : ''}
           {uploadData[0].up_planter ?
@@ -295,7 +303,13 @@ function Page() {
           {uploadData[0].gp_name ?
             <div className="">
               <p className="text-sm text-gray-500">Group Name</p>
-              <p className="text-base">{uploadData[0].gp_name}</p>
+              <a 
+                  href={`/group-page?gname=${uploadData[0].gp_name}&gid=${uploadData[0].gp_id}&uc=${0}&cordinator=${uploadData[0].co_ord_name}&groupType=${uploadData[0].group_type}`} 
+                  className="text-blue-500 hover:underline flex items-center gap-1"
+                >
+                  {uploadData[0].gp_name}
+                  <Link size={16} className="text-blue-600" />
+                </a>
             </div>
             : ''}
           {uploadData[0].group_type ?

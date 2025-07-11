@@ -7,6 +7,7 @@ import Cookies from 'js-cookie';
 import axios from "axios";
 import { apiURL } from "@/app/requestsapi/request";
 import { EditGrpTypeForm } from "./edit-grp-form";
+import { Link } from 'lucide-react';
 
 interface UploadData {
   up_id: string;
@@ -40,6 +41,7 @@ interface UploadData {
   no_of_students: number;
   club_names: string;
   list_of_classes: string;
+  gp_id: number;
 }
 
 function Page() {
@@ -111,7 +113,13 @@ function Page() {
         {uploadData[0].gp_name ?
             <div className="">
               <p className="text-sm text-gray-500">Group Name</p>
-              <p className="text-base">{uploadData[0].gp_name}</p>
+              <a 
+                href={`/group-page?gname=${uploadData[0].gp_name}&gid=${uploadData[0].gp_id}&uc=${0}&cordinator=${uploadData[0].co_ord_name}&groupType=${uploadData[0].group_type}`} 
+                className="text-blue-500 hover:underline flex items-center gap-1"
+              >
+                {uploadData[0].gp_name}
+                <Link size={16} className="text-blue-600" />
+              </a>
             </div>
             : ''}
           {uploadData[0].group_type ?

@@ -6,6 +6,7 @@ import { CoordinatorForm } from "./coordinatorform";
 import axios from "axios";
 import { apiURL } from "@/app/requestsapi/request";
 import Cookies from 'js-cookie';
+import { Link } from 'lucide-react';
 
 interface UserData {
   edu_district: string;
@@ -34,6 +35,7 @@ interface UserData {
   gp_cat_name: string;
   co_username: string;
   co_email_id: string;
+  gp_id: number;
 }
 function Page() {
 
@@ -139,7 +141,13 @@ function Page() {
           </div>
           <div className="">
             <p className="text-sm text-gray-500">Group Name</p>
-            <p className="text-base">{userData[0].gp_name}</p>
+            <a 
+                  href={`/group-page?gname=${userData[0].gp_name}&gid=${userData[0].gp_id}&uc=${0}&cordinator=${userData[0].co_ord_name}&groupType=${userData[0].group_type}`} 
+                  className="text-blue-500 hover:underline flex items-center gap-1"
+                >
+                  {userData[0].gp_name}
+                  <Link size={16} className="text-blue-600" />
+                </a>
           </div>
           <div className="">
             <p className="text-sm text-gray-500">Group Type</p>

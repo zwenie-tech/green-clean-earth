@@ -6,6 +6,7 @@ import { apiURL, baseURL } from '@/app/requestsapi/request';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { Button } from '@/components/ui/button';
+import PaginationComponent from "../../PageComponent";
 
 interface Institution {
   gp_id: number;
@@ -22,25 +23,26 @@ const Invite: React.FC = () => {
   const ref_code = Cookies.get('cord_refcode');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
   const itemsPerPage = 10;
 
 
   useEffect(() => {
-    async function fetchfirstData() {
-      const responseall = await fetch(`${apiURL}/coordinator/our-invites?limit=100000000000`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      if (responseall.status === 200) {
-        const dataall = await responseall.json();
-        setTotalPages(Math.ceil(dataall.data.length / itemsPerPage));
+    // async function fetchfirstData() {
+    //   const responseall = await fetch(`${apiURL}/coordinator/our-invites?limit=100000000000`, {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Authorization': `Bearer ${token}`
+    //     }
+    //   });
+    //   if (responseall.status === 200) {
+    //     const dataall = await responseall.json();
+    //     setTotalPages(Math.ceil(dataall.data.length / itemsPerPage));
 
-      }
-    }
-    fetchfirstData();
+    //   }
+    // }
+    // fetchfirstData();
   }, [token]);
 
   const handlePageChange = (newPage: number) => {
@@ -65,6 +67,8 @@ const Invite: React.FC = () => {
         });
         const result = await response.json();
         if (result.success) {
+          setTotalCount(result.totalCount)
+          setTotalPages(Math.ceil(result.totalCount / itemsPerPage));
           setInstitutions(result.data);
         }
       } catch (error) {
@@ -108,7 +112,8 @@ const Invite: React.FC = () => {
             അയച്ചു കൊടുക്കുക.
           </p>
         </div>
-
+        
+          <h1 className='text-xl mt-2 font-bold'>Total Count: {totalCount}</h1>
       </div>
       <div className="container mx-auto p-6">
         <div className="overflow-x-auto">
@@ -127,7 +132,7 @@ const Invite: React.FC = () => {
               <tbody>
                 {institutions.length > 0 ? institutions.map((institution, index) => (
                   <tr key={institution.gp_id} className="border border-gray-200 hover:bg-gray-100">
-                    <td className="py-3 px-6 text-left">{index + 1}</td>
+                    <td className="py-3 px-6 text-left">{(currentPage - 1) * itemsPerPage + index + 1}</td>
                     <td className="py-3 px-6 text-left">{institution.gp_id}</td>
                     <td className="py-3 px-6 text-left">{institution.gp_name}</td>
                     {/* <td className="py-3 px-6 text-left">Bathhon Pannur</td> */}
@@ -139,29 +144,7 @@ const Invite: React.FC = () => {
         </div>
       </div>
       <div className="flex justify-center items-center space-x-2 my-4">
-        <button
-          className={currentPage === 1 ?
-            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
-            : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-          }
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-        <span className="text-xl">{currentPage}</span>
-        <button
-          className={currentPage === totalPages ?
-            "text-white text-sm py-2 px-4 bg-[#6b6767] rounded-xl shadow-lg"
-            : "text-white text-sm py-2 px-4 bg-[#3C6E1F] rounded-xl shadow-lg"
-          }
-          onClick={() => {
-            handlePageChange(currentPage + 1)
-          }}
-          disabled={currentPage === totalPages}
-        >
-          Next
-        </button>
+        <PaginationComponent currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
       </div>
       <Footer />
 
