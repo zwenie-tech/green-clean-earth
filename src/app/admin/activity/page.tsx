@@ -14,7 +14,7 @@ import axios from "axios";
 import { apiURL } from "@/app/requestsapi/request";
 import Cookies from 'js-cookie';
 import * as XLSX from 'xlsx';
-import PaginationComponent from "../PageComponent";
+import PaginationComponent from '../../PageComponent';
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
