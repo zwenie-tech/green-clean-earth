@@ -137,6 +137,14 @@ function Page() {
     fetchdata();
   }, [token, coId]);
 
+  useEffect(() => {
+    if (activeTab === "users") {
+      fetchInvitedData("users", currentPage);
+    } else {
+      fetchInvitedData("cordinators", currentPage);
+    }
+  }, [currentPage, activeTab]);
+
   const handlePageChange = (newPage: number) => {
     if (newPage > 0 && newPage <= totalPages) {
       setCurrentPage(newPage);
@@ -274,6 +282,7 @@ function Page() {
           <table className="min-w-full text-sm">
             <thead>
               <tr className="text-left border-b">
+                <p className="text-sm text-gray-600 mb-2">Total Users: {totalCount}</p>
                 {activeTab === "users" ? (
                   <>
                     <th className="py-2 px-4">User Id</th>
