@@ -121,7 +121,9 @@ const Events = () => {
               Share
             </button>
           </div>
-          <p>{event.event_body}</p>
+          {event.event_body.split('\n').map((paragraph, idx) => (
+            <p key={idx} className="mb-2">{paragraph}</p>
+          ))}
         </div>
       </div>
 
