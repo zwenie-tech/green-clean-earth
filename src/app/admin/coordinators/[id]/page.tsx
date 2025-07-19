@@ -65,8 +65,13 @@ function Page() {
   const [currentPage, setCurrentPage] = useState(1);
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
-  const [totalCount, setTotalCount] = useState(0);
-  const totalPages = Math.ceil(totalCount / limit);
+  const [userTotalCount, setUserTotalCount] = useState(0);
+  const [cordTotalCount, setCordTotalCount] = useState(0);
+
+  const totalPages = activeTab === "users"
+  ? Math.ceil(userTotalCount / limit)
+  : Math.ceil(cordTotalCount / limit);
+
 
   const fetchInvitedData = async (type: "users" | "cordinators", pg = 1) => {
     const endpoint = type === "users" ? "/admin/invitedUsers" : "/admin/invitedCordinators";
@@ -85,10 +90,12 @@ function Page() {
       if (response.data.success) {
         if (type === "users") {
           setInvitedUsers(response.data.invitedUsers || []);
+          setUserTotalCount(response.data.total_count || 0);
         } else {
           setInvitedCords(response.data.invitedCordinators || []);
+          setCordTotalCount(response.data.total_count || 0);
         }
-        setTotalCount(response.data.total_count || 0);
+
       }
     } catch (error) {
       console.error(`Error fetching ${type}:`, error);
@@ -282,7 +289,11 @@ function Page() {
           <table className="min-w-full text-sm">
             <thead>
               <tr className="text-left border-b">
-                <p className="text-sm text-gray-600 mb-2">Total Users: {totalCount}</p>
+                <p className="text-sm text-gray-600 mb-2">
+                  {activeTab === "users"
+                    ? `Total Users: ${userTotalCount}`
+                    : `Total Coordinators: ${cordTotalCount}`}
+                </p>
                 {activeTab === "users" ? (
                   <>
                     <th className="py-2 px-4">User Id</th>
