@@ -156,7 +156,7 @@ const Dashboard = () => {
       {!isApproved && (
         <div className="text-center my-10 text-xl font-semibold text-red-600">
           <div>Waiting for admin approval to access the dashboard.</div>
-          <div>Please contact +919645964592</div>
+          <div>Please contact +91 9645 9645 92</div>
         </div>
       )}
 

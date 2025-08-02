@@ -264,7 +264,7 @@ const MyUploadedPlants = () => {
               className='text-primary underline text-xs sm:text-sm mt-1'
               onClick={() => toggleEditState(plant.up_id, imageNumber)}
             >
-              Edit
+              Edit to replace
             </button>
           )}
         </div>
@@ -300,7 +300,7 @@ const MyUploadedPlants = () => {
                 <table className="min-w-[1200px] w-full divide-y divide-gray-200">
                   <thead>
                     <tr>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tree #</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tree Number</th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Planter</th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Uploader</th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Image 1</th>
@@ -313,15 +313,26 @@ const MyUploadedPlants = () => {
                     {data.map((plant) => (
                       <tr key={`plant-${plant.up_id}`} className='hover:bg-gray-50'>
                         <td className='px-4 py-4 text-sm font-medium text-primary whitespace-nowrap'>
-                          <Link
-                            href={{
-                              pathname: 'uploaded-plants/plant',
-                              query: { tree: plant.up_id },
-                            }}
-                            className='hover:text-primary-dark text-primary underline'
-                          >
-                            {plant.up_id}
-                          </Link>
+                          <div>
+                            <Link
+                              href={{
+                                pathname: 'uploaded-plants/plant',
+                                query: { plant: plant.up_id },
+                              }}
+                              className='hover:text-primary-dark text-primary underline block'
+                            >
+                              {plant.up_id}
+                            </Link>
+                            <Link
+                              href={{
+                                pathname: 'uploaded-plants/plant',
+                                query: { tree: plant.up_id },
+                              }}
+                              className='hover:text-primary-dark text-primary underline text-sm block mt-1'
+                            >
+                              Edit
+                            </Link>
+                          </div>                  
                         </td>
                         <td className='px-4 py-4 text-sm text-gray-500 whitespace-nowrap '>
                           {plant.up_planter}

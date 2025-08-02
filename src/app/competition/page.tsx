@@ -168,7 +168,7 @@ const Competition = () => {
                     <div className="p-4 md:p-10">
                         <h2 className="text-xl font-bold">സൃഷ്ടികൾ  സമർപ്പിക്കൽ</h2>
                         <p className="mt-2">
-                            മത്സരാർത്ഥികൾ പ്രകടനത്തിന്റെ  വീഡിയോ തയ്യാറാക്കിയതിന്   ശേഷം,    സ്‌കൂൾ  കോർഡിനേറ്റർ ആയ  അദ്ധ്യാപകനെ  സമീപിച്ച് IGAR Number (Institution Green Art fest Registration Number)   വാങ്ങിയതിന്  ശേഷം   9645964592  എന്ന നമ്പറിലേക്ക് Whatsapp / Telegram വഴി send ചെയ്യേണ്ടതാണ് . ഒരു വിദ്യാലയത്തിലെ  കോർഡിനേറ്റർ  അവിടുത്തെ  വിദ്യാർഥികൾ  സബ്മിറ്റ്  ചെയ്യുന്ന  സൃഷ്ടികൾക്ക്  നൽകുന്ന  സീരിയൽ നമ്പർ ആണ്  IGAR NUMBER
+                            മത്സരാർത്ഥികൾ പ്രകടനത്തിന്റെ  വീഡിയോ തയ്യാറാക്കിയതിന്   ശേഷം,    സ്‌കൂൾ  കോർഡിനേറ്റർ ആയ  അദ്ധ്യാപകനെ  സമീപിച്ച് IGAR Number (Institution Green Art fest Registration Number)   വാങ്ങിയതിന്  ശേഷം   +91 9645 9645 92  എന്ന നമ്പറിലേക്ക് Whatsapp / Telegram വഴി send ചെയ്യേണ്ടതാണ് . ഒരു വിദ്യാലയത്തിലെ  കോർഡിനേറ്റർ  അവിടുത്തെ  വിദ്യാർഥികൾ  സബ്മിറ്റ്  ചെയ്യുന്ന  സൃഷ്ടികൾക്ക്  നൽകുന്ന  സീരിയൽ നമ്പർ ആണ്  IGAR NUMBER
                             <br /><br />IGAR നമ്പർ  ഇല്ലാതെ  അയക്കുന്ന  വീഡിയോകൾ  മത്സരത്തിൽ  പരിഗണിക്കുന്നതല്ല .
                             <br /><br />ചാനലിൽ  Title കൊടുക്കുവാൻ  വേണ്ടി ഓരോ കലാ സൃഷ്ടിയോടുമൊപ്പം   താഴെ  ചേർത്ത    വിവരങ്ങൾ  അതേഓർഡറിൽ  ഇംഗ്ലീഷിൽ ടെക്സ്റ്റ്  ആയി അയക്കേണ്ടതാണ് .
                             <br /><br />Name of competition,  Name of student, Name of Institution (mention KG/ LP/UP/HS/HSS/College), IGAR Number

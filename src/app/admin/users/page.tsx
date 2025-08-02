@@ -163,6 +163,8 @@ const AdminGrid = () => {
     },
     { field: "gp_name", headerName: "Group name", width: 140 },
     { field: "co_ord_name", headerName: "Coordinator name", width: 180 },
+    { field: "acivity_count", headerName: "Activity Count", width: 100 },
+    { field: "upload_count", headerName: "Upload Count", width: 100 },
   ]);
 
   const defaultColDef = useMemo(() => {
